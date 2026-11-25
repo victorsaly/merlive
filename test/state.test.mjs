@@ -168,12 +168,12 @@ describe('state: notes', () => {
 });
 
 describe('state: direction, kinds and what Mermaid sets', () => {
-  it('follows the direction it is given, and says which way it draws the two it does not have', () => {
+  it('follows the direction it is given, the last one said', () => {
     assert.equal(state('direction LR\nA --> B').direction, 'LR');
     assert.equal(state('direction TB\nA --> B').direction, 'TD');
     const m = state('direction RL\nA --> B');
-    assert.equal(m.direction, 'LR');
-    assert.match(m.warnings[0], /^line 2: RL is drawn as LR/);
+    assert.deepEqual([m.direction, m.reversed, m.warnings], ['LR', true, []]);
+    assert.ok(!state('direction BT\ndirection TB\nA --> B').reversed);
   });
 
   it('reads past the direction of a composite state, which runs the way the rest does', () => {

@@ -88,7 +88,7 @@ Still to do, in this order:
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
    - the name of a narrow group usually has its line pass behind it, and the arrowhead sits close under it;
-   - bottom-to-top and right-to-left are drawn the other way round; a group's own direction is read past;
+   - a group's own direction is read past;
    - of the newer `@{ shape }` list, twelve shapes are drawn and the rest are boxes.
 2. **The other kinds**, picked by what Victor's own repositories use, not by Mermaid's list. Thirty are left.
    A kind of boxes and links (requirement, C4, block, architecture) can use the placement there is; a chart or a

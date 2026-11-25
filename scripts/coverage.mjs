@@ -18,7 +18,7 @@ import { sequencePicture } from '../skills/merlive/scripts/sequence-render.mjs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],shapes?:string[],notes?:number,direction?:string,rows?:number[],says?:string,loses?:string,family?:string}} Sample
+ * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],shapes?:string[],notes?:number,reversed?:boolean,direction?:string,rows?:number[],says?:string,loses?:string,family?:string}} Sample
  * @typedef {{sample:Sample,result:'drawn'|'less'|'partly'|'refused'|'left',why:string[],svg:string}} Row
  */
 
@@ -50,6 +50,7 @@ export function judge(sample, source) {
   count('groups', sample.groups, lay.groups.length);
   count('notes', sample.notes, Object.keys(model.notes).length);
   if (sample.direction !== undefined && model.direction !== sample.direction) why.push(`drawn ${model.direction}, not ${sample.direction}`);
+  if (sample.reversed !== undefined && (model.reversed === true) !== sample.reversed) why.push(sample.reversed ? 'not drawn from the far end, as it was written' : 'drawn from the far end, which it was not written from');
   const said = [...model.nodes.flatMap((n) => [n.label, n.over ?? '', ...(n.rows ?? []).flat()]), ...model.edges.flatMap((e) => [e.label, e.near ?? '', e.far ?? '']), ...model.groups.map((g) => g.title), ...Object.values(model.notes)];
   for (const text of sample.has ?? []) if (!said.includes(text)) why.push(`"${text}" is not among its words`);
   for (const kind of sample.kinds ?? []) if (!model.nodes.some((n) => n.kind === kind)) why.push(`no box is of the kind ${kind}`);

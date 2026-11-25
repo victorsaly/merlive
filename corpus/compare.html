@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 255 samples, Merlive draws 224 whole and 3 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>255</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>170</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>54</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>3</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>28</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 255 samples, Merlive draws 226 whole and 1 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>255</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>172</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>54</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>1</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>28</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -72,17 +72,17 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
   A[Quote] --&gt; B[Order] --&gt; C[Invoice]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>Direction BT: bottom to top</h3>
-<p class="result"><b>Partly read</b> <span class="why">line 1: BT is drawn as TD</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/direction-bt.png" width="127" height="278" style="--w:127" alt="Direction BT: bottom to top, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/direction-bt.svg" width="184" height="284" style="--w:184" alt="Direction BT: bottom to top, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart BT
   A[Quote] --&gt; B[Order] --&gt; C[Invoice]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>Direction RL: right to left</h3>
-<p class="result"><b>Partly read</b> <span class="why">line 1: RL is drawn as LR</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/direction-rl.png" width="432" height="70" style="--w:432" alt="Direction RL: right to left, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/direction-rl.svg" width="584" height="100" style="--w:584" alt="Direction RL: right to left, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart RL
   A[Quote] --&gt; B[Order] --&gt; C[Invoice]

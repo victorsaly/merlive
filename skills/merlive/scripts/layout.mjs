@@ -11,7 +11,7 @@ import { inset, roomIn } from './shapes.mjs';
 /** @typedef {{x:number,y:number,w:number,h:number,text:string,lines:string[]}} Words a link's words: the middle of where they sit, their size, and the lines they are wrapped to */
 /** @typedef {{id:string,points:Pt[],back:boolean,label:null|Words,near?:Words,far?:Words}} Routed near, far: the few words at the end it comes from and the end it leads to */
 /** @typedef {{id:string,title:string,x:number,y:number,w:number,h:number,name:{x:number,y:number,w:number,h:number,plate:boolean}}} Frame a group's frame, from its top left corner; name: where its name sits, from its middle, and whether a line has to pass behind it */
-/** @typedef {{width:number,height:number,direction:'TD'|'LR',box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[]}} Layout */
+/** @typedef {{width:number,height:number,direction:'TD'|'LR',reversed:boolean,box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[]}} Layout */
 
 // What is measured, named once. Boxes are sized without a browser, from the average glyph of a 13px UI face.
 export const measure = {
@@ -192,13 +192,14 @@ export function layout(model) {
   // of different widths.
   const box = boxFor(model);
   if (model.nodes.some((n) => extraHeight(n, box) > 0)) return placed(model, 'TD');
-  const first = placed(model, model.direction);
+  const first = placed(model, model.direction, model.reversed === true);
   // A flow written left to right that comes out wider than a screen cannot be read without scrolling sideways,
   // and nobody scrolls a diagram sideways. Top to bottom it is the same flow, and scrolls the way a page does.
   if (first.direction !== 'LR' || first.width <= measure.wide || model.hints.turn === false) return first;
   const turned = placed(model, 'TD');
   if (turned.width >= first.width) return first;
-  turned.warnings.unshift(`written left to right, drawn top to bottom: left to right it would be ${first.width}px wide, wider than most screens. "%% turn: no" keeps it as written`);
+  // Turned, it is read from the top, as a page is, whichever side it was written from.
+  turned.warnings.unshift(`written ${model.reversed ? 'right to left' : 'left to right'}, drawn top to bottom: left to right it would be ${first.width}px wide, wider than most screens. "%% turn: no" keeps it as written`);
   return turned;
 }
 
@@ -206,9 +207,10 @@ export function layout(model) {
  * The placing itself, in the direction asked for.
  * @param {Model} model
  * @param {'TD'|'LR'} dir
+ * @param {boolean} [reversed] from the far end: bottom to top, or right to left
  * @returns {Layout}
  */
-function placed(model, dir) {
+function placed(model, dir, reversed = false) {
   /** @type {string[]} */
   const warnings = [];
   const box = boxFor(model);
@@ -324,7 +326,9 @@ function placed(model, dir) {
   /** @type {number[]} */
   const wider = Array.from({ length: ranks + 1 }, (_, r) => {
     const frames = most(ends, r - 1) + most(starts, r);
-    return frames > 1 ? Math.max(0, measure.framePad * most(ends, r - 1) + atStart * most(starts, r) + measure.frameAir - rankGap) : 0;
+    // From the far end, a frame's top (and its name) is where the frame ends along the flow, not where it starts.
+    const [atEnds, atStarts] = reversed ? [atStart, measure.framePad] : [measure.framePad, atStart];
+    return frames > 1 ? Math.max(0, atEnds * most(ends, r - 1) + atStarts * most(starts, r) + measure.frameAir - rankGap) : 0;
   });
   // A box that lists rows is taller than one that does not. A rank is as tall as its tallest box, every box of
   // it sits on the rank's middle line, and the room to the next rank is the same whatever the heights.
@@ -625,7 +629,13 @@ function placed(model, dir) {
   const farRight = Math.max(...all.map((n) => n.x + n.w / 2), ...routes.flatMap((r) => r.points.map((p) => p.x)), 0) + over;
   const flip = (/** @type {Pt} */ p) => (model.hints.side === 'left' ? { x: farRight + measure.pad - (p.x + over), y: p.y } : { x: p.x + over, y: p.y });
   const turn = (/** @type {Pt} */ p) => (dir === 'LR' ? { x: p.y, y: p.x } : p);
-  const place = (/** @type {Pt} */ p) => turn(flip(p));
+  // A flow written bottom to top or right to left is the same flow, begun at the far end: everything is turned
+  // over along the flow before anything that depends on which way is up (a shape's outline, a frame's name, a
+  // link's words) is worked out, so all of that is done for the picture as it will be seen.
+  const alongs = [...all.flatMap((n) => [n.y - n.h / 2, n.y + n.h / 2]), ...routes.flatMap((r) => r.points.map((p) => p.y))];
+  const bothEnds = Math.min(...alongs) + Math.max(...alongs);
+  const upturn = (/** @type {Pt} */ p) => (reversed ? { x: p.x, y: bothEnds - p.y } : p);
+  const place = (/** @type {Pt} */ p) => turn(flip(upturn(p)));
   // Turned on its side, a box is as wide and as tall as it really is; top to bottom, it keeps its own height.
   for (const n of all) Object.assign(n, place(n), dir === 'LR' ? { w: box.w, h: box.h } : { w: box.w });
 
@@ -758,7 +768,7 @@ function placed(model, dir) {
   const ys = [...all.map((n) => n.y + n.h / 2), ...groups.map((f) => f.y + f.h), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.y), ...[e.label, e.near, e.far].flatMap((l) => (l ? [l.y + l.h / 2] : []))])];
   const width = Math.ceil(Math.max(0, ...xs) + measure.pad), height = Math.ceil(Math.max(0, ...ys) + measure.pad);
   if (dir === 'LR' && width > measure.wide && model.hints.turn === false) warnings.push(`left to right, this flow is ${width}px wide and will scroll on most screens; "flowchart TD" would read better`);
-  return { width, height, direction: dir, box, nodes, edges, groups, spine, warnings };
+  return { width, height, direction: dir, reversed, box, nodes, edges, groups, spine, warnings };
 }
 
 /** Drops points that repeat or sit on a straight run between their neighbours. */

@@ -6,7 +6,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 ## In short
 
-- **Flowcharts:** of 70 features, 46 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 2 are only partly read, and 0 are refused.
+- **Flowcharts:** of 70 features, 48 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 0 are only partly read, and 0 are refused.
 - **State diagrams:** of 27 features, 16 are drawn as written, 10 are drawn less something, 1 are only partly read, and 0 are refused.
 - **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
@@ -26,8 +26,8 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | Direction TB: top to bottom | Drawn |  | [source](../corpus/flowchart/direction-tb.mmd) | [picture](../corpus/drawn/direction-tb.svg) |
 | Direction TD: top down | Drawn |  | [source](../corpus/flowchart/direction-td.mmd) | [picture](../corpus/drawn/direction-td.svg) |
 | Direction LR: left to right | Drawn |  | [source](../corpus/flowchart/direction-lr.mmd) | [picture](../corpus/drawn/direction-lr.svg) |
-| Direction BT: bottom to top | Partly read | line 1: BT is drawn as TD | [source](../corpus/flowchart/direction-bt.mmd) | [picture](../corpus/drawn/direction-bt.svg) |
-| Direction RL: right to left | Partly read | line 1: RL is drawn as LR | [source](../corpus/flowchart/direction-rl.mmd) | [picture](../corpus/drawn/direction-rl.svg) |
+| Direction BT: bottom to top | Drawn |  | [source](../corpus/flowchart/direction-bt.mmd) | [picture](../corpus/drawn/direction-bt.svg) |
+| Direction RL: right to left | Drawn |  | [source](../corpus/flowchart/direction-rl.mmd) | [picture](../corpus/drawn/direction-rl.svg) |
 | A title and settings in front matter | Drawn, less something | Mermaid's own settings are read past: the look is the design's | [source](../corpus/flowchart/frontmatter.mmd) | [picture](../corpus/drawn/frontmatter.svg) |
 | Settings in an init directive | Drawn, less something | Mermaid's own settings are read past: the look is the design's | [source](../corpus/flowchart/init-directive.mmd) | [picture](../corpus/drawn/init-directive.svg) |
 | Comments on lines of their own | Drawn |  | [source](../corpus/flowchart/comments.mmd) | [picture](../corpus/drawn/comments.svg) |

@@ -336,9 +336,9 @@ describe('parse: what it does not read, it says', () => {
     assert.equal(m.nodes.length, 0);
   });
 
-  it('draws BT and RL the other way round, and says so', () => {
-    assert.equal(parse('graph RL\nA --> B').direction, 'LR');
-    assert.match(parse('graph BT\nA --> B').warnings[0], /BT is drawn as TD/);
+  it('reads BT and RL as a flow from the far end, with nothing to say about it', () => {
+    assert.deepEqual([parse('graph RL\nA --> B').direction, parse('graph RL\nA --> B').reversed], ['LR', true]);
+    assert.deepEqual([parse('graph BT\nA --> B').direction, parse('graph BT\nA --> B').reversed, parse('graph BT\nA --> B').warnings], ['TD', true, []]);
     assert.equal(parse('flowchart LR\nA --> B').direction, 'LR');
   });
 });

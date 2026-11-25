@@ -11,6 +11,9 @@ Class diagrams and entity diagrams.
   any more.
 - **A group's title can be read.** In a sequence diagram it takes the design's quiet colour in light and dark,
   sits inside its frame and wraps to it. In a still picture it was black on any page.
+- **Bottom to top and right to left are drawn as written.** `flowchart BT`, `flowchart RL` and a state diagram's
+  `direction BT` or `RL` were drawn top to bottom and left to right, with a note. They are now the same flow
+  begun at the far end, every arrow pointing the way its author drew it.
 - **A title is drawn on a still picture.** The `title` in a diagram's front matter (and a sequence diagram's own
   `title`) sits above the picture, wrapped to its width. A page already had it as its heading; a still picture
   had it only in what a screen reader is told. `accTitle` stays unseen, as it was written to be.

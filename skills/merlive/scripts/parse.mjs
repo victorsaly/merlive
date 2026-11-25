@@ -21,6 +21,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {'flowchart'|'unsupported'} type
  * @property {string} kindOfDiagram the first word of the source: which kind it is, and the message when it is one Merlive does not draw
  * @property {'TD'|'LR'} direction
+ * @property {boolean} [reversed] the flow was written from the far end: bottom to top (BT), or right to left (RL)
  * @property {string} title what the author called the picture, in its front matter or (accTitle) for a reader who cannot see it
  * @property {string} heading the title its author meant to be seen on the picture: the front matter's, never accTitle's
  * @property {string} describes what the author says it shows (accDescr)
@@ -468,7 +469,7 @@ export function parse(src) {
         return;
       }
       if (h[2] === 'LR' || h[2] === 'RL') model.direction = 'LR';
-      if (h[2] === 'BT' || h[2] === 'RL') warn(line, `${h[2]} is drawn as ${model.direction}`);
+      if (h[2] === 'BT' || h[2] === 'RL') model.reversed = true;
       return;
     }
     if (model.type === 'unsupported') return;

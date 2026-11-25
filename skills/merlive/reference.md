@@ -8,7 +8,7 @@ What only some diagrams need. SKILL.md has the everyday path.
 |---|---|
 | `flowchart TD`, `graph TD`, `TB` | Top to bottom |
 | `flowchart LR` | Left to right |
-| `BT`, `RL` | Drawn as `TD` and `LR`, with a note |
+| `BT`, `RL` | Bottom to top and right to left: the same flow, begun at the far end, with every arrow pointing the way it was written. A right-to-left flow too wide for a screen is turned top to bottom, as a left-to-right one is |
 | `A[Text]`, `A(Text)` | A box |
 | `A([Text])`, `A((Text))` | A start or end (a pill) |
 | `A{Text}` | A rhombus, as wide and as tall as the boxes round it |
@@ -47,7 +47,6 @@ Where the Mermaid is kept decides how it is found: fenced `mermaid` blocks in Ma
 of a `.mmd` file; and, in any other file (an `.astro` page, a script), a string between backticks that starts as
 a flowchart does. A string put together with `${…}` when the page runs cannot be read.
 
-Not read yet, each named in a `note,` line when met: `BT` and `RL`, which are drawn the other way round.
 [What is and is not drawn](https://github.com/victorsaly/merlive/blob/main/docs/COVERAGE.md), feature by feature.
 
 ## A state diagram
@@ -65,7 +64,7 @@ this page holds for them: the rules, the design, Merlive's own lines.
 | `state enough <<choice>>` | A decision, with its name or its words in it |
 | `state split <<fork>>`, `state together <<join>>` | A box, with its name or its words in it |
 | `note right of Draft : words`, `note left of Draft` … `end note` | The note on that box: what a reader sees on picking it |
-| `direction LR` | The way the diagram runs. A composite state's own direction is read past |
+| `direction LR`, `direction BT`, `direction RL` | The way the diagram runs. A composite state's own direction is read past |
 | `classDef`, `class Held, Lost stopped`, `Held:::stopped` | Kinds, as in a flowchart |
 | `%% words` after a line, `hide empty description`, `scale 350 width` | Read past |
 

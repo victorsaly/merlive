@@ -100,7 +100,8 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
       // A composite state's own direction is read past, as a group's is: it runs the way the rest does.
       if (open.length) return true;
       model.direction = way[1] === 'LR' || way[1] === 'RL' ? 'LR' : 'TD';
-      if (way[1] === 'BT' || way[1] === 'RL') warn(line, `${way[1]} is drawn as ${model.direction}`);
+      if (way[1] === 'BT' || way[1] === 'RL') model.reversed = true;
+      else delete model.reversed;
       return true;
     }
     if (text === '--') return warn(line, 'concurrency ("--") is not read: the regions it parts are drawn as one'), true;

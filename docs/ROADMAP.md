@@ -29,7 +29,7 @@ hand, and the colours are yours, read from your site, but checked, for contrast 
 2. **0.2, class diagrams and entity diagrams (in hand).** Boxes that list rows under their name, in one width and
    their own height; links that end in "is a", "has" or how many.
 3. **Next, where Mermaid still reads better.** Forks and joins as bars and regions side by side in a state diagram; a group's own
-   direction; bottom-to-top and right-to-left; the rest of the newer shapes.
+   direction; the rest of the newer shapes.
 4. **Then the other kinds**, picked by what real documents use: those of boxes and links first (requirement, C4,
    block, architecture), which the placement there is can draw; then timelines, charts and trees, each of which
    needs a way of drawing of its own.

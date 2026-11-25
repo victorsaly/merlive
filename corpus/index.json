@@ -36,14 +36,16 @@
       "covers": "Direction BT: bottom to top",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn the other way round: top to bottom"
+      "direction": "TD",
+      "reversed": true
     },
     {
       "file": "flowchart/direction-rl.mmd",
       "covers": "Direction RL: right to left",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn the other way round: left to right"
+      "direction": "LR",
+      "reversed": true
     },
     {
       "file": "flowchart/frontmatter.mmd",
