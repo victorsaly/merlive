@@ -88,7 +88,7 @@ describe('what is drawn', () => {
     assert.match(html, /^<!doctype html>/);
     assert.ok(html.includes('<title>A &lt;test&gt;</title>'));
     assert.equal(html.match(/class="mv-node"/g)?.length, 3);
-    assert.equal(html.match(/class="mv-edge"/g)?.length, 3);
+    assert.equal(html.match(/class="mv-edge[ "]/g)?.length, 3);
     assert.ok(html.includes('Go &lt;now&gt;'));
     assert.ok(html.includes('data-style="dotted"'));
     assert.ok(html.includes('id="mv-next"'));
@@ -132,7 +132,7 @@ describe('the setup page', () => {
   });
 
   it('offers every choice a project has: modes, motion, what is written, what a page carries, corner and colours', () => {
-    for (const name of ['modes', 'motion', 'format']) assert.ok(html.includes(`name="${name}"`), name);
+    for (const name of ['modes', 'motion', 'format', 'depth', 'ground']) assert.ok(html.includes(`name="${name}"`), name);
     for (const id of ['steps', 'legend', 'source', 'radius', 'settings', 'copy']) assert.ok(html.includes(`id="${id}"`), id);
     assert.ok(html.includes('type="color"'));
   });

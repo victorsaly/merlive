@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { blocksOf, parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout } from '../skills/merlive/scripts/layout.mjs';
-import { builtIn, designWith } from '../skills/merlive/scripts/design.mjs';
+import { builtIn, designFrom, designWith } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { page, picture } from '../skills/merlive/scripts/render.mjs';
-import { readingOf } from '../skills/merlive/scripts/site.mjs';
+import { designOf, readingOf } from '../skills/merlive/scripts/site.mjs';
 
 // A diagram somebody really wrote: "the paper trail" on blog.victorsaly.com, as it stands in
 // site/src/pages/how-it-works.astro. Everything Merlive got wrong the first time it met it is held here.
@@ -344,5 +344,63 @@ describe('more real diagrams: drawn', () => {
     assert.ok(svg.includes('>Build the agent</text>'));
     const long = parse('flowchart TD\nA -->|a label that goes on for rather a while| B');
     assert.equal(picture(long, layout(long), builtIn, { title: '' }).match(/<tspan class="mv-label-line"/g)?.length, 2);
+  });
+});
+
+describe('character: what a diagram looks like says something', () => {
+  const m = parse(trail);
+  const lay = layout(m);
+  const svg = picture(m, lay, builtIn, { title: m.title });
+  const quiet = picture(m, lay, designFrom({ depth: 'flat', ground: 'plain' }), { title: m.title });
+
+  it('draws the main path heavier than what branches off it, so it is read first', () => {
+    assert.equal(svg.match(/class="mv-edge mv-main"/g)?.length, lay.spine.length - 1);
+    assert.equal(svg.match(/class="mv-edge"/g)?.length, m.edges.length - (lay.spine.length - 1));
+    assert.match(svg, /\.mv-main \.mv-line\{[^}]*stroke-width:2\.4/);
+  });
+
+  it("sets the boxes on a ground of dots, the grid they are placed on, and lifts them off it with a shadow, in Merlive's own look", () => {
+    assert.match(svg, /<pattern id="mv-dots"/);
+    assert.match(svg, /class="mv-ground"[^>]*fill="url\(#mv-dots\)"/);
+    assert.match(svg, /\.mv-node\{filter:drop-shadow\(/);
+    assert.match(svg, /--mv-dot:#[0-9a-f]{6}/);
+  });
+
+  it('spreads the dots over the whole stage of a live page, not only behind the drawing', () => {
+    const html = page(m, lay, builtIn, { title: m.title, source: trail, version: '0' });
+    assert.match(html, /\.mv-stage\{[^}]*radial-gradient\(var\(--mv-dot\)/);
+    assert.doesNotMatch(html, /mv-dots/);
+    assert.doesNotMatch(page(m, lay, designFrom({ ground: 'plain' }), { title: m.title, source: trail, version: '0' }), /radial-gradient/);
+  });
+
+  it('leaves the ground plain and the boxes flat when the design says so', () => {
+    assert.doesNotMatch(quiet, /mv-dots|drop-shadow/);
+  });
+
+  it('marks a box of a kind with a stripe of its colour down its edge, and leaves a plain box, a decision and a start or end without one', () => {
+    const kinds = parse('flowchart TD\nA([Start]) --> B{Ready?}\nB --> C[Fix it]:::rework\nB --> D[Plain]');
+    const drawn = picture(kinds, layout(kinds), builtIn, { title: '' });
+    assert.equal(drawn.match(/class="mv-stripe"/g)?.length, 1);
+    assert.match(drawn, /data-kind="rework"[^>]*>.*?class="mv-stripe"/);
+  });
+
+  it("gives a group's frame a faint fill, so it reads as a place", () => {
+    const g = parse(steps);
+    assert.match(picture(g, layout(g), builtIn, { title: '' }), /\.mv-group rect\{fill:var\(--mv-group\)/);
+  });
+});
+
+describe('character: a design says how much', () => {
+  it("is dots and a soft shadow in Merlive's own look, and refuses what is neither", () => {
+    assert.deepEqual([builtIn.ground, builtIn.depth], ['dots', 'soft']);
+    assert.throws(() => designFrom({ depth: 'huge' }), /depth must be flat or soft/);
+    assert.throws(() => designFrom({ ground: 'stripes' }), /ground must be plain or dots/);
+  });
+
+  it('follows the site: a shadow where the site has shadows, flat where it has none, and a plain ground either way', () => {
+    const flat = designFrom(designOf(readingOf(['body{background:#fff;color:#000} .card{border:1px solid}']), { name: 'ink', from: 'x' }).file);
+    const soft = designFrom(designOf(readingOf(['body{background:#fff;color:#000} .card{box-shadow:0 2px 8px rgba(0,0,0,.1)} .x{box-shadow:none}']), { name: 'soft', from: 'x' }).file);
+    assert.deepEqual([flat.depth, flat.ground], ['flat', 'plain']);
+    assert.deepEqual([soft.depth, soft.ground], ['soft', 'plain']);
   });
 });

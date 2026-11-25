@@ -2,7 +2,7 @@
 // with scripts off); the page around it adds picking and steps. Pure: a model, a layout and a design in, a
 // string out.
 
-import { kindFill, looksOf } from './design.mjs';
+import { contrast, kindFill, looksOf, mix } from './design.mjs';
 import { runtime } from './runtime.mjs';
 
 /** @typedef {import('./layout.mjs').Pt} Pt */
@@ -13,6 +13,10 @@ const draw = {
   headHalf: 4.5, // and half its width
   cut: 0.36, // how much of a decision's height its corners are cut by
   baseline: 4.5, // from the middle of a 13px line of words down to its baseline
+  dots: 16, // px between the dots of the ground: an eighth of the narrowest box
+  dot: 0.12, // how much of the text colour a dot is, over the page: there, and no more
+  frame: 0.035, // how much of the text colour fills a group's frame
+  stripe: 4, // px across the stripe that marks a box of a kind
   leastScale: 0.8, // the smallest a drawing is shown before it scrolls sideways instead
 };
 
@@ -53,21 +57,28 @@ export const kindName = (/** @type {string} */ k) => (k === 'terminal' ? 'Start 
 export function variables(/** @type {import('./design.mjs').Palette} */ p, /** @type {string[]} */ kinds) {
   const base = ['bg', 'node', 'stroke', 'text', 'muted', 'edge', 'accent'].map((k) => `--mv-${k}:${/** @type {Record<string,string>} */ (/** @type {unknown} */ (p))[k]}`);
   const each = kinds.flatMap((k) => [`--mv-k-${k}:${p.kinds[k] ?? p.stroke}`, `--mv-kf-${k}:${kindFill(p, k)}`]);
-  return [...base, ...each].join(';');
+  // What is made from the palette, not chosen: the ground's dots, a frame's fill, and a shadow that is the text
+  // colour thinned on a light page and plain dark on a dark one, where a tinted shadow would not show.
+  const lightPage = contrast('#000000', p.bg) >= contrast('#ffffff', p.bg);
+  const made = [`--mv-dot:${mix(p.text, p.bg, draw.dot)}`, `--mv-group:${mix(p.text, p.bg, draw.frame)}`, `--mv-shadow:${lightPage ? `${p.text}29` : '#00000080'}`];
+  return [...base, ...each, ...made].join(';');
 }
 
 /** The drawing's own rules, with no colours in them: those come from the variables of whatever it sits in. */
 export function rulesFor(/** @type {import('./design.mjs').Design} */ design, /** @type {string[]} */ kinds) {
   return `.mv-svg{font-family:${design.font}}
 .mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
-${kinds.map((k) => `[data-kind="${k}"] .mv-shape{fill:var(--mv-kf-${k});stroke:var(--mv-k-${k})}`).join('\n')}
+${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}\n' : ''}${kinds.map((k) => `[data-kind="${k}"] .mv-shape{fill:var(--mv-kf-${k});stroke:var(--mv-k-${k})}`).join('\n')}
 .mv-node text{font-size:13px;font-weight:${design.weight};fill:var(--mv-text);text-anchor:middle}
-.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.6}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+${kinds.map((k) => `[data-kind="${k}"] .mv-stripe{fill:var(--mv-k-${k})}`).join('\n')}
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
 [data-style="thick"] .mv-line{stroke-width:2.8}
 .mv-head{fill:var(--mv-edge)}
 .mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
-.mv-group rect{fill:none;stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
 .mv-group text{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}`;
 }
 
@@ -80,7 +91,9 @@ function styleOf(/** @type {import('./design.mjs').Design} */ design, /** @type 
 }
 
 /** The drawing alone: the SVG's insides, the same for a page, a picture and the setup page. */
-export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {import('./layout.mjs').Layout} */ lay, /** @type {import('./design.mjs').Design} */ design, /** @type {boolean} */ live) {
+export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {import('./layout.mjs').Layout} */ lay, /** @type {import('./design.mjs').Design} */ design, /** @type {boolean} */ live, tag = '') {
+  // The main path, link by link: it is drawn heavier, so a reader's eye takes it first.
+  const main = new Set(lay.spine.slice(1).map((id, i) => `${lay.spine[i]}>${id}`));
   const label = new Map(model.nodes.map((m) => [m.id, m.label]));
   const links = model.edges.map((e) => {
     const r = lay.edges[e.id], pts = r.points, end = pts[pts.length - 1], before = pts[pts.length - 2];
@@ -93,7 +106,7 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     const mid = middleOf(pts);
     const extras = live ? `<path class="mv-hit" d="${pathOf(pts)}"/><g class="mv-seq" transform="translate(${at(mid)})"><circle r="8"/><text y="3.5"></text></g>` : '';
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`Link from ${label.get(e.from)} to ${label.get(e.to)}${e.label ? `, ${e.label}` : ''}`)}"` : '';
-    return `<g class="mv-edge" data-edge="${esc(e.id)}" data-style="${e.style}"${role}><path class="mv-line" d="${pathOf(line)}"/>${head}${words}${extras}</g>`;
+    return `<g class="mv-edge${main.has(`${e.from}>${e.to}`) ? ' mv-main' : ''}" data-edge="${esc(e.id)}" data-style="${e.style}"${role}><path class="mv-line" d="${pathOf(line)}"/>${head}${words}${extras}</g>`;
   });
   const boxes = model.nodes.map((m) => {
     const b = lay.nodes[m.id], l = b.x - b.w / 2, t = b.y - b.h / 2, r = b.x + b.w / 2, u = b.y + b.h / 2;
@@ -104,11 +117,21 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     const first = b.y - ((b.lines.length - 1) * 16) / 2 + draw.baseline;
     const words = b.lines.map((line, i) => `<tspan x="${n(b.x)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${m.label}, ${kindName(m.kind)}`)}"` : '';
-    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${role}>${shape}<text>${words}</text></g>`;
+    // A box of a kind that means something carries a stripe of its colour down its near edge. A decision and a
+    // start or end already differ in shape, and a plain step has nothing to say.
+    const round = Math.min(design.radius, b.h / 2);
+    const marked = m.shape === 'box' && m.kind !== 'step' && b.h - 2 * round >= 12;
+    const stripe = marked ? `<rect class="mv-stripe" x="${n(l + 1)}" y="${n(t + Math.max(round, 1))}" width="${draw.stripe}" height="${n(b.h - 2 * Math.max(round, 1))}"/>` : '';
+    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${role}>${shape}${stripe}<text>${words}</text></g>`;
   });
   // A group's frame, behind everything, with what the group is called at its top left.
   const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/><text x="${n(f.x + 10)}" y="${n(f.y + 16)}">${esc(f.title)}</text></g>`);
-  return `<g>${frames.join('')}</g><g>${links.join('')}</g><g>${boxes.join('')}</g>`;
+  // The ground: the grid the boxes are placed on, shown as dots faint enough to sit behind everything.
+  // A live page spreads them over its whole stage instead, so they do not stop at the drawing's edge.
+  const ground = design.ground === 'dots' && !live
+    ? `<defs><pattern id="mv-dots${tag}" width="${draw.dots}" height="${draw.dots}" patternUnits="userSpaceOnUse"><circle cx="${draw.dots / 2}" cy="${draw.dots / 2}" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="${lay.width}" height="${lay.height}" fill="url(#mv-dots${tag})"/>`
+    : '';
+  return `${ground}<g>${frames.join('')}</g><g>${links.join('')}</g><g>${boxes.join('')}</g>`;
 }
 
 export const kindsIn = (/** @type {import('./parse.mjs').Model} */ model) => [...new Set(model.nodes.map((m) => m.kind))];
@@ -204,6 +227,7 @@ summary{cursor:pointer;color:var(--mv-muted);font-size:13px}
 .mv-dim{opacity:.16}
 .mv-lit .mv-shape{stroke-width:2.4}
 .mv-on .mv-line,.mv-sel .mv-line,.mv-edge:focus-visible .mv-line{stroke:var(--mv-accent);stroke-width:2.6}
+.mv-stage{border-radius:${Math.min(design.radius, 14)}px;padding:8px 0${design.ground === 'dots' ? `;background-image:radial-gradient(var(--mv-dot) 1px,transparent 1.3px);background-size:${draw.dots}px ${draw.dots}px` : ''}}
 .mv-on .mv-head,.mv-sel .mv-head{fill:var(--mv-accent)}
 .mv-sel .mv-shape,.mv-node:focus-visible .mv-shape{stroke:var(--mv-accent);stroke-width:3}
 .mv-seq{display:none;pointer-events:none}

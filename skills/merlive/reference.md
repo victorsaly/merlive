@@ -59,6 +59,8 @@ never write one by hand. Everything in it is optional, and what is left out come
   "from": "src/styles/global.css",
   "modes": "both",
   "motion": "calm",
+  "depth": "soft",
+  "ground": "dots",
   "output": { "format": "html", "steps": true, "legend": true, "source": true },
   "font": "\"IBM Plex Sans\", system-ui, sans-serif",
   "weight": 500,
@@ -81,6 +83,8 @@ never write one by hand. Everything in it is optional, and what is left out come
 |---|---|
 | `modes` | `light`, `dark` or `both` (follow the reader's system). `dark` and `both` need dark colours |
 | `motion` | `none`: nothing moves. `calm`: one dot follows a path when the reader presses play. `lively`: the path flows too |
+| `depth` | `flat`: boxes lie on the page. `soft`: a shadow lifts them off it. Setup follows the site: `soft` only where the site has shadows |
+| `ground` | `plain`: the page as it is. `dots`: the grid the boxes are placed on, shown faintly. Setup leaves a site's page `plain` |
 | `output.format` | What is written for each diagram: `html` (a live page), `svg` (a still picture) or `both` |
 | `output.steps` | Whether a page carries the walkthrough, when the diagram has `%% step` lines |
 | `output.legend` | Whether a page carries the legend of kinds of box |
@@ -122,7 +126,7 @@ the stylesheets it links to and the styles written in it.
 | Page and text colours | What `body` sets, following `var()`; else tokens named like `--bg`, `--background`, `--paper`, `--text`, `--foreground`, `--ink` |
 | Accent | The colour of links when it is a colour; else a token named like `--accent`, `--primary`, `--brand`, `--mark`; else the strongest colour among the tokens |
 | Dark mode | The same, inside `prefers-color-scheme: dark`, `.dark` or `[data-theme="dark"]` |
-| Face and corner | `body`'s `font-family`; the most common `border-radius` |
+| Face, corner and shadows | `body`'s `font-family`; the most common `border-radius`; whether anything has a `box-shadow` |
 
 Colours are read as hex, `rgb()`, `hsl()`, bare `H S% L%` and `oklch()`. What a diagram needs and a site does not
 have (a box's fill and edge, lines, quiet text, the colours of kinds) is made from the page and text colours and

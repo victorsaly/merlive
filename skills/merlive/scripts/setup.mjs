@@ -26,7 +26,7 @@ const colourNames = { bg: 'Page', node: 'Box', stroke: 'Box edge', text: 'Words'
  * @param {string[]} kinds
  */
 export function setupRuntime(state, kinds) {
-  /* global colourChecks, kindFill */
+  /* global colourChecks, kindFill, mix */
   const byId = (/** @type {string} */ id) => /** @type {HTMLElement} */ (document.getElementById(id));
   const ruleNames = { D1: 'Words and lines can be read', D2: 'Kinds of box can be told apart' };
   const paint = () => {
@@ -39,6 +39,13 @@ export function setupRuntime(state, kinds) {
         // @ts-expect-error kindFill comes from the sums written into the page before this
         el.style.setProperty(`--mv-kf-${k}`, kindFill(p, k));
       }
+      // What is made from the palette is made again as it changes.
+      // @ts-expect-error mix comes from the sums written into the page before this
+      el.style.setProperty('--mv-dot', mix(p.text, p.bg, 0.12));
+      // @ts-expect-error mix comes from the sums written into the page before this
+      el.style.setProperty('--mv-group', mix(p.text, p.bg, 0.035));
+      el.classList.toggle('mv-flat', state.depth === 'flat');
+      el.classList.toggle('mv-plain', state.ground === 'plain');
       el.hidden = !(state.modes === 'both' || state.modes === mode);
     }
     document.querySelectorAll('rect.mv-shape:not(.mv-pill)').forEach((r) => r.setAttribute('rx', String(Math.min(state.radius, Number(r.getAttribute('height')) / 2))));
@@ -96,7 +103,7 @@ export function setupPage({ model, lay, design, said, sums, wrote }) {
   const palettes = /** @type {['light'|'dark', import('./design.mjs').Palette][]} */ ([['light', design.light], ['dark', design.dark]]).filter(([, p]) => p);
   const shown = new Set(looksOf(design).map(([mode]) => mode));
   /** @type {Record<string, unknown>} */
-  const state = { name: design.name, modes: design.modes, motion: design.motion, radius: design.radius, font: design.font, weight: design.weight, output: design.output, light: design.light };
+  const state = { name: design.name, modes: design.modes, motion: design.motion, depth: design.depth, ground: design.ground, radius: design.radius, font: design.font, weight: design.weight, output: design.output, light: design.light };
   if (design.from) state.from = design.from;
   if (design.dark) state.dark = design.dark;
 
@@ -108,10 +115,11 @@ export function setupPage({ model, lay, design, said, sums, wrote }) {
 ${Object.entries(colourNames).map(([key, words]) => `<label><input type="color" data-look="${mode}" data-key="${key}" value="${/** @type {Record<string,string>} */ (/** @type {unknown} */ (p))[key]}"> ${words}</label>`).join('\n')}
 ${Object.entries(p.kinds).map(([k, c]) => `<label><input type="color" data-look="${mode}" data-kind="${esc(k)}" value="${c}"> ${esc(kindName(k))}</label>`).join('\n')}
 </div></fieldset>`).join('\n');
-  const drawing = inside(model, lay, design, false);
+  // Drawn with its shadow and its dots, so that either can be switched off and on as the page is used.
+  const whole = { ...design, depth: /** @type {const} */ ('soft'), ground: /** @type {const} */ ('dots') };
   const looks = palettes.map(([mode, p]) => `<figure class="mv-look" data-look="${mode}" style="${variables(p, kinds)}"${shown.has(mode) ? '' : ' hidden'}>
 <figcaption>${mode === 'light' && palettes.length === 1 ? 'Your diagram' : mode === 'light' ? 'Light' : 'Dark'}</figcaption>
-<svg class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" style="width:${lay.width}px" role="img" aria-label="The diagram in ${mode}">${drawing}</svg>
+<svg class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" style="width:${lay.width}px" role="img" aria-label="The diagram in ${mode}">${inside(model, lay, whole, false, `-${mode}`)}</svg>
 </figure>`).join('\n');
   const lead = wrote
     ? 'Merlive read your site, made these settings from it and saved them as <code>merlive.design.json</code>. Every diagram in this project is now drawn this way. Nothing on this page needs doing.'
@@ -153,7 +161,9 @@ input[type=color]{width:34px;height:28px;padding:0;border:1px solid rgba(128,128
 textarea{width:100%;height:180px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid rgba(128,128,128,.6);border-radius:8px;padding:10px;background:Canvas;color:CanvasText}
 button{font:inherit;padding:8px 14px;border-radius:8px;border:1px solid rgba(128,128,128,.6);background:ButtonFace;color:ButtonText;cursor:pointer;min-height:38px;justify-self:start}
 :focus-visible{outline:3px solid Highlight;outline-offset:2px}
-${rulesFor(design, kinds)}
+${rulesFor(whole, kinds)}
+.mv-flat .mv-node{filter:none}
+.mv-plain .mv-ground{display:none}
 </style>
 </head>
 <body>
@@ -184,6 +194,14 @@ ${radio('format', 'both', 'Both', design.output.format)}
 ${tick('steps', 'Steps to walk through, when the diagram has them')}
 ${tick('legend', 'A legend of the kinds of box')}
 ${tick('source', 'The Mermaid it was drawn from')}
+</div></fieldset>
+<fieldset><legend>Depth</legend><div class="row">
+${radio('depth', 'flat', 'Flat: boxes lie on the page', design.depth)}
+${radio('depth', 'soft', 'Soft: a shadow lifts them off it', design.depth)}
+</div></fieldset>
+<fieldset><legend>The ground behind the diagram</legend><div class="row">
+${radio('ground', 'plain', 'Plain: the page as it is', design.ground)}
+${radio('ground', 'dots', 'Dots: the grid the boxes sit on, faintly', design.ground)}
 </div></fieldset>
 <fieldset><legend>Corner of a box</legend><div class="row">
 <label><input type="range" id="radius" min="0" max="24" step="1" value="${Math.min(24, design.radius)}"> <span id="radius-now"></span></label>

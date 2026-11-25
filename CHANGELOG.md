@@ -28,6 +28,11 @@ The first version. It draws flowcharts and nothing else, and says so.
   whichever side crosses less.
 - **Mermaid kept in code is found**: a flowchart in a string in an `.astro` page or a script is drawn like one
   in Markdown.
+- **A diagram has character, and each part of it means something.** The main path is drawn heavier. A box of a
+  kind carries a stripe of its colour down its edge. A group's frame has a faint fill. In Merlive's own look,
+  boxes lift off the page with a soft shadow and sit on a ground of dots, the grid they are placed on. Both are
+  the design's to switch (`depth`, `ground`), both are on the setup page, and a design read from a site follows
+  the site: a shadow only where the site has shadows, its page left plain.
 - **Steps and notes live in the Mermaid source**, as `%%` comments other renderers ignore: `%% step:` for a
   walkthrough, `%% note X:` for what a box means, `%% main:` to name the main path, `%% side:` for where loops go.
 - **A reader can pick a box or a line** to see only what it connects to, and walk the steps. Nothing moves until

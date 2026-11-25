@@ -42,6 +42,9 @@ node skills/merlive/scripts/merlive.mjs --setup --from https://your.site        
 - **A diagram that looks planned.** The main path runs in one straight line and everything else sits to one side.
   Every box is the same size, on a grid. A decision is a box with cut corners, not a diamond twice the size of its
   neighbours. Lines turn at right angles, each with a port of its own, and go round boxes.
+- **Character that means something.** The main path is drawn heavier. A box of a kind carries a stripe of its
+  colour. A group sits in a faintly filled frame. Boxes lift off a ground of dots, the grid they are placed on.
+  Nothing is decoration, and a site with no shadows gets diagrams with none.
 - **Rules that are checked.** Seven placement rules and two for colour run before anything is written. A diagram
   that breaks one is not written, and the message says which rule, where, and what to change.
   [The rules](docs/PLACEMENT.md).

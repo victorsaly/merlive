@@ -23,6 +23,8 @@ in a left-to-right flow). Everything else sits to one side of it.
 - **Fail:** the third box of the main path is pushed sideways to make room for a branch.
 - **Why:** a reader finds the normal case first, then the exceptions.
 
+The main path is also drawn heavier than what branches off it, so the eye takes it first.
+
 Off the main path, a box has a side. What leaves the main path (a branch, a loop) goes to one side of it; what
 feeds it (a box nothing leads to, that comes in part-way) comes in from the other, one step before what it feeds.
 So a line coming in never has to cross a line going out. A box takes another free place only when that costs less
@@ -105,6 +107,23 @@ twelve. Checked in light and in dark. Only kinds the design gives a colour are c
   lighter or darker helps more than changing its hue.
 - **And never colour alone:** a decision and a start or end also differ in shape, the legend names every kind,
   and a picked box says its kind in words.
+
+## What a diagram looks like says something
+
+Nothing is there for decoration. Each difference a reader can see means one thing:
+
+| What is seen | What it means |
+|---|---|
+| A heavier line | The main path |
+| A stripe of colour down a box's edge, and its tint | A box of a kind that means something (rework, risk, your own) |
+| Cut corners, a pill | A decision, a start or end |
+| A dashed frame with a faint fill and a title | A group the author made |
+| A dotted line | A link the author drew dotted |
+| A ground of dots (`ground: dots`) | The grid every box is placed on |
+| A soft shadow (`depth: soft`) | A box, lifted off the ground it sits on |
+
+The last two are the design's to switch off. A design read from a site keeps the site's manners: a shadow only
+where the site has shadows, and the page behind the diagram left plain.
 
 ## Motion is not a placement rule, but it has one of its own
 

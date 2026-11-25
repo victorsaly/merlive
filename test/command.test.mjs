@@ -84,7 +84,7 @@ describe('the command', () => {
     await go([example, '--out', out]);
     const page = readFileSync(join(out, 'order-approval-1.html'), 'utf8');
     assert.doesNotMatch(page, /(src|href)="https?:/);
-    assert.doesNotMatch(page, /@import|url\(/);
+    assert.doesNotMatch(page, /@import|url\((?!#)/, 'the only url() is one that points inside the page itself');
     assert.ok(page.includes('id="mermaid-source"'));
     assert.ok(page.includes('C --&gt;|Yes| D[Manager approval]'), 'the Mermaid, as written');
   });

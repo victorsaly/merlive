@@ -117,6 +117,7 @@ accent", "square corners"), or paste settings copied from the setup page. Change
 |---|---|
 | Light only, dark only, or both | `modes` |
 | Nothing moving, or more | `motion`: `none`, `calm`, `lively` |
+| More character, or less: shadows, a dotted ground | `depth`: `flat`, `soft`. `ground`: `plain`, `dots` |
 | A still picture as well as, or in place of, the page | `output.format`: `html`, `svg`, `both` |
 | No walkthrough, no legend, no Mermaid shown | `output.steps`, `output.legend`, `output.source` |
 | Another colour, face or corner | `light`, `dark`, `font`, `radius` |

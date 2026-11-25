@@ -6,7 +6,7 @@
 import { builtIn, colourChecks, colourLimits, contrast, designFrom, mix, strength } from './design.mjs';
 
 /** @typedef {{bg?:string,text?:string,accent?:string}} Found */
-/** @typedef {{light?:Found,dark?:Found,font?:string,radius?:number}} Reading */
+/** @typedef {{light?:Found,dark?:Found,font?:string,radius?:number,shadows?:boolean}} Reading */
 
 // What is looked for, and how sure it has to be.
 const reads = {
@@ -120,6 +120,7 @@ export function readingOf(sheets) {
   let face = '';
   /** @type {string[]} */
   const corners = [];
+  let shadowed = false;
   for (const r of rules) {
     const mode = r.dark ? 'dark' : 'light';
     // What is left of each selector once its theme switches are taken off: ":root:not([data-theme='light'])" is :root.
@@ -132,6 +133,7 @@ export function readingOf(sheets) {
       else if (page && name === 'font-family') face = value;
       else if (name === 'color' && parts.some((s) => s === 'a' || s === 'a:link')) set[mode].link = value;
       else if (name === 'border-radius') corners.push(value);
+      else if (name === 'box-shadow' && !/^(none|unset|initial|inherit|0)$/i.test(value)) shadowed = true;
     }
   }
   const token = (/** @type {'light'|'dark'} */ mode, /** @type {string} */ name) => tokens[mode].get(name) ?? tokens.light.get(name);
@@ -172,6 +174,7 @@ export function readingOf(sheets) {
   if (dark && dark.bg && dark.bg !== light?.bg) reading.dark = dark;
   if (face) reading.font = filled(face, 'light');
   const px = corners.map((c) => /^(\d*\.?\d+)(px|rem|em)$/.exec(filled(c, 'light'))).filter((m) => m !== null).map((m) => parseFloat(m[1]) * (m[2] === 'px' ? 1 : reads.rem)).filter((v) => v < reads.pill);
+  if (reading.light || reading.dark) reading.shadows = shadowed;
   if (px.length) reading.radius = [...new Set(px)].sort((a, b) => px.filter((v) => v === b).length - px.filter((v) => v === a).length || a - b)[0];
   else if (reading.light && rules.length >= reads.enoughRules) reading.radius = 0;
   return reading;
@@ -255,7 +258,9 @@ export function designOf(reading, about) {
   said.found.push(`${one}${faces.length ? `, face ${faces[0]}` : ''}, ${reading.dark ? 'in light and dark' : 'one look'}`);
   said.made.push('a box\'s fill and edge, lines and quiet text, from your page and text colours', 'the colours for kinds of box (decision, rework and the rest) are Merlive\'s, held to your page');
 
-  Object.assign(file, { modes: reading.dark ? 'both' : 'light', motion: builtIn.motion, output: { ...builtIn.output }, light: look(reading.light, 'light') });
+  // A diagram on somebody's site keeps that site's manners: a shadow only where the site has shadows, and the
+  // page behind it left as the site made it.
+  Object.assign(file, { modes: reading.dark ? 'both' : 'light', motion: builtIn.motion, depth: reading.shadows ? 'soft' : 'flat', ground: 'plain', output: { ...builtIn.output }, light: look(reading.light, 'light') });
   if (reading.dark) file.dark = look(reading.dark, 'dark');
   if (faces.length) file.font = faces.join(', ');
   if (reading.radius !== undefined) file.radius = Math.min(reads.mostCorner, Math.round(reading.radius));

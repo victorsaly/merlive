@@ -21,6 +21,8 @@
  * @property {number} weight
  * @property {number} radius a box's corner, in px
  * @property {'none'|'calm'|'lively'} motion none: nothing moves. calm: one dot, when asked. lively: the path flows too.
+ * @property {'flat'|'soft'} depth flat: boxes lie on the page. soft: a shadow lifts them off it.
+ * @property {'plain'|'dots'} ground plain: the page as it is. dots: the grid the boxes are placed on, shown faintly.
  * @property {Palette} light
  * @property {Palette} [dark] left out, the diagram keeps its one look in both
  * @property {'light'|'dark'|'both'} modes which of the two a diagram is drawn in
@@ -37,7 +39,7 @@
  * @type {Design}
  */
 export const builtIn = {
-  name: 'merlive', font: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', weight: 500, radius: 8, motion: 'calm',
+  name: 'merlive', font: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', weight: 500, radius: 8, motion: 'calm', depth: 'soft', ground: 'dots',
   modes: 'both', output: { format: 'html', steps: true, legend: true, source: true },
   light: { bg: '#eff6f5', node: '#ffffff', stroke: '#b3cbc7', text: '#0f2f2d', muted: '#48615e', edge: '#5e827e', accent: '#d6452b',
     kinds: { decision: '#b87a00', terminal: '#2c7d4f', rework: '#a8327a', external: '#5a4fcf', data: '#0a84c4', risk: '#7a1f12' } },
@@ -197,6 +199,8 @@ export function designFrom(file) {
     for (const k of Object.keys(p.kinds)) if (!/^\w+$/.test(k)) throw say(`${mode}.kinds has "${k}"; a kind is named in letters, digits and _ only.`);
   }
   if (!['none', 'calm', 'lively'].includes(d.motion)) throw say('motion must be none, calm or lively.');
+  if (!['flat', 'soft'].includes(d.depth)) throw say('depth must be flat or soft.');
+  if (!['plain', 'dots'].includes(d.ground)) throw say('ground must be plain or dots.');
   // The face is written into the page's styles as it is, so it may hold only what a list of faces holds.
   if (typeof d.font !== 'string' || !/^[\w\s,'"-]+$/.test(d.font)) throw say('font must be a list of faces, like "Inter", system-ui, sans-serif.');
   if (typeof d.radius !== 'number' || d.radius < 0 || d.radius > 40) throw say('radius must be a number of pixels from 0 to 40.');
