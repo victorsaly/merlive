@@ -3,6 +3,7 @@
 
 import { iconFor } from './icons.mjs';
 import { stateReader } from './state.mjs';
+import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
 /** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string}} Node dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
@@ -199,6 +200,8 @@ export function hueOf(colour) {
  * @returns {Model}
  */
 export function parse(src) {
+  // A sequence diagram has a reader, rules and a drawing of its own: sequence.mjs.
+  if (isSequence(src)) return /** @type {any} */ (parseSequence(src));
   /** @type {Model} */
   const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, groups: [], warnings: [] };
   /** @type {Map<string, Node>} */

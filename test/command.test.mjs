@@ -67,16 +67,38 @@ describe('options', () => {
 });
 
 describe('the command', () => {
-  it('draws each flowchart as a page, and leaves and names what is not one', async () => {
+  it('draws each flowchart and each sequence diagram as a page', async () => {
     const out = temp();
     const { code, text } = await go([example, '--out', out]);
     assert.equal(code, exits.drawn);
     assert.match(text, /drew .*order-approval-1\.html \(8 boxes, 9 links, 0 crossings, merlive design\)/);
-    assert.match(text, /left as Mermaid: block 3 \(line \d+\) is a sequenceDiagram/);
+    assert.match(text, /drew .*order-approval-3\.html \(3 participants, 2 messages, merlive design\)/);
     const page = readFileSync(join(out, 'order-approval-1.html'), 'utf8');
     assert.match(page, /<title>Purchase order approval<\/title>/);
     assert.ok(page.includes('Revise order'));
-    assert.equal(existsSync(join(out, 'order-approval-3.html')), false);
+    const calls = readFileSync(join(out, 'order-approval-3.html'), 'utf8');
+    assert.match(calls, /<title>Who talks to whom<\/title>/);
+    assert.ok(calls.includes('Ask for approval') && calls.includes('id="mv-next"'));
+  });
+
+  it('draws a sequence diagram as a still picture, says what would be drawn, and refuses one that breaks a rule', async () => {
+    const cwd = temp();
+    writeFileSync(join(cwd, 'calls.mmd'), 'sequenceDiagram\n  Buyer->>ERP: Raise order\n  ERP-|\\Buyer: half\n');
+    const checked = await go(['calls.mmd', '--check'], cwd);
+    assert.match(checked.text, /note, block 1: line 3: half arrows are not read yet/);
+    assert.match(checked.text, /would draw calls-1\.html \(2 participants, 1 messages, merlive design\)/);
+    assert.equal((await go(['calls.mmd', '--format', 'svg'], cwd)).code, exits.drawn);
+    assert.match(readFileSync(join(cwd, 'diagrams/calls-1.svg'), 'utf8'), /^<svg xmlns/);
+    writeFileSync(join(cwd, 'long.mmd'), 'sequenceDiagram\n  participant A as Pneumonoultramicroscopicsilicovolcanoconiosis\n  A->>B: hi\n');
+    const long = await go(['long.mmd'], cwd);
+    assert.equal(long.code, exits.brokeARule);
+    assert.match(long.text, /not drawn: block 1 \(line 1\) breaks 1 of its rules\n {2}S7 Names, words and notes fit where they sit: /);
+  });
+
+  it('leaves and names a kind of diagram it does not draw', async () => {
+    const cwd = temp();
+    writeFileSync(join(cwd, 'mixed.md'), '```mermaid\nflowchart TD\nA --> B\n```\n\n```mermaid\npie title Orders\n  "UK" : 46\n```\n');
+    assert.match((await go(['mixed.md', '--check'], cwd)).text, /left as Mermaid: block 2 \(line 6\) is a pie, and Merlive draws flowcharts and sequence diagrams for now/);
   });
 
   it('writes a page that fetches nothing and carries its source', async () => {
@@ -189,11 +211,11 @@ describe('the command: what is missing ends with 2, nothing to draw with 3', () 
 
   it('ends with 3 for a file with no flowchart', async () => {
     const cwd = temp();
-    writeFileSync(join(cwd, 'plain.md'), '# Nothing\n\n```mermaid\nsequenceDiagram\nA->>B: hi\n```\n\n```mermaid\nflowchart TD\n```\n');
+    writeFileSync(join(cwd, 'plain.md'), '# Nothing\n\n```mermaid\npie title Orders\n"UK" : 46\n```\n\n```mermaid\nflowchart TD\n```\n');
     const { code, text } = await go(['plain.md'], cwd);
     assert.equal(code, exits.nothingToDraw);
     assert.match(text, /block 2 \(line 8\) has no boxes/);
-    assert.match(text, /Nothing to draw: plain\.md has no Mermaid flowchart\./);
+    assert.match(text, /Nothing to draw: plain\.md has no Mermaid flowchart or sequence diagram\./);
     assert.match((await go([example, '--only', '9'])).text, /at block 9/);
   });
 });

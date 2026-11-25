@@ -7,6 +7,8 @@ import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout, roomFor } from '../skills/merlive/scripts/layout.mjs';
 import { builtIn, designFrom, designWith } from '../skills/merlive/scripts/design.mjs';
 import { page, picture } from '../skills/merlive/scripts/render.mjs';
+import { layoutSequence, parseSequence } from '../skills/merlive/scripts/sequence.mjs';
+import { sequencePicture } from '../skills/merlive/scripts/sequence-render.mjs';
 import { setupPage } from '../skills/merlive/scripts/setup.mjs';
 import { runtime } from '../skills/merlive/scripts/runtime.mjs';
 import { run, version } from '../skills/merlive/scripts/merlive.mjs';
@@ -208,5 +210,8 @@ describe('the examples', () => {
     const model = parse(block);
     assert.equal(read('examples/diagrams/order-approval-1.svg'), picture(model, layout(model), builtIn, { title: 'Purchase order approval' }));
     assert.equal(read('examples/diagrams/order-approval-1.html'), page(model, layout(model), builtIn, { title: 'Purchase order approval', source: block, version }));
+    // The third block is a sequence diagram, drawn by rules of its own.
+    const calls = parseSequence(md.split('```mermaid\n')[3].split('\n```')[0]);
+    assert.equal(read('examples/diagrams/order-approval-3.svg'), sequencePicture(calls, layoutSequence(calls), builtIn, { title: 'Who talks to whom' }));
   });
 });

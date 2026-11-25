@@ -217,9 +217,9 @@ describe('parse: front matter', () => {
   });
 
   it('still names another kind of diagram behind it', () => {
-    const m = parse('---\ntitle: Calls\n---\nsequenceDiagram\n  A->>B: hello');
+    const m = parse('---\ntitle: Shares\n---\npie\n  "UK" : 46');
     assert.equal(m.type, 'unsupported');
-    assert.equal(m.kindOfDiagram, 'sequenceDiagram');
+    assert.equal(m.kindOfDiagram, 'pie');
   });
 
   it('says so when it is never closed, and draws nothing from a guess', () => {
@@ -324,9 +324,9 @@ describe('parse: what it does not read, it says', () => {
   });
 
   it('says a diagram that is not a flowchart is not one', () => {
-    const m = parse('sequenceDiagram\n  A->>B: hi');
+    const m = parse('gantt\n  title Rolling out');
     assert.equal(m.type, 'unsupported');
-    assert.equal(m.kindOfDiagram, 'sequenceDiagram');
+    assert.equal(m.kindOfDiagram, 'gantt');
     assert.equal(m.nodes.length, 0);
   });
 

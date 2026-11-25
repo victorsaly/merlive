@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Why: the one command an agent runs. It reads a Markdown file's Mermaid flowcharts, places each by rule,
+// Why: the one command an agent runs. It reads a Markdown file's Mermaid flowcharts and sequence diagrams, places each by rule,
 // checks the rules, and only then writes a diagram; and, once for a project, it reads the project's own
 // colours and writes the design file, so nobody has to. This file is the only one that touches the disk and
 // the network; everything it decides with is in the pure files beside it.
@@ -12,6 +12,8 @@ import { layout } from './layout.mjs';
 import { designFrom, designWith } from './design.mjs';
 import { score } from './score.mjs';
 import { page, picture } from './render.mjs';
+import { layoutSequence, scoreSequence } from './sequence.mjs';
+import { sequencePage, sequencePicture } from './sequence-render.mjs';
 import { designOf, readingOf, stylesheetsOf } from './site.mjs';
 import { sample, setupPage } from './setup.mjs';
 
@@ -34,10 +36,11 @@ const looks = {
   notASite: /(^|\.)(github\.com|gitlab\.com|bitbucket\.org|npmjs\.com)$/,
 };
 
-export const help = `Merlive ${version}: Mermaid flowcharts, placed by rule and made live.
+export const help = `Merlive ${version}: Mermaid flowcharts and sequence diagrams, placed by rule and made live.
 
-  node merlive.mjs <file> [options]                   draw a file's flowcharts: Markdown, a .mmd file, or a
-                                                      page or script that keeps one in a string
+  node merlive.mjs <file> [options]                   draw a file's flowcharts and sequence diagrams:
+                                                      Markdown, a .mmd file, or a page or script that keeps
+                                                      a flowchart in a string
   node merlive.mjs --setup [file.md] [--from <site>]  once for a project: read its colours, write its design
 
   --setup             read the project's colours (its own stylesheet, or the site named in package.json) and
@@ -53,9 +56,10 @@ export const help = `Merlive ${version}: Mermaid flowcharts, placed by rule and 
   --force             write a diagram even when it breaks a rule; with --setup, replace the design there is
   --help              this
 
-Ends with 0 when every flowchart was drawn, 1 when one broke a rule and was not written, 2 when something is
-missing (the file, an option's value, the design, a site that does not answer), 3 when the file has no flowchart.
-A state diagram is drawn as a flowchart is. Blocks of any other kind are left as they are and named.`;
+Ends with 0 when every diagram was drawn, 1 when one broke a rule and was not written, 2 when something is
+missing (the file, an option's value, the design, a site that does not answer), 3 when the file has nothing
+Merlive draws. A state diagram is drawn as a flowchart is. Blocks of any other kind of diagram are left as they
+are and named.`;
 
 /**
  * @param {string[]} argv
@@ -254,15 +258,19 @@ export async function run(argv, io = {}) {
     const number = i + 1;
     if (o.only && o.only !== number) return;
     const model = parse(block.source);
-    if (model.type !== 'flowchart') return say(`left as Mermaid: block ${number} (line ${block.line}) is a ${model.kindOfDiagram || 'blank block'}, and Merlive draws flowcharts and state diagrams for now`);
-    if (!model.nodes.length) return say(`left as Mermaid: block ${number} (line ${block.line}) has no boxes`);
+    // A sequence diagram is read, placed, checked and drawn by sequence.mjs; from here on it goes the same way.
+    const seq = /** @type {string} */ (model.type) === 'sequence' ? /** @type {import('./sequence.mjs').SequenceModel} */ (/** @type {unknown} */ (model)) : null;
+    if (!seq && model.type !== 'flowchart') return say(`left as Mermaid: block ${number} (line ${block.line}) is a ${model.kindOfDiagram || 'blank block'}, and Merlive draws flowcharts, state diagrams and sequence diagrams for now`);
+    if (seq ? !seq.participants.length : !model.nodes.length) return say(`left as Mermaid: block ${number} (line ${block.line}) has no ${seq ? 'participants' : 'boxes'}`);
 
-    const lay = layout(model);
+    const lay = seq ? /** @type {any} */ (layoutSequence(seq)) : layout(model);
     // The project's design, and the nearest of its colours for any class this diagram's author made up.
-    const drawnIn = designWith(design, model);
-    const result = score(model, lay, drawnIn);
+    const drawnIn = seq ? design : designWith(design, model);
+    const result = seq ? scoreSequence(seq, lay, drawnIn) : score(model, lay, drawnIn);
     const crossings = result.checks.find((c) => c.id === 'P4')?.detail ?? '';
-    const facts = `${model.nodes.length} boxes, ${model.edges.length} links, ${crossings}, ${design.name} design`;
+    const facts = seq
+      ? `${seq.participants.length} participants, ${seq.items.filter((i) => i.type === 'message').length} messages, ${design.name} design`
+      : `${model.nodes.length} boxes, ${model.edges.length} links, ${crossings}, ${design.name} design`;
     for (const w of [...model.warnings, ...lay.warnings]) say(`  note, block ${number}: ${w}`);
 
     if (!result.pass) {
@@ -279,14 +287,15 @@ export async function run(argv, io = {}) {
         continue;
       }
       mkdirSync(outDir, { recursive: true });
-      writeFileSync(join(outDir, name), format === 'svg' ? picture(model, lay, drawnIn, about) : page(model, lay, drawnIn, about));
+      const made = seq ? (format === 'svg' ? sequencePicture : sequencePage)(seq, lay, drawnIn, about) : format === 'svg' ? picture(model, lay, drawnIn, about) : page(model, lay, drawnIn, about);
+      writeFileSync(join(outDir, name), made);
       say(`drew ${join(outDir, name)} (${facts})`);
     }
     drawn++;
   });
 
   if (broke && !o.force) return exits.brokeARule;
-  if (!drawn) return say(`Nothing to draw: ${o.file} has no Mermaid flowchart${o.only ? ` at block ${o.only}` : ''}.`), exits.nothingToDraw;
+  if (!drawn) return say(`Nothing to draw: ${o.file} has no Mermaid flowchart or sequence diagram${o.only ? ` at block ${o.only}` : ''}.`), exits.nothingToDraw;
   return exits.drawn;
 }
 

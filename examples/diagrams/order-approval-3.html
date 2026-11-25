@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="Merlive 0.1.0">
+<title>Who talks to whom</title>
+<style>
+:root{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){:root{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+[data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-group text{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}
+.mv-life{stroke:var(--mv-stroke);stroke-width:1.2;stroke-dasharray:4 4}
+.mv-bar{fill:var(--mv-node);stroke:var(--mv-edge);stroke-width:1.2}
+.mv-open{fill:none;stroke:var(--mv-edge);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mv-words{font-size:12px;font-weight:600;fill:var(--mv-text);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-num circle{fill:var(--mv-text)}
+.mv-num text{font-size:10px;font-weight:700;fill:var(--mv-bg);text-anchor:middle}
+.mv-note-box{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.2}
+.mv-note-fold{fill:none;stroke:var(--mv-stroke);stroke-width:1.2}
+.mv-note text{font-size:12px;fill:var(--mv-text);text-anchor:middle}
+.mv-frame-box{fill:none;stroke:var(--mv-stroke);stroke-width:1.2}
+[data-kind="rect"] .mv-frame-box{fill:var(--mv-text);fill-opacity:0.045;stroke:none}
+.mv-frame-tab{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1.2}
+.mv-frame-kind{font-size:10.5px;font-weight:700;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}
+.mv-frame-label{font-size:12px;font-weight:600;fill:var(--mv-muted);paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-frame-divide{stroke:var(--mv-stroke);stroke-width:1.2;stroke-dasharray:5 4}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mv-bg);color:var(--mv-text);font:15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+main{max-width:1080px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:16px}
+h1{font-size:20px;font-weight:650;margin:0;text-wrap:balance}
+h2{font-size:16px;font-weight:650;margin:0}
+p{margin:0}
+.mv-layout{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:880px){.mv-layout{grid-template-columns:minmax(0,1fr) 340px;align-items:start}.mv-side{position:sticky;top:16px}}
+.mv-stage{margin:0;overflow-x:auto}
+/* The drawing may shrink to fit, but only so far: below that the words stop being readable, so it scrolls. */
+.mv-svg{display:block;width:clamp(365px,100%,456px);height:auto;margin:0 auto}
+#mv-picked:not([hidden]){display:grid;gap:8px}
+.mv-side{display:grid;gap:12px}
+/* On a phone a sequence is taller than the screen, so the card that goes through it stays at the foot of the
+   screen. It can only stay within what holds it, so there the drawing and the cards are one plain column. */
+@media (max-width:879px){.mv-layout{display:block}.mv-side{display:contents}.mv-stage,.mv-card{margin-bottom:12px}.mv-steps{position:sticky;bottom:8px;z-index:1;box-shadow:0 2px 14px var(--mv-shadow)}}
+.mv-card{background:var(--mv-node);border:1px solid var(--mv-stroke);border-radius:8px;padding:14px;display:grid;gap:8px}
+.mv-small,.mv-legend{font-size:12px;color:var(--mv-muted)}
+.mv-row{display:flex;gap:8px;flex-wrap:wrap}
+.mv-row .mv-main{margin-left:auto}
+button{font:inherit;font-size:14px;color:var(--mv-text);background:var(--mv-node);border:1px solid var(--mv-stroke);border-radius:8px;padding:7px 12px;min-height:38px;cursor:pointer}
+button.mv-main{background:var(--mv-accent);border-color:var(--mv-accent);color:var(--mv-bg)}
+button:disabled{opacity:.4;cursor:default}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--mv-accent);outline-offset:2px}
+.mv-legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px}
+.mv-legend span{display:inline-flex;align-items:center;gap:6px}
+.mv-legend i{width:14px;height:10px;border:2px solid;border-radius:3px}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
+dt{color:var(--mv-muted)}
+dd{margin:0}
+pre{margin:8px 0 0;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-x:auto;border:1px solid var(--mv-stroke);border-radius:8px;padding:10px}
+summary{cursor:pointer;color:var(--mv-muted);font-size:13px}
+.mv-node[role],.mv-edge{cursor:pointer}
+.mv-node,.mv-edge,.mv-note,.mv-frame,.mv-bar{transition:opacity .2s}
+.mv-node:focus,.mv-edge:focus{outline:none}
+.mv-hit{fill:none;stroke:transparent;stroke-width:22;pointer-events:stroke}
+.mv-dim{opacity:.16}
+.mv-lit .mv-shape{stroke-width:2.4}
+.mv-on .mv-line,.mv-sel .mv-line,.mv-edge:focus-visible .mv-line{stroke:var(--mv-accent);stroke-width:2.6}
+.mv-on .mv-head,.mv-sel .mv-head{fill:var(--mv-accent)}
+.mv-on .mv-cross,.mv-sel .mv-cross,.mv-on .mv-open,.mv-sel .mv-open{stroke:var(--mv-accent)}
+.mv-on .mv-num circle,.mv-sel .mv-num circle{fill:var(--mv-accent)}
+.mv-sel .mv-shape,.mv-node:focus-visible .mv-shape{stroke:var(--mv-accent);stroke-width:3}
+.mv-stage{border-radius:8px;padding:8px 0;background-image:radial-gradient(var(--mv-dot) 1px,transparent 1.3px);background-size:16px 16px}
+#mv-dot circle{fill:var(--mv-accent);stroke:var(--mv-bg);stroke-width:2}
+#mv-dot{pointer-events:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{button,.mv-source{display:none}.mv-layout{grid-template-columns:1fr}.mv-dim{opacity:1}}
+</style>
+</head>
+<body data-motion="calm">
+<main>
+<h1>Who talks to whom</h1>
+<div class="mv-layout">
+<figure class="mv-stage">
+<svg class="mv-svg" viewBox="0 0 456 208" role="group" aria-label="Who talks to whom">
+<g></g><g></g><g><line class="mv-life" x1="76" y1="68" x2="76" y2="180"/><line class="mv-life" x1="228" y1="68" x2="228" y2="180"/><line class="mv-life" x1="380" y1="68" x2="380" y2="180"/></g><g></g><g></g><g><g class="mv-edge" data-edge="m1" data-style="solid" tabindex="0" role="button" aria-label="Message 1, Requester to ERP: Submit order"><path class="mv-line" d="M76,111L221,111"/><polygon class="mv-head" points="219,106.5 228,111 219,115.5"/><text class="mv-words"><tspan x="152" y="101.7">Submit order</tspan></text><path class="mv-hit" d="M76,111L228,111"/></g><g class="mv-edge" data-edge="m2" data-style="solid" tabindex="0" role="button" aria-label="Message 2, ERP to Manager: Ask for approval"><path class="mv-line" d="M228,156L373,156"/><polygon class="mv-head" points="371,151.5 380,156 371,160.5"/><text class="mv-words"><tspan x="304" y="146.7">Ask for approval</tspan></text><path class="mv-hit" d="M228,156L380,156"/></g></g><g></g><g><g class="mv-node" data-node="Requester" data-kind="step" tabindex="0" role="button" aria-label="Requester, a participant"><rect class="mv-shape" x="28" y="28" width="96" height="40" rx="8"/><text><tspan x="76" y="52.5">Requester</tspan></text></g><g class="mv-node" data-node="ERP" data-kind="step" tabindex="0" role="button" aria-label="ERP, a participant"><rect class="mv-shape" x="180" y="28" width="96" height="40" rx="8"/><text><tspan x="228" y="52.5">ERP</tspan></text></g><g class="mv-node" data-node="Manager" data-kind="step" tabindex="0" role="button" aria-label="Manager, a participant"><rect class="mv-shape" x="332" y="28" width="96" height="40" rx="8"/><text><tspan x="380" y="52.5">Manager</tspan></text></g></g>
+<g id="mv-dot" style="display:none"><circle r="6"/></g>
+</svg>
+<figcaption class="mv-legend"><span><i style="border-color:var(--mv-k-step);background:var(--mv-kf-step)"></i>Participant</span></figcaption>
+</figure>
+<div class="mv-side">
+<section class="mv-card mv-steps" aria-live="polite">
+<p class="mv-small" id="mv-count"></p>
+<h2 id="mv-step-title"></h2>
+<p id="mv-step-text"></p>
+<div class="mv-row"><button type="button" id="mv-prev">Back</button><button type="button" id="mv-next" class="mv-main">Next</button></div>
+</section>
+<section class="mv-card" aria-live="polite">
+<p class="mv-small" id="mv-none">Pick a participant or a message to see only what it touches.</p>
+<div id="mv-picked" hidden>
+<h2 id="mv-title"></h2>
+<p id="mv-note"></p>
+<dl id="mv-facts"></dl>
+<div class="mv-row"><button type="button" id="mv-clear">Show everything</button></div>
+</div>
+</section>
+</div>
+</div>
+<details class="mv-source"><summary>Mermaid source</summary><pre id="mermaid-source">sequenceDiagram
+  Requester-&gt;&gt;ERP: Submit order
+  ERP-&gt;&gt;Manager: Ask for approval</pre></details>
+</main>
+<script>(function sequenceRuntime(data) {
+  const $ = (/** @type {string} */ id) => /** @type {HTMLElement} */ (document.getElementById(id));
+  const svg = /** @type {SVGSVGElement} */ (document.querySelector('.mv-svg'));
+  const all = (/** @type {string} */ what) => /** @type {SVGElement[]} */ ([...svg.querySelectorAll(what)]);
+  const lines = all('[data-edge]'), people = all('[data-node]'), notes = all('[data-note]'), frames = all('.mv-frame'), bars = all('.mv-bar');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches || data.motion === 'none';
+  const named = (/** @type {string} */ id) => data.participants.find((p) => p.id === id)?.label ?? id;
+  const total = data.messages.length;
+  let step = 0;
+  /** @type {{what:'message'|'participant',id:string}|null} */
+  let picked = null;
+
+  /** One dot, once, from the sender to the receiver: which way a message went. */
+  const run = (/** @type {SVGElement} */ line) => {
+    const path = /** @type {SVGPathElement|null} */ (line.querySelector('.mv-line')), dot = /** @type {SVGElement|null} */ (svg.querySelector('#mv-dot'));
+    if (still || !path || !dot) return;
+    const length = path.getTotalLength(), began = performance.now(), takes = 450;
+    dot.style.display = '';
+    const move = (/** @type {number} */ now) => {
+      const t = Math.min(1, (now - began) / takes), p = path.getPointAtLength(length * t);
+      dot.setAttribute('transform', `translate(${p.x},${p.y})`);
+      if (t < 1) requestAnimationFrame(move);
+      else dot.style.display = 'none';
+    };
+    requestAnimationFrame(move);
+  };
+
+  const paint = () => {
+    for (const el of [...lines, ...people, ...notes, ...frames, ...bars]) el.classList.remove('mv-dim', 'mv-on', 'mv-sel', 'mv-lit');
+    const dim = (/** @type {SVGElement[]} */ list, /** @type {(el:SVGElement, i:number) => boolean} */ when) => list.forEach((el, i) => el.classList.toggle('mv-dim', when(el, i)));
+    const at = (/** @type {SVGElement} */ el, /** @type {string} */ key) => Number(el.dataset[key] ?? 0);
+    const now = step ? data.messages[step - 1] : null;
+    if (now) {
+      // What has not been said yet is faint; what is being said is lit.
+      dim(lines, (_, i) => i + 1 > step);
+      lines[step - 1]?.classList.add('mv-on');
+      dim(notes, (el) => at(el, 'after') > step);
+      dim(frames, (el) => at(el, 'first') > step);
+      dim(bars, (el) => at(el, 'first') > step);
+      for (const el of people) if (el.dataset.node === now.from || el.dataset.node === now.to) el.classList.add('mv-lit');
+    } else if (picked?.what === 'participant') {
+      const id = picked.id, with_ = new Set([id]);
+      for (const m of data.messages) if (m.from === id || m.to === id) with_.add(m.from).add(m.to);
+      dim(lines, (_, i) => data.messages[i].from !== id && data.messages[i].to !== id);
+      dim(people, (el) => !with_.has(el.dataset.node ?? ''));
+      dim(notes, (el) => !(el.dataset.over ?? '').split(' ').includes(id));
+      dim(bars, (el) => el.dataset.of !== id);
+      for (const el of people) if (el.dataset.node === id) el.classList.add('mv-sel');
+    } else if (picked) {
+      const m = data.messages.find((x) => x.id === picked?.id);
+      dim(lines, (el) => el.dataset.edge !== picked?.id);
+      dim(people, (el) => el.dataset.node !== m?.from && el.dataset.node !== m?.to);
+      dim(notes, () => true);
+      for (const el of lines) if (el.dataset.edge === picked.id) el.classList.add('mv-sel');
+    }
+
+    const count = $('mv-count');
+    if (count) {
+      count.textContent = now ? `Message ${step} of ${total}` : `${total} messages, all shown`;
+      $('mv-step-title').textContent = now ? `${named(now.from)} to ${named(now.to)}` : 'Go through it one message at a time';
+      $('mv-step-text').textContent = now ? now.label : 'Next shows the first message and leaves the rest faint.';
+      /** @type {HTMLButtonElement} */ ($('mv-prev')).disabled = step === 0;
+      /** @type {HTMLButtonElement} */ ($('mv-next')).disabled = step === total;
+    }
+    $('mv-none').hidden = Boolean(picked) || Boolean(now);
+    $('mv-picked').hidden = !picked && !now;
+    const facts = $('mv-facts');
+    facts.textContent = '';
+    const fact = (/** @type {string} */ what, /** @type {string} */ value) => {
+      facts.append(Object.assign(document.createElement('dt'), { textContent: what }), Object.assign(document.createElement('dd'), { textContent: value }));
+    };
+    if (picked?.what === 'participant') {
+      const p = data.participants.find((x) => x.id === picked?.id);
+      $('mv-title').textContent = p?.label ?? '';
+      $('mv-note').textContent = '';
+      fact('Is', p?.role ?? '');
+      fact('Sends', String(data.messages.filter((m) => m.from === p?.id).length));
+      fact('Receives', String(data.messages.filter((m) => m.to === p?.id).length));
+    } else if (picked) {
+      const m = data.messages.find((x) => x.id === picked?.id);
+      $('mv-title').textContent = m ? `${named(m.from)} to ${named(m.to)}` : '';
+      $('mv-note').textContent = m?.label ?? '';
+      if (m) fact('Message', `${data.messages.indexOf(m) + 1} of ${total}`);
+    } else {
+      // Going through the messages, the card above says which one this is; here is only the way back.
+      $('mv-title').textContent = 'What is still to come is faint';
+      $('mv-note').textContent = '';
+    }
+  };
+
+  const pick = (/** @type {EventTarget|null} */ target) => {
+    const el = /** @type {Element|null} */ (target instanceof Element ? target.closest('[data-edge],[data-node]') : null);
+    if (!el) return;
+    const line = el.getAttribute('data-edge'), id = line ?? el.getAttribute('data-node') ?? '';
+    const same = picked && picked.id === id && (picked.what === 'message') === Boolean(line);
+    picked = same ? null : { what: line ? 'message' : 'participant', id };
+    step = 0;
+    paint();
+  };
+  svg.addEventListener('click', (e) => pick(e.target));
+  svg.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    pick(e.target);
+  });
+  const go = (/** @type {number} */ to) => {
+    step = Math.max(0, Math.min(total, to));
+    picked = null;
+    paint();
+    const line = lines[step - 1];
+    if (!line) return;
+    line.scrollIntoView({ block: 'center', inline: 'nearest', behavior: still ? 'auto' : 'smooth' });
+    run(line);
+  };
+  $('mv-next')?.addEventListener('click', () => go(step + 1));
+  $('mv-prev')?.addEventListener('click', () => go(step - 1));
+  $('mv-clear').addEventListener('click', () => {
+    picked = null;
+    go(0);
+  });
+  paint();
+})({"participants":[{"id":"Requester","label":"Requester","role":"A participant"},{"id":"ERP","label":"ERP","role":"A participant"},{"id":"Manager","label":"Manager","role":"A participant"}],"messages":[{"id":"m1","from":"Requester","to":"ERP","label":"Submit order"},{"id":"m2","from":"ERP","to":"Manager","label":"Ask for approval"}],"motion":"calm"});</script>
+</body>
+</html>
