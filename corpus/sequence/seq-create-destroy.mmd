@@ -1,0 +1,11 @@
+sequenceDiagram
+  Buyer->>ERP: Raise order
+  create participant J as Pick job
+  ERP->>J: Start picking
+  create actor P as Picker
+  J->>P: Assign
+  destroy P
+  J-xP: Released
+  destroy J
+  J-->>ERP: Picked
+  ERP-->>Buyer: On its way

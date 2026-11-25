@@ -1,0 +1,7 @@
+sequenceDiagram
+  Buyer->>ERP: Raise order
+  alt In stock
+    ERP-->>Buyer: Ships today
+  else Out of stock
+    ERP-->>Buyer: Ships next week
+  end

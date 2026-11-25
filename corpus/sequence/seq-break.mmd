@@ -1,0 +1,7 @@
+sequenceDiagram
+  Buyer-->ERP: Raise order
+  ERP-->Supplier: Send order
+  break When the supplier says no
+    ERP-->Buyer: Order refused
+  end
+  ERP-->Warehouse: Make room

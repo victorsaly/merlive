@@ -1,0 +1,6 @@
+sequenceDiagram
+  Buyer->>ERP: Raise order
+  loop Every morning
+    ERP->>Supplier: Any news?
+    Supplier-->>ERP: Not yet
+  end

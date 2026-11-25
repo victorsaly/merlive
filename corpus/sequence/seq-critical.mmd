@@ -1,0 +1,8 @@
+sequenceDiagram
+  critical Reserve the stock
+    ERP-->Warehouse: Reserve
+  option Warehouse does not answer
+    ERP-->ERP: Try again later
+  option Nothing left
+    ERP-->ERP: Back order
+  end

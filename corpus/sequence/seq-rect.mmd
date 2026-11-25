@@ -1,0 +1,13 @@
+sequenceDiagram
+  participant Buyer
+  participant ERP
+  rect rgb(191, 223, 255)
+  note right of Buyer: The buyer asks
+  Buyer->>+ERP: Raise order
+  rect rgb(200, 150, 255)
+  Buyer->>+ERP: And one more
+  ERP-->>-Buyer: Second order number
+  end
+  ERP-->>-Buyer: First order number
+  end
+  Buyer->>ERP: Thanks

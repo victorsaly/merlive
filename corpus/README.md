@@ -5,6 +5,7 @@ One small sample of everything Mermaid documents, to answer one question: what o
 - `flowchart/`: one sample for each feature the flowchart page of Mermaid's documentation sets out, from a box
   with words to links played in steps.
 - `state/`: the same for the state diagram page.
+- `sequence/`: the same for the sequence diagram page.
 - `kinds/`: one sample of each kind of diagram Mermaid documents.
 - `index.json`: for each sample, what it covers and what it should be read as: how many boxes, links and groups,
   which words, which kinds, what is at the ends of its links, and anything Merlive is known to leave out (`loses`).

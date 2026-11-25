@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 680 432" width="680" height="432" role="img" aria-label="A participant made part way down, and one ended">
+<title>A participant made part way down, and one ended</title>
+<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-k-external:#5a4fcf;--mv-kf-external:#eae8f9;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-k-external:#56b4e9;--mv-kf-external:#163c48;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+[data-kind="external"] .mv-shape{fill:var(--mv-kf-external);stroke:var(--mv-k-external)}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+[data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
+[data-kind="external"] .mv-stripe{fill:var(--mv-k-external)}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-group text{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}
+.mv-life{stroke:var(--mv-stroke);stroke-width:1.2;stroke-dasharray:4 4}
+.mv-bar{fill:var(--mv-node);stroke:var(--mv-edge);stroke-width:1.2}
+.mv-open{fill:none;stroke:var(--mv-edge);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mv-words{font-size:12px;font-weight:600;fill:var(--mv-text);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-num circle{fill:var(--mv-text)}
+.mv-num text{font-size:10px;font-weight:700;fill:var(--mv-bg);text-anchor:middle}
+.mv-note-box{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.2}
+.mv-note-fold{fill:none;stroke:var(--mv-stroke);stroke-width:1.2}
+.mv-note text{font-size:12px;fill:var(--mv-text);text-anchor:middle}
+.mv-frame-box{fill:none;stroke:var(--mv-stroke);stroke-width:1.2}
+[data-kind="rect"] .mv-frame-box{fill:var(--mv-text);fill-opacity:0.045;stroke:none}
+.mv-frame-tab{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1.2}
+.mv-frame-kind{font-size:10.5px;font-weight:700;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}
+.mv-frame-label{font-size:12px;font-weight:600;fill:var(--mv-muted);paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-frame-divide{stroke:var(--mv-stroke);stroke-width:1.2;stroke-dasharray:5 4}</style>
+<rect width="100%" height="100%" fill="var(--mv-bg)"/>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="680" height="432" fill="url(#mv-dots)"/><g></g><g></g><g><line class="mv-life" x1="76" y1="68" x2="76" y2="404"/><line class="mv-life" x1="252" y1="68" x2="252" y2="404"/><line class="mv-life" x1="428" y1="176" x2="428" y2="331"/><path class="mv-cross" d="M422,325L434,337M422,337L434,325"/><line class="mv-life" x1="604" y1="239" x2="604" y2="282"/><path class="mv-cross" d="M598,276L610,288M598,288L610,276"/></g><g></g><g></g><g><g class="mv-edge" data-edge="m1" data-style="solid"><path class="mv-line" d="M76,111L245,111"/><polygon class="mv-head" points="243,106.5 252,111 243,115.5"/><text class="mv-words"><tspan x="164" y="101.7">Raise order</tspan></text></g><g class="mv-edge" data-edge="m2" data-style="solid"><path class="mv-line" d="M252,156L373,156"/><polygon class="mv-head" points="371,151.5 380,156 371,160.5"/><text class="mv-words"><tspan x="316" y="146.7">Start picking</tspan></text></g><g class="mv-edge" data-edge="m3" data-style="solid"><path class="mv-line" d="M428,219L549,219"/><polygon class="mv-head" points="547,214.5 556,219 547,223.5"/><text class="mv-words"><tspan x="492" y="209.7">Assign</tspan></text></g><g class="mv-edge" data-edge="m4" data-style="solid"><path class="mv-line" d="M428,282L596,282"/><text class="mv-words"><tspan x="516" y="272.7">Released</tspan></text></g><g class="mv-edge" data-edge="m5" data-style="dotted"><path class="mv-line" d="M428,331L259,331"/><polygon class="mv-head" points="261,335.5 252,331 261,326.5"/><text class="mv-words"><tspan x="340" y="321.7">Picked</tspan></text></g><g class="mv-edge" data-edge="m6" data-style="dotted"><path class="mv-line" d="M252,380L83,380"/><polygon class="mv-head" points="85,384.5 76,380 85,375.5"/><text class="mv-words"><tspan x="164" y="370.7">On its way</tspan></text></g></g><g></g><g><g class="mv-node" data-node="Buyer" data-kind="step"><rect class="mv-shape" x="28" y="28" width="96" height="40" rx="8"/><text><tspan x="76" y="52.5">Buyer</tspan></text></g><g class="mv-node" data-node="ERP" data-kind="step"><rect class="mv-shape" x="204" y="28" width="96" height="40" rx="8"/><text><tspan x="252" y="52.5">ERP</tspan></text></g><g class="mv-node" data-node="J" data-kind="step"><rect class="mv-shape" x="380" y="136" width="96" height="40" rx="8"/><text><tspan x="428" y="160.5">Pick job</tspan></text></g><g class="mv-node" data-node="P" data-kind="external"><rect class="mv-shape mv-pill" x="556" y="199" width="96" height="40" rx="20"/><text><tspan x="604" y="223.5">Picker</tspan></text></g></g>
+</svg>

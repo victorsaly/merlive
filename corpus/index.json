@@ -1,5 +1,5 @@
 {
-  "from": "The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart page and its state diagram page set out. The samples are our own.",
+  "from": "The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram and sequence diagram pages set out. The samples are our own.",
   "flowchart": [
     {
       "file": "flowchart/declare-flowchart.mmd",
@@ -1135,6 +1135,460 @@
       "file": "kinds/railroad.mmd",
       "covers": "Railroad (syntax) diagram",
       "family": "grammar"
+    }
+  ],
+  "sequence": [
+    {
+      "file": "sequence/seq-participants-implicit.mmd",
+      "covers": "Participants named by the messages they are in",
+      "participants": 2,
+      "messages": 2,
+      "order": [
+        "Buyer",
+        "ERP"
+      ]
+    },
+    {
+      "file": "sequence/seq-participants-declared.mmd",
+      "covers": "Participants declared, in an order of their own",
+      "participants": 3,
+      "messages": 2,
+      "order": [
+        "Supplier",
+        "Buyer",
+        "ERP"
+      ]
+    },
+    {
+      "file": "sequence/seq-actors.mmd",
+      "covers": "Actors: people, not systems",
+      "participants": 3,
+      "messages": 2,
+      "roles": [
+        "actor",
+        "actor",
+        "participant"
+      ]
+    },
+    {
+      "file": "sequence/seq-participant-types.mmd",
+      "covers": "A participant with a type: boundary, control, entity, database, collections, queue",
+      "participants": 6,
+      "messages": 5,
+      "roles": [
+        "boundary",
+        "control",
+        "entity",
+        "database",
+        "collections",
+        "queue"
+      ],
+      "loses": "A database is a box of the kind \"data\". The other five are plain boxes, told apart by their names, not by a symbol"
+    },
+    {
+      "file": "sequence/seq-alias-as.mmd",
+      "covers": "A participant with a short id and a name, written with \"as\"",
+      "participants": 2,
+      "messages": 2,
+      "has": [
+        "Buyer",
+        "ERP"
+      ]
+    },
+    {
+      "file": "sequence/seq-alias-inline.mmd",
+      "covers": "A name written inside the braces",
+      "participants": 2,
+      "messages": 2,
+      "has": [
+        "Web shop",
+        "Order book"
+      ]
+    },
+    {
+      "file": "sequence/seq-alias-precedence.mmd",
+      "covers": "A name inside the braces and another after \"as\": the one after \"as\" wins",
+      "participants": 2,
+      "messages": 2,
+      "has": [
+        "Order desk",
+        "Order book"
+      ]
+    },
+    {
+      "file": "sequence/seq-create-destroy.mmd",
+      "covers": "A participant made part way down, and one ended",
+      "participants": 4,
+      "messages": 6,
+      "has": [
+        "Pick job",
+        "Picker"
+      ],
+      "made": [
+        "J",
+        "P"
+      ],
+      "ended": [
+        "J",
+        "P"
+      ]
+    },
+    {
+      "file": "sequence/seq-box-groups.mmd",
+      "covers": "Participants grouped in boxes, with and without a colour and a title",
+      "participants": 4,
+      "messages": 3,
+      "groups": 3,
+      "has": [
+        "Buying",
+        "Outside the firm"
+      ],
+      "loses": "A group's colour is read past: the look is the design's"
+    },
+    {
+      "file": "sequence/seq-message-line.mmd",
+      "covers": "A message with no arrowhead, solid and dotted",
+      "participants": 2,
+      "messages": 2,
+      "ends": [
+        [
+          "solid",
+          "none",
+          "none"
+        ],
+        [
+          "dotted",
+          "none",
+          "none"
+        ]
+      ]
+    },
+    {
+      "file": "sequence/seq-message-arrow.mmd",
+      "covers": "A message with an arrowhead, solid and dotted",
+      "participants": 2,
+      "messages": 2,
+      "ends": [
+        [
+          "solid",
+          "none",
+          "arrow"
+        ],
+        [
+          "dotted",
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "sequence/seq-message-both-ways.mmd",
+      "covers": "A message with an arrowhead at both ends",
+      "participants": 3,
+      "messages": 2,
+      "ends": [
+        [
+          "solid",
+          "arrow",
+          "arrow"
+        ],
+        [
+          "dotted",
+          "arrow",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "sequence/seq-message-cross.mmd",
+      "covers": "A message that ends in a cross",
+      "participants": 2,
+      "messages": 2,
+      "ends": [
+        [
+          "solid",
+          "none",
+          "cross"
+        ],
+        [
+          "dotted",
+          "none",
+          "cross"
+        ]
+      ]
+    },
+    {
+      "file": "sequence/seq-message-async.mmd",
+      "covers": "A message that does not wait: an open arrow",
+      "participants": 2,
+      "messages": 2,
+      "ends": [
+        [
+          "solid",
+          "none",
+          "open"
+        ],
+        [
+          "dotted",
+          "none",
+          "open"
+        ]
+      ]
+    },
+    {
+      "file": "sequence/seq-message-self.mmd",
+      "covers": "A message from a participant to itself",
+      "participants": 2,
+      "messages": 3,
+      "has": [
+        "Check the budget"
+      ]
+    },
+    {
+      "file": "sequence/seq-half-arrows.mmd",
+      "covers": "Half arrows",
+      "participants": 2,
+      "messages": 4
+    },
+    {
+      "file": "sequence/seq-central-connection.mmd",
+      "covers": "A message to or from the middle of a line",
+      "participants": 2,
+      "messages": 3
+    },
+    {
+      "file": "sequence/seq-activation-explicit.mmd",
+      "covers": "A participant at work, written with activate and deactivate",
+      "participants": 2,
+      "messages": 2,
+      "bars": 1
+    },
+    {
+      "file": "sequence/seq-activation-shortcut.mmd",
+      "covers": "A participant at work, written with + and -",
+      "participants": 2,
+      "messages": 2,
+      "bars": 1
+    },
+    {
+      "file": "sequence/seq-activation-stacked.mmd",
+      "covers": "A participant at work twice at once",
+      "participants": 2,
+      "messages": 4,
+      "bars": 2
+    },
+    {
+      "file": "sequence/seq-note-beside.mmd",
+      "covers": "A note to the right or the left of a participant",
+      "participants": 2,
+      "messages": 1,
+      "notes": 2,
+      "has": [
+        "Checks the budget",
+        "Waits"
+      ]
+    },
+    {
+      "file": "sequence/seq-note-over.mmd",
+      "covers": "A note over a participant",
+      "participants": 2,
+      "messages": 1,
+      "notes": 1,
+      "has": [
+        "Over the limit"
+      ]
+    },
+    {
+      "file": "sequence/seq-note-over-two.mmd",
+      "covers": "A note over two participants",
+      "participants": 2,
+      "messages": 1,
+      "notes": 1,
+      "has": [
+        "Both keep a copy"
+      ]
+    },
+    {
+      "file": "sequence/seq-line-breaks.mmd",
+      "covers": "A line break in a message, a note and a name",
+      "participants": 2,
+      "messages": 1,
+      "notes": 1,
+      "has": [
+        "Main warehouse",
+        "Pick the order before noon",
+        "Counted twice on the way out"
+      ],
+      "lines": 3
+    },
+    {
+      "file": "sequence/seq-loop.mmd",
+      "covers": "A loop",
+      "participants": 3,
+      "messages": 3,
+      "blocks": 1,
+      "has": [
+        "Every morning"
+      ]
+    },
+    {
+      "file": "sequence/seq-alt-else.mmd",
+      "covers": "One way or another: alt and else",
+      "participants": 2,
+      "messages": 3,
+      "blocks": 1,
+      "has": [
+        "In stock",
+        "Out of stock"
+      ]
+    },
+    {
+      "file": "sequence/seq-opt.mmd",
+      "covers": "Something that may not happen: opt",
+      "participants": 3,
+      "messages": 2,
+      "blocks": 1,
+      "has": [
+        "Over the limit"
+      ]
+    },
+    {
+      "file": "sequence/seq-par.mmd",
+      "covers": "Things done at once: par and and",
+      "participants": 3,
+      "messages": 4,
+      "blocks": 1,
+      "has": [
+        "To the supplier",
+        "To the warehouse"
+      ]
+    },
+    {
+      "file": "sequence/seq-par-nested.mmd",
+      "covers": "A block inside a block",
+      "participants": 5,
+      "messages": 4,
+      "blocks": 2,
+      "has": [
+        "Shelves",
+        "Dock"
+      ]
+    },
+    {
+      "file": "sequence/seq-critical.mmd",
+      "covers": "What must happen, and what to do when it cannot: critical and option",
+      "participants": 2,
+      "messages": 3,
+      "blocks": 1,
+      "has": [
+        "Reserve the stock",
+        "Warehouse does not answer",
+        "Nothing left"
+      ]
+    },
+    {
+      "file": "sequence/seq-critical-plain.mmd",
+      "covers": "A critical block with no options",
+      "participants": 2,
+      "messages": 1,
+      "blocks": 1,
+      "has": [
+        "Reserve the stock"
+      ]
+    },
+    {
+      "file": "sequence/seq-break.mmd",
+      "covers": "Where the sequence stops: break",
+      "participants": 4,
+      "messages": 4,
+      "blocks": 1,
+      "has": [
+        "When the supplier says no"
+      ]
+    },
+    {
+      "file": "sequence/seq-rect.mmd",
+      "covers": "Rows highlighted with a coloured background, one inside another",
+      "participants": 2,
+      "messages": 5,
+      "blocks": 2,
+      "notes": 1,
+      "bars": 2,
+      "loses": "The highlight's colour is read past: it is drawn in the design's own tint"
+    },
+    {
+      "file": "sequence/seq-comments.mmd",
+      "covers": "Comments on lines of their own",
+      "participants": 2,
+      "messages": 2
+    },
+    {
+      "file": "sequence/seq-entity-codes.mmd",
+      "covers": "Characters written as entity codes",
+      "participants": 2,
+      "messages": 2,
+      "has": [
+        "I ♥ this supplier",
+        "Noted ; ∞ thanks"
+      ]
+    },
+    {
+      "file": "sequence/seq-autonumber.mmd",
+      "covers": "Messages numbered",
+      "participants": 2,
+      "messages": 3,
+      "blocks": 1,
+      "numbers": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "file": "sequence/seq-autonumber-from.mmd",
+      "covers": "Messages numbered from a start, by a step",
+      "participants": 2,
+      "messages": 3,
+      "numbers": [
+        10,
+        15,
+        20
+      ]
+    },
+    {
+      "file": "sequence/seq-actor-menus.mmd",
+      "covers": "A menu of links on a participant",
+      "participants": 2,
+      "messages": 2,
+      "loses": "The menus are left out: a page of Merlive opens no links"
+    },
+    {
+      "file": "sequence/seq-title.mmd",
+      "covers": "A title in the diagram",
+      "participants": 2,
+      "messages": 2,
+      "title": "Raising an order"
+    },
+    {
+      "file": "sequence/seq-accessibility.mmd",
+      "covers": "A title and a description for readers who cannot see it",
+      "participants": 2,
+      "messages": 2,
+      "title": "Raising an order"
+    },
+    {
+      "file": "sequence/seq-semicolons.mmd",
+      "covers": "Statements parted by semicolons",
+      "participants": 3,
+      "messages": 3
+    },
+    {
+      "file": "sequence/seq-frontmatter.mmd",
+      "covers": "A title and settings in front matter",
+      "participants": 2,
+      "messages": 2,
+      "title": "Raising an order",
+      "loses": "Mermaid's own settings are read past: the look and the numbering are the design's and the diagram's own"
     }
   ]
 }

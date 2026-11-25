@@ -1,0 +1,5 @@
+sequenceDiagram
+  Buyer->>ERP: Raise order
+  opt Over the limit
+    ERP->>Manager: Ask for approval
+  end

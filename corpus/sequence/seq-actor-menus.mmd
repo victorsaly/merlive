@@ -1,0 +1,7 @@
+sequenceDiagram
+  participant Buyer
+  participant ERP
+  link Buyer: Open orders @ https://example.com/orders
+  links ERP: {"Status": "https://example.com/status", "Wiki": "https://example.com/wiki"}
+  Buyer->>ERP: Raise order
+  ERP-->>Buyer: Order number

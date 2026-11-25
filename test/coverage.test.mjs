@@ -13,13 +13,14 @@ const index = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8'));
 const again = 'Run "npm run coverage" and commit what it writes.';
 
 test('every sample is listed, and every sample listed is there', () => {
-  const listed = [...index.flowchart, ...index.state, ...index.kinds].map((s) => s.file).sort();
+  const listed = [...index.flowchart, ...index.state, ...index.sequence, ...index.kinds].map((s) => s.file).sort();
   assert.deepEqual(listed, samplesOnDisk());
 });
 
 test('every flowchart sample says what it should be read as, and every other kind its family', () => {
   for (const s of [...index.flowchart, ...index.state]) assert.ok(s.covers && Number.isInteger(s.boxes) && Number.isInteger(s.links), s.file);
   for (const s of index.kinds) assert.ok(s.covers && s.family, s.file);
+  for (const s of index.sequence) assert.ok(s.covers && Number.isInteger(s.participants) && Number.isInteger(s.messages), s.file);
 });
 
 test('docs/COVERAGE.md says what the code does today', () => {
@@ -68,8 +69,17 @@ test('a box, a word or a line that is not read makes a sample partly read', () =
 });
 
 test('a flowchart that is not taken for one is partly read, not filed with the other kinds', () => {
-  const row = judge({ file: 'x.mmd', covers: 'x', boxes: 1, links: 0 }, 'sequenceDiagram\n  A->>B: hello\n');
+  const row = judge({ file: 'x.mmd', covers: 'x', boxes: 1, links: 0 }, 'gantt\n  title Rolling out\n');
   assert.equal(row.result, 'partly');
+});
+
+test('a sequence diagram is drawn, and held to its participants, its messages and their ends', () => {
+  const source = 'sequenceDiagram\n  Buyer->>ERP: Raise order\n  ERP--xBuyer: No\n';
+  const row = judge({ file: 'x.mmd', covers: 'x', participants: 2, messages: 2, ends: [['solid', 'none', 'arrow'], ['dotted', 'none', 'cross']], has: ['Raise order'] }, source);
+  assert.equal(row.result, 'drawn');
+  assert.match(row.svg, /^<svg/);
+  assert.deepEqual(judge({ file: 'x.mmd', covers: 'x', participants: 3, messages: 2, ends: [['solid', 'none', 'arrow'], ['solid', 'none', 'cross']] }, source).why, ['read 2 of 3 participants', 'what is at the ends of its messages is not kept']);
+  assert.equal(judge({ file: 'x.mmd', covers: 'x', participants: 2, messages: 2 }, `${source}  ERP-|\\Buyer: half\n`).result, 'partly');
 });
 
 test('another kind of diagram is left as Mermaid and named', () => {

@@ -1,0 +1,5 @@
+sequenceDiagram
+  participant Desk@{ "type": "boundary", "alias": "Inside name" } as Order desk
+  participant Db@{ "type": "database", "alias": "Inside book" } as Order book
+  Desk->>Db: Save
+  Db-->>Desk: Saved

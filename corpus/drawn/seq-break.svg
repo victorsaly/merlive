@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 548 344" width="548" height="344" role="img" aria-label="Where the sequence stops: break">
+<title>Where the sequence stops: break</title>
+<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+[data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-group text{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}
+.mv-life{stroke:var(--mv-stroke);stroke-width:1.2;stroke-dasharray:4 4}
+.mv-bar{fill:var(--mv-node);stroke:var(--mv-edge);stroke-width:1.2}
+.mv-open{fill:none;stroke:var(--mv-edge);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mv-words{font-size:12px;font-weight:600;fill:var(--mv-text);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-num circle{fill:var(--mv-text)}
+.mv-num text{font-size:10px;font-weight:700;fill:var(--mv-bg);text-anchor:middle}
+.mv-note-box{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.2}
+.mv-note-fold{fill:none;stroke:var(--mv-stroke);stroke-width:1.2}
+.mv-note text{font-size:12px;fill:var(--mv-text);text-anchor:middle}
+.mv-frame-box{fill:none;stroke:var(--mv-stroke);stroke-width:1.2}
+[data-kind="rect"] .mv-frame-box{fill:var(--mv-text);fill-opacity:0.045;stroke:none}
+.mv-frame-tab{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1.2}
+.mv-frame-kind{font-size:10.5px;font-weight:700;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}
+.mv-frame-label{font-size:12px;font-weight:600;fill:var(--mv-muted);paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-frame-divide{stroke:var(--mv-stroke);stroke-width:1.2;stroke-dasharray:5 4}</style>
+<rect width="100%" height="100%" fill="var(--mv-bg)"/>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="548" height="344" fill="url(#mv-dots)"/><g></g><g><g class="mv-frame" data-kind="break" data-first="3"><rect class="mv-frame-box" x="28" y="180" width="253" height="69" rx="4"/></g></g><g><line class="mv-life" x1="88" y1="68" x2="88" y2="316"/><line class="mv-life" x1="216" y1="68" x2="216" y2="316"/><line class="mv-life" x1="344" y1="68" x2="344" y2="316"/><line class="mv-life" x1="472" y1="68" x2="472" y2="316"/></g><g></g><g><g class="mv-frame" data-kind="break" data-first="3"><path class="mv-frame-tab" d="M28,180H80V192L74,198H28Z"/><text class="mv-frame-kind" x="36" y="193">break</text><text class="mv-frame-label" x="104" y="194">When the supplier says no</text></g></g><g><g class="mv-edge" data-edge="m1" data-style="dotted"><path class="mv-line" d="M88,111L216,111"/><text class="mv-words"><tspan x="152" y="101.7">Raise order</tspan></text></g><g class="mv-edge" data-edge="m2" data-style="dotted"><path class="mv-line" d="M216,156L344,156"/><text class="mv-words"><tspan x="280" y="146.7">Send order</tspan></text></g><g class="mv-edge" data-edge="m3" data-style="dotted"><path class="mv-line" d="M216,236L88,236"/><text class="mv-words"><tspan x="152" y="226.7">Order refused</tspan></text></g><g class="mv-edge" data-edge="m4" data-style="dotted"><path class="mv-line" d="M216,292L472,292"/><text class="mv-words"><tspan x="280" y="282.7">Make room</tspan></text></g></g><g></g><g><g class="mv-node" data-node="Buyer" data-kind="step"><rect class="mv-shape" x="40" y="28" width="96" height="40" rx="8"/><text><tspan x="88" y="52.5">Buyer</tspan></text></g><g class="mv-node" data-node="ERP" data-kind="step"><rect class="mv-shape" x="168" y="28" width="96" height="40" rx="8"/><text><tspan x="216" y="52.5">ERP</tspan></text></g><g class="mv-node" data-node="Supplier" data-kind="step"><rect class="mv-shape" x="296" y="28" width="96" height="40" rx="8"/><text><tspan x="344" y="52.5">Supplier</tspan></text></g><g class="mv-node" data-node="Warehouse" data-kind="step"><rect class="mv-shape" x="424" y="28" width="96" height="40" rx="8"/><text><tspan x="472" y="52.5">Warehouse</tspan></text></g></g>
+</svg>

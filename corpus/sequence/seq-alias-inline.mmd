@@ -1,0 +1,5 @@
+sequenceDiagram
+  participant Shop@{ "type": "boundary", "alias": "Web shop" }
+  participant Db@{ "type": "database", "alias": "Order book" }
+  Shop->>Db: Save the order
+  Db-->>Shop: Saved

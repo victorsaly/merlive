@@ -1,0 +1,7 @@
+sequenceDiagram
+  autonumber
+  Buyer->>ERP: Raise order
+  loop Until it is right
+    ERP->>ERP: Check the lines
+  end
+  ERP-->>Buyer: Order number

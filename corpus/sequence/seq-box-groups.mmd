@@ -1,0 +1,14 @@
+sequenceDiagram
+  box Aqua Buying
+    participant B as Buyer
+    participant E as ERP
+  end
+  box rgb(33,66,99)
+    participant W as Warehouse
+  end
+  box Outside the firm
+    participant S as Supplier
+  end
+  B->>E: Raise order
+  E->>W: Check stock
+  E->>S: Send order

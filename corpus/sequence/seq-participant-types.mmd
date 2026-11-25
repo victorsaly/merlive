@@ -1,0 +1,12 @@
+sequenceDiagram
+  participant Shop@{ "type": "boundary" }
+  participant Rules@{ "type": "control" }
+  participant Order@{ "type": "entity" }
+  participant Orders@{ "type": "database" }
+  participant Lines@{ "type": "collections" }
+  participant Jobs@{ "type": "queue" }
+  Shop->>Rules: Check the order
+  Rules->>Order: Make it
+  Order->>Orders: Save
+  Order->>Lines: Add lines
+  Order->>Jobs: Queue the pick

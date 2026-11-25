@@ -1,0 +1,11 @@
+sequenceDiagram
+  par To the supplier
+    ERP->>Supplier: Send order
+  and To the warehouse
+    ERP->>Warehouse: Make room
+    par Shelves
+      Warehouse->>Picker: Clear a shelf
+    and Dock
+      Warehouse->>Driver: Book a dock
+    end
+  end

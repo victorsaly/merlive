@@ -1,0 +1,8 @@
+sequenceDiagram
+  par To the supplier
+    ERP->>Supplier: Send order
+  and To the warehouse
+    ERP->>Warehouse: Make room
+  end
+  Supplier-->>ERP: Confirmed
+  Warehouse-->>ERP: Ready
