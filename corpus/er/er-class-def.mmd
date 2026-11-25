@@ -1,0 +1,5 @@
+erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    ORDER ||--o| INVOICE : "is billed by"
+    classDef late stroke:#c62828,stroke-width:2px
+    class ORDER,INVOICE late

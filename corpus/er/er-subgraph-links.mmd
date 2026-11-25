@@ -1,0 +1,9 @@
+erDiagram
+    subgraph Buying
+        SUPPLIER ||--o{ ORDER : receives
+    end
+    subgraph Paying
+        INVOICE ||--o{ PAYMENT : "is settled by"
+    end
+    Buying ||--|| Paying : "leads to"
+    Paying ||--o{ RECEIPT : gives

@@ -3,6 +3,7 @@
 
 import { iconFor } from './icons.mjs';
 import { stateReader } from './state.mjs';
+import { erReader } from './er.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
@@ -232,9 +233,10 @@ export function parse(src) {
   const ofBoxes = [];
   /** @type {[number[], ReturnType<typeof lookOf>][]} */
   const ofLinks = [];
-  // A state diagram's lines are read by state.mjs, into this same model.
-  /** @type {ReturnType<typeof stateReader>|null} */
-  let state = null;
+  // A diagram that is boxes and links but is not written as a flowchart (a state diagram, an entity diagram) has
+  // a reader of its own, which reads its lines into this same model.
+  /** @type {{read:(text:string,line:number) => boolean,done:() => void}|null} */
+  let reader = null;
 
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
 
@@ -449,7 +451,8 @@ export function parse(src) {
       header = true;
       const h = /^(flowchart|graph)\b\s*(TD|TB|BT|LR|RL)?/.exec(text);
       model.kindOfDiagram = text.split(/\s+/)[0];
-      if (/^stateDiagram(-v2)?;?$/.test(text)) return void (state = stateReader({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf }));
+      if (/^stateDiagram(-v2)?;?$/.test(text)) return void (reader = stateReader({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf }));
+      if (/^erDiagram;?$/.test(text)) return void (reader = erReader({ model, node, say, connect, warn, wordsOf, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]) }));
       if (!h) {
         model.type = 'unsupported';
         return;
@@ -459,7 +462,7 @@ export function parse(src) {
       return;
     }
     if (model.type === 'unsupported') return;
-    if (state?.read(text, line)) return;
+    if (reader?.read(text, line)) return;
 
     const group = /^subgraph\s+(.+)$/.exec(text);
     if (group) {
@@ -526,7 +529,7 @@ export function parse(src) {
 
   // A link to a group ("g1 --> g2") is a link from the end of one to the start of the next: the last box of the
   // first that leads to no other box in it, and the first box of the second that none of its own leads to.
-  state?.done();
+  reader?.done();
   // The innermost first, so that by the time a link to an outer group is joined, what is inside it is boxes.
   for (const g of [...model.groups].reverse()) join(g);
   function join(/** @type {{id:string,title:string,members:string[]}} */ g) {

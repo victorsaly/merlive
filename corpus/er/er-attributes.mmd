@@ -1,0 +1,11 @@
+erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    SUPPLIER {
+        string name
+        string accountNumber
+        string country
+    }
+    ORDER {
+        int number
+        date placed
+    }
