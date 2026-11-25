@@ -139,7 +139,7 @@ export const things = [
   ['requirement', 'Requirement diagrams', 'A requirement is a box that says what kind it is, a sentence of what it asks, and its id, risk and how it is\nverified. Held to the same measure.'],
   ['c4', 'C4 diagrams', 'A person, a system, a container or a component is a box that says what it is and a sentence of what it does;\na boundary is a group. Held to the same measure.'],
   ['architecture', 'Architecture diagrams', 'A service is a box with its icon, a group is a group, and the sides an edge leaves by say which way the\ndiagram runs. Held to the same measure.'],
-  ['block', 'Block diagrams', 'Blocks joined by links are read as a flowchart is. One whose meaning is in its grid is left as Mermaid, and\nsaid.'],
+  ['block', 'Block diagrams', 'Blocks joined by links are read as a flowchart is and placed by rule. One whose meaning is in its grid is\nplaced on that grid, each block in the cell its author gave it.'],
 ];
 export const lists = ['flowchart', 'state', ...things.map(([list]) => list), 'sequence', 'kinds'];
 

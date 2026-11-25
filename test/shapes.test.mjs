@@ -124,6 +124,9 @@ describe('shapes: a point', () => {
     assert.equal(inset('point', 'left', 0, w, h), w / 2 - form.point);
     assert.ok(inset('point', 'top', 5, w, h) > h / 2 - form.point, 'off its middle, a little further');
     assert.equal(inset('point', 'top', 40, w, h), h / 2, 'and past the dot, to the line through its middle');
+  });
+});
+
 describe('shapes: an arrow drawn as a block', () => {
   const pts = (/** @type {string} */ shape, wide = w, tall = h) => (/points="([^"]*)"/.exec(outlineOf(/** @type {any} */ (shape), 0, 0, wide, tall, 8).main)?.[1] ?? '').split(' ').map((p) => p.split(',').map(Number));
 

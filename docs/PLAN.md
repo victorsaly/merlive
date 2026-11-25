@@ -48,24 +48,24 @@ On the branch `kinds`, stacked on `class-er` until the 0.2.0 pull request is mer
 Done: readers for requirement, C4, architecture and block diagrams (`requirement.mjs`, `c4.mjs`,
 `architecture.mjs`, `block.mjs`), each with its tests, its list in `corpus/index.json` and its section in
 `skills/merlive/reference.md`; a box's sentence (`Node.text`); room for words that run into a group or sit by a
-turn; the line over a name fitted to its box. Every sample is drawn with no rule broken, or left on purpose.
+turn; the line over a name fitted to its box. Every sample is drawn with no rule broken.
 
 Left, in the order worth doing:
 
-1. **A grid its author placed.** Ten of the 36 block samples are left as Mermaid because what they say is where
-   each block is. `block.mjs` already reads the grid into `model.grid` (`{columns, cells}`, each cell a block,
-   a space, an arrow or a group with a grid of its own, with its span). To draw them: fill cells row by row, one
-   column width for a grid and one height for a row, a block of span `s` as wide as `s` columns and their gaps
-   (P2 needs a clause and a check for that), a group cell as a frame round its own grid, a block-arrow shape in
-   `shapes.mjs`, and links routed at right angles in the gaps between cells, never through one.
+1. **A grid its author placed** is drawn (`grid.mjs`, `model.placedBy = 'grid'`). What is weak in it: the room
+   between cells holds three lines, and a fourth through one gap is not routed (a warning, and P3 refuses);
+   a link to a block that holds others is joined to a block inside it, so two lines can run side by side where
+   Mermaid draws one to the frame; a block fills its whole cell, so a circle in a wide column is a wide pill; a
+   grid inside a frame stretches its columns to the frame and not its rows; a flow written with `columns 2` is
+   still one chain placed by rank.
 2. **A junction** is a dot (the `point` shape) in a footprint as big as any box, so the room round it is a
    box's. A box smaller than the one box size would let the diagram close up round it.
 3. **Smaller things**: an edge out of a group (`a{group}:R`) is drawn from the service named, not from the frame;
    a group has nowhere to keep an icon or a description (a Deployment_Node's); `disk` is drawn with the database
    icon; `contains` in a requirement diagram ends in a circle where Mermaid has a crossed ring; emphasis inside a
    box's sentence is dropped; the page's side panel does not show a box's sentence.
-4. **Look, sample by sample**, at the 151 new samples on `corpus/compare.html`: one whole sample of each kind
-   was looked at closely, the rest only by their rules passing.
+4. **Look, sample by sample**, at the requirement samples on `corpus/compare.html`: the C4, architecture and
+   block samples were looked through on contact sheets, the requirement ones only by their rules passing.
 5. **Release**: the changelog's date, the README's status line, the pull request.
 
 ## Waiting on Victor

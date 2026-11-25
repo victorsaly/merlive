@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 406 samples, Merlive draws 372 whole and 0 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>406</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>279</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>93</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>0</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>34</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 406 samples, Merlive draws 382 whole and 0 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>406</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>288</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>94</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>0</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>24</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -4090,20 +4090,20 @@ block
   erp --&gt; ledger
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>A grid of blocks with no links: what it says is where each block is</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-grid.png" width="200" height="82" style="--w:200" alt="A grid of blocks with no links: what it says is where each block is, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: &quot;Shop&quot;, &quot;Portal&quot;, &quot;Phone&quot; and 3 more are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-grid.png" width="200" height="82" style="--w:200" alt="A grid of blocks with no links: what it says is where each block is, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-grid.svg" width="536" height="192" style="--w:536" alt="A grid of blocks with no links: what it says is where each block is, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   columns 3
   a[&quot;Shop&quot;] b[&quot;Portal&quot;] c[&quot;Phone&quot;]
   d[&quot;ERP&quot;] e[&quot;Stock&quot;] f[&quot;Ledger&quot;]
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Every shape of a block, laid out in a grid with no links</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-shapes-grid.png" width="440" height="440" style="--w:440" alt="Every shape of a block, laid out in a grid with no links, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: &quot;Box&quot;, &quot;Round&quot;, &quot;Stadium&quot; and 11 more are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-shapes-grid.png" width="440" height="440" style="--w:440" alt="Every shape of a block, laid out in a grid with no links, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-shapes-grid.svg" width="712" height="376" style="--w:712" alt="Every shape of a block, laid out in a grid with no links, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   columns 4
   a[&quot;Box&quot;] b(&quot;Round&quot;) c([&quot;Stadium&quot;]) d[[&quot;Subroutine&quot;]]
@@ -4112,18 +4112,18 @@ block
   m[\&quot;Trapezoid&quot;/] n(((&quot;Stop&quot;)))
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>One block on its own</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-alone.png" width="51" height="42" style="--w:51" alt="One block on its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: &quot;ERP&quot; is joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-alone.png" width="51" height="42" style="--w:51" alt="One block on its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-alone.svg" width="184" height="100" style="--w:184" alt="One block on its own, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   erp[&quot;ERP&quot;]
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Blocks that span columns: a wide block over two narrower ones</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-span.png" width="171" height="82" style="--w:171" alt="Blocks that span columns: a wide block over two narrower ones, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: &quot;Web shop&quot; spans 3 columns (line 3); &quot;ERP&quot; spans 2 columns (line 4). To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-span.png" width="171" height="82" style="--w:171" alt="Blocks that span columns: a wide block over two narrower ones, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-span.svg" width="536" height="192" style="--w:536" alt="Blocks that span columns: a wide block over two narrower ones, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   columns 3
   shop[&quot;Web shop&quot;]:3
@@ -4132,10 +4132,10 @@ block
   erp --&gt; stock
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>A block that spans the grid under two others, a space between them and an empty row</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-space.png" width="266" height="122" style="--w:266" alt="A block that spans the grid under two others, a space between them and an empty row, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: &quot;Warehouse&quot; spans 3 columns (line 5). To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-space.png" width="266" height="122" style="--w:266" alt="A block that spans the grid under two others, a space between them and an empty row, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-space.svg" width="536" height="284" style="--w:536" alt="A block that spans the grid under two others, a space between them and an empty row, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   columns 3
   web[&quot;Web shop&quot;] space erp[&quot;ERP&quot;]
@@ -4145,10 +4145,10 @@ block
   erp --&gt; wh
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Spaces that put a block under the one it belongs to</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-space-offset.png" width="203" height="82" style="--w:203" alt="Spaces that put a block under the one it belongs to, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: the space on line 4 places a block, and does not make room for a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-space-offset.png" width="203" height="82" style="--w:203" alt="Spaces that put a block under the one it belongs to, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-space-offset.svg" width="536" height="192" style="--w:536" alt="Spaces that put a block under the one it belongs to, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   columns 3
   a[&quot;Quote&quot;] b[&quot;Order&quot;] c[&quot;Invoice&quot;]
@@ -4158,10 +4158,10 @@ block
   b --&gt; d
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Block arrows between cells: arrows drawn as blocks, placed by the grid</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-arrows.png" width="294" height="146" style="--w:294" alt="Block arrows between cells: arrows drawn as blocks, placed by the grid, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: &quot;orders&quot; is a block arrow (line 3); &quot;stock&quot; is a block arrow (line 4); the space on line 4 places a block, and does not make room for a link; and 2 more. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-arrows.png" width="294" height="146" style="--w:294" alt="Block arrows between cells: arrows drawn as blocks, placed by the grid, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-arrows.svg" width="536" height="300" style="--w:536" alt="Block arrows between cells: arrows drawn as blocks, placed by the grid, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   columns 3
   shop[&quot;Shop&quot;] toErp&lt;[&quot;orders&quot;]&gt;(right) erp[&quot;ERP&quot;]
@@ -4169,20 +4169,20 @@ block
   space wh[&quot;Warehouse&quot;] space
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="less">
 <h3>A block arrow pointing every way it can</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-arrow-directions.png" width="717" height="98" style="--w:717" alt="A block arrow pointing every way it can, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: &quot;Right&quot; is a block arrow (line 3); &quot;Left&quot; is a block arrow (line 3); &quot;Up&quot; is a block arrow (line 3); and 4 more. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn, less something</b> <span class="why">An arrow that points across and down is drawn pointing both ways across: Merlive draws an arrow along one line</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-arrow-directions.png" width="717" height="98" style="--w:717" alt="A block arrow pointing every way it can, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-arrow-directions.svg" width="712" height="256" style="--w:712" alt="A block arrow pointing every way it can, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   columns 4
   r&lt;[&quot;Right&quot;]&gt;(right) l&lt;[&quot;Left&quot;]&gt;(left) u&lt;[&quot;Up&quot;]&gt;(up) d&lt;[&quot;Down&quot;]&gt;(down)
   x&lt;[&quot;Both ways&quot;]&gt;(x) y&lt;[&quot;Up and down&quot;]&gt;(y) xd&lt;[&quot;Across and down&quot;]&gt;(x, down)
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Blocks that hold grids of their own, and span columns of the grid they are in</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-nested-columns.png" width="199" height="250" style="--w:199" alt="Blocks that hold grids of their own, and span columns of the grid they are in, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: &quot;Everything&quot; spans 3 columns (line 3); &quot;left&quot; spans 2 columns (line 4); &quot;wide&quot; spans 3 columns (line 9); and 1 more. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-nested-columns.png" width="199" height="250" style="--w:199" alt="Blocks that hold grids of their own, and span columns of the grid they are in, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-nested-columns.svg" width="572" height="424" style="--w:572" alt="Blocks that hold grids of their own, and span columns of the grid they are in, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   columns 3
   top[&quot;Everything&quot;]:3
@@ -4196,10 +4196,10 @@ block
   end
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide)</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-mixed.png" width="587" height="282" style="--w:587" alt="A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide), as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: &quot;feeds&quot; is a block arrow (line 4); &quot;DB&quot;, &quot;A&quot;, &quot;A wide one in the middle&quot; are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block-mixed.png" width="587" height="282" style="--w:587" alt="A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide), as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/block-mixed.svg" width="560" height="524" style="--w:560" alt="A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide), as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>block
   columns 1
   db((&quot;DB&quot;))
