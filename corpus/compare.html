@@ -1,0 +1,1241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mermaid and Merlive, side by side</title>
+<style>
+:root{color-scheme:light dark}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:Canvas;color:CanvasText}
+main{max-width:1280px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:8px 0}h2{font-size:18px;margin:32px 0 12px}h3{font-size:15px;margin:0}
+.lede,.why,figcaption,summary{color:color-mix(in srgb,CanvasText 68%,Canvas)}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0;position:sticky;top:0;background:Canvas;padding:8px 0;z-index:1}
+button{font:inherit;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid color-mix(in srgb,CanvasText 30%,Canvas);background:Canvas;color:CanvasText;cursor:pointer}
+button[aria-pressed="true"]{background:CanvasText;color:Canvas}
+.card{border:1px solid color-mix(in srgb,CanvasText 18%,Canvas);border-radius:10px;padding:14px;margin:0 0 16px}
+.result{margin:2px 0 10px;font-size:13px}
+.pair{display:grid;gap:12px}
+@media(min-width:900px){.pair{grid-template-columns:1fr 1fr}}
+figure{margin:0;min-width:0}figcaption{font-size:12px;margin-bottom:4px}
+.pane{overflow-x:auto;border-radius:8px;padding:10px;border:1px solid color-mix(in srgb,CanvasText 12%,Canvas)}
+.pane.mermaid{background:#fff}
+.pane img{display:block;height:auto;max-width:none;width:clamp(calc(var(--w) * 0.6px),100%,calc(var(--w) * 1px))}
+.none{margin:0;padding:10px;border-radius:8px;border:1px dashed color-mix(in srgb,CanvasText 30%,Canvas);font-size:13px;overflow-wrap:anywhere}
+details{margin-top:10px;font-size:13px}pre{overflow-x:auto;margin:8px 0 0;padding:10px;border-radius:8px;background:color-mix(in srgb,CanvasText 6%,Canvas);font:12px/1.5 ui-monospace,Menlo,Consolas,monospace}
+body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn"] section:not(:has(article[data-result="drawn"])),body[data-show="less"] article:not([data-result="less"]),body[data-show="less"] section:not(:has(article[data-result="less"])),body[data-show="partly"] article:not([data-result="partly"]),body[data-show="partly"] section:not(:has(article[data-result="partly"])),body[data-show="refused"] article:not([data-result="refused"]),body[data-show="refused"] section:not(:has(article[data-result="refused"])),body[data-show="left"] article:not([data-result="left"]),body[data-show="left"] section:not(:has(article[data-result="left"])){display:none}
+</style>
+</head>
+<body data-show="all">
+<main>
+<h1>Mermaid and Merlive, side by side</h1>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 101 samples, Merlive draws 54 whole and 15 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>101</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>32</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>22</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>15</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>32</b></button></div>
+<section><h2>Flowcharts, feature by feature</h2>
+<article class="card" data-result="drawn">
+<h3>A flowchart, declared with &quot;flowchart&quot;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/declare-flowchart.png" width="182" height="174" style="--w:182" alt="A flowchart, declared with &quot;flowchart&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/declare-flowchart.svg" width="184" height="192" style="--w:184" alt="A flowchart, declared with &quot;flowchart&quot;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TD
+  A[Order received] --&gt; B[Stock checked]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A flowchart, declared with &quot;graph&quot;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/declare-graph.png" width="182" height="174" style="--w:182" alt="A flowchart, declared with &quot;graph&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/declare-graph.svg" width="184" height="192" style="--w:184" alt="A flowchart, declared with &quot;graph&quot;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>graph TD
+  A[Order received] --&gt; B[Stock checked]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Direction TB: top to bottom</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/direction-tb.png" width="127" height="278" style="--w:127" alt="Direction TB: top to bottom, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/direction-tb.svg" width="184" height="284" style="--w:184" alt="Direction TB: top to bottom, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TB
+  A[Quote] --&gt; B[Order] --&gt; C[Invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Direction TD: top down</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/direction-td.png" width="127" height="278" style="--w:127" alt="Direction TD: top down, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/direction-td.svg" width="184" height="284" style="--w:184" alt="Direction TD: top down, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TD
+  A[Quote] --&gt; B[Order] --&gt; C[Invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Direction LR: left to right</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/direction-lr.png" width="432" height="70" style="--w:432" alt="Direction LR: left to right, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/direction-lr.svg" width="584" height="100" style="--w:584" alt="Direction LR: left to right, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Quote] --&gt; B[Order] --&gt; C[Invoice]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Direction BT: bottom to top</h3>
+<p class="result"><b>Partly read</b> <span class="why">line 1: BT is drawn as TD</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/direction-bt.png" width="127" height="278" style="--w:127" alt="Direction BT: bottom to top, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/direction-bt.svg" width="184" height="284" style="--w:184" alt="Direction BT: bottom to top, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart BT
+  A[Quote] --&gt; B[Order] --&gt; C[Invoice]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Direction RL: right to left</h3>
+<p class="result"><b>Partly read</b> <span class="why">line 1: RL is drawn as LR</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/direction-rl.png" width="432" height="70" style="--w:432" alt="Direction RL: right to left, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/direction-rl.svg" width="584" height="100" style="--w:584" alt="Direction RL: right to left, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart RL
+  A[Quote] --&gt; B[Order] --&gt; C[Invoice]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A title and settings in front matter</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/frontmatter.png" width="270" height="123" style="--w:270" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/frontmatter.svg" width="384" height="100" style="--w:384" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: Order to cash
+config:
+  look: handDrawn
+  theme: neutral
+---
+flowchart LR
+  A[Order] --&gt; B[Cash]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Settings in an init directive</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/init-directive.png" width="265" height="70" style="--w:265" alt="Settings in an init directive, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/init-directive.svg" width="384" height="100" style="--w:384" alt="Settings in an init directive, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>%%{init: {&quot;flowchart&quot;: {&quot;curve&quot;: &quot;basis&quot;}, &quot;theme&quot;: &quot;forest&quot;} }%%
+flowchart LR
+  A[Order] --&gt; B[Cash]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Comments on lines of their own</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/comments.png" width="265" height="70" style="--w:265" alt="Comments on lines of their own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/comments.svg" width="384" height="100" style="--w:384" alt="Comments on lines of their own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  %% the happy path
+  A[Order] --&gt; B[Cash]
+  %% and nothing else
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title and a description for readers who cannot see it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/accessibility.png" width="265" height="70" style="--w:265" alt="A title and a description for readers who cannot see it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/accessibility.svg" width="384" height="100" style="--w:384" alt="A title and a description for readers who cannot see it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  accTitle: Order to cash
+  accDescr: An order becomes cash once it is paid
+  A[Order] --&gt; B[Cash]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A description written over several lines</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/accessibility-block.png" width="265" height="70" style="--w:265" alt="A description written over several lines, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/accessibility-block.svg" width="384" height="100" style="--w:384" alt="A description written over several lines, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  accTitle: Order to cash
+  accDescr {
+    An order becomes cash
+    once it is paid
+  }
+  A[Order] --&gt; B[Cash]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Statements ended with semicolons, and no spaces</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/semicolons.png" width="545" height="70" style="--w:545" alt="Statements ended with semicolons, and no spaces, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/semicolons.svg" width="784" height="100" style="--w:784" alt="Statements ended with semicolons, and no spaces, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR;
+  A[Order]--&gt;B[Pick];
+  B--&gt;C[Pack];C--&gt;D[Ship];
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Boxes named by their id alone</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-id-only.png" width="459" height="70" style="--w:459" alt="Boxes named by their id alone, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-id-only.svg" width="584" height="100" style="--w:584" alt="Boxes named by their id alone, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  ordered --&gt; packed --&gt; shipped
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A box with words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-text.png" width="396" height="70" style="--w:396" alt="A box with words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-text.svg" width="384" height="100" style="--w:384" alt="A box with words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order received] --&gt; B[Stock checked]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Words in other alphabets</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-unicode.png" width="398" height="70" style="--w:398" alt="Words in other alphabets, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-unicode.svg" width="384" height="116" style="--w:384" alt="Words in other alphabets, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[&quot;Commande reçue ❤&quot;] --&gt; B[&quot;在庫確認&quot;]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Brackets and signs inside quotes</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-quoted.png" width="377" height="70" style="--w:377" alt="Brackets and signs inside quotes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-quoted.svg" width="384" height="116" style="--w:384" alt="Brackets and signs inside quotes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[&quot;Total (net) &amp; tax&quot;] --&gt; B[&quot;Is it &gt; 100?&quot;]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Characters written as entity codes</h3>
+<p class="result"><b>Partly read</b> <span class="why">&quot;Marked &quot;rush&quot;&quot; is not among its words; &quot;Thanks ♥&quot; is not among its words</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-entities.png" width="353" height="70" style="--w:353" alt="Characters written as entity codes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-entities.svg" width="448" height="116" style="--w:448" alt="Characters written as entity codes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[&quot;Marked #quot;rush#quot;&quot;] --&gt; B[&quot;Thanks #9829;&quot;]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A line break in a label</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-line-break.png" width="390" height="94" style="--w:390" alt="A line break in a label, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-line-break.svg" width="448" height="116" style="--w:448" alt="A line break in a label, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[&quot;Check stock&lt;br/&gt;in both warehouses&quot;] --&gt; B[Pick&lt;br&gt;and pack]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Markdown strings: bold, italic and a real line break</h3>
+<p class="result"><b>Partly read</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-markdown.png" width="354" height="94" style="--w:354" alt="Markdown strings: bold, italic and a real line break, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 2 boxes; read 0 of 1 links; &quot;Urgent order&quot; is not among its words; &quot;Pick today and pack&quot; is not among its words; line 2: not read: &quot;A[&quot;`**Urgent** order`&quot;] --&gt; B[&quot;`Pick *today*&quot;; line 3: not read: &quot;and pack`&quot;]&quot;</p></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[&quot;`**Urgent** order`&quot;] --&gt; B[&quot;`Pick *today*
+  and pack`&quot;]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>A Font Awesome icon in a label</h3>
+<p class="result"><b>Partly read</b> <span class="why">&quot;Shipped&quot; is not among its words; &quot;Delivered&quot; is not among its words</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-fontawesome.png" width="362" height="70" style="--w:362" alt="A Font Awesome icon in a label, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-fontawesome.svg" width="384" height="116" style="--w:384" alt="A Font Awesome icon in a label, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[&quot;fa:fa-truck Shipped&quot;] --&gt; B[fa:fa-check Delivered]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Shape: Round edges</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Its corners are the design's, the same as every box</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-round.png" width="411" height="70" style="--w:411" alt="Shape: Round edges, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-round.svg" width="584" height="100" style="--w:584" alt="Shape: Round edges, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B(Checked) --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Shape: Stadium</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-stadium.png" width="412" height="70" style="--w:412" alt="Shape: Stadium, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-stadium.svg" width="584" height="100" style="--w:584" alt="Shape: Stadium, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B([Start here]) --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Shape: Subroutine</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-subroutine.png" width="436" height="70" style="--w:436" alt="Shape: Subroutine, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-subroutine.svg" width="584" height="100" style="--w:584" alt="Shape: Subroutine, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B[[Price lookup]] --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Shape: Cylinder, a database</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a box of the kind &quot;data&quot;, not as a cylinder</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-cylinder.png" width="381" height="81" style="--w:381" alt="Shape: Cylinder, a database, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-cylinder.svg" width="584" height="100" style="--w:584" alt="Shape: Cylinder, a database, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B[(Orders)] --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Shape: Circle</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a pill</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-circle.png" width="362" height="70" style="--w:362" alt="Shape: Circle, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-circle.svg" width="584" height="100" style="--w:584" alt="Shape: Circle, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B((Hub)) --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Shape: Asymmetric, a flag</h3>
+<p class="result"><b>Partly read</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-asymmetric.png" width="400" height="70" style="--w:400" alt="Shape: Asymmetric, a flag, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 3 boxes; read 0 of 2 links; &quot;Before&quot; is not among its words; &quot;Flagged&quot; is not among its words; &quot;After&quot; is not among its words; line 2: not read: &quot;A[Before] --&gt; B&gt;Flagged] --&gt; C[After]&quot;</p></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B&gt;Flagged] --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Shape: Rhombus, a decision</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-rhombus.png" width="435" height="135" style="--w:435" alt="Shape: Rhombus, a decision, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-rhombus.svg" width="584" height="100" style="--w:584" alt="Shape: Rhombus, a decision, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B{In stock?} --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Shape: Hexagon</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a decision</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-hexagon.png" width="409" height="70" style="--w:409" alt="Shape: Hexagon, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-hexagon.svg" width="584" height="100" style="--w:584" alt="Shape: Hexagon, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B{{Prepare}} --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Shape: Parallelogram</h3>
+<p class="result"><b>Partly read</b> <span class="why">&quot;Input&quot; is not among its words</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-parallelogram.png" width="407" height="70" style="--w:407" alt="Shape: Parallelogram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-parallelogram.svg" width="584" height="100" style="--w:584" alt="Shape: Parallelogram, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B[/Input/] --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Shape: Parallelogram, leaning back</h3>
+<p class="result"><b>Partly read</b> <span class="why">&quot;Output&quot; is not among its words</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-parallelogram-alt.png" width="419" height="70" style="--w:419" alt="Shape: Parallelogram, leaning back, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-parallelogram-alt.svg" width="584" height="100" style="--w:584" alt="Shape: Parallelogram, leaning back, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B[\Output\] --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Shape: Trapezoid</h3>
+<p class="result"><b>Partly read</b> <span class="why">&quot;Manual step&quot; is not among its words</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-trapezoid.png" width="459" height="70" style="--w:459" alt="Shape: Trapezoid, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-trapezoid.svg" width="584" height="100" style="--w:584" alt="Shape: Trapezoid, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B[/Manual step\] --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Shape: Trapezoid, upside down</h3>
+<p class="result"><b>Partly read</b> <span class="why">&quot;Priority&quot; is not among its words</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-trapezoid-alt.png" width="451" height="70" style="--w:451" alt="Shape: Trapezoid, upside down, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-trapezoid-alt.svg" width="584" height="100" style="--w:584" alt="Shape: Trapezoid, upside down, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B[\Priority/] --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Shape: Double circle</h3>
+<p class="result"><b>Partly read</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-double-circle.png" width="380" height="79" style="--w:380" alt="Shape: Double circle, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 3 boxes; read 0 of 2 links; &quot;Before&quot; is not among its words; &quot;Stop&quot; is not among its words; &quot;After&quot; is not among its words; line 2: not read: &quot;A[Before] --&gt; B(((Stop))) --&gt; C[After]&quot;</p></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Before] --&gt; B(((Stop))) --&gt; C[After]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Shapes written as @{ shape: … }, with a label</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-at-syntax.png" width="273" height="445" style="--w:273" alt="Shapes written as @{ shape: … }, with a label, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-at-syntax.svg" width="376" height="440" style="--w:376" alt="Shapes written as @{ shape: … }, with a label, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TD
+  A@{ shape: rect, label: &quot;Take the order&quot; } --&gt; B@{ shape: diam, label: &quot;In stock?&quot; }
+  B --&gt; C@{ shape: cyl, label: &quot;Orders&quot; }
+  B --&gt; D@{ shape: doc, label: &quot;Back order note&quot; }
+  D --&gt; E@{ shape: stadium, label: &quot;Done&quot; }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Every one of the 53 newer shapes</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Each is drawn as a box, a pill or a decision; the shape itself is not</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><p class="none">Mermaid could not draw this: Error: No such shape: browser.</p></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-at-every.svg" width="1720" height="560" style="--w:1720" alt="Every one of the 53 newer shapes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TD
+  n0@{ shape: bang, label: &quot;bang&quot; }
+  n1@{ shape: browser, label: &quot;browser&quot; }
+  n2@{ shape: bucket, label: &quot;bucket&quot; }
+  n3@{ shape: notch-rect, label: &quot;notch-rect&quot; }
+  n4@{ shape: cloud, label: &quot;cloud&quot; }
+  n5@{ shape: hourglass, label: &quot;hourglass&quot; }
+  n6@{ shape: bolt, label: &quot;bolt&quot; }
+  n7@{ shape: brace, label: &quot;brace&quot; }
+  n8@{ shape: brace-r, label: &quot;brace-r&quot; }
+  n9@{ shape: braces, label: &quot;braces&quot; }
+  n10@{ shape: console, label: &quot;console&quot; }
+  n11@{ shape: lean-r, label: &quot;lean-r&quot; }
+  n12@{ shape: lean-l, label: &quot;lean-l&quot; }
+  n13@{ shape: datastore, label: &quot;datastore&quot; }
+  n14@{ shape: cyl, label: &quot;cyl&quot; }
+  n15@{ shape: diam, label: &quot;diam&quot; }
+  n16@{ shape: delay, label: &quot;delay&quot; }
+  n17@{ shape: h-cyl, label: &quot;h-cyl&quot; }
+  n18@{ shape: lin-cyl, label: &quot;lin-cyl&quot; }
+  n19@{ shape: curv-trap, label: &quot;curv-trap&quot; }
+  n20@{ shape: div-rect, label: &quot;div-rect&quot; }
+  n21@{ shape: doc, label: &quot;doc&quot; }
+  n22@{ shape: rounded, label: &quot;rounded&quot; }
+  n23@{ shape: tri, label: &quot;tri&quot; }
+  n24@{ shape: folder, label: &quot;folder&quot; }
+  n25@{ shape: fork, label: &quot;fork&quot; }
+  n26@{ shape: win-pane, label: &quot;win-pane&quot; }
+  n27@{ shape: f-circ, label: &quot;f-circ&quot; }
+  n28@{ shape: lin-doc, label: &quot;lin-doc&quot; }
+  n29@{ shape: lin-rect, label: &quot;lin-rect&quot; }
+  n30@{ shape: notch-pent, label: &quot;notch-pent&quot; }
+  n31@{ shape: flip-tri, label: &quot;flip-tri&quot; }
+  n32@{ shape: sl-rect, label: &quot;sl-rect&quot; }
+  n33@{ shape: trap-t, label: &quot;trap-t&quot; }
+  n34@{ shape: docs, label: &quot;docs&quot; }
+  n35@{ shape: st-rect, label: &quot;st-rect&quot; }
+  n36@{ shape: odd, label: &quot;odd&quot; }
+  n37@{ shape: flag, label: &quot;flag&quot; }
+  n38@{ shape: person, label: &quot;person&quot; }
+  n39@{ shape: hex, label: &quot;hex&quot; }
+  n40@{ shape: trap-b, label: &quot;trap-b&quot; }
+  n41@{ shape: rect, label: &quot;rect&quot; }
+  n42@{ shape: circle, label: &quot;circle&quot; }
+  n43@{ shape: sm-circ, label: &quot;sm-circ&quot; }
+  n44@{ shape: dbl-circ, label: &quot;dbl-circ&quot; }
+  n45@{ shape: fr-circ, label: &quot;fr-circ&quot; }
+  n46@{ shape: bow-rect, label: &quot;bow-rect&quot; }
+  n47@{ shape: fr-rect, label: &quot;fr-rect&quot; }
+  n48@{ shape: cross-circ, label: &quot;cross-circ&quot; }
+  n49@{ shape: tag-doc, label: &quot;tag-doc&quot; }
+  n50@{ shape: tag-rect, label: &quot;tag-rect&quot; }
+  n51@{ shape: stadium, label: &quot;stadium&quot; }
+  n52@{ shape: text, label: &quot;text&quot; }
+  n0 --&gt; n9
+  n1 --&gt; n10
+  n2 --&gt; n11
+  n3 --&gt; n12
+  n4 --&gt; n13
+  n5 --&gt; n14
+  n6 --&gt; n15
+  n7 --&gt; n16
+  n8 --&gt; n17
+  n9 --&gt; n18
+  n10 --&gt; n19
+  n11 --&gt; n20
+  n12 --&gt; n21
+  n13 --&gt; n22
+  n14 --&gt; n23
+  n15 --&gt; n24
+  n16 --&gt; n25
+  n17 --&gt; n26
+  n18 --&gt; n27
+  n19 --&gt; n28
+  n20 --&gt; n29
+  n21 --&gt; n30
+  n22 --&gt; n31
+  n23 --&gt; n32
+  n24 --&gt; n33
+  n25 --&gt; n34
+  n26 --&gt; n35
+  n27 --&gt; n36
+  n28 --&gt; n37
+  n29 --&gt; n38
+  n30 --&gt; n39
+  n31 --&gt; n40
+  n32 --&gt; n41
+  n33 --&gt; n42
+  n34 --&gt; n43
+  n35 --&gt; n44
+  n36 --&gt; n45
+  n37 --&gt; n46
+  n38 --&gt; n47
+  n39 --&gt; n48
+  n40 --&gt; n49
+  n41 --&gt; n50
+  n42 --&gt; n51
+  n43 --&gt; n52
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A box that is an icon</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The icon is left out; its label is kept</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-icon.png" width="261" height="127" style="--w:261" alt="A box that is an icon, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-icon.svg" width="384" height="100" style="--w:384" alt="A box that is an icon, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A@{ icon: &quot;fa:user&quot;, form: &quot;square&quot;, label: &quot;Buyer&quot;, pos: &quot;t&quot;, h: 60 } --&gt; B[Approve]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A box that is an image</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The image is left out (a page of Merlive fetches nothing); its label is kept</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><p class="none">Mermaid could not draw this: Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED</p></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-image.svg" width="384" height="100" style="--w:384" alt="A box that is an image, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A@{ img: &quot;https://example.com/logo.svg&quot;, label: &quot;Supplier&quot;, pos: &quot;t&quot;, w: 60, h: 60, constraint: &quot;on&quot; } --&gt; B[Order]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Boxes given a row and a column</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The rows and columns are read past: placement is Merlive's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/grid-layout.png" width="127" height="278" style="--w:127" alt="Boxes given a row and a column, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/grid-layout.svg" width="184" height="284" style="--w:184" alt="Boxes given a row and a column, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TB
+  A[Quote]@{ row: 1, column: 1 } --&gt; B[Order]@{ row: 1, column: 2 }
+  B --&gt; C[Invoice]@{ row: 2, column: 2 }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A link with an arrowhead</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-arrow.png" width="258" height="70" style="--w:258" alt="A link with an arrowhead, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-arrow.svg" width="384" height="100" style="--w:384" alt="A link with an arrowhead, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --&gt; B[Pick]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A link with no arrowhead</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-open.png" width="258" height="70" style="--w:258" alt="A link with no arrowhead, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-open.svg" width="384" height="100" style="--w:384" alt="A link with no arrowhead, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --- B[Pick]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Words on a link, between bars</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-text-bars.png" width="547" height="70" style="--w:547" alt="Words on a link, between bars, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-text-bars.svg" width="584" height="100" style="--w:584" alt="Words on a link, between bars, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --&gt;|approved| B[Pick]
+  B ---|same shelf| C[Pack]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Words on a link, written into it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-text-inline.png" width="760" height="70" style="--w:760" alt="Words on a link, written into it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-text-inline.svg" width="784" height="100" style="--w:784" alt="Words on a link, written into it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] -- approved --&gt; B[Pick]
+  B -- same shelf --- C[Pack]
+  C -- &quot;signed for&quot; --&gt; D[Ship]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A dotted link, with and without words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-dotted.png" width="638" height="70" style="--w:638" alt="A dotted link, with and without words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-dotted.svg" width="784" height="100" style="--w:784" alt="A dotted link, with and without words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] -.-&gt; B[Pick]
+  B -. if fragile .-&gt; C[Wrap]
+  C -.-&gt;|then| D[Pack]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A thick link, with and without words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-thick.png" width="629" height="70" style="--w:629" alt="A thick link, with and without words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-thick.svg" width="784" height="100" style="--w:784" alt="A thick link, with and without words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] ==&gt; B[Pick]
+  B == must ==&gt; C[Pack]
+  C ==&gt;|always| D[Ship]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>An invisible link, used to nudge placement</h3>
+<p class="result"><b>Partly read</b> <span class="why">read 2 of 3 boxes; read 1 of 2 links; line 2: not read: &quot;A[Order] ~~~ B[Pick]&quot;</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-invisible.png" width="403" height="70" style="--w:403" alt="An invisible link, used to nudge placement, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-invisible.svg" width="384" height="100" style="--w:384" alt="An invisible link, used to nudge placement, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] ~~~ B[Pick]
+  B --&gt; C[Pack]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Links chained in one line</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-chain.png" width="545" height="70" style="--w:545" alt="Links chained in one line, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-chain.svg" width="784" height="100" style="--w:784" alt="Links chained in one line, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --&gt; B[Pick] --&gt; C[Pack] --&gt; D[Ship]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>One line linking to several boxes with &amp;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-chain-and.png" width="238" height="278" style="--w:238" alt="One line linking to several boxes with &amp;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-chain-and.svg" width="376" height="284" style="--w:376" alt="One line linking to several boxes with &amp;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TB
+  A[Order] --&gt; B[Pick] &amp; C[Bill] --&gt; D[Close]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Several boxes to several boxes with &amp;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-and-both.png" width="349" height="174" style="--w:349" alt="Several boxes to several boxes with &amp;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-and-both.svg" width="376" height="192" style="--w:376" alt="Several boxes to several boxes with &amp;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TB
+  A[Web order] &amp; B[Phone order] --&gt; C[Pick] &amp; D[Bill]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>A link ending in a circle or a cross</h3>
+<p class="result"><b>Partly read</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-circle-cross.png" width="481" height="70" style="--w:481" alt="A link ending in a circle or a cross, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 3 boxes; read 0 of 2 links; line 2: not read: &quot;A[Order] --o B[Line items]&quot;; line 3: not read: &quot;B --x C[Cancelled]&quot;</p></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --o B[Line items]
+  B --x C[Cancelled]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Arrows at both ends</h3>
+<p class="result"><b>Partly read</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-both-ways.png" width="626" height="70" style="--w:626" alt="Arrows at both ends, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 4 boxes; read 0 of 3 links; line 2: not read: &quot;A[ERP] &lt;--&gt; B[Warehouse]&quot;; line 3: not read: &quot;B o--o C[Carrier]&quot;; line 4: not read: &quot;C x--x D[Blocked]&quot;</p></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[ERP] &lt;--&gt; B[Warehouse]
+  B o--o C[Carrier]
+  C x--x D[Blocked]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Links drawn longer, to push a box further on</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The extra length is read past: placement is Merlive's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-length.png" width="269" height="772" style="--w:269" alt="Links drawn longer, to push a box further on, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-length.svg" width="402" height="376" style="--w:402" alt="Links drawn longer, to push a box further on, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TD
+  A[Order] --&gt; B{In stock?}
+  B --&gt;|Yes| C[Pick]
+  B ----&gt;|No| D[Back order]
+  C -- then ---&gt; E[Ship]
+  D -...-&gt; E
+  A ====&gt; E
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A link given an id</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-id.png" width="403" height="70" style="--w:403" alt="A link given an id, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-id.svg" width="584" height="100" style="--w:584" alt="A link given an id, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] e1@--&gt; B[Pick]
+  B e2@==&gt; C[Pack]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A link set to animate</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's animation is read past: movement is the design's, and starts when a reader asks</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-animate.png" width="403" height="70" style="--w:403" alt="A link set to animate, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-animate.svg" width="584" height="100" style="--w:584" alt="A link set to animate, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] e1@--&gt; B[Pick]
+  B e2@--&gt; C[Pack]
+  e1@{ animate: true }
+  e2@{ animation: fast }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Links played one step after another</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The step numbers are read past; a walkthrough is written with &quot;%% step&quot;</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-steps.png" width="575" height="70" style="--w:575" alt="Links played one step after another, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-steps.svg" width="784" height="100" style="--w:784" alt="Links played one step after another, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  Client e1@--&gt; API
+  API e2@--&gt; Cache
+  Cache e3@--&gt;|miss| DB
+  e1@{ step: 1 }
+  e2@{ step: 2 }
+  e3@{ step: 3 }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A link given a curve of its own</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The curve is read past: lines turn at right angles by rule</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-curve.png" width="258" height="174" style="--w:258" alt="A link given a curve of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-curve.svg" width="384" height="184" style="--w:384" alt="A link given a curve of its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] e1@==&gt; B[Pick]
+  A e2@--&gt; C[Bill]
+  e1@{ curve: linear }
+  e2@{ curve: natural }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A group named by its title</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-title.png" width="182" height="432" style="--w:182" alt="A group named by its title, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-title.svg" width="196" height="376" style="--w:196" alt="A group named by its title, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TB
+  A[Order] --&gt; B[Pick]
+  subgraph Warehouse
+    B --&gt; C[Pack]
+  end
+  C --&gt; D[Ship]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A group with an id and a title</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-id.png" width="182" height="432" style="--w:182" alt="A group with an id and a title, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-id.svg" width="196" height="376" style="--w:196" alt="A group with an id and a title, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TB
+  A[Order] --&gt; B[Pick]
+  subgraph wh [&quot;The warehouse&quot;]
+    B --&gt; C[Pack]
+  end
+  C --&gt; D[Ship]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Links to a group and between groups</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-links.png" width="371" height="502" style="--w:371" alt="Links to a group and between groups, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-links.svg" width="196" height="468" style="--w:196" alt="Links to a group and between groups, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TB
+  subgraph buy [Buying]
+    A[Quote] --&gt; B[Order]
+  end
+  subgraph pay [Paying]
+    C[Invoice] --&gt; D[Payment]
+  end
+  buy --&gt; pay
+  D --&gt; E[Close]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A group with a direction of its own</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The group's own direction is read past; it runs the way the rest does</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-direction.png" width="526" height="348" style="--w:526" alt="A group with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-direction.svg" width="196" height="468" style="--w:196" alt="A group with a direction of its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TB
+  A[Order] --&gt; B
+  subgraph wh [Warehouse]
+    direction LR
+    B[Pick] --&gt; C[Pack] --&gt; D[Label]
+  end
+  D --&gt; E[Ship]
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>A group inside a group</h3>
+<p class="result"><b>Partly read</b> <span class="why">read 1 of 2 groups; line 4: a group inside a group is drawn as part of the outer one</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-nested.png" width="222" height="482" style="--w:222" alt="A group inside a group, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-nested.svg" width="196" height="376" style="--w:196" alt="A group inside a group, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TB
+  subgraph site [Site]
+    A[Receive]
+    subgraph wh [Warehouse]
+      B[Pick] --&gt; C[Pack]
+    end
+    A --&gt; B
+  end
+  C --&gt; D[Ship]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A group shown collapsed</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn open: a picture cannot be opened and closed</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-collapsed.png" width="369" height="348" style="--w:369" alt="A group shown collapsed, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-collapsed.svg" width="196" height="376" style="--w:196" alt="A group shown collapsed, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TD
+  Start --&gt; one
+  subgraph one [Checks]
+    A[Credit] --&gt; B[Stock]
+  end
+  one --&gt; End
+  one@{ view: collapsed }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A box styled on its own</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The style is read past: the look is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/style-node.png" width="283" height="70" style="--w:283" alt="A box styled on its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/style-node.svg" width="384" height="100" style="--w:384" alt="A box styled on its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --&gt; B[On hold]
+  style B fill:#fde,stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Links styled by their number</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The style is read past: the look is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/style-link.png" width="403" height="70" style="--w:403" alt="Links styled by their number, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/style-link.svg" width="584" height="100" style="--w:584" alt="Links styled by their number, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --&gt; B[Pick] --&gt; C[Pack]
+  linkStyle 0 stroke:#c00,stroke-width:4px
+  linkStyle default stroke:#888
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class made and given to boxes</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-def.png" width="465" height="70" style="--w:465" alt="A class made and given to boxes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-def.svg" width="584" height="100" style="--w:584" alt="A class made and given to boxes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --&gt; B[On hold] --&gt; C[Cancelled]
+  classDef stopped stroke:#c62828,stroke-width:2px
+  class B,C stopped
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class given with :::</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-inline.png" width="283" height="70" style="--w:283" alt="A class given with :::, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-inline.svg" width="384" height="100" style="--w:384" alt="A class given with :::, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order]:::fresh --&gt; B[On hold]:::stopped
+  classDef fresh stroke:#2e7d32
+  classDef stopped stroke:#c62828
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A default class for every box</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The default class is read past: the look is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-default.png" width="258" height="70" style="--w:258" alt="A default class for every box, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-default.svg" width="384" height="100" style="--w:384" alt="A default class for every box, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --&gt; B[Pick]
+  classDef default fill:#f9f,stroke:#333,stroke-width:2px
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A box that calls a function when clicked</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The click is left out: a page of Merlive runs no code of yours</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/click-callback.png" width="258" height="70" style="--w:258" alt="A box that calls a function when clicked, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/click-callback.svg" width="384" height="100" style="--w:384" alt="A box that calls a function when clicked, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --&gt; B[Pick]
+  click A callback &quot;Open the order&quot;
+  click B call showPick() &quot;Show the pick list&quot;
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A box that opens a link when clicked</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The link is left out</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/click-link.png" width="258" height="70" style="--w:258" alt="A box that opens a link when clicked, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/click-link.svg" width="384" height="100" style="--w:384" alt="A box that opens a link when clicked, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart LR
+  A[Order] --&gt; B[Pick]
+  click A &quot;https://example.com/orders&quot; &quot;Open the order&quot; _blank
+  click B href &quot;https://example.com/picks&quot;
+</pre></details>
+</article>
+</section>
+<section><h2>Other kinds: steps in order</h2>
+<article class="card" data-result="left">
+<h3>Sequence diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/sequence.png" width="650" height="347" style="--w:650" alt="Sequence diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a sequenceDiagram is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>sequenceDiagram
+  participant B as Buyer
+  participant E as ERP
+  participant S as Supplier
+  B-&gt;&gt;E: Raise order
+  E-&gt;&gt;S: Send order
+  S--&gt;&gt;E: Confirm
+  E--&gt;&gt;B: Order confirmed
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>ZenUML sequence diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/zenuml.png" width="334" height="243" style="--w:334" alt="ZenUML sequence diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a zenuml is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>zenuml
+  title Order
+  Buyer-&gt;ERP: Raise order
+  ERP-&gt;Supplier: Send order
+  Supplier-&gt;ERP: Confirm
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Event model</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/eventmodeling.png" width="764" height="470" style="--w:764" alt="Event model, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a eventmodeling is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>eventmodeling
+
+tf 01 ui OrderForm
+tf 02 cmd PlaceOrder
+tf 03 evt OrderPlaced
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>User journey</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/journey.png" width="784" height="565" style="--w:784" alt="User journey, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a journey is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>journey
+  title Raising an order
+  section Ask
+    Find the supplier: 3: Buyer
+    Fill in the order: 2: Buyer
+  section Wait
+    Get approval: 4: Buyer, Manager
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Timeline</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline.png" width="784" height="416" style="--w:784" alt="Timeline, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a timeline is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>timeline
+  title The order's week
+  Monday : Raised
+  Tuesday : Approved : Sent
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Gantt chart</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/gantt.png" width="784" height="172" style="--w:784" alt="Gantt chart, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a gantt is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>gantt
+  title Rolling out the ERP
+  dateFormat YYYY-MM-DD
+  section Europe
+    UK        :a1, 2027-01-04, 30d
+    Germany   :after a1, 20d
+  section Elsewhere
+    South Africa :2027-02-15, 25d
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Git graph</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/gitgraph.png" width="369" height="175" style="--w:369" alt="Git graph, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a gitGraph is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>gitGraph
+  commit
+  branch feature
+  checkout feature
+  commit
+  commit
+  checkout main
+  merge feature
+  commit
+</pre></details>
+</article>
+</section>
+<section><h2>Other kinds: boxes and links</h2>
+<article class="card" data-result="left">
+<h3>Class diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class.png" width="313" height="378" style="--w:313" alt="Class diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a classDiagram is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order {
+    +String number
+    +Date placed
+    +total() Money
+  }
+  class OrderLine {
+    +int quantity
+    +Money price
+  }
+  Order &quot;1&quot; *-- &quot;many&quot; OrderLine
+  Order --&gt; Supplier
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>State diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state.png" width="157" height="412" style="--w:157" alt="State diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a stateDiagram-v2 is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  [*] --&gt; Draft
+  Draft --&gt; Submitted: submit
+  Submitted --&gt; Approved: approve
+  Submitted --&gt; Draft: send back
+  Approved --&gt; [*]
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Entity relationship diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er.png" width="385" height="470" style="--w:385" alt="Entity relationship diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a erDiagram is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+  SUPPLIER ||--o{ ORDER : receives
+  ORDER ||--|{ ORDER_LINE : contains
+  PRODUCT ||--o{ ORDER_LINE : &quot;is on&quot;
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Requirement diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/requirement.png" width="423" height="386" style="--w:423" alt="Requirement diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a requirementDiagram is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>requirementDiagram
+
+  requirement approval {
+    id: 1
+    text: Orders over the limit are approved by a manager.
+    risk: high
+    verifymethod: test
+  }
+
+  element approval_flow {
+    type: workflow
+  }
+
+  approval_flow - satisfies -&gt; approval
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>C4 diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/c4.png" width="784" height="641" style="--w:784" alt="C4 diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a C4Context is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>C4Context
+  title Ordering, in context
+  Person(buyer, &quot;Buyer&quot;, &quot;Raises purchase orders&quot;)
+  System(erp, &quot;ERP&quot;, &quot;Holds orders and stock&quot;)
+  System_Ext(sup, &quot;Supplier portal&quot;, &quot;Takes orders&quot;)
+  Rel(buyer, erp, &quot;Raises orders in&quot;)
+  Rel(erp, sup, &quot;Sends orders to&quot;)
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Block diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/block.png" width="266" height="122" style="--w:266" alt="Block diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a block is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>block
+  columns 3
+  web[&quot;Web shop&quot;] space erp[&quot;ERP&quot;]
+  space:3
+  wh[&quot;Warehouse&quot;]:3
+  web --&gt; erp
+  erp --&gt; wh
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Architecture diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/architecture.png" width="448" height="463" style="--w:448" alt="Architecture diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a architecture-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>architecture-beta
+  group cloud(cloud)[Azure]
+
+  service api(server)[Orders API] in cloud
+  service db(database)[Orders] in cloud
+  service queue(disk)[Queue] in cloud
+
+  api:R -- L:db
+  api:B -- T:queue
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Swimlane diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/swimlane.png" width="215" height="591" style="--w:215" alt="Swimlane diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a swimlane-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>swimlane-beta LR
+  subgraph Buyer
+    Raise[Raise order]
+  end
+  subgraph Manager
+    Approve[Approve]
+  end
+  subgraph Supplier
+    Confirm[Confirm]
+  end
+  Raise --&gt; Approve --&gt; Confirm
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Use case diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><p class="none">Mermaid could not draw this: UnknownDiagramError: No diagram type detected matching given configuration</p></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a usecase-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>usecase-beta
+  direction LR
+  actor Buyer(&quot;Buyer&quot;)
+  systemBoundary &quot;Ordering&quot;
+    Raise(&quot;Raise an order&quot;)
+  end
+  Buyer --&gt; Raise
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Agent flow</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><p class="none">Mermaid could not draw this: UnknownDiagramError: No diagram type detected matching given configuration</p></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a agentflow-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>agentflow-beta TB
+  flow buyer[&quot;Order agent&quot;]
+    read[&quot;Read the request&quot;]@{ shape: input }
+    check[&quot;check_stock&quot;]@{ shape: tool }
+    ok[&quot;In stock?&quot;]@{ shape: decision }
+
+    read --&gt; check --&gt; ok
+  end
+</pre></details>
+</article>
+</section>
+<section><h2>Other kinds: tree</h2>
+<article class="card" data-result="left">
+<h3>Mindmap</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap.png" width="342" height="417" style="--w:342" alt="Mindmap, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a mindmap is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    Buying
+      Quotes
+      Orders
+    Paying
+      Invoices
+      Payments
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Tree view</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/treeview.png" width="121" height="163" style="--w:121" alt="Tree view, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a treeView-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>treeView-beta
+├── orders/
+│   ├── open.csv
+│   └── closed.csv
+├── suppliers.csv
+└── README.md
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Ishikawa (fishbone) diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/ishikawa.png" width="451" height="579" style="--w:451" alt="Ishikawa (fishbone) diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a ishikawa-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>ishikawa-beta
+    Late delivery
+    Supplier
+        Out of stock
+        Wrong address
+    Warehouse
+        Short staffed
+    Carrier
+        Missed pick-up
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Kanban board</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban.png" width="630" height="99" style="--w:630" alt="Kanban board, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a kanban is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    t1[Raise the order]
+  doing[Doing]
+    t2[Chase the supplier]
+  done[Done]
+    t3[Pay the invoice]
+</pre></details>
+</article>
+</section>
+<section><h2>Other kinds: chart</h2>
+<article class="card" data-result="left">
+<h3>Treemap</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/treemap.png" width="784" height="293" style="--w:784" alt="Treemap, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a treemap-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>treemap-beta
+&quot;Europe&quot;
+    &quot;UK&quot;: 40
+    &quot;Germany&quot;: 25
+&quot;Africa&quot;
+    &quot;South Africa&quot;: 20
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Pie chart</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/pie.png" width="605" height="450" style="--w:605" alt="Pie chart, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a pie is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>pie title Orders by region
+  &quot;UK&quot; : 46
+  &quot;EU&quot; : 31
+  &quot;USA&quot; : 15
+  &quot;South Africa&quot; : 8
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Quadrant chart</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/quadrant.png" width="500" height="500" style="--w:500" alt="Quadrant chart, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a quadrantChart is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>quadrantChart
+  title Suppliers by price and speed
+  x-axis Slow --&gt; Fast
+  y-axis Dear --&gt; Cheap
+  quadrant-1 Keep
+  quadrant-2 Speed up
+  quadrant-3 Replace
+  quadrant-4 Negotiate
+  Acme: [0.8, 0.7]
+  Bolt: [0.3, 0.6]
+  Cord: [0.6, 0.2]
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>XY chart</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/xychart.png" width="700" height="500" style="--w:700" alt="XY chart, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a xychart is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>xychart
+  title &quot;Orders a month&quot;
+  x-axis [jan, feb, mar, apr, may, jun]
+  y-axis &quot;Orders&quot; 0 --&gt; 500
+  bar [220, 260, 310, 290, 380, 430]
+  line [220, 260, 310, 290, 380, 430]
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Sankey diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/sankey.png" width="600" height="400" style="--w:600" alt="Sankey diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a sankey is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>sankey
+
+Orders,Approved,80
+Orders,Sent back,20
+Approved,Delivered,74
+Approved,Cancelled,6
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Radar chart</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/radar.png" width="700" height="700" style="--w:700" alt="Radar chart, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a radar-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>radar-beta
+  axis p[&quot;Price&quot;], s[&quot;Speed&quot;], q[&quot;Quality&quot;], r[&quot;Range&quot;]
+  curve a[&quot;Acme&quot;]{70, 90, 80, 60}
+  curve b[&quot;Bolt&quot;]{90, 50, 70, 80}
+
+  max 100
+  min 0
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Packet diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet.png" width="784" height="84" style="--w:784" alt="Packet diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a packet is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>packet
+0-15: &quot;Order number&quot;
+16-23: &quot;Lines&quot;
+24-31: &quot;Status&quot;
+32-63: &quot;Total, in pence&quot;
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Venn diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/venn.png" width="784" height="441" style="--w:784" alt="Venn diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a venn-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>venn-beta
+  title A supplier worth keeping
+  set Cheap
+  set Fast
+  set Good
+  union Cheap,Fast[&quot;Risky&quot;]
+  union Fast,Good[&quot;Dear&quot;]
+  union Cheap,Fast,Good[&quot;Keep&quot;]
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Cynefin framework</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/cynefin.png" width="784" height="606" style="--w:784" alt="Cynefin framework, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a cynefin-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>cynefin-beta
+  title A late order
+
+  complex
+    &quot;Find out why it keeps happening&quot;
+
+  complicated
+    &quot;Ask the carrier's planner&quot;
+
+  clear
+    &quot;Send it again&quot;
+</pre></details>
+</article>
+<article class="card" data-result="left">
+<h3>Wardley map</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/wardley.png" width="784" height="523" style="--w:784" alt="Wardley map, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a wardley-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>wardley-beta
+title Ordering
+
+anchor Buyer [0.95, 0.63]
+component Order [0.79, 0.61]
+component ERP [0.52, 0.80]
+component Hosting [0.10, 0.90]
+
+Buyer -&gt; Order
+Order -&gt; ERP
+ERP -&gt; Hosting
+</pre></details>
+</article>
+</section>
+<section><h2>Other kinds: grammar</h2>
+<article class="card" data-result="left">
+<h3>Railroad (syntax) diagram</h3>
+<p class="result"><b>Left as Mermaid</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/railroad.png" width="469" height="557" style="--w:469" alt="Railroad (syntax) diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a railroad-ebnf-beta is not drawn yet</p></figure></div>
+<details><summary>Source</summary><pre>railroad-ebnf-beta
+title &quot;Order number&quot;
+
+ordernumber = &quot;PO-&quot; digit digit digit digit ;
+digit = &quot;0&quot; | &quot;1&quot; | &quot;2&quot; | &quot;3&quot; | &quot;4&quot; | &quot;5&quot; | &quot;6&quot; | &quot;7&quot; | &quot;8&quot; | &quot;9&quot; ;
+</pre></details>
+</article>
+</section>
+</main>
+<script>
+const show = (which) => {
+  const pressed = document.querySelector('.filters button[data-show="' + which + '"]');
+  if (!pressed) return;
+  document.body.dataset.show = which;
+  for (const b of document.querySelectorAll('.filters button')) b.setAttribute('aria-pressed', String(b === pressed));
+};
+document.querySelector('.filters').addEventListener('click', (e) => {
+  const pressed = e.target.closest('button');
+  if (!pressed) return;
+  history.replaceState(null, '', '#' + pressed.dataset.show);
+  show(pressed.dataset.show);
+});
+// A link can ask for one result: compare.html#partly opens on what is only partly read.
+show(location.hash.slice(1));
+</script>
+</body>
+</html>

@@ -32,6 +32,10 @@ For coding agents changing this repository. It follows the same habits as
 - `corpus/`: one sample of every kind of diagram Mermaid documents and of every feature of its flowcharts, with
   what each should be read as in `index.json`. `scripts/coverage.mjs` runs Merlive over all of it and writes
   `docs/COVERAGE.md` and `corpus/drawn/`. Written again with `npm run coverage`; never edited by hand.
+- `corpus/compare.html`: every sample drawn twice, by Mermaid's own command and by Merlive, to look at side by
+  side. `scripts/compare.mjs` writes it. Mermaid's pictures are kept in `corpus/mermaid/` and drawn again only by
+  `npm run compare`, which needs `mmdc` and Chrome; `npm run coverage` writes the page again from them, and the
+  tests need neither.
 - `test/`: the pure files at 90% of lines or more, the command run for real into a temporary folder, and
   `skill.test.mjs` for the skill's own files and one version everywhere.
 

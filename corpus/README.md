@@ -8,9 +8,18 @@ One small sample of everything Mermaid documents, to answer one question: what o
 - `index.json`: for each sample, what it covers and what it should be read as: how many boxes, links and groups,
   which words, which kinds, what is at the ends of its links, and anything Merlive is known to leave out (`loses`).
 - `drawn/`: what Merlive draws of each flowchart sample today.
+- `mermaid/`: what Mermaid's own command draws of every sample, and `mermaid/index.json`, which says which it
+  could not draw and why.
+- `compare.html`: the two side by side, sample by sample. Open it in a browser; `compare.html#partly` opens on
+  the samples Merlive only partly reads.
 
-The answer is [docs/COVERAGE.md](../docs/COVERAGE.md). `npm run coverage` writes it and the pictures again, and
-`npm test` fails when either no longer says what the code does.
+The answer is [docs/COVERAGE.md](../docs/COVERAGE.md). `npm run coverage` writes it, the pictures and the
+comparison page again, and `npm test` fails when any of them no longer says what the code does.
+
+`npm run compare` draws Mermaid's side again. It needs Mermaid's command (`npm install -g @mermaid-js/mermaid-cli`)
+and Chrome, and is only worth running when a sample changes or Mermaid does. A sample Mermaid cannot draw is a
+result, kept with Mermaid's own words for why: the corpus follows Mermaid's documentation, which runs ahead of
+its releases.
 
 ## Where the list comes from
 

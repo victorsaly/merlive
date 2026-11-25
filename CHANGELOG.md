@@ -68,6 +68,9 @@ The first version. It draws flowcharts and nothing else, and says so.
   (`A & B --> C & D`) cannot be drawn without two lines crossing once. P4 counts such crossings exactly and
   allows them on top of one for every eight links; any other crossing is refused as before. The two lines no
   longer lie on each other on the way: a line entering a box steps aside from one leaving the box above it.
+- **Mermaid's drawing and Merlive's can be looked at side by side.** `corpus/compare.html` shows every sample in
+  the corpus drawn twice, on one page that reads on a phone, with what Merlive left out said beside each.
+  `npm run compare` draws Mermaid's side with its own command; `npm run coverage` keeps Merlive's side current.
 - **What Merlive draws of Mermaid is written down, and checked.** `corpus/` holds one sample of each of the 32
   other kinds of diagram Mermaid documents and of 69 features of its flowcharts; `npm run coverage` runs Merlive
   over all of it and writes `docs/COVERAGE.md` and a picture of each flowchart sample. The tests fail when the

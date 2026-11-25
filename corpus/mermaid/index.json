@@ -1,0 +1,506 @@
+{
+  "by": "mermaid-cli 11.16.0",
+  "samples": {
+    "flowchart/declare-flowchart.mmd": {
+      "ok": true,
+      "width": 182,
+      "height": 174
+    },
+    "flowchart/declare-graph.mmd": {
+      "ok": true,
+      "width": 182,
+      "height": 174
+    },
+    "flowchart/direction-tb.mmd": {
+      "ok": true,
+      "width": 127,
+      "height": 278
+    },
+    "flowchart/direction-td.mmd": {
+      "ok": true,
+      "width": 127,
+      "height": 278
+    },
+    "flowchart/direction-lr.mmd": {
+      "ok": true,
+      "width": 432,
+      "height": 70
+    },
+    "flowchart/direction-bt.mmd": {
+      "ok": true,
+      "width": 127,
+      "height": 278
+    },
+    "flowchart/direction-rl.mmd": {
+      "ok": true,
+      "width": 432,
+      "height": 70
+    },
+    "flowchart/frontmatter.mmd": {
+      "ok": true,
+      "width": 270,
+      "height": 123
+    },
+    "flowchart/init-directive.mmd": {
+      "ok": true,
+      "width": 265,
+      "height": 70
+    },
+    "flowchart/comments.mmd": {
+      "ok": true,
+      "width": 265,
+      "height": 70
+    },
+    "flowchart/accessibility.mmd": {
+      "ok": true,
+      "width": 265,
+      "height": 70
+    },
+    "flowchart/accessibility-block.mmd": {
+      "ok": true,
+      "width": 265,
+      "height": 70
+    },
+    "flowchart/semicolons.mmd": {
+      "ok": true,
+      "width": 545,
+      "height": 70
+    },
+    "flowchart/node-id-only.mmd": {
+      "ok": true,
+      "width": 459,
+      "height": 70
+    },
+    "flowchart/node-text.mmd": {
+      "ok": true,
+      "width": 396,
+      "height": 70
+    },
+    "flowchart/node-unicode.mmd": {
+      "ok": true,
+      "width": 398,
+      "height": 70
+    },
+    "flowchart/node-quoted.mmd": {
+      "ok": true,
+      "width": 377,
+      "height": 70
+    },
+    "flowchart/node-entities.mmd": {
+      "ok": true,
+      "width": 353,
+      "height": 70
+    },
+    "flowchart/node-line-break.mmd": {
+      "ok": true,
+      "width": 390,
+      "height": 94
+    },
+    "flowchart/node-markdown.mmd": {
+      "ok": true,
+      "width": 354,
+      "height": 94
+    },
+    "flowchart/node-fontawesome.mmd": {
+      "ok": true,
+      "width": 362,
+      "height": 70
+    },
+    "flowchart/shape-round.mmd": {
+      "ok": true,
+      "width": 411,
+      "height": 70
+    },
+    "flowchart/shape-stadium.mmd": {
+      "ok": true,
+      "width": 412,
+      "height": 70
+    },
+    "flowchart/shape-subroutine.mmd": {
+      "ok": true,
+      "width": 436,
+      "height": 70
+    },
+    "flowchart/shape-cylinder.mmd": {
+      "ok": true,
+      "width": 381,
+      "height": 81
+    },
+    "flowchart/shape-circle.mmd": {
+      "ok": true,
+      "width": 362,
+      "height": 70
+    },
+    "flowchart/shape-asymmetric.mmd": {
+      "ok": true,
+      "width": 400,
+      "height": 70
+    },
+    "flowchart/shape-rhombus.mmd": {
+      "ok": true,
+      "width": 435,
+      "height": 135
+    },
+    "flowchart/shape-hexagon.mmd": {
+      "ok": true,
+      "width": 409,
+      "height": 70
+    },
+    "flowchart/shape-parallelogram.mmd": {
+      "ok": true,
+      "width": 407,
+      "height": 70
+    },
+    "flowchart/shape-parallelogram-alt.mmd": {
+      "ok": true,
+      "width": 419,
+      "height": 70
+    },
+    "flowchart/shape-trapezoid.mmd": {
+      "ok": true,
+      "width": 459,
+      "height": 70
+    },
+    "flowchart/shape-trapezoid-alt.mmd": {
+      "ok": true,
+      "width": 451,
+      "height": 70
+    },
+    "flowchart/shape-double-circle.mmd": {
+      "ok": true,
+      "width": 380,
+      "height": 79
+    },
+    "flowchart/shape-at-syntax.mmd": {
+      "ok": true,
+      "width": 273,
+      "height": 445
+    },
+    "flowchart/shape-at-every.mmd": {
+      "ok": false,
+      "error": "Error: No such shape: browser."
+    },
+    "flowchart/shape-icon.mmd": {
+      "ok": true,
+      "width": 261,
+      "height": 127
+    },
+    "flowchart/shape-image.mmd": {
+      "ok": false,
+      "error": "Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED"
+    },
+    "flowchart/grid-layout.mmd": {
+      "ok": true,
+      "width": 127,
+      "height": 278
+    },
+    "flowchart/link-arrow.mmd": {
+      "ok": true,
+      "width": 258,
+      "height": 70
+    },
+    "flowchart/link-open.mmd": {
+      "ok": true,
+      "width": 258,
+      "height": 70
+    },
+    "flowchart/link-text-bars.mmd": {
+      "ok": true,
+      "width": 547,
+      "height": 70
+    },
+    "flowchart/link-text-inline.mmd": {
+      "ok": true,
+      "width": 760,
+      "height": 70
+    },
+    "flowchart/link-dotted.mmd": {
+      "ok": true,
+      "width": 638,
+      "height": 70
+    },
+    "flowchart/link-thick.mmd": {
+      "ok": true,
+      "width": 629,
+      "height": 70
+    },
+    "flowchart/link-invisible.mmd": {
+      "ok": true,
+      "width": 403,
+      "height": 70
+    },
+    "flowchart/link-chain.mmd": {
+      "ok": true,
+      "width": 545,
+      "height": 70
+    },
+    "flowchart/link-chain-and.mmd": {
+      "ok": true,
+      "width": 238,
+      "height": 278
+    },
+    "flowchart/link-and-both.mmd": {
+      "ok": true,
+      "width": 349,
+      "height": 174
+    },
+    "flowchart/link-circle-cross.mmd": {
+      "ok": true,
+      "width": 481,
+      "height": 70
+    },
+    "flowchart/link-both-ways.mmd": {
+      "ok": true,
+      "width": 626,
+      "height": 70
+    },
+    "flowchart/link-length.mmd": {
+      "ok": true,
+      "width": 269,
+      "height": 772
+    },
+    "flowchart/link-id.mmd": {
+      "ok": true,
+      "width": 403,
+      "height": 70
+    },
+    "flowchart/link-animate.mmd": {
+      "ok": true,
+      "width": 403,
+      "height": 70
+    },
+    "flowchart/link-steps.mmd": {
+      "ok": true,
+      "width": 575,
+      "height": 70
+    },
+    "flowchart/link-curve.mmd": {
+      "ok": true,
+      "width": 258,
+      "height": 174
+    },
+    "flowchart/subgraph-title.mmd": {
+      "ok": true,
+      "width": 182,
+      "height": 432
+    },
+    "flowchart/subgraph-id.mmd": {
+      "ok": true,
+      "width": 182,
+      "height": 432
+    },
+    "flowchart/subgraph-links.mmd": {
+      "ok": true,
+      "width": 371,
+      "height": 502
+    },
+    "flowchart/subgraph-direction.mmd": {
+      "ok": true,
+      "width": 526,
+      "height": 348
+    },
+    "flowchart/subgraph-nested.mmd": {
+      "ok": true,
+      "width": 222,
+      "height": 482
+    },
+    "flowchart/subgraph-collapsed.mmd": {
+      "ok": true,
+      "width": 369,
+      "height": 348
+    },
+    "flowchart/style-node.mmd": {
+      "ok": true,
+      "width": 283,
+      "height": 70
+    },
+    "flowchart/style-link.mmd": {
+      "ok": true,
+      "width": 403,
+      "height": 70
+    },
+    "flowchart/class-def.mmd": {
+      "ok": true,
+      "width": 465,
+      "height": 70
+    },
+    "flowchart/class-inline.mmd": {
+      "ok": true,
+      "width": 283,
+      "height": 70
+    },
+    "flowchart/class-default.mmd": {
+      "ok": true,
+      "width": 258,
+      "height": 70
+    },
+    "flowchart/click-callback.mmd": {
+      "ok": true,
+      "width": 258,
+      "height": 70
+    },
+    "flowchart/click-link.mmd": {
+      "ok": true,
+      "width": 258,
+      "height": 70
+    },
+    "kinds/sequence.mmd": {
+      "ok": true,
+      "width": 650,
+      "height": 347
+    },
+    "kinds/zenuml.mmd": {
+      "ok": true,
+      "width": 334,
+      "height": 243
+    },
+    "kinds/class.mmd": {
+      "ok": true,
+      "width": 313,
+      "height": 378
+    },
+    "kinds/state.mmd": {
+      "ok": true,
+      "width": 157,
+      "height": 412
+    },
+    "kinds/er.mmd": {
+      "ok": true,
+      "width": 385,
+      "height": 470
+    },
+    "kinds/requirement.mmd": {
+      "ok": true,
+      "width": 423,
+      "height": 386
+    },
+    "kinds/c4.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 641
+    },
+    "kinds/block.mmd": {
+      "ok": true,
+      "width": 266,
+      "height": 122
+    },
+    "kinds/architecture.mmd": {
+      "ok": true,
+      "width": 448,
+      "height": 463
+    },
+    "kinds/swimlane.mmd": {
+      "ok": true,
+      "width": 215,
+      "height": 591
+    },
+    "kinds/usecase.mmd": {
+      "ok": false,
+      "error": "UnknownDiagramError: No diagram type detected matching given configuration"
+    },
+    "kinds/agentflow.mmd": {
+      "ok": false,
+      "error": "UnknownDiagramError: No diagram type detected matching given configuration"
+    },
+    "kinds/eventmodeling.mmd": {
+      "ok": true,
+      "width": 764,
+      "height": 470
+    },
+    "kinds/journey.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 565
+    },
+    "kinds/timeline.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 416
+    },
+    "kinds/gantt.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 172
+    },
+    "kinds/gitgraph.mmd": {
+      "ok": true,
+      "width": 369,
+      "height": 175
+    },
+    "kinds/mindmap.mmd": {
+      "ok": true,
+      "width": 342,
+      "height": 417
+    },
+    "kinds/treeview.mmd": {
+      "ok": true,
+      "width": 121,
+      "height": 163
+    },
+    "kinds/ishikawa.mmd": {
+      "ok": true,
+      "width": 451,
+      "height": 579
+    },
+    "kinds/kanban.mmd": {
+      "ok": true,
+      "width": 630,
+      "height": 99
+    },
+    "kinds/treemap.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 293
+    },
+    "kinds/pie.mmd": {
+      "ok": true,
+      "width": 605,
+      "height": 450
+    },
+    "kinds/quadrant.mmd": {
+      "ok": true,
+      "width": 500,
+      "height": 500
+    },
+    "kinds/xychart.mmd": {
+      "ok": true,
+      "width": 700,
+      "height": 500
+    },
+    "kinds/sankey.mmd": {
+      "ok": true,
+      "width": 600,
+      "height": 400
+    },
+    "kinds/radar.mmd": {
+      "ok": true,
+      "width": 700,
+      "height": 700
+    },
+    "kinds/packet.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 84
+    },
+    "kinds/venn.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 441
+    },
+    "kinds/cynefin.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 606
+    },
+    "kinds/wardley.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 523
+    },
+    "kinds/railroad.mmd": {
+      "ok": true,
+      "width": 469,
+      "height": 557
+    }
+  }
+}
