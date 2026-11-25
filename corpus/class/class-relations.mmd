@@ -1,0 +1,9 @@
+classDiagram
+  Document <|-- Order
+  Order *-- OrderLine
+  Warehouse o-- Product
+  Invoice --> Order
+  Supplier -- Contact
+  Order ..> PriceList
+  Payable <|.. Invoice
+  Buyer .. Note

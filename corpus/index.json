@@ -1,5 +1,5 @@
 {
-  "from": "The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram, entity diagram and sequence diagram pages set out. The samples are our own.",
+  "from": "The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram, class diagram, entity diagram and sequence diagram pages set out. The samples are our own.",
   "flowchart": [
     {
       "file": "flowchart/declare-flowchart.mmd",
@@ -982,6 +982,564 @@
       "links": 1,
       "title": "An order",
       "loses": "Mermaid's own settings are read past: the look is the design's"
+    }
+  ],
+  "class": [
+    {
+      "file": "class/class-declare.mmd",
+      "covers": "A class, declared with \"class\"",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": []
+    },
+    {
+      "file": "class/class-declare-relation.mmd",
+      "covers": "Two classes made by tying one to the other",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "class/class-declare-v2.mmd",
+      "covers": "A class diagram, declared with \"classDiagram-v2\"",
+      "boxes": 2,
+      "links": 1,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "class/class-title.mmd",
+      "covers": "A title in front matter",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        2
+      ],
+      "title": "Ordering"
+    },
+    {
+      "file": "class/class-label.mmd",
+      "covers": "A class with a label",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "A purchase order",
+        "Order line, with *! signs"
+      ]
+    },
+    {
+      "file": "class/class-backticks.mmd",
+      "covers": "A class named between backticks",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Purchase order!",
+        "Order line"
+      ]
+    },
+    {
+      "file": "class/class-members-colon.mmd",
+      "covers": "Members given one at a time, after a colon",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        4
+      ],
+      "has": [
+        "+String number",
+        "+Date placed",
+        "+total()",
+        "+cancel()"
+      ]
+    },
+    {
+      "file": "class/class-members-block.mmd",
+      "covers": "Members given together, between brackets",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        4
+      ],
+      "has": [
+        "+String number",
+        "+cancel()"
+      ]
+    },
+    {
+      "file": "class/class-return-type.mmd",
+      "covers": "What a method gives back",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        3
+      ],
+      "has": [
+        "+total() Money",
+        "+cancel() bool"
+      ]
+    },
+    {
+      "file": "class/class-generics.mmd",
+      "covers": "Generic types, in a class, a member and what a method gives back",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        6
+      ],
+      "has": [
+        "Basket<Item>",
+        "List<Item> items",
+        "add(List<Item> more)",
+        "lines() List<Item>",
+        "byShelf() List<List<Item>>",
+        "-List<string> notes"
+      ]
+    },
+    {
+      "file": "class/class-visibility.mmd",
+      "covers": "Who may see a member: public, private, protected, package",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        6
+      ],
+      "has": [
+        "+String number",
+        "-Money total",
+        "#Date due",
+        "~Ledger ledger"
+      ]
+    },
+    {
+      "file": "class/class-classifiers.mmd",
+      "covers": "Members marked abstract or static",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        5
+      ],
+      "has": [
+        "+String prefix {static}",
+        "+total() Money {abstract}",
+        "+count() {static}",
+        "+next() int {static}",
+        "+check() {abstract}"
+      ],
+      "loses": "Abstract and static are said in words at the end of the row, where Mermaid slants or underlines it"
+    },
+    {
+      "file": "class/class-relations.mmd",
+      "covers": "The eight relations",
+      "boxes": 12,
+      "links": 8,
+      "ends": [
+        [
+          "triangle",
+          "none"
+        ],
+        [
+          "diamond",
+          "none"
+        ],
+        [
+          "diamond-open",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "triangle",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ]
+    },
+    {
+      "file": "class/class-relations-reversed.mmd",
+      "covers": "The eight relations written the other way round, each with words",
+      "boxes": 12,
+      "links": 8,
+      "has": [
+        "Inheritance",
+        "Composition",
+        "Aggregation",
+        "Association",
+        "Link(Solid)",
+        "Dependency",
+        "Realization",
+        "Link(Dashed)"
+      ],
+      "ends": [
+        [
+          "triangle",
+          "none"
+        ],
+        [
+          "none",
+          "diamond"
+        ],
+        [
+          "none",
+          "diamond-open"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "triangle",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "loses": "\"Is a\" is drawn from the parent down to the child, whichever way it was written"
+    },
+    {
+      "file": "class/class-relation-labels.mmd",
+      "covers": "Words on a relation",
+      "boxes": 5,
+      "links": 3,
+      "has": [
+        "is a",
+        "holds",
+        "stocks"
+      ]
+    },
+    {
+      "file": "class/class-two-way.mmd",
+      "covers": "A relation that says something at both ends",
+      "boxes": 6,
+      "links": 3,
+      "ends": [
+        [
+          "triangle",
+          "triangle"
+        ],
+        [
+          "arrow",
+          "arrow"
+        ],
+        [
+          "diamond",
+          "diamond-open"
+        ]
+      ]
+    },
+    {
+      "file": "class/class-lollipop.mmd",
+      "covers": "A lollipop interface",
+      "boxes": 4,
+      "links": 2,
+      "rows": [
+        2,
+        0,
+        0,
+        0
+      ],
+      "has": [
+        "Payable",
+        "Printable",
+        "«interface»"
+      ],
+      "ends": [
+        [
+          "circle",
+          "none"
+        ],
+        [
+          "none",
+          "circle"
+        ]
+      ],
+      "loses": "A lollipop is drawn as a box of its own, named for the interface and marked «interface», with the circle on its line"
+    },
+    {
+      "file": "class/class-cardinality.mmd",
+      "covers": "How many, at either end of a relation",
+      "boxes": 5,
+      "links": 3,
+      "has": [
+        "1",
+        "*",
+        "1..*",
+        "many",
+        "Stocks"
+      ]
+    },
+    {
+      "file": "class/class-namespace.mmd",
+      "covers": "A namespace",
+      "boxes": 2,
+      "links": 1,
+      "groups": 1,
+      "rows": [
+        0,
+        2
+      ],
+      "has": [
+        "Buying"
+      ]
+    },
+    {
+      "file": "class/class-namespace-label.mmd",
+      "covers": "A namespace with a label",
+      "boxes": 1,
+      "links": 0,
+      "groups": 1,
+      "rows": [
+        2
+      ],
+      "has": [
+        "Signing in"
+      ]
+    },
+    {
+      "file": "class/class-namespace-nested.mmd",
+      "covers": "A namespace written inside another",
+      "boxes": 3,
+      "links": 2,
+      "groups": 3,
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying",
+        "records"
+      ]
+    },
+    {
+      "file": "class/class-namespace-dotted.mmd",
+      "covers": "Namespaces inside one another, spelt with dots",
+      "boxes": 3,
+      "links": 2,
+      "groups": 4,
+      "has": [
+        "Shop",
+        "Ordering",
+        "Buying",
+        "Paying"
+      ]
+    },
+    {
+      "file": "class/class-annotation-inline.mmd",
+      "covers": "An annotation, on the line that declares the class",
+      "boxes": 1,
+      "links": 0,
+      "has": [
+        "«interface»"
+      ]
+    },
+    {
+      "file": "class/class-annotation-line.mmd",
+      "covers": "An annotation, on a line of its own",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        2
+      ],
+      "has": [
+        "«interface»",
+        "amountDue",
+        "pay()"
+      ]
+    },
+    {
+      "file": "class/class-annotation-nested.mmd",
+      "covers": "An annotation, inside the class",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        2,
+        3
+      ],
+      "has": [
+        "«interface»",
+        "«enumeration»",
+        "DRAFT",
+        "PAID"
+      ]
+    },
+    {
+      "file": "class/class-comments.mmd",
+      "covers": "A comment on a line of its own",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ]
+    },
+    {
+      "file": "class/class-direction.mmd",
+      "covers": "A direction for the whole diagram",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        2
+      ],
+      "has": [
+        "carries",
+        "-badge : Badge"
+      ],
+      "ends": [
+        [
+          "none",
+          "diamond-open"
+        ]
+      ],
+      "loses": "Drawn top to bottom: boxes of different heights are only placed that way yet"
+    },
+    {
+      "file": "class/class-interaction.mmd",
+      "covers": "A class that opens a link or calls a function when clicked",
+      "boxes": 4,
+      "links": 0,
+      "loses": "The clicks are left out: a page of Merlive opens no links and runs no code of yours"
+    },
+    {
+      "file": "class/class-note-for.mmd",
+      "covers": "A note for a class",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "notes": 1,
+      "has": [
+        "Raised by a buyer Approved by a manager"
+      ],
+      "loses": "A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it"
+    },
+    {
+      "file": "class/class-note-general.mmd",
+      "covers": "A note for no class in particular",
+      "boxes": 2,
+      "links": 1,
+      "notes": 0,
+      "loses": "A note for no class in particular has no box to belong to: it is not drawn, and said"
+    },
+    {
+      "file": "class/class-style.mmd",
+      "covers": "A class styled on its own",
+      "boxes": 2,
+      "links": 0,
+      "kinds": [
+        "grey",
+        "red"
+      ],
+      "loses": "Each outline is heavy or broken as written, in the design's own nearest colour; the fill is the design's"
+    },
+    {
+      "file": "class/class-classdef.mmd",
+      "covers": "A style class made with classDef and given with cssClass",
+      "boxes": 3,
+      "links": 0,
+      "kinds": [
+        "late",
+        "held"
+      ]
+    },
+    {
+      "file": "class/class-css-inline.mmd",
+      "covers": "A style class given with :::",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        0,
+        2
+      ],
+      "kinds": [
+        "late"
+      ]
+    },
+    {
+      "file": "class/class-default-class.mmd",
+      "covers": "A default style class for every class",
+      "boxes": 2,
+      "links": 0,
+      "kinds": [
+        "quiet"
+      ],
+      "loses": "The default class is read past: the look is the design's"
+    },
+    {
+      "file": "class/class-css-class.mmd",
+      "covers": "A style class kept in the page's own stylesheet",
+      "boxes": 1,
+      "links": 0,
+      "kinds": [
+        "styleClass"
+      ],
+      "loses": "A page's own stylesheet cannot be read from here: the class is of that kind, in the design's plain look"
+    },
+    {
+      "file": "class/class-whole.mmd",
+      "covers": "A whole diagram: classes, what they list, what they inherit, and a note",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        3,
+        3,
+        2
+      ],
+      "notes": 1,
+      "title": "Orders and what they hold",
+      "has": [
+        "Sent when the order is delivered Paid within thirty days",
+        "+print()",
+        "-Money amountDue"
+      ],
+      "ends": [
+        [
+          "triangle",
+          "none"
+        ],
+        [
+          "triangle",
+          "none"
+        ]
+      ],
+      "loses": "A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it"
     }
   ],
   "er": [

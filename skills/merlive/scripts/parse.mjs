@@ -4,6 +4,7 @@
 import { iconFor } from './icons.mjs';
 import { stateReader } from './state.mjs';
 import { erReader } from './er.mjs';
+import { classReader } from './class.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
@@ -161,6 +162,14 @@ function leftOpen(/** @type {string} */ text) {
   return (text.split('`').length - 1) % 2 ? 'a Markdown string' : '';
 }
 
+// A diagram that is boxes and links under another name has a reader of its own, which reads its lines into the
+// model a flowchart gives: how the block starts, and the reader for it. A new kind is one more line here.
+const READERS = /** @type {const} */ ([
+  [/^stateDiagram(-v2)?;?$/, stateReader],
+  [/^classDiagram(-v2)?;?$/, classReader],
+  [/^erDiagram;?$/, erReader],
+]);
+
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own
 // direction is not followed yet.
 const PASSED = /^(click|direction)\b/;
@@ -233,9 +242,8 @@ export function parse(src) {
   const ofBoxes = [];
   /** @type {[number[], ReturnType<typeof lookOf>][]} */
   const ofLinks = [];
-  // A diagram that is boxes and links but is not written as a flowchart (a state diagram, an entity diagram) has
-  // a reader of its own, which reads its lines into this same model.
-  /** @type {{read:(text:string,line:number) => boolean,done:() => void}|null} */
+  // The reader of a diagram that is not written as a flowchart is (see READERS), reading into this same model.
+  /** @type {{read:(text:string, line:number) => boolean, done:() => void}|null} */
   let reader = null;
 
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
@@ -346,7 +354,8 @@ export function parse(src) {
 
   /** Opens a group. One opened inside another is drawn as part of the outer one, and said once. */
   const frame = (/** @type {string} */ id, /** @type {string} */ title, /** @type {number} */ line) => {
-    model.groups.push({ id, title, members: [], ...(open.length ? { parent: open[open.length - 1] } : {}) });
+    // A group named a second time is the same group, opened again: what is declared in it now joins what was.
+    if (!model.groups.some((g) => g.id === id)) model.groups.push({ id, title, members: [], ...(open.length ? { parent: open[open.length - 1] } : {}) });
     open.push(id);
   };
 
@@ -451,8 +460,8 @@ export function parse(src) {
       header = true;
       const h = /^(flowchart|graph)\b\s*(TD|TB|BT|LR|RL)?/.exec(text);
       model.kindOfDiagram = text.split(/\s+/)[0];
-      if (/^stateDiagram(-v2)?;?$/.test(text)) return void (reader = stateReader({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf }));
-      if (/^erDiagram;?$/.test(text)) return void (reader = erReader({ model, node, say, connect, warn, wordsOf, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]) }));
+      const read = READERS.find(([starts]) => starts.test(text))?.[1];
+      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]) }));
       if (!h) {
         model.type = 'unsupported';
         return;

@@ -1,0 +1,4 @@
+classDiagram
+  Customer "1" --> "*" Order
+  Order "1" *-- "1..*" OrderLine
+  Warehouse --> "many" Product : Stocks

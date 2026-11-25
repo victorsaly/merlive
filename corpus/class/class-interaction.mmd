@@ -1,0 +1,9 @@
+classDiagram
+  class Order
+  class Invoice
+  class Supplier
+  class Product
+  link Order "https://example.com/orders" "Open the order"
+  click Invoice href "https://example.com/invoices" "Open the invoice"
+  callback Supplier "showSupplier" "Show the supplier"
+  click Product call showProduct() "Show the product"

@@ -72,6 +72,40 @@ this page holds for them: the rules, the design, Merlive's own lines.
 Not read yet, named in a `note,` line when met: concurrency (`--`), whose regions are drawn as one. A composite
 state inside another is a group inside a group.
 
+## A class diagram
+
+`classDiagram` and `classDiagram-v2` are read into the same boxes and links as a flowchart, so everything else on
+this page holds for them: the rules, the design, Merlive's own lines.
+
+| Written | Read as |
+|---|---|
+| `class Order`, or a name first met in a relation | A class: a box named by its name |
+| `class Order["A purchase order"]`, `` class `Purchase order!` `` | A class with a label, or with a name no bare name could be. In Merlive's own lines it is the name without the backticks |
+| `class Basket~Item~` | A class called `Basket<Item>`. What it is generic over is no part of its name: relations and Merlive's own lines say `Basket` |
+| `Order : +String number`, `class Order { +String number … }` | A member: one row of the box. Rows that end in brackets are what the class does and come second; the rest are what it holds and come first. A class that only holds, or only does, has one compartment |
+| `+`, `-`, `#`, `~` before a member; `total() Money` | Kept as written: who may see the member, and what it gives back |
+| `List~Item~`, `List~List~Item~~` in a member | `List<Item>`, `List<List<Item>>` |
+| `check()*`, `total() Money*`, `count()$`, `String prefix$` | The row ends in the words `{abstract}` or `{static}` |
+| `class Payable <<interface>>`, `<<interface>> Payable`, `<<interface>>` inside the brackets | What the class is, over its name: `«interface»` |
+| `Document <\|-- Order`, `Order --\|> Document` | Inheritance: a link with a triangle at the parent. It is drawn from the parent down to the child, whichever way it was written |
+| `Payable <\|.. Invoice`, `Invoice ..\|> Payable` | Realisation: the same, dotted |
+| `Order *-- OrderLine`, `Warehouse o-- Product` | Composition and aggregation: a filled or an open diamond at the class that holds |
+| `Invoice --> Order`, `Order ..> PriceList` | Association and dependency: an arrow, on a solid or a dotted line |
+| `Supplier -- Contact`, `Buyer .. Note` | A link with nothing at either end |
+| `Supplier <--> Buyer`, `Bundle *--o Product` | A relation that says something at both ends |
+| `Order "1" *-- "1..*" OrderLine : holds` | How many, beside each end, and the words on the link |
+| `Payable ()-- Invoice`, `Order --() Printable` | A lollipop: a small box of its own for each class that offers it, named for the interface, marked `«interface»`, with a circle on its line. In Merlive's own lines it is `Invoice_Payable` |
+| `namespace Buying { … }`, `namespace Auth["Signing in"] { … }` | A group of the classes declared in it, called by its label when it has one |
+| A namespace inside another, `namespace Shop.Ordering.Buying { … }` | A group inside a group. A dotted name makes every group it spells out, each once, called by its last word; in Merlive's own lines a group is its whole dotted name |
+| `note for Order "words"` | The note on that box: what a reader sees on picking it. A `\n` or `<br>` in it is a space |
+| `classDef`, `cssClass "Order,Invoice" late`, `Order:::late`, `style Order …` | Kinds and outlines, as in a flowchart |
+| `click`, `link`, `callback` | Read past |
+
+Not read yet, each named in a `note,` line when met: a note for no class in particular (`note "words"`), which
+has no box to belong to; a direction other than top to bottom (`direction LR`), since boxes of different heights
+are only placed that way for now; a lollipop at both ends of one line. A line that is none of the above is said
+with its line number and nothing is drawn from it.
+
 ## An entity diagram
 
 A block that starts `erDiagram` is read into the same boxes and links as a flowchart, so everything else on this

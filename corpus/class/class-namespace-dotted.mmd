@@ -1,0 +1,18 @@
+classDiagram
+  namespace Shop.Ordering.Buying {
+    class Order {
+      +raise()
+    }
+  }
+  namespace Shop.Ordering.Paying {
+    class Invoice {
+      +pay()
+    }
+  }
+  namespace Shop.Ordering {
+    class Ledger {
+      +post()
+    }
+  }
+  Ledger --> Order : records
+  Ledger --> Invoice : records
