@@ -6,7 +6,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 ## In short
 
-- **Flowcharts:** of 70 features, 48 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 0 are only partly read, and 0 are refused.
+- **Flowcharts:** of 70 features, 49 are drawn as written, 21 are drawn less something Merlive leaves out on purpose or does not have yet, 0 are only partly read, and 0 are refused.
 - **State diagrams:** of 27 features, 17 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
@@ -40,7 +40,7 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | Brackets and signs inside quotes | Drawn |  | [source](../corpus/flowchart/node-quoted.mmd) | [picture](../corpus/drawn/node-quoted.svg) |
 | Characters written as entity codes | Drawn |  | [source](../corpus/flowchart/node-entities.mmd) | [picture](../corpus/drawn/node-entities.svg) |
 | A line break in a label | Drawn |  | [source](../corpus/flowchart/node-line-break.mmd) | [picture](../corpus/drawn/node-line-break.svg) |
-| Markdown strings: bold, italic and a real line break | Drawn, less something | Bold and italic are drawn as plain words | [source](../corpus/flowchart/node-markdown.mmd) | [picture](../corpus/drawn/node-markdown.svg) |
+| Markdown strings: bold, italic and a real line break | Drawn |  | [source](../corpus/flowchart/node-markdown.mmd) | [picture](../corpus/drawn/node-markdown.svg) |
 | A Font Awesome icon in a label | Drawn, less something | The icons are Merlive's own drawings of a truck and a tick, not Font Awesome's | [source](../corpus/flowchart/node-fontawesome.mmd) | [picture](../corpus/drawn/node-fontawesome.svg) |
 | Shape: Round edges | Drawn, less something | Its corners are the design's, the same as every box | [source](../corpus/flowchart/shape-round.mmd) | [picture](../corpus/drawn/shape-round.svg) |
 | Shape: Stadium | Drawn |  | [source](../corpus/flowchart/shape-stadium.mmd) | [picture](../corpus/drawn/shape-stadium.svg) |

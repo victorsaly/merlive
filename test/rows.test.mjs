@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
-import { hitsBox, layout, measure, meet, rowsRoom, tableNeeds } from '../skills/merlive/scripts/layout.mjs';
+import { hitsBox, layout, measure, meet, roomFor, rowsRoom, tableNeeds } from '../skills/merlive/scripts/layout.mjs';
 import { builtIn, designFrom } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { draw, picture } from '../skills/merlive/scripts/render.mjs';
@@ -278,5 +278,35 @@ describe('a table: its shaded rows can be read', () => {
     assert.match(d1?.detail ?? '', /text on a shaded row/);
     const plain = parse('flowchart TD\n  A --> B');
     assert.doesNotMatch(score(plain, layout(plain), faint).checks.find((c) => c.id === 'D1')?.detail ?? '', /shaded row/);
+  });
+});
+
+describe('words a Markdown string stresses', () => {
+  const drawn = (/** @type {string} */ words) => {
+    const m = parse(`flowchart LR\n  A["\`${words}\`"] --> B[Next]`), lay = layout(m);
+    return { m, lay, g: /<g class="mv-node" data-node="A".*?<\/g>/s.exec(picture(m, lay, builtIn, { title: 't' }))?.[0] ?? '' };
+  };
+
+  it('are drawn bold and italic, inside the line they are on', () => {
+    assert.match(drawn('**Urgent** order').g, /<tspan x="[\d.]+" y="[\d.]+"><tspan class="mv-strong">Urgent<\/tspan> order<\/tspan>/);
+    assert.match(drawn('Pick *today* now').g, />Pick <tspan class="mv-em">today<\/tspan> now<\/tspan>/);
+    assert.match(drawn('***Both*** ways').g, /<tspan class="mv-strong mv-em">Both<\/tspan> ways/);
+  });
+
+  it('stay bold on every line a long run is wrapped to', () => {
+    const { g, lay } = drawn('**An urgent order that somebody has to pick and pack today** please');
+    assert.ok(lay.nodes.A.lines.length > 1);
+    assert.equal((g.match(/class="mv-strong"/g) ?? []).length, lay.nodes.A.lines.length);
+    assert.equal(g.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(), 'An urgent order that somebody has to pick and pack today please');
+  });
+
+  it('leave a box that stresses nothing drawn as it always was', () => {
+    assert.doesNotMatch(drawn('Plain words').g, /mv-strong|mv-em/);
+    assert.match(drawn('Plain words').g, /<text><tspan x="[\d.]+" y="[\d.]+">Plain words<\/tspan><\/text>/);
+  });
+
+  it('are reckoned wider when bold, so a line of them still fits its box', () => {
+    const plain = parse('flowchart LR\n  A[Twelve chars] --> B').nodes[0], bold = parse('flowchart LR\n  A["`**Twelve chars**`"] --> B').nodes[0];
+    assert.ok(roomFor(bold, 160) < roomFor(plain, 160));
   });
 });

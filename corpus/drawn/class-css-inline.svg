@@ -19,6 +19,8 @@
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
 .mv-stripe{stroke:none}
+.mv-node .mv-strong{font-weight:700}
+.mv-node .mv-em{font-style:italic}
 .mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
 [data-kind="late"] .mv-stripe{fill:var(--mv-k-late)}
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}

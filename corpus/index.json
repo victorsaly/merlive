@@ -151,8 +151,7 @@
       "has": [
         "Urgent order",
         "Pick today and pack"
-      ],
-      "loses": "Bold and italic are drawn as plain words"
+      ]
     },
     {
       "file": "flowchart/node-fontawesome.mmd",

@@ -30,7 +30,7 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
 <p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 255 samples, Merlive draws 227 whole and 0 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>255</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>173</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>54</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>0</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>28</b></button></div>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>255</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>174</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>53</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>0</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>28</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -201,9 +201,9 @@ flowchart LR
   A[&quot;Check stock&lt;br/&gt;in both warehouses&quot;] --&gt; B[Pick&lt;br&gt;and pack]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Markdown strings: bold, italic and a real line break</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Bold and italic are drawn as plain words</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-markdown.png" width="354" height="94" style="--w:354" alt="Markdown strings: bold, italic and a real line break, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-markdown.svg" width="384" height="116" style="--w:384" alt="Markdown strings: bold, italic and a real line break, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[&quot;`**Urgent** order`&quot;] --&gt; B[&quot;`Pick *today*

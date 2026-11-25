@@ -94,6 +94,8 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
 .mv-stripe{stroke:none}
+.mv-node .mv-strong{font-weight:${Math.min(900, Math.max(700, design.weight + 200))}}
+.mv-node .mv-em{font-style:italic}
 .mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
 ${kinds.map((k) => `[data-kind="${k}"] .mv-stripe{fill:var(--mv-k-${k})}`).join('\n')}
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
@@ -214,7 +216,26 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     const widest = Math.max(...b.lines.map((line) => line.length)) * measure.glyph;
     const icon = drawing ? `<path class="mv-icon" transform="translate(${n(b.x + at.dx + aside - widest / 2 - measure.icon)},${n(nameY + at.dy - iconMeasure.grid / 2)})" d="${drawing}"/>` : '';
     const first = nameY + at.dy - ((b.lines.length - 1) * 16) / 2 + draw.baseline;
-    const words = b.lines.map((line, i) => `<tspan x="${n(b.x + at.dx + aside)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
+    // What a Markdown string made bold or italic stays so on whichever line its words came to. The lines are
+    // the label's own words in order, so each letter's look is found by counting letters, spaces aside.
+    const looks = (m.emphasis ?? []).flatMap((run) => [...run.words.replace(/\s/g, '')].map(() => [run.strong ? 'mv-strong' : '', run.em ? 'mv-em' : ''].filter(Boolean).join(' ')));
+    let letter = 0;
+    const stressed = (/** @type {string} */ line) => {
+      const letters = [...line];
+      /** @type {(string|null)[]} */
+      const look = letters.map((c) => (/\s/.test(c) ? null : looks[letter++] ?? ''));
+      // A space is bold or slanted only between two words that are: never on its own, nor at the edge of a run.
+      const spaced = look.map((l, i) => l ?? (look[i - 1] === look[i + 1] ? look[i - 1] ?? '' : ''));
+      /** @type {[string, string][]} */
+      const runs = [];
+      letters.forEach((c, i) => {
+        const last = runs[runs.length - 1];
+        if (last && last[0] === spaced[i]) last[1] += c;
+        else runs.push([spaced[i], c]);
+      });
+      return runs.map(([l, text]) => (l ? `<tspan class="${l}">${esc(text)}</tspan>` : esc(text))).join('');
+    };
+    const words = b.lines.map((line, i) => `<tspan x="${n(b.x + at.dx + aside)}" y="${n(first + i * 16)}">${looks.length ? stressed(line) : esc(line)}</tspan>`).join('');
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${m.label}, ${kindName(m.kind)}`)}"` : '';
     // A box of a kind that means something carries a stripe of its colour down its near edge. Any other shape
     // already says what it is by its outline, and a plain step has nothing to say.

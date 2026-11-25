@@ -16,6 +16,7 @@ import { inset, roomIn } from './shapes.mjs';
 // What is measured, named once. Boxes are sized without a browser, from the average glyph of a 13px UI face.
 export const measure = {
   glyph: 7.1, // px per character at 13px
+  strong: 1.08, // how much wider a label is reckoned when any of it is bold: bold letters are that much wider
   labelGlyph: 6.6, // px per character of a link's label at 11px
   widths: [128, 160, 192, 224, 256, 288], // the only box widths there are; a diagram uses one of them throughout
   lineHeight: 16,
@@ -72,7 +73,8 @@ export function wrap(/** @type {string} */ label, /** @type {number} */ max) {
 }
 
 /** How many characters a line of words may run to in a box of this shape and width: shapes.mjs says how much room each leaves. */
-export const roomFor = (/** @type {{shape:import('./shapes.mjs').Shape,icon?:string}} */ n, /** @type {number} */ width) => Math.floor((roomIn(n.shape, width) - (n.icon ? measure.icon : 0)) / measure.glyph);
+export const roomFor = (/** @type {{shape:import('./shapes.mjs').Shape,icon?:string,emphasis?:{strong?:boolean}[]}} */ n, /** @type {number} */ width) =>
+  Math.floor((roomIn(n.shape, width) - (n.icon ? measure.icon : 0)) / (measure.glyph * (n.emphasis?.some((run) => run.strong) ? measure.strong : 1)));
 
 /**
  * The lines of a box's words in a box of some width. Where the author broke the label, each of their lines is

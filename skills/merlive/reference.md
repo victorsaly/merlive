@@ -16,7 +16,7 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A[/Text/]`, `A[\Text\]`, `A[/Text\]`, `A[\Text/]` | The two that lean and the two trapezoids, drawn as themselves |
 | `A["Text with (brackets)"]` | A quoted label |
 | `A["one line<br/>and another"]` | A label in the author's own lines, up to four |
-| ``A["`**Bold** and *italic*`"]`` | A Markdown string: its words and its own line breaks, drawn plain |
+| ``A["`**Bold** and *italic*`"]`` | A Markdown string: its words, its own line breaks, and what it makes bold or italic. On a link's words the stars come off and the words are plain |
 | `#quot;`, `#9829;` | An entity code becomes its character |
 | `fa:fa-truck Shipped` | An icon is drawn beside its words. The drawing is Merlive's own (seventy-two of them, found by any name Font Awesome has used): nothing is fetched. One Merlive has no drawing for, or a brand's mark, is left out and named in a `note,` line |
 | `A@{ shape: diam, label: "In stock?" }` | A box written the newer way, on one line or several. Its label is kept. Every shape in the rows above is drawn as itself, by any of Mermaid's names for it; a shape Merlive has no drawing for is a box |

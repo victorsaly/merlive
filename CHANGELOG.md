@@ -11,6 +11,8 @@ Class diagrams and entity diagrams.
   any more.
 - **A group's title can be read.** In a sequence diagram it takes the design's quiet colour in light and dark,
   sits inside its frame and wraps to it. In a still picture it was black on any page.
+- **Bold and italic are drawn.** What a Markdown string stresses (`**Urgent** order`, `Pick *today*`) stays bold
+  or italic in its box, on whichever line its words are wrapped to. It was drawn as plain words.
 - **A composite state's regions are drawn.** What `--` parts are frames side by side inside the composite
   state, each with a start of its own, and a link into the composite state goes into every one. They were drawn
   as one, with a note.

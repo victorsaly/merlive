@@ -8,7 +8,7 @@ import { classReader } from './class.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
-/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string,rows?:string[][],table?:string[][],over?:string}} Node table: an entity's rows again, cell by cell (type, name, keys), to be drawn as a table; rows: what a class or an entity lists under its name, a compartment at a time, each line as it is shown; over: a short line above its name ("«interface»"); dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
+/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string,rows?:string[][],table?:string[][],over?:string,emphasis?:{words:string,strong?:boolean,em?:boolean}[]}} Node emphasis: the label again as runs, when a Markdown string made some of it bold or italic; table: an entity's rows again, cell by cell (type, name, keys), to be drawn as a table; rows: what a class or an entity lists under its name, a compartment at a time, each line as it is shown; over: a short line above its name ("«interface»"); dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
 /**
  * @typedef {'none'|'arrow'|'circle'|'cross'|'triangle'|'diamond'|'diamond-open'|'one'|'zero-or-one'|'one-or-many'|'zero-or-many'} Mark
  * what is drawn at an end of a link. A class diagram adds the hollow triangle of "is a", the filled diamond of
@@ -75,17 +75,20 @@ const MARKS = { '<': 'arrow', '>': 'arrow', o: 'circle', x: 'cross' };
 // these are the ones a diagram's words use. A code not here is left as it was typed.
 const NAMED = { quot: '"', amp: '&', lt: '<', gt: '>', apos: "'", nbsp: ' ', hearts: '♥', copy: '©', reg: '®', trade: '™', hellip: '…', mdash: '—', ndash: '–', larr: '←', rarr: '→', uarr: '↑', darr: '↓', harr: '↔', deg: '°', times: '×', divide: '÷', plusmn: '±', euro: '€', pound: '£', yen: '¥', cent: '¢', check: '✓', cross: '✗', bull: '•', middot: '·', laquo: '«', raquo: '»', lsquo: '‘', rsquo: '’', ldquo: '“', rdquo: '”', micro: 'µ', para: '¶', sect: '§', infin: '∞', ne: '≠', le: '≤', ge: '≥' };
 
-/**
- * The words of a label as a reader should see them, in the author's own lines. Quotes come off; a Markdown
- * string keeps its words and its line breaks and loses its stars; an icon's name comes out of the words (a box
- * draws it beside them, see iconsIn); an entity code becomes its character.
- * @param {string} text
- * @returns {string[]}
- */
-export function wordsOf(text) {
-  let words = text.trim().replace(/^"([^]*)"$/, '$1').trim();
+// Where a Markdown string's bold and italic begin and end, kept in the words while they are read as four
+// characters nobody types (from Unicode's private use area), so that everything done to the words is done once.
+const STRESS = { strongOn: '\uE000', strongOff: '\uE001', emOn: '\uE002', emOff: '\uE003' };
+const stressless = (/** @type {string} */ words) => words.replace(/[\uE000-\uE003]/g, '');
+
+/** The lines of a label as wordsOf gives them, with where bold and italic begin and end still marked. */
+function stressed(/** @type {string} */ text) {
+  let words = stressless(text).trim().replace(/^"([^]*)"$/, '$1').trim();
   const markdown = /^`[^]*`$/.test(words);
-  if (markdown) words = words.slice(1, -1).replace(/(\*\*|__)(?=\S)([^]*?\S)\1/g, '$2').replace(/(^|[^\w*])([*_])(?=\S)([^*_]*?\S)\2(?!\w)/g, '$1$3');
+  if (markdown) {
+    words = words.slice(1, -1)
+      .replace(/(\*\*|__)(?=\S)([^]*?\S)\1/g, `${STRESS.strongOn}$2${STRESS.strongOff}`)
+      .replace(/(^|[^\w*])([*_])(?=\S)([^*_]*?\S)\2(?!\w)/g, `$1${STRESS.emOn}$3${STRESS.emOff}`);
+  }
   return words
     .split(markdown ? /<br\s*\/?>|\n/i : /<br\s*\/?>/i)
     .map((line) => line
@@ -98,7 +101,39 @@ export function wordsOf(text) {
       })
       .replace(/\s+/g, ' ')
       .trim())
-    .filter(Boolean);
+    .filter((line) => stressless(line));
+}
+
+/**
+ * The words of a label as a reader should see them, in the author's own lines. Quotes come off; a Markdown
+ * string keeps its words and its line breaks and loses its stars (emphasisOf says what they stressed); an
+ * icon's name comes out of the words (a box draws it beside them, see iconsIn); an entity code becomes its
+ * character.
+ * @param {string} text
+ * @returns {string[]}
+ */
+export const wordsOf = (text) => stressed(text).map(stressless);
+
+/**
+ * What a Markdown string made bold or italic: the label as runs of words, which put end to end are the label.
+ * Nothing, when it stressed nothing.
+ * @param {string} text
+ * @returns {{words:string,strong?:boolean,em?:boolean}[]|undefined}
+ */
+export function emphasisOf(text) {
+  /** @type {{words:string,strong?:boolean,em?:boolean}[]} */
+  const runs = [];
+  let strong = false, em = false;
+  for (const c of stressed(text).join(' ')) {
+    if (c === STRESS.strongOn || c === STRESS.strongOff) strong = c === STRESS.strongOn;
+    else if (c === STRESS.emOn || c === STRESS.emOff) em = c === STRESS.emOn;
+    else {
+      const last = runs[runs.length - 1];
+      if (last && Boolean(last.strong) === strong && Boolean(last.em) === em) last.words += c;
+      else runs.push({ words: c, ...(strong ? { strong } : {}), ...(em ? { em } : {}) });
+    }
+  }
+  return runs.some((r) => r.strong || r.em) ? runs : undefined;
 }
 
 // The newer shapes ("A@{ shape: diam }") that Merlive has a drawing for, by every name Mermaid gives them.
@@ -283,6 +318,9 @@ export function parse(src) {
     n.label = lines.join(' ') || n.id;
     if (lines.length > 1) n.breaks = lines;
     else delete n.breaks;
+    const runs = emphasisOf(words);
+    if (runs) n.emphasis = runs;
+    else delete n.emphasis;
   };
 
   /** Gives a box its shape. A cylinder is a store of data, and so is of the kind that holds data, like one only named as a store. */
