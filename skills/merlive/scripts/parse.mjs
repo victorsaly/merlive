@@ -35,6 +35,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Step[]} steps
  * @property {{main?:string[],side?:'left'|'right',turn?:boolean}} hints turn: false keeps a wide left-to-right flow as it was written
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
+ * @property {Record<string,string>} [meanings] what a kind of box means, in its author's words (`%% kind red: Read-only data`): the legend's name for it
  * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
  * @property {string[]} warnings
  * @property {string} [left] why a diagram of a kind Merlive reads is left as Mermaid all the same, in a sentence that says what to do; its type is then 'unsupported' (a block diagram placed by its author's grid)
@@ -237,6 +238,9 @@ function lookOf(css) {
 }
 
 // What is measured in an author's styling, named once.
+// Names of colours, which say how a kind looks and not what it means.
+const COLOURS = new Set(['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink', 'grey', 'gray', 'black', 'white', 'brown', 'cyan', 'magenta']);
+
 const looks = {
   heavy: 3, // px of stroke-width from which an outline or a line is drawn heavy: Mermaid's own thick link is 3.5
   grey: 0.15, // a colour less saturated than this has no hue to speak of
@@ -264,7 +268,7 @@ export function parse(src) {
   // A sequence diagram has a reader, rules and a drawing of its own: sequence.mjs.
   if (isSequence(src)) return /** @type {any} */ (parseSequence(src));
   /** @type {Model} */
-  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', heading: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, groups: [], warnings: [] };
+  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', heading: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, meanings: {}, groups: [], warnings: [] };
   /** @type {Map<string, Node>} */
   const byId = new Map();
   const seenEdge = new Map();
@@ -493,6 +497,8 @@ export function parse(src) {
     // Merlive's own lines live in Mermaid comments, so every other Mermaid renderer still reads the block.
     const note = /^%%\s*note\s+(\w+)\s*:\s*(.+)$/.exec(text);
     if (note) return void (model.notes[note[1]] = note[2].trim());
+    const meaning = /^%%\s*kind\s+(\w+)\s*:\s*(.+)$/.exec(text);
+    if (meaning) return void ((model.meanings ??= {})[meaning[1]] = meaning[2].trim());
     const step = /^%%\s*step\s*:\s*(.+)$/.exec(text);
     if (step) {
       const [title = '', path = '-', words = ''] = step[1].split('|').map((x) => x.trim());
@@ -646,6 +652,11 @@ export function parse(src) {
   }
   for (const n of model.nodes) if (!n.kind) n.kind = n.shape === 'diamond' || n.shape === 'hexagon' ? 'decision' : n.shape === 'pill' || n.shape === 'double-circle' ? 'terminal' : 'step';
   for (const id of Object.keys(model.notes)) if (!byId.has(id)) model.warnings.push(`note for ${id}: no such node`);
+  // A kind its author named for its colour (classDef red) tells a reader of the legend only what they can see.
+  const kinds = new Set(model.nodes.map((n) => n.kind));
+  for (const k of Object.keys(model.meanings ?? {})) if (!kinds.has(k)) model.warnings.push(`kind ${k}: no box is of that kind`);
+  // Only a name the author chose: one Merlive gives a styled box (style B stroke:#c00) is its hue on purpose.
+  for (const k of kinds) if (COLOURS.has(k) && ofClass.has(k) && !model.meanings?.[k]) model.warnings.push(`the kind "${k}" says only its colour, so the legend says "${k}" too: "%% kind ${k}: what it means" names it there`);
   resolveSteps(model);
   return model;
 }

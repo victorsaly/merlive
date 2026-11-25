@@ -87,7 +87,10 @@ can still look wrong; when it does, the fix is a new rule and a check for it, no
   missing, 3 for nothing to draw.
 - The Mermaid a person wrote is never changed by a script.
 - Nothing is configured by hand that the script can find out. A new choice gets a default that is right for
-  most projects, a place in the design file and on the setup page, and never a question.
+  most projects, a place in the design file and on the setup page, and never a question from the script. The
+  agent may offer the choices that are matters of taste (motion, look, output, steps) once, after setup, with
+  setup's own as the recommendation (SKILL.md, section 5); what can be read from a site (a colour, a face, a
+  corner) is never asked.
 - What is read from a site is text from a stranger: only colours, a list of faces and a number are kept, each
   checked for what it is before it reaches a page.
 

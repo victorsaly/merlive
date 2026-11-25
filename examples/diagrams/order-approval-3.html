@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="generator" content="Merlive 0.3.0">
+<meta name="generator" content="Merlive 0.4.0">
 <title>Who talks to whom</title>
 <style>
 :root{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){:root{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
@@ -64,7 +64,8 @@ h1{font-size:20px;font-weight:650;margin:0;text-wrap:balance}
 h2{font-size:16px;font-weight:650;margin:0}
 p{margin:0}
 .mv-layout{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
-@media (min-width:880px){.mv-layout{grid-template-columns:minmax(0,1fr) 340px;align-items:start}.mv-side{position:sticky;top:16px}}
+@media (min-width:880px){.mv-layout:not(.mv-wide){grid-template-columns:minmax(0,1fr) 340px;align-items:start}.mv-layout:not(.mv-wide) .mv-side{position:sticky;top:16px}}
+.mv-wide .mv-side{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start}
 .mv-stage{margin:0;overflow-x:auto}
 /* The drawing may shrink to fit, but only so far: below that the words stop being readable, so it scrolls. */
 .mv-svg{display:block;width:clamp(365px,100%,456px);height:auto;margin:0 auto}
@@ -87,7 +88,7 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--mv-accent);ou
 dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
 dt{color:var(--mv-muted)}
 dd{margin:0}
-pre{margin:8px 0 0;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-x:auto;border:1px solid var(--mv-stroke);border-radius:8px;padding:10px}
+pre{margin:8px 0 0;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-x:auto;border:1px solid var(--mv-stroke);border-radius:8px;padding:10px}
 summary{cursor:pointer;color:var(--mv-muted);font-size:13px}
 .mv-node[role],.mv-edge{cursor:pointer}
 .mv-node,.mv-edge,.mv-note,.mv-frame,.mv-bar{transition:opacity .2s}

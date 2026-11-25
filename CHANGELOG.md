@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.4.0 (unreleased)
+
+What a real project's documents showed: diagrams hidden behind the panel, words adrift from their lines or
+squeezed into a column, a legend that said "Red", and code in a face the site does not use.
+
+- **A drawing too wide to sit beside the panel has the panel above it.** The column beside the panel is 692px;
+  a drawing that would not fit it even shrunk as far as it may be (to 80%) was partly behind the panel, or had to
+  be scrolled sideways to find its last boxes. The steps and the picking now sit above it, side by side, and the
+  drawing has the page's width. The same for a sequence diagram.
+- **Words beside a line that runs along the flow stay by their line.** They were centred on a width reckoned from
+  an average glyph; in a narrower face (a hand-lettered one, say) they drifted away from the line. They are now
+  drawn from the side next to it.
+- **A link's words are not squeezed into a column.** Left to right, the room between two ranks is as wide as the
+  words on a link straight across it. P7 now fails a label wrapped again into more than two lines, and more
+  than it wraps to anyway, and says to shorten it.
+- **`%% kind red: Read-only data` says what a kind of box means.** The legend and a picked box say it instead of
+  "Red". A kind its author named for a colour, with no such line, is named in a `note,` line that says how.
+- **Code is set in the site's own face for code.** Setup reads the `font-family` of `code` and `pre`, writes it
+  as `mono` in the design file, and the Mermaid a page shows and the rows a class or an entity lists use it.
+- **The agent offers the choices once, after setup.** Motion, look, output and steps, each with setup's own as
+  the recommendation (SKILL.md, section 5). A colour, a face or a corner is still never asked: it is read.
+
 ## 0.3.0 (unreleased)
 
 More kinds of diagram that are boxes and links: requirement, C4, architecture and block diagrams.

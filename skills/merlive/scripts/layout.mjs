@@ -8,7 +8,7 @@ import { inset, roomIn } from './shapes.mjs';
 /** @typedef {{x:number,y:number}} Pt */
 /** @typedef {'top'|'bottom'|'left'|'right'} Side */
 /** @typedef {{id:string,x:number,y:number,w:number,h:number,rank:number,lane:number,spine:boolean,lines:string[]}} Placed */
-/** @typedef {{x:number,y:number,w:number,h:number,text:string,lines:string[]}} Words a link's words: the middle of where they sit, their size, and the lines they are wrapped to */
+/** @typedef {{x:number,y:number,w:number,h:number,text:string,lines:string[],align?:'start'|'end'}} Words a link's words: the middle of where they sit, their size, and the lines they are wrapped to; align: beside a line that runs along the flow, the side of them that is next to it, where they are held */
 /** @typedef {{id:string,points:Pt[],back:boolean,label:null|Words,near?:Words,far?:Words}} Routed near, far: the few words at the end it comes from and the end it leads to */
 /** @typedef {{id:string,title:string,x:number,y:number,w:number,h:number,name:{x:number,y:number,w:number,h:number,plate:boolean}}} Frame a group's frame, from its top left corner; name: where its name sits, from its middle, and whether a line has to pass behind it */
 /** @typedef {{width:number,height:number,direction:'TD'|'LR',reversed:boolean,box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[]}} Layout */
@@ -34,6 +34,7 @@ export const measure = {
   labelLine: 14, // px between two lines of a link's words
   wordsIn: 16, // px from a box to the words on a line that leaves it, and the air under them
   labelOff: 5, // px between a link's words and its line
+  wordsAcross: 12, // px more than its words a run across must be before they are wrapped again to fit it
   framePad: 12, // from a group's boxes to its frame
   frameTitle: 14, // more at the top, for what the group is called
   frameAir: 10, // the least along the flow between two frames, or a frame and a box that is not in it
@@ -352,7 +353,14 @@ function placed(model, dir, reversed = false) {
     const forFrames = frames > 1 ? Math.max(0, atEnds * most(ends, r - 1) + atStarts * most(starts, r) + measure.frameAir - rankGap) : 0;
     // Words on a link that runs into a group from outside would land on the group's name, which is along the top
     // of its frame, in this same room. The room is made taller by the words, so they have a row above the name.
-    if (dir === 'LR') return forFrames;
+    // Left to right, a link from one rank straight on to the next runs across this room, and its words sit
+    // above or below it: the room is made as wide as the words, so they keep the lines they wrap to anyway
+    // instead of being wrapped again into a column.
+    if (dir === 'LR') {
+      const across = model.edges.filter((e) => e.label && Math.min(rank.get(e.from) ?? 0, rank.get(e.to) ?? 0) === r - 1 && Math.max(rank.get(e.from) ?? 0, rank.get(e.to) ?? 0) === r && lane.get(e.from) === lane.get(e.to));
+      const forWords = across.length ? Math.max(...across.map((e) => Math.max(...wrap(e.label, measure.labelWrap).map((l) => l.length)) * measure.labelGlyph + 10)) + measure.wordsAcross - rankGap : 0;
+      return Math.max(forFrames, forWords, 0);
+    }
     const topsHere = model.groups.filter((g) => g.title && g.members.length && (reversed ? ends.get(g.id) === r - 1 : starts.get(g.id) === r));
     const through = model.edges.filter((e) => {
       const a = rank.get(e.from) ?? 0, b = rank.get(e.to) ?? 0;
@@ -831,20 +839,22 @@ function tidy(/** @type {Pt[]} */ pts) {
 function wordsFor(pts, text, boxes, placed, lines) {
   const sized = (/** @type {string[]} */ wrapped) => ({ lines: wrapped, w: Math.round(Math.max(...wrapped.map((l) => l.length)) * measure.labelGlyph + 10), h: 4 + measure.labelLine * wrapped.length });
   const usual = sized(wrap(text, measure.labelWrap));
-  /** @type {{x:number,y:number,w:number,h:number,lines:string[]}[]} */
+  /** @type {{x:number,y:number,w:number,h:number,lines:string[],align?:'start'|'end'}[]} */
   const places = [];
   for (const [a, b] of segmentsOf(pts)) {
     const flat = a.y === b.y, length = flat ? Math.abs(b.x - a.x) : Math.abs(b.y - a.y), way = Math.sign(flat ? b.x - a.x : b.y - a.y);
     if (length < 16) continue;
     // Words wider than a short run across are wrapped again to fit it, so they do not hang over the boxes at
     // either end.
-    const fit = flat && usual.w > length - 8 ? sized(wrap(text, Math.max(4, Math.floor((length - 18) / measure.labelGlyph)))) : usual;
+    const fit = flat && usual.w > length - measure.wordsAcross ? sized(wrap(text, Math.max(4, Math.floor((length - 18) / measure.labelGlyph)))) : usual;
     const need = flat ? fit.w : fit.h;
     // Near where the run starts, at its middle, near where it ends; a run too short for that, at its middle only.
     const along = length >= need + 24 ? [12 + need / 2, length / 2, length - 12 - need / 2] : [length / 2];
     for (const d of along) {
       for (const side of [-1, 1]) {
-        places.push(flat ? { ...fit, x: a.x + way * d, y: a.y + side * (fit.h / 2 + measure.labelOff) } : { ...fit, x: a.x - side * (fit.w / 2 + measure.labelOff + 2), y: a.y + way * d });
+        // Beside a line that runs along the flow, the words are held at the side next to it: their width is
+        // reckoned from an average glyph, and in a narrower face words centred on that reckoning drift away.
+        places.push(flat ? { ...fit, x: a.x + way * d, y: a.y + side * (fit.h / 2 + measure.labelOff) } : { ...fit, x: a.x - side * (fit.w / 2 + measure.labelOff + 2), y: a.y + way * d, align: side > 0 ? 'end' : 'start' });
       }
     }
   }
@@ -854,6 +864,6 @@ function wordsFor(pts, text, boxes, placed, lines) {
     100 * boxes.filter((r) => on(p, r)).length + 100 * placed.filter((r) => on(p, r)).length
     + 10 * lines.reduce((sum, line) => sum + segmentsOf(line).filter((seg) => hitsBox(seg, p, 0)).length, 0) + i;
   const best = places.map((p, i) => ({ p, c: cost(p, i) })).sort((a, b) => a.c - b.c)[0].p;
-  return { x: best.x, y: best.y, w: best.w, h: best.h, text, lines: best.lines };
+  return { x: best.x, y: best.y, w: best.w, h: best.h, text, lines: best.lines, ...(best.align ? { align: best.align } : {}) };
 }
 

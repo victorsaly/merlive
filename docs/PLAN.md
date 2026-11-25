@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 25 November 2026, with 0.3.0 in hand.
+Last brought up to date: 25 November 2026, with 0.3.0 merged and 0.4.0 in hand.
 
 ## Released
 
@@ -41,7 +41,22 @@ What 0.2.0 left, each said by the command when met or named on the comparison pa
   or in Victor's diagrams has two subgraphs with one id, but it is a change of behaviour, so say so in the pull
   request.
 
-## In hand: 0.3.0, more kinds that are boxes and links
+## In hand: 0.4.0, what a real project's documents showed
+
+On the branch `fit-the-page-and-ask`. Found by drawing the diagrams of a business analyst demo (its
+`docs/index.md` and `docs/running-the-app.md`, held in `test/fit.test.mjs` and `test/real.test.mjs`) in that
+project's own hand-lettered design. Done: the panel above a drawing too wide for the column beside it
+(`draw.column` in render.mjs); words beside a line that runs along the flow drawn from the side next to it
+(`Words.align`); room for words across a left-to-right rank gap, and a P7 check for words squeezed into a
+column; `%% kind name: meaning` (`model.meanings`) and a note for a kind named for its colour; the site's face
+for code (`mono`); the choices offered once after setup (SKILL.md, section 5, and the rule in AGENTS.md).
+
+Left: the setup page shows `mono` in the settings it copies, but has no control for it; a state diagram's reader
+does not read `%% kind` yet; the main path is still the longest one, which in a flow with a fallback (Groq,
+then OpenAI when its limit is reached) puts the fallback on the straight line. `%% main:` fixes it by hand;
+picking the path that takes no decision's exception would fix it by rule.
+
+## Merged, not released: 0.3.0, more kinds that are boxes and links
 
 On the branch `kinds`, stacked on `class-er` until the 0.2.0 pull request is merged. One pull request, one release.
 

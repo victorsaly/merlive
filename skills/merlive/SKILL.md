@@ -3,7 +3,7 @@ name: merlive
 description: Turns the Mermaid flowcharts and state, class, entity, requirement, C4, architecture, block and sequence diagrams in a Markdown file into well placed, live diagrams, one self-contained HTML page (or a still SVG) each, in the project's own colours, which it reads from the project's site by itself, with the main path straight, boxes of one size, and steps a reader can walk through. The Mermaid stays the source and is not changed. Use when asked to make a Mermaid diagram live, interactive, better looking or better laid out, to "merlive" a document, to add a walkthrough to a flowchart, or to set the look of a project's diagrams. Load it before planning the diagrams, even when asked not to run anything yet.
 license: MIT
 metadata:
-  version: 0.3.0
+  version: 0.4.0
   homepage: https://github.com/victorsaly/merlive
 allowed-tools: Bash(node ${CLAUDE_SKILL_DIR}/scripts/*)
 ---
@@ -60,6 +60,7 @@ Mermaid, with the person's agreement:
 | Rule | Usual fix |
 |---|---|
 | P6 words do not fit | Shorten the label; put the detail in a `%% note` |
+| P7 a link's words squeezed into a column | Shorten the words on the link; the detail can go in a `%% note` on a box |
 | P4 too many crossings | Name the main path with `%% main:`, or split the diagram in two |
 | S7 a name or words too long (a sequence diagram) | Give the participant a shorter name with `as`; break a message with `<br/>` |
 | P3 a line through a box | Name the main path with `%% main:` so the box in the way moves aside |
@@ -78,11 +79,14 @@ renderer ignores them and the file still renders anywhere:
 %% step: The budget check | B>C | A valid order is compared with the remaining budget.
 %% step: The revision loop | loop 1 | Over budget, so the requester revises and it is validated again.
 %% main: A>B>C>D
+%% kind red: Read-only data
 ```
 
 - When a flowchart has no steps, **offer** to add some: draft them from the document's own words (three to six
   steps, the normal path first, then each loop), show the person the lines you would add, and add them only when
   they agree. Never invent what a box does; a note says only what the document says.
+- A `note,` line saying a kind "says only its colour" (`classDef red …`) means the legend will say "red". Ask
+  what that colour means in this diagram, in the document's words, and add `%% kind red: …` when they say.
 - `loop 1` is the shortest loop in the graph, `loop 2` the next. The syntax in full is in
   [reference.md](reference.md).
 
@@ -96,13 +100,24 @@ node ${CLAUDE_SKILL_DIR}/scripts/merlive.mjs --setup
 ```
 
 It finds the project's own stylesheet (or the site named in `package.json`), reads its page, text and accent
-colours, its face, its corner and whether it has a dark mode, writes `merlive.design.json`, and writes
+colours, its face, the face its code is set in, its corner and whether it has a dark mode, writes `merlive.design.json`, and writes
 `diagrams/merlive-setup.html`: one of the project's diagrams in those colours, with every choice there is. It
 puts right whatever would break a colour rule and says what it changed. Then draw as usual.
 
 - **Tell the person what it did, in a sentence or two**: where the colours came from, anything it changed (an
   accent too light for a line, say), and that the setup page is there if they want to look. Do not read them the
   settings.
+- **Then offer the choices, once, before drawing**: the way the setup page would, but in the conversation. Ask
+  up to four questions in one go (in Claude Code, one AskUserQuestion call), each with what setup chose as the
+  first option, marked "(Recommended)", and a small preview where it helps:
+  - **Steps**, when a flowchart has none: the `%% step` lines you drafted (section 4), to add or not.
+  - **Motion**: `calm`, `lively` or `none`.
+  - **Look**: `depth` and `ground` together (soft or flat, plain or dots).
+  - **Output**: a live page and a still SVG, the page only, or the SVG only.
+
+  Ask about light and dark only when the site has a dark mode. Never ask for a colour, a face or a corner: those
+  are read from the site. When the person says "just draw it", or has answered once in this project, skip this.
+  Write the answers into `merlive.design.json` and draw.
 - **The diagrams will be read somewhere else** (a blog, a docs site that is not this folder): when the person has
   named it, or the README does, give it: `--setup --from https://their.site`.
 - **Setup found no colours**: ask one question, "What site will these diagrams be read on?", and run it again
@@ -125,7 +140,7 @@ accent", "square corners"), or paste settings copied from the setup page. Change
 | More character, or less: shadows, a dotted ground | `depth`: `flat`, `soft`. `ground`: `plain`, `dots` |
 | A still picture as well as, or in place of, the page | `output.format`: `html`, `svg`, `both` |
 | No walkthrough, no legend, no Mermaid shown | `output.steps`, `output.legend`, `output.source` |
-| Another colour, face or corner | `light`, `dark`, `font`, `radius` |
+| Another colour, face or corner | `light`, `dark`, `font`, `mono` (for code), `radius` |
 
 Two rules hold any colours to account, and the message names the colour to change: D1, words and lines can be
 read, and D2, the kinds of box can be told apart, also by people who do not see red and green apart. Pass the

@@ -101,12 +101,16 @@ the room is tall enough for the words above or below the turn.
 
 A link's words ("Yes", "No") are tried beside each run of its line, near where it leaves first: the first place
 that sits on no box and no other words wins, and of those, one no line passes through. Long words are wrapped,
-and wrapped again to fit a short run between two boxes. Words beside a line that goes round the outside stay
+and wrapped again to fit a short run between two boxes, but never into a column: past two lines, and past the
+lines they wrap to anyway, the rule fails. Left to right, the room between two ranks is made as wide as the words
+on a link straight across it, so they keep their lines. Beside a line that runs along the flow, words are drawn
+from the side next to the line, so a face narrower than the one they were measured in does not leave them adrift. Words beside a line that goes round the outside stay
 inside the picture: everything moves over to give them the margin the boxes have. The few words at an end of a
 link ("1", "0..*") sit beside the line just out from its box, the two ends on one side and the link's own words
 on the other, and are held to the same.
 
 - **Fail:** the words of a line round the left side are cut off by the edge of the picture.
+- **Fail:** "every run is saved for Replay" squeezed between two boxes into a column of one or two words a line.
 
 ## Groups
 

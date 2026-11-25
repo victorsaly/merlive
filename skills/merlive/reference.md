@@ -330,6 +330,7 @@ All are Mermaid comments, anywhere in the block.
 | `%% step: Title \| - \| words` | A step with nothing lit, for an opening or closing remark |
 | `%% main: A>B>C>D` | The path that gets the straight line. Without it, the longest path does |
 | `%% side: left` | Branches and loops go to the left of the main path (above it, left to right). Default `right` |
+| `%% kind red: Read-only data` | What a kind of box means. The legend, and a picked box, say this instead of the kind's own name. A kind its author named for a colour (`classDef red …`) with no such line is named in a `note,` line |
 | `%% turn: no` | A flow written left to right that would be wider than a screen (1,100 px) is drawn top to bottom, and the command says so. This keeps it as written |
 
 A step's path must follow links that exist; one that does not is named in a `note,` line and that part is left out.
@@ -349,6 +350,7 @@ never write one by hand. Everything in it is optional, and what is left out come
   "ground": "dots",
   "output": { "format": "html", "steps": true, "legend": true, "source": true },
   "font": "\"IBM Plex Sans\", system-ui, sans-serif",
+  "mono": "\"IBM Plex Mono\", ui-monospace, monospace",
   "weight": 500,
   "radius": 6,
   "light": {
@@ -376,6 +378,7 @@ never write one by hand. Everything in it is optional, and what is left out come
 | `output.legend` | Whether a page carries the legend of kinds of box |
 | `output.source` | Whether a page carries the Mermaid it was drawn from |
 | `font`, `weight`, `radius` | The face (a list of faces), its weight (100 to 900) and a box's corner in px (0 to 40) |
+| `mono` | The face for code (a list of faces): the Mermaid a page shows, and the rows a class or an entity lists |
 | `from` | Where setup read the colours. Not used in drawing; it says where to look again |
 
 | Colour | What it is |
@@ -413,6 +416,7 @@ the stylesheets it links to and the styles written in it.
 | Accent | The colour of links when it is a colour; else a token named like `--accent`, `--primary`, `--brand`, `--mark`; else the strongest colour among the tokens |
 | Dark mode | The same, inside `prefers-color-scheme: dark`, `.dark` or `[data-theme="dark"]` |
 | Face, corner and shadows | `body`'s `font-family`; the most common `border-radius`; whether anything has a `box-shadow` |
+| The face for code | The `font-family` of `code`, `pre`, `kbd` or `samp`, following `var()`; it is made to end in `monospace` |
 
 Colours are read as hex, `rgb()`, `hsl()`, bare `H S% L%` and `oklch()`. What a diagram needs and a site does not
 have (a box's fill and edge, lines, quiet text, the colours of kinds) is made from the page and text colours and

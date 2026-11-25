@@ -4,7 +4,7 @@
 // so the two kinds of diagram in one document are one family. Pure.
 
 import { looksOf } from './design.mjs';
-import { rulesFor, titleOf, variables } from './render.mjs';
+import { draw, rulesFor, titleOf, variables } from './render.mjs';
 import { across, namedUnder, tabOf } from './sequence.mjs';
 import { sequenceRuntime } from './sequence-runtime.mjs';
 
@@ -275,6 +275,29 @@ export function sequencePage(model, lay, design, about) {
 <div class="mv-row"><button type="button" id="mv-prev">Back</button><button type="button" id="mv-next" class="mv-main">Next</button></div>
 </section>`
     : '';
+  // As on a flowchart's page: a drawing too wide to sit beside the panel has the panel above it.
+  const wide = lay.width * show.leastScale > draw.column;
+  const figure = `<figure class="mv-stage">
+<svg class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" role="group" aria-label="${esc(about.title)}">${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
+${sequenceInside(model, lay, design, true)}
+<g id="mv-dot" style="display:none"><circle r="6"/></g>
+</svg>
+${design.output.legend ? `<figcaption class="mv-legend">${legend}</figcaption>` : ''}
+</figure>
+`;
+  const side = `<div class="mv-side">
+${steps}
+<section class="mv-card" aria-live="polite">
+<p class="mv-small" id="mv-none">Pick a participant or a message to see only what it touches.</p>
+<div id="mv-picked" hidden>
+<h2 id="mv-title"></h2>
+<p id="mv-note"></p>
+<dl id="mv-facts"></dl>
+<div class="mv-row"><button type="button" id="mv-clear">Show everything</button></div>
+</div>
+</section>
+</div>
+`;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -286,12 +309,13 @@ export function sequencePage(model, lay, design, about) {
 ${styleOf(design, kinds, ':root')}
 *{box-sizing:border-box}
 body{margin:0;background:var(--mv-bg);color:var(--mv-text);font:15px/1.5 ${design.font}}
-main{max-width:1080px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:16px}
+main{max-width:${draw.page}px;margin:0 auto;padding:20px ${draw.pagePad}px 40px;display:grid;gap:16px}
 h1{font-size:20px;font-weight:650;margin:0;text-wrap:balance}
 h2{font-size:16px;font-weight:650;margin:0}
 p{margin:0}
-.mv-layout{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
-@media (min-width:880px){.mv-layout{grid-template-columns:minmax(0,1fr) 340px;align-items:start}.mv-side{position:sticky;top:16px}}
+.mv-layout{display:grid;gap:${draw.gap}px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:880px){.mv-layout:not(.mv-wide){grid-template-columns:minmax(0,1fr) ${draw.panel}px;align-items:start}.mv-layout:not(.mv-wide) .mv-side{position:sticky;top:16px}}
+.mv-wide .mv-side{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start}
 .mv-stage{margin:0;overflow-x:auto}
 /* The drawing may shrink to fit, but only so far: below that the words stop being readable, so it scrolls. */
 .mv-svg{display:block;width:clamp(${Math.round(lay.width * show.leastScale)}px,100%,${lay.width}px);height:auto;margin:0 auto}
@@ -314,7 +338,7 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--mv-accent);ou
 dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
 dt{color:var(--mv-muted)}
 dd{margin:0}
-pre{margin:8px 0 0;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-x:auto;border:1px solid var(--mv-stroke);border-radius:8px;padding:10px}
+pre{margin:8px 0 0;font:12px/1.55 ${design.mono};overflow-x:auto;border:1px solid var(--mv-stroke);border-radius:8px;padding:10px}
 summary{cursor:pointer;color:var(--mv-muted);font-size:13px}
 .mv-node[role],.mv-edge{cursor:pointer}
 .mv-node,.mv-edge,.mv-note,.mv-frame,.mv-bar{transition:opacity .2s}
@@ -337,27 +361,8 @@ summary{cursor:pointer;color:var(--mv-muted);font-size:13px}
 <body data-motion="${design.motion}">
 <main>
 <h1>${esc(about.title)}</h1>
-<div class="mv-layout">
-<figure class="mv-stage">
-<svg class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" role="group" aria-label="${esc(about.title)}">${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
-${sequenceInside(model, lay, design, true)}
-<g id="mv-dot" style="display:none"><circle r="6"/></g>
-</svg>
-${design.output.legend ? `<figcaption class="mv-legend">${legend}</figcaption>` : ''}
-</figure>
-<div class="mv-side">
-${steps}
-<section class="mv-card" aria-live="polite">
-<p class="mv-small" id="mv-none">Pick a participant or a message to see only what it touches.</p>
-<div id="mv-picked" hidden>
-<h2 id="mv-title"></h2>
-<p id="mv-note"></p>
-<dl id="mv-facts"></dl>
-<div class="mv-row"><button type="button" id="mv-clear">Show everything</button></div>
-</div>
-</section>
-</div>
-</div>
+<div class="mv-layout${wide ? ' mv-wide' : ''}">
+${wide ? side + figure : figure + side}</div>
 ${design.output.source ? `<details class="mv-source"><summary>Mermaid source</summary><pre id="mermaid-source">${esc(about.source)}</pre></details>` : ''}
 </main>
 <script>(${sequenceRuntime.toString()})(${json});</script>

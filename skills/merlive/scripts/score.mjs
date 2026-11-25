@@ -1,7 +1,7 @@
 // Why: a rule nobody checks is a wish. Every placement rule in docs/PLACEMENT.md is a check here, so a
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
-import { compartmentsOf, hitsBox, meet, measure, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf } from './layout.mjs';
+import { compartmentsOf, hitsBox, meet, measure, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf, wrap } from './layout.mjs';
 import { colourChecks, looksOf } from './design.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
@@ -126,6 +126,9 @@ export function score(model, lay, design) {
     for (const n of nodes) if (overlap(l, n)) covered.push(`the label "${l.text}" sits on "${label(n.id)}"`);
     for (const f of lay.groups) if (overlap(l, f.name)) covered.push(`the label "${l.text}" sits on the name of the group "${f.title}"`);
     for (const o of labels.slice(i + 1)) if (o.label && overlap(l, o.label)) covered.push(`the labels "${l.text}" and "${o.label.text}" overlap`);
+    // Wrapped again to fit between two boxes is a last resort. Two lines read as words (an author often breaks
+    // a label in two); past two, and past the lines they wrap to anyway, they read as a column of single words.
+    if (l.lines.length > Math.max(2, wrap(l.text, measure.labelWrap).length)) covered.push(`the label "${l.text}" is squeezed into ${l.lines.length} lines between two boxes: shorten it, or give the boxes room`);
   });
   // The few words at the ends of a link are held to the same: off every box, and inside the picture.
   for (const e of edges) {
