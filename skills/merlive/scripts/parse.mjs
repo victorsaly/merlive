@@ -6,9 +6,13 @@ import { stateReader } from './state.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
-/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string}} Node dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
-/** @typedef {'none'|'arrow'|'circle'|'cross'} Mark what is drawn at an end of a link */
-/** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',head:Mark,tail:Mark,kind?:string}} Edge head: at the box it leads to; tail: at the box it comes from; kind: the colour its author gave it, by name */
+/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string,rows?:string[][],over?:string}} Node rows: what a class or an entity lists under its name, a compartment at a time, each line as it is shown; over: a short line above its name ("«interface»"); dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
+/**
+ * @typedef {'none'|'arrow'|'circle'|'cross'|'triangle'|'diamond'|'diamond-open'|'one'|'zero-or-one'|'one-or-many'|'zero-or-many'} Mark
+ * what is drawn at an end of a link. A class diagram adds the hollow triangle of "is a", the filled diamond of
+ * "is made of" and the open one of "has"; an entity diagram adds how many: one, none or one, one or more, any.
+ */
+/** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',head:Mark,tail:Mark,kind?:string,near?:string,far?:string}} Edge head: at the box it leads to; tail: at the box it comes from; near, far: the few words written at each of those ends ("1", "0..*"); kind: the colour its author gave it, by name */
 /** @typedef {{title:string,text:string,path:string,seq:string[],loop:boolean}} Step */
 /**
  * @typedef {object} Model

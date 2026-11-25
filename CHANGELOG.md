@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0 (unreleased)
+
+Class diagrams and entity diagrams.
+
 ## 0.1.0 (2026-11-25)
 
 The first version. It draws flowcharts, state diagrams and sequence diagrams, and says what it leaves.
