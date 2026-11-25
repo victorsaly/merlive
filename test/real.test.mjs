@@ -348,6 +348,16 @@ describe('more real diagrams: drawn', () => {
     assert.match(picture(m, layout(m), d, { title: m.title }), /--mv-k-red:#7a1f12/);
   });
 
+  it('never gives it the colour of a kind that is in the same diagram: the two could not be told apart', () => {
+    // Dark grey is nearest the green a start has. With a start in the diagram, it takes the next nearest.
+    const m = parse('flowchart TD\n  A([Start]) --> B[Work]\n  style B fill:#969,stroke:#333,stroke-width:4px'), d = designWith(builtIn, m);
+    assert.notEqual(d.light.kinds.grey, builtIn.light.kinds.terminal);
+    assert.ok(Object.values(builtIn.light.kinds).includes(d.light.kinds.grey), 'still one of the design\'s own colours');
+    assert.deepEqual(score(m, layout(m), d).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), []);
+    const alone = parse('flowchart TD\n  A[Start] --> B[Work]\n  style B stroke:#333');
+    assert.equal(designWith(builtIn, alone).light.kinds.grey, builtIn.light.kinds.terminal, 'with no start there, the nearest is free');
+  });
+
   it("draws a group's frame behind its boxes, with its title, and a link's words in the lines they were wrapped to", () => {
     const m = parse(steps);
     const svg = picture(m, layout(m), builtIn, { title: m.title });

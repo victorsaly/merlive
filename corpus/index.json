@@ -5199,56 +5199,115 @@
       "covers": "A grid of blocks with no links: what it says is where each block is",
       "boxes": 6,
       "links": 0,
-      "left": "\"Shop\", \"Portal\", \"Phone\" and 3 more are joined to nothing by a link"
+      "placedBy": "grid",
+      "has": [
+        "Shop",
+        "Portal",
+        "Phone",
+        "ERP",
+        "Stock",
+        "Ledger"
+      ]
     },
     {
       "file": "block/block-shapes-grid.mmd",
       "covers": "Every shape of a block, laid out in a grid with no links",
       "boxes": 14,
       "links": 0,
-      "left": "are joined to nothing by a link"
+      "placedBy": "grid"
     },
     {
       "file": "block/block-alone.mmd",
       "covers": "One block on its own",
       "boxes": 1,
       "links": 0,
-      "left": "\"ERP\" is joined to nothing by a link"
+      "placedBy": "grid",
+      "has": [
+        "ERP"
+      ]
     },
     {
       "file": "block/block-span.mmd",
       "covers": "Blocks that span columns: a wide block over two narrower ones",
       "boxes": 3,
       "links": 2,
-      "left": "\"Web shop\" spans 3 columns (line 3); \"ERP\" spans 2 columns (line 4)"
+      "placedBy": "grid",
+      "has": [
+        "Web shop",
+        "ERP",
+        "Stock"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
     },
     {
       "file": "block/block-space.mmd",
       "covers": "A block that spans the grid under two others, a space between them and an empty row",
       "boxes": 3,
       "links": 2,
-      "left": "\"Warehouse\" spans 3 columns (line 5)"
+      "placedBy": "grid",
+      "has": [
+        "Web shop",
+        "ERP",
+        "Warehouse"
+      ]
     },
     {
       "file": "block/block-space-offset.mmd",
       "covers": "Spaces that put a block under the one it belongs to",
       "boxes": 4,
       "links": 3,
-      "left": "the space on line 4 places a block, and does not make room for a link"
+      "placedBy": "grid",
+      "has": [
+        "Quote",
+        "Order",
+        "Invoice",
+        "Stock"
+      ]
     },
     {
       "file": "block/block-arrows.mmd",
       "covers": "Block arrows between cells: arrows drawn as blocks, placed by the grid",
       "boxes": 5,
       "links": 0,
-      "left": "\"orders\" is a block arrow (line 3)"
+      "placedBy": "grid",
+      "shapes": [
+        "box",
+        "arrow-right",
+        "box",
+        "arrow-down",
+        "box"
+      ],
+      "has": [
+        "orders",
+        "stock"
+      ]
     },
     {
       "file": "block/block-arrow-directions.mmd",
       "covers": "A block arrow pointing every way it can",
       "boxes": 7,
       "links": 0,
-      "left": "\"Right\" is a block arrow (line 3)"
+      "placedBy": "grid",
+      "shapes": [
+        "arrow-right",
+        "arrow-left",
+        "arrow-up",
+        "arrow-down",
+        "arrow-x",
+        "arrow-y",
+        "arrow-x"
+      ],
+      "says": "points x and down, and is drawn pointing both ways across",
+      "loses": "An arrow that points across and down is drawn pointing both ways across: Merlive draws an arrow along one line"
     },
     {
       "file": "block/block-nested-columns.mmd",
@@ -5256,7 +5315,18 @@
       "boxes": 9,
       "links": 0,
       "groups": 2,
-      "left": "\"Everything\" spans 3 columns (line 3)"
+      "placedBy": "grid",
+      "has": [
+        "Everything",
+        "Buy",
+        "Pick",
+        "Pack",
+        "Send",
+        "Bank",
+        "Mon",
+        "Tue",
+        "Wed"
+      ]
     },
     {
       "file": "block/block-mixed.mmd",
@@ -5264,7 +5334,19 @@
       "boxes": 6,
       "links": 2,
       "groups": 1,
-      "left": "\"feeds\" is a block arrow (line 4)"
+      "placedBy": "grid",
+      "shapes": [
+        "pill",
+        "arrow-down",
+        "box",
+        "box",
+        "box",
+        "box"
+      ],
+      "has": [
+        "DB",
+        "A wide one in the middle"
+      ]
     }
   ],
   "sequence": [

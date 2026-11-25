@@ -18,7 +18,7 @@ import { sequencePicture } from '../skills/merlive/scripts/sequence-render.mjs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],shapes?:string[],notes?:number,left?:string,reversed?:boolean,direction?:string,rows?:number[],says?:string,loses?:string,family?:string}} Sample
+ * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],shapes?:string[],notes?:number,left?:string,placedBy?:string,reversed?:boolean,direction?:string,rows?:number[],says?:string,loses?:string,family?:string}} Sample
  * @typedef {{sample:Sample,result:'drawn'|'less'|'partly'|'refused'|'left',why:string[],svg:string}} Row
  */
 
@@ -68,6 +68,7 @@ export function judge(sample, source) {
   // being told it would be.
   const told = (/** @type {string} */ w) => sample.says !== undefined && w.includes(sample.says);
   if (sample.says !== undefined && !model.warnings.some(told)) why.push(`it is not told: ${sample.says}`);
+  if ((sample.placedBy ?? '') !== (model.placedBy ?? '')) why.push(sample.placedBy ? `placed by rule, though the corpus expects it on its author's ${sample.placedBy}` : `placed on its author's ${model.placedBy}, which the corpus does not expect`);
   if (sample.shapes && JSON.stringify(model.nodes.map((n) => n.shape)) !== JSON.stringify(sample.shapes)) why.push(`its shapes are read as ${model.nodes.map((n) => n.shape).join(', ')}`);
   // That a flow is wide is true of the sample, not a thing Merlive failed to read.
   why.push(...model.warnings.filter((w) => !told(w)), ...lay.warnings.filter((w) => !w.includes('will scroll on most screens') && !w.startsWith('written left to right, drawn top to bottom')));
