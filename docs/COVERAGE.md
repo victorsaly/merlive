@@ -8,7 +8,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 - **Flowcharts:** of 70 features, 46 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 2 are only partly read, and 0 are refused.
 - **State diagrams:** of 27 features, 16 are drawn as written, 10 are drawn less something, 1 are only partly read, and 0 are refused.
-- **Class diagrams:** of 36 features, 25 are drawn as written, 10 are drawn less something, 1 are only partly read, and 0 are refused.
+- **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Sequence diagrams:** of 42 features, 35 are drawn as written, 5 are drawn less something, 2 are only partly read, and 0 are refused.
 - **Every kind of diagram:** of 32, 4 drawn (those with their own lists above), and 28 left as Mermaid and named.
@@ -162,14 +162,14 @@ the rows each box lists and what each link ends in.
 | A comment on a line of its own | Drawn |  | [source](../corpus/class/class-comments.mmd) | [picture](../corpus/drawn/class-comments.svg) |
 | A direction for the whole diagram | Drawn, less something | Drawn top to bottom: boxes of different heights are only placed that way yet | [source](../corpus/class/class-direction.mmd) | [picture](../corpus/drawn/class-direction.svg) |
 | A class that opens a link or calls a function when clicked | Drawn, less something | The clicks are left out: a page of Merlive opens no links and runs no code of yours | [source](../corpus/class/class-interaction.mmd) | [picture](../corpus/drawn/class-interaction.svg) |
-| A note for a class | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/class/class-note-for.mmd) | [picture](../corpus/drawn/class-note-for.svg) |
-| A note for no class in particular | Partly read | line 2: a note for no class in particular is not drawn: "From order to invoice" | [source](../corpus/class/class-note-general.mmd) | [picture](../corpus/drawn/class-note-general.svg) |
+| A note for a class | Drawn |  | [source](../corpus/class/class-note-for.mmd) | [picture](../corpus/drawn/class-note-for.svg) |
+| A note for no class in particular | Drawn |  | [source](../corpus/class/class-note-general.mmd) | [picture](../corpus/drawn/class-note-general.svg) |
 | A class styled on its own | Drawn, less something | Each outline is heavy or broken as written, in the design's own nearest colour; the fill is the design's | [source](../corpus/class/class-style.mmd) | [picture](../corpus/drawn/class-style.svg) |
 | A style class made with classDef and given with cssClass | Drawn |  | [source](../corpus/class/class-classdef.mmd) | [picture](../corpus/drawn/class-classdef.svg) |
 | A style class given with ::: | Drawn |  | [source](../corpus/class/class-css-inline.mmd) | [picture](../corpus/drawn/class-css-inline.svg) |
 | A default style class for every class | Drawn, less something | The default class is read past: the look is the design's | [source](../corpus/class/class-default-class.mmd) | [picture](../corpus/drawn/class-default-class.svg) |
 | A style class kept in the page's own stylesheet | Drawn, less something | A page's own stylesheet cannot be read from here: the class is of that kind, in the design's plain look | [source](../corpus/class/class-css-class.mmd) | [picture](../corpus/drawn/class-css-class.svg) |
-| A whole diagram: classes, what they list, what they inherit, and a note | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/class/class-whole.mmd) | [picture](../corpus/drawn/class-whole.svg) |
+| A whole diagram: classes, what they list, what they inherit, and a note | Drawn |  | [source](../corpus/class/class-whole.mmd) | [picture](../corpus/drawn/class-whole.svg) |
 
 ## Entity diagrams, feature by feature
 

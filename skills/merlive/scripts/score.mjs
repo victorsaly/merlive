@@ -70,7 +70,7 @@ export function score(model, lay, design) {
   /** @type {string[]} */
   const close = [];
   nodes.forEach((a, i) => nodes.slice(i + 1).forEach((b) => overlap(a, b, limits.boxGap) && close.push(`"${label(a.id)}" and "${label(b.id)}" are closer than ${limits.boxGap}px`)));
-  add('P2', 'Boxes are one size, on a grid, with room between them', close, `${nodes.length} boxes of ${lay.box.w}×${lay.box.h}${nodes.some((n) => n.h !== lay.box.h) ? ', taller where they list rows' : ''}`);
+  add('P2', 'Boxes are one size, on a grid, with room between them', close, `${nodes.length} boxes of ${lay.box.w}×${lay.box.h}${nodes.some((n) => n.h !== lay.box.h) ? ', taller where they list rows or carry a note' : ''}`);
 
   // P3
   /** @type {string[]} */
@@ -104,7 +104,7 @@ export function score(model, lay, design) {
   const tight = [];
   for (const n of model.nodes) {
     const lines = lay.nodes[n.id].lines, room = roomFor(n, lay.box.w);
-    if (lines.length > measure.mostLines) tight.push(`"${n.label}" needs ${lines.length} lines; shorten it or put the detail in a "%% note"`);
+    if (n.shape !== 'note' && lines.length > measure.mostLines) tight.push(`"${n.label}" needs ${lines.length} lines; shorten it or put the detail in a "%% note"`);
     else if (lines.some((l) => l.length > room)) tight.push(`"${n.label}" has a word too long for a ${lay.box.w}px box`);
     // A row keeps its one line: breaking a method's name in two would make two of it.
     const long = compartmentsOf(n).flat().find((row) => row.length > rowsRoom(lay.box.w));

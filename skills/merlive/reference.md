@@ -23,7 +23,7 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A@{ icon: "fa:user", label: "Buyer" }` | A box with its label, and Merlive's own drawing of the icon beside it |
 | `A@{ img: "…", label: "…" }` | A box with its label. The image is left out: a page of Merlive fetches nothing |
 | `A@{ row: 1, column: 2 }`, `g@{ view: collapsed }` | Read past: placement is Merlive's, and a group is drawn open |
-| `---` … `---` at the top | Front matter: its `title` is kept as the picture's name, and Mermaid's own settings are read past |
+| `---` … `---` at the top | Front matter: its `title` is the picture's name, drawn above a still picture and as the heading of a page; Mermaid's own settings are read past |
 | `accTitle: …`, `accDescr: …` | What the picture is called and what it shows, kept for readers who cannot see it |
 | `A --> B`, `A --- B` | A link, with or without an arrowhead |
 | `A -.-> B`, `A ==> B` | A dotted link, a thick link |
@@ -97,12 +97,11 @@ this page holds for them: the rules, the design, Merlive's own lines.
 | `Payable ()-- Invoice`, `Order --() Printable` | A lollipop: a small box of its own for each class that offers it, named for the interface, marked `«interface»`, with a circle on its line. In Merlive's own lines it is `Invoice_Payable` |
 | `namespace Buying { … }`, `namespace Auth["Signing in"] { … }` | A group of the classes declared in it, called by its label when it has one |
 | A namespace inside another, `namespace Shop.Ordering.Buying { … }` | A group inside a group. A dotted name makes every group it spells out, each once, called by its last word; in Merlive's own lines a group is its whole dotted name |
-| `note for Order "words"` | The note on that box: what a reader sees on picking it. A `\n` or `<br>` in it is a space |
+| `note for Order "words"`, `note "words"` | A note drawn on the picture: a sheet with a folded corner, joined to its class by a dotted line, or to nothing. A `\n` or `<br>` in it is a new line. It is as tall as its words need |
 | `classDef`, `cssClass "Order,Invoice" late`, `Order:::late`, `style Order …` | Kinds and outlines, as in a flowchart |
 | `click`, `link`, `callback` | Read past |
 
-Not read yet, each named in a `note,` line when met: a note for no class in particular (`note "words"`), which
-has no box to belong to; a direction other than top to bottom (`direction LR`), since boxes of different heights
+Not read yet, each named in a `note,` line when met: a direction other than top to bottom (`direction LR`), since boxes of different heights
 are only placed that way for now; a lollipop at both ends of one line. A line that is none of the above is said
 with its line number and nothing is drawn from it.
 

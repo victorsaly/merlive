@@ -1440,24 +1440,32 @@
     {
       "file": "class/class-note-for.mmd",
       "covers": "A note for a class",
-      "boxes": 1,
-      "links": 0,
-      "rows": [
-        1
-      ],
-      "notes": 1,
+      "boxes": 2,
+      "links": 1,
+      "notes": 0,
       "has": [
         "Raised by a buyer Approved by a manager"
       ],
-      "loses": "A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it"
+      "shapes": [
+        "box",
+        "note"
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ]
+      ]
     },
     {
       "file": "class/class-note-general.mmd",
       "covers": "A note for no class in particular",
-      "boxes": 2,
+      "boxes": 3,
       "links": 1,
       "notes": 0,
-      "loses": "A note for no class in particular has no box to belong to: it is not drawn, and said"
+      "has": [
+        "From order to invoice"
+      ]
     },
     {
       "file": "class/class-style.mmd",
@@ -1516,31 +1524,15 @@
     {
       "file": "class/class-whole.mmd",
       "covers": "A whole diagram: classes, what they list, what they inherit, and a note",
-      "boxes": 3,
-      "links": 2,
-      "rows": [
-        3,
-        3,
-        2
-      ],
-      "notes": 1,
+      "boxes": 4,
+      "links": 3,
+      "notes": 0,
       "title": "Orders and what they hold",
       "has": [
         "Sent when the order is delivered Paid within thirty days",
         "+print()",
         "-Money amountDue"
-      ],
-      "ends": [
-        [
-          "triangle",
-          "none"
-        ],
-        [
-          "triangle",
-          "none"
-        ]
-      ],
-      "loses": "A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it"
+      ]
     }
   ],
   "er": [

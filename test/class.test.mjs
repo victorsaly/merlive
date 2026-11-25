@@ -209,14 +209,29 @@ describe('class: a namespace', () => {
 });
 
 describe('class: notes', () => {
-  it('puts a note for a class on that class, its lines run together', () => {
+  it('draws a note for a class as a box of its own, joined to the class by a dotted line with nothing at its ends', () => {
     const m = cls('class Order\nnote for Order "Raised by a buyer\\nApproved by a manager"\nnote for Order "Never deleted<br>only closed"');
-    assert.equal(m.notes.Order, 'Raised by a buyer Approved by a manager Never deleted only closed');
+    const notes = m.nodes.filter((n) => n.shape === 'note');
+    assert.deepEqual(notes.map((n) => [n.label, n.breaks, n.kind]), [
+      ['Raised by a buyer Approved by a manager', ['Raised by a buyer', 'Approved by a manager'], 'note'],
+      ['Never deleted only closed', ['Never deleted', 'only closed'], 'note'],
+    ]);
+    assert.deepEqual(m.edges.map((e) => [e.from, e.to, e.style, e.tail, e.head]), notes.map((n) => [n.id, 'Order', 'dotted', 'none', 'none']));
+    // What is drawn on the picture is not said again beside it.
+    assert.equal(m.notes.Order, undefined);
     assert.deepEqual(m.warnings, []);
   });
 
-  it('says that a note for no class in particular is not drawn', () => {
-    assert.deepEqual(cls('note "From order to invoice"\nA --> B').warnings, ['line 2: a note for no class in particular is not drawn: "From order to invoice"']);
+  it('draws a note for no class in particular as a box joined to nothing', () => {
+    const m = cls('note "From order to invoice"\nA --> B');
+    assert.deepEqual(m.nodes.filter((n) => n.shape === 'note').map((n) => n.label), ['From order to invoice']);
+    assert.equal(m.edges.length, 1);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('gives a note a name no class has, even one that looks like it', () => {
+    const m = cls('class note1\nnote for note1 "Kept"');
+    assert.equal(new Set(m.nodes.map((n) => n.id)).size, 2);
   });
 
   it("takes Merlive's own lines as a flowchart does", () => {

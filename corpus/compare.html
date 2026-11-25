@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 255 samples, Merlive draws 221 whole and 6 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>255</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>164</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>57</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>6</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>28</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 255 samples, Merlive draws 222 whole and 5 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>255</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>167</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>55</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>5</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>28</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -91,7 +91,7 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <article class="card" data-result="less">
 <h3>A title and settings in front matter</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look is the design's</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/frontmatter.png" width="270" height="123" style="--w:270" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/frontmatter.svg" width="384" height="100" style="--w:384" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/frontmatter.png" width="270" height="123" style="--w:270" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/frontmatter.svg" width="384" height="138" style="--w:384" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>---
 title: Order to cash
 config:
@@ -1082,7 +1082,7 @@ flowchart LR
 <article class="card" data-result="less">
 <h3>A title and settings in front matter</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look is the design's</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-frontmatter.png" width="86" height="195" style="--w:86" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-frontmatter.svg" width="184" height="192" style="--w:184" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-frontmatter.png" width="86" height="195" style="--w:86" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-frontmatter.svg" width="184" height="230" style="--w:184" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>---
 title: An order
 config:
@@ -1125,7 +1125,7 @@ stateDiagram-v2
 <article class="card" data-result="drawn">
 <h3>A title in front matter</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-title.png" width="172" height="206" style="--w:172" alt="A title in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-title.svg" width="184" height="156" style="--w:184" alt="A title in front matter, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-title.png" width="172" height="206" style="--w:172" alt="A title in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-title.svg" width="184" height="194" style="--w:184" alt="A title in front matter, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>---
 title: Ordering
 ---
@@ -1464,10 +1464,10 @@ classDiagram
   click Product call showProduct() &quot;Show the product&quot;
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>A note for a class</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-note-for.png" width="342" height="228" style="--w:342" alt="A note for a class, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-note-for.svg" width="184" height="128" style="--w:184" alt="A note for a class, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-note-for.png" width="342" height="228" style="--w:342" alt="A note for a class, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-note-for.svg" width="248" height="236" style="--w:248" alt="A note for a class, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>classDiagram
   class Order{
     +total()
@@ -1475,10 +1475,10 @@ classDiagram
   note for Order &quot;Raised by a buyer\nApproved by a manager&quot;
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>A note for no class in particular</h3>
-<p class="result"><b>Partly read</b> <span class="why">line 2: a note for no class in particular is not drawn: &quot;From order to invoice&quot;</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-note-general.png" width="303" height="234" style="--w:303" alt="A note for no class in particular, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-note-general.svg" width="184" height="192" style="--w:184" alt="A note for no class in particular, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-note-general.png" width="303" height="234" style="--w:303" alt="A note for no class in particular, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-note-general.svg" width="376" height="208" style="--w:376" alt="A note for no class in particular, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>classDiagram
   note &quot;From order to invoice&quot;
   Order --&gt; Invoice
@@ -1541,10 +1541,10 @@ classDiagram
   class Order:::styleClass
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>A whole diagram: classes, what they list, what they inherit, and a note</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-whole.png" width="483" height="448" style="--w:483" alt="A whole diagram: classes, what they list, what they inherit, and a note, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-whole.svg" width="440" height="336" style="--w:440" alt="A whole diagram: classes, what they list, what they inherit, and a note, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-whole.png" width="483" height="448" style="--w:483" alt="A whole diagram: classes, what they list, what they inherit, and a note, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-whole.svg" width="632" height="374" style="--w:632" alt="A whole diagram: classes, what they list, what they inherit, and a note, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>---
 title: Orders and what they hold
 ---
@@ -2046,7 +2046,7 @@ classDiagram
 <article class="card" data-result="less">
 <h3>A title and settings in front matter</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look and the placement are Merlive's</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-frontmatter.png" width="198" height="331" style="--w:198" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-frontmatter.svg" width="190" height="192" style="--w:190" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-frontmatter.png" width="198" height="331" style="--w:198" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-frontmatter.svg" width="190" height="250" style="--w:190" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>---
 title: Orders and who fills them
 config:
@@ -2537,7 +2537,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A title in the diagram</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-title.png" width="450" height="299" style="--w:450" alt="A title in the diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-title.svg" width="280" height="208" style="--w:280" alt="A title in the diagram, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-title.png" width="450" height="299" style="--w:450" alt="A title in the diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-title.svg" width="280" height="246" style="--w:280" alt="A title in the diagram, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   title: Raising an order
   Buyer-&gt;&gt;ERP: Raise order
@@ -2566,7 +2566,7 @@ erDiagram
 <article class="card" data-result="less">
 <h3>A title and settings in front matter</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look and the numbering are the design's and the diagram's own</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-frontmatter.png" width="450" height="213" style="--w:450" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-frontmatter.svg" width="280" height="208" style="--w:280" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-frontmatter.png" width="450" height="213" style="--w:450" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-frontmatter.svg" width="280" height="246" style="--w:280" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>---
 title: Raising an order
 config:

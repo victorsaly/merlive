@@ -36,7 +36,8 @@ A diagram uses one box width (128, 160, 192 or 224 px: the narrowest that fits e
 height. A shape is what its author drew (a rhombus, a hexagon, a cylinder, a subroutine, a side that leans, a
 double circle, a flag), in the same footprint as every other box: a rhombus is as wide and as tall as the boxes
 round it, not a diamond twice their size. Each line runs on to the outline of the shape it meets. No two boxes
-come closer than 16 px.
+come closer than 16 px. Two boxes are taller than the rest: one that lists rows under its name, and a note, each
+by what it holds.
 
 A class and an entity list rows under their name, so their boxes cannot all be one height. They keep one width
 (up to 384 px, wide enough for the longest row, which is never broken), and each is as tall as what it lists. A
@@ -85,7 +86,8 @@ the other would lie on each other in the room between them, the line entering st
 
 A plain label is wrapped to two lines. Where the author broke a label with `<br/>`, their lines are kept as
 written, up to four, in a box wide enough for each (there are six widths, 128 to 288 px). No word is wider than
-the box.
+the box. A note is the one box whose words may run on, since saying more than a name is what it is for: it
+keeps the lines its author broke it into when a width allows, wraps when none does, and is as tall as its lines.
 
 - **What to do when it fails:** shorten the label and put the detail in a `%% note`.
 

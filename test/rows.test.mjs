@@ -8,7 +8,7 @@ import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { hitsBox, layout, measure, meet, rowsRoom } from '../skills/merlive/scripts/layout.mjs';
 import { builtIn } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
-import { picture } from '../skills/merlive/scripts/render.mjs';
+import { draw, picture } from '../skills/merlive/scripts/render.mjs';
 
 /** Three classes as a reader would give them: a flowchart's model, with rows, a line above a name, and ends. */
 const classes = (direction = 'TD') => {
@@ -138,5 +138,75 @@ describe('rows: drawn', () => {
     assert.equal(of('A-B').match(/class="mv-hollow"/g)?.length, 1, 'a ring for "none"');
     assert.equal(of('A-C').match(/class="mv-hollow"/g)?.length, 1);
     assert.doesNotMatch(of('A-B'), /mv-head/, 'no arrowhead: how many is not which way');
+  });
+});
+
+describe('notes: a box as tall as what it says', () => {
+  const noted = (/** @type {string} */ words) => parse(`classDiagram\n  class Order{\n    +String number\n  }\n  Order --> Supplier\n  note for Order "${words}"`);
+  const long = 'An order is raised by a buyer and approved by a manager before anything is sent to the supplier, and once it has been approved nobody may change its lines, not even the buyer who raised it, who must cancel it and raise another one instead';
+
+  it('wraps a long note to as many lines as it needs, and makes only the note taller', () => {
+    const m = noted(long), lay = layout(m);
+    const note = /** @type {import('../skills/merlive/scripts/parse.mjs').Node} */ (m.nodes.find((n) => n.shape === 'note'));
+    const placed = lay.nodes[note.id];
+    assert.ok(placed.lines.length > measure.mostLines, `${placed.lines.length} lines`);
+    assert.equal(placed.lines.join(' '), long);
+    assert.ok(placed.h >= placed.lines.length * measure.lineHeight, 'tall enough for every line');
+    assert.equal(lay.nodes.Supplier.h, lay.box.h, 'a plain box is no taller for it');
+    assert.equal(lay.direction, 'TD');
+  });
+
+  it('passes its rules: many lines are what a note is for', () => {
+    const m = noted(long), lay = layout(m);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+  });
+
+  it('keeps the lines its author broke it into', () => {
+    const m = noted('Sent when delivered<br>Paid within thirty days'), lay = layout(m);
+    const note = /** @type {import('../skills/merlive/scripts/parse.mjs').Node} */ (m.nodes.find((n) => n.shape === 'note'));
+    assert.deepEqual(lay.nodes[note.id].lines, ['Sent when delivered', 'Paid within thirty days']);
+  });
+
+  it('is drawn above the class it is about, joined by a dotted line', () => {
+    const m = noted('Never deleted'), lay = layout(m), svg = picture(m, lay, builtIn, { title: 't' });
+    const note = /** @type {import('../skills/merlive/scripts/parse.mjs').Node} */ (m.nodes.find((n) => n.shape === 'note'));
+    assert.ok(lay.nodes[note.id].y < lay.nodes.Order.y);
+    assert.match(svg, new RegExp(`data-edge="${note.id}-Order" data-style="dotted"`));
+    assert.match(svg, />Never deleted</);
+  });
+});
+
+describe('a title its author gave the picture', () => {
+  const titled = (/** @type {string} */ title, body = 'flowchart TD\n  A[Raise] --> B[Approve]') => parse(`---\ntitle: ${title}\n---\n${body}`);
+  const heightOf = (/** @type {string} */ svg) => Number(/viewBox="0 0 \d+ (\d+)"/.exec(svg)?.[1]);
+
+  it('is drawn above a still picture, which is taller by the room it takes', () => {
+    const m = titled('From order to invoice', 'flowchart TD\n  A[Raise] --> B[Approve] & C[Refuse] & D[Ask again]'), lay = layout(m), svg = picture(m, lay, builtIn, { title: 'x' });
+    assert.match(svg, /<text class="mv-title"[^>]*><tspan[^>]*>From order to invoice<\/tspan><\/text>/);
+    assert.ok(heightOf(svg) > lay.height);
+    const plain = parse('flowchart TD\n  A[Raise] --> B[Approve]');
+    assert.equal(heightOf(picture(plain, layout(plain), builtIn, { title: 'x' })), layout(plain).height);
+    assert.doesNotMatch(picture(plain, layout(plain), builtIn, { title: 'x' }), /class="mv-title"/);
+  });
+
+  it('wraps a title wider than its picture, and no line of it is wider than the picture', () => {
+    const m = titled('How an order goes from the buyer who raises it to the supplier who is paid for it in the end'), lay = layout(m);
+    const lines = [...picture(m, lay, builtIn, { title: 'x' }).matchAll(/<tspan class="mv-title-line"[^>]*>([^<]*)</g)].map((x) => x[1]);
+    assert.ok(lines.length > 1);
+    for (const line of lines) assert.ok(line.length * draw.titleGlyph <= lay.width, line);
+  });
+
+  it('is not what was written only for a reader who cannot see the picture', () => {
+    const m = parse('flowchart TD\n  accTitle: Orders\n  A --> B');
+    assert.equal(m.title, 'Orders');
+    assert.equal(m.heading, '');
+    assert.doesNotMatch(picture(m, layout(m), builtIn, { title: 'x' }), /class="mv-title"/);
+  });
+
+  it('is drawn on a class diagram and a state diagram too', () => {
+    for (const body of ['classDiagram\n  A <|-- B', 'stateDiagram-v2\n  [*] --> Open\n  Open --> [*]']) {
+      const m = titled('Orders and what they hold', body);
+      assert.match(picture(m, layout(m), builtIn, { title: 'x' }), /class="mv-title"/, body);
+    }
   });
 });

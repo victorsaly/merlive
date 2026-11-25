@@ -4,11 +4,11 @@
 // words, and where a line meets it. Layout and drawing both ask here, so a line always ends on the outline.
 // Pure.
 
-/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'} Shape */
+/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'|'note'} Shape */
 /** @typedef {'top'|'bottom'|'left'|'right'} Side */
 
 /** @type {Shape[]} */
-export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag'];
+export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag', 'note'];
 
 // What is measured, named once.
 export const form = {
@@ -21,6 +21,7 @@ export const form = {
   rail: 8, // px from the edge of a subroutine to the line inside it
   ring: 4, // px between the two lines of a double circle
   notch: 14, // px a flag is cut in at the middle of its left side
+  fold: 12, // px of a note's top right corner that is folded over: enough to see, not enough to take a word's room
 };
 
 /** How far the corners of a hexagon of this height are cut. */
@@ -77,6 +78,8 @@ export function inset(shape, side, off, w, h) {
     case 'trapezoid': return flat ? 0 : within(Math.max(0, lean(true)));
     case 'trapezoid-alt': return flat ? 0 : within(Math.max(0, lean(false)));
     case 'flag': return side === 'left' ? within(form.notch * (1 - a / (h / 2))) : 0;
+    // Only the folded corner is in from the box: the last few px of the top, and the first few of the right side.
+    case 'note': return side === 'top' ? within(Math.max(0, off - (w / 2 - form.fold))) : side === 'right' ? within(Math.max(0, -off - (h / 2 - form.fold))) : 0;
     case 'cylinder': return flat ? within(form.cap * (1 - Math.sqrt(Math.max(0, 1 - (a / (w / 2)) ** 2)))) : 0;
     default: return 0;
   }
@@ -113,6 +116,10 @@ export function outlineOf(shape, l, t, w, h, radius) {
     case 'trapezoid': return { main: polygon([[l + s, t], [r - s, t], [r, u], [l, u]]), more: [] };
     case 'trapezoid-alt': return { main: polygon([[l, t], [r, t], [r - s, u], [l + s, u]]), more: [] };
     case 'flag': return { main: polygon([[l, t], [r, t], [r, u], [l, u], [l + form.notch, y]]), more: [] };
+    case 'note': {
+      const f = Math.min(form.fold, h / 2);
+      return { main: polygon([[l, t], [r - f, t], [r, t + f], [r, u], [l, u]]), more: [`<path class="mv-shape mv-detail" d="M${n(r - f)},${n(t)}V${n(t + f)}H${n(r)}"/>`] };
+    }
     case 'cylinder': {
       const c = form.cap, rx = n(w / 2);
       return {

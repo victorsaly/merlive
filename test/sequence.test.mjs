@@ -445,3 +445,15 @@ describe('sequence: the drawing', () => {
     assert.ok(!plain.includes('prefers-color-scheme:dark'));
   });
 });
+
+describe('sequence: a title its author gave the picture', () => {
+  it('is drawn above the still picture, from the diagram or from its front matter', () => {
+    for (const src of ['sequenceDiagram\n  title Placing an order\n  A->>B: Order', '---\ntitle: Placing an order\n---\nsequenceDiagram\n  A->>B: Order']) {
+      const m = parseSequence(src), lay = layoutSequence(m);
+      assert.equal(m.title, 'Placing an order');
+      const svg = sequencePicture(m, lay, builtIn, { title: 'x' });
+      assert.match(svg, /<text class="mv-title"[^>]*><tspan[^>]*>Placing an order<\/tspan><\/text>/);
+      assert.ok(Number(/viewBox="0 0 \d+ (\d+)"/.exec(svg)?.[1]) > lay.height);
+    }
+  });
+});

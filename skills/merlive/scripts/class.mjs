@@ -99,6 +99,18 @@ export function classReader({ model, node, say, connect, frame, unframe, warn, w
 
   const idOf = (/** @type {string|undefined} */ ticked, /** @type {string|undefined} */ bare) => /** @type {string} */ (ticked ?? bare);
   const made = (/** @type {string} */ id) => model.nodes.some((n) => n.id === id);
+  // A note is drawn where its author put it: a sheet of its own on the picture, joined to the class it is
+  // about by a dotted line, or to nothing. Its lines are kept as they were broken.
+  let notes = 0;
+  const note = (/** @type {string} */ written) => {
+    const lines = wordsOf(written.replace(/\\n/g, '<br/>'));
+    if (!lines.join('')) return null;
+    let id = `note${++notes}`;
+    while (made(id)) id = `note${++notes}`;
+    const sheet = node(id);
+    Object.assign(sheet, { label: lines.join(' '), shape: 'note', kind: 'note' }, lines.length > 1 ? { breaks: lines } : {});
+    return sheet;
+  };
   const lists = (/** @type {string} */ id, /** @type {string} */ written) => {
     const of = listed.get(id) ?? { holds: [], does: [] };
     listed.set(id, of);
@@ -218,12 +230,12 @@ export function classReader({ model, node, say, connect, frame, unframe, warn, w
 
     const noted = LINES.noteFor.exec(text);
     if (noted) {
-      const id = idOf(noted[1], noted[2]), words = wordsOf(noted[3].replace(/\\n/g, '<br/>')).join(' ');
-      if (words) model.notes[id] = [model.notes[id], words].filter(Boolean).join(' ');
+      const about = node(idOf(noted[1], noted[2])), sheet = note(noted[3]);
+      if (sheet) connect(sheet, about, { label: '', style: 'dotted', head: 'none', tail: 'none' }, line);
       return true;
     }
     const general = LINES.note.exec(text);
-    if (general) return warn(line, `a note for no class in particular is not drawn: "${wordsOf(general[1].replace(/\\n/g, '<br/>')).join(' ')}"`), true;
+    if (general) return note(general[1]), true;
 
     const css = LINES.cssClass.exec(text);
     if (css) {

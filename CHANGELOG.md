@@ -4,6 +4,12 @@
 
 Class diagrams and entity diagrams.
 
+- **A title is drawn on a still picture.** The `title` in a diagram's front matter (and a sequence diagram's own
+  `title`) sits above the picture, wrapped to its width. A page already had it as its heading; a still picture
+  had it only in what a screen reader is told. `accTitle` stays unseen, as it was written to be.
+- **A class diagram's notes are drawn.** `note for Order "…"` is a sheet with a folded corner beside its class,
+  joined by a dotted line; `note "…"` is one joined to nothing. A note keeps its author's lines and is as tall
+  as its words.
 - **Class diagrams are drawn.** Classes with what they hold and what they do, annotations («interface»), every
   relation Mermaid has (is a, is made of, has, uses, depends on, in either direction) with the words and the
   counts at its ends, namespaces as groups, and notes on a class. A parent sits above its children whichever

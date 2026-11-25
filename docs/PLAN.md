@@ -37,15 +37,20 @@ Still to do, in this order:
    that passes its checks and looks wrong gets a new rule and a check, not a special case. Known to look at:
    where the words at a line's ends land when several lines meet one box; a line entering the side of a tall box
    among its rows; a class with a very long method; a lollipop interface.
-2. **What is known to be missing**, each said by the command when met: a class diagram's note for no class in
-   particular; a direction other than top to bottom, for either kind (boxes of different heights are only placed
-   top to bottom); attributes written on the line that opens an entity. A picked class is called "Step" on the
-   page, since a class has no kind of its own.
-3. **One thing the class reader changed for flowcharts too**: two groups with one id are now one group
+2. **What is known to be missing**, each said by the command when met: a direction other than top to bottom,
+   for either kind (boxes of different heights are only placed top to bottom); attributes written on the line
+   that opens an entity. A picked class is called "Step" on the page, since a class has no kind of its own.
+3. **Notes in a state diagram are not drawn yet.** A class diagram's notes are (a `note` shape, a box of kind
+   `note`, a dotted link with nothing at its ends: `class.mjs`). A state diagram's (`note right of X`) are still
+   only what a reader sees on picking the state. Drawing them the same way needs one thing first: a state
+   diagram has a main path and steps, and a note's link must not be taken for part of the flow (a note has
+   nothing coming in, so it looks like a place to start). A note is drawn in the design's own colours, not
+   Mermaid's yellow: the colours are the user's.
+4. **One thing the class reader changed for flowcharts too**: two groups with one id are now one group
    (`frame()` in `parse.mjs` reopens a group whose id exists). Dotted namespaces need it. Nothing in the corpus
    or in Victor's diagrams has two subgraphs with one id, but it is a change of behaviour, so say so in the pull
    request.
-4. **Release.** The pull request for `class-er`, with the changelog's `0.2.0 (unreleased)` given its date on
+5. **Release.** The pull request for `class-er`, with the changelog's `0.2.0 (unreleased)` given its date on
    the day it is merged; then the tag.
 
 ## Waiting on Victor

@@ -6,11 +6,14 @@ import { contrast, kindFill, looksOf, mix } from './design.mjs';
 import { runtime } from './runtime.mjs';
 import { outlineOf, wordsAt } from './shapes.mjs';
 import { iconMeasure, icons } from './icons.mjs';
-import { compartmentsOf, measure } from './layout.mjs';
+import { compartmentsOf, measure, wrap } from './layout.mjs';
 
 /** @typedef {import('./layout.mjs').Pt} Pt */
 
-const draw = {
+export const draw = {
+  titleGlyph: 8.4, // px per character of a picture's title, at 15px and heavy
+  titleLine: 20, // px between two lines of a title
+  titlePad: 18, // px above a title, and again between it and the picture
   corner: 8, // the round of a line's turn
   head: 9, // an arrowhead's length
   headHalf: 4.5, // and half its width
@@ -87,6 +90,7 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
 .mv-stripe{stroke:none}
+.mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
 ${kinds.map((k) => `[data-kind="${k}"] .mv-stripe{fill:var(--mv-k-${k})}`).join('\n')}
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
 [data-style="thick"] .mv-line{stroke-width:2.8}
@@ -216,6 +220,20 @@ export const kindsIn = (/** @type {import('./parse.mjs').Model} */ model) => [..
 export const lineKindsIn = (/** @type {import('./parse.mjs').Model} */ model) => [...new Set(model.edges.flatMap((e) => (e.kind ? [e.kind] : [])))];
 
 /**
+ * The title its author gave a picture, above it. A page has a heading of its own; a still picture has only
+ * itself, and a title left off it is lost. Wrapped so that no line is wider than the picture.
+ * @param {string} heading
+ * @param {number} width of the picture
+ * @returns {{band:number,svg:string}} the room it takes above the picture, and its words
+ */
+export function titleOf(heading, width) {
+  if (!heading) return { band: 0, svg: '' };
+  const lines = wrap(heading, Math.max(8, Math.floor((width - 2 * draw.titlePad) / draw.titleGlyph)));
+  const spans = lines.map((line, i) => `<tspan class="mv-title-line" x="${n(width / 2)}" y="${n(draw.titlePad + 15 + i * draw.titleLine)}">${esc(line)}</tspan>`).join('');
+  return { band: draw.titlePad + lines.length * draw.titleLine, svg: `<text class="mv-title">${spans}</text>` };
+}
+
+/**
  * A still picture: one SVG file, for wikis and anywhere a page cannot go.
  * @param {import('./parse.mjs').Model} model
  * @param {import('./layout.mjs').Layout} lay
@@ -223,11 +241,12 @@ export const lineKindsIn = (/** @type {import('./parse.mjs').Model} */ model) =>
  * @param {{title:string}} about
  */
 export function picture(model, lay, design, about) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" width="${lay.width}" height="${lay.height}" role="img" aria-label="${esc(about.title)}">
+  const title = titleOf(model.heading, lay.width);
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height + title.band}" width="${lay.width}" height="${lay.height + title.band}" role="img" aria-label="${esc(about.title)}">
 <title>${esc(about.title)}</title>${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
 <style>${styleOf(design, kindsIn(model), '.mv-svg', lineKindsIn(model))}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
-${inside(model, lay, design, false)}
+${title.band ? `${title.svg}\n<g transform="translate(0,${title.band})">\n${inside(model, lay, design, false)}\n</g>` : inside(model, lay, design, false)}
 </svg>
 `;
 }

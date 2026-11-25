@@ -21,7 +21,8 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {'flowchart'|'unsupported'} type
  * @property {string} kindOfDiagram the first word of the source: which kind it is, and the message when it is one Merlive does not draw
  * @property {'TD'|'LR'} direction
- * @property {string} title what the author called the picture (accTitle), for a reader who cannot see it
+ * @property {string} title what the author called the picture, in its front matter or (accTitle) for a reader who cannot see it
+ * @property {string} heading the title its author meant to be seen on the picture: the front matter's, never accTitle's
  * @property {string} describes what the author says it shows (accDescr)
  * @property {Node[]} nodes
  * @property {Edge[]} edges
@@ -217,7 +218,7 @@ export function parse(src) {
   // A sequence diagram has a reader, rules and a drawing of its own: sequence.mjs.
   if (isSequence(src)) return /** @type {any} */ (parseSequence(src));
   /** @type {Model} */
-  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, groups: [], warnings: [] };
+  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', heading: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, groups: [], warnings: [] };
   /** @type {Map<string, Node>} */
   const byId = new Map();
   const seenEdge = new Map();
@@ -520,7 +521,7 @@ export function parse(src) {
     if (front === 'in') {
       // Only a title at the left edge is the picture's: one further in belongs to something else.
       const title = /^title\s*:\s*(.*?)\s*$/.exec(raw);
-      if (title) model.title = title[1].replace(/^(["'])(.*)\1$/, '$2');
+      if (title) model.title = model.heading = title[1].replace(/^(["'])(.*)\1$/, '$2');
       if (text === '---') front = 'after';
       return;
     }

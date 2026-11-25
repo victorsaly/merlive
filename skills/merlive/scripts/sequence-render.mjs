@@ -4,7 +4,7 @@
 // so the two kinds of diagram in one document are one family. Pure.
 
 import { looksOf } from './design.mjs';
-import { rulesFor, variables } from './render.mjs';
+import { rulesFor, titleOf, variables } from './render.mjs';
 import { across, tabOf } from './sequence.mjs';
 import { sequenceRuntime } from './sequence-runtime.mjs';
 
@@ -178,11 +178,12 @@ export function sequenceInside(/** @type {SequenceModel} */ model, /** @type {Se
  * @param {{title:string}} about
  */
 export function sequencePicture(model, lay, design, about) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" width="${lay.width}" height="${lay.height}" role="img" aria-label="${esc(about.title)}">
+  const title = titleOf(model.heading, lay.width);
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height + title.band}" width="${lay.width}" height="${lay.height + title.band}" role="img" aria-label="${esc(about.title)}">
 <title>${esc(about.title)}</title>${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
 <style>${styleOf(design, kindsOf(model), '.mv-svg')}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
-${sequenceInside(model, lay, design, false)}
+${title.band ? `${title.svg}\n<g transform="translate(0,${title.band})">\n${sequenceInside(model, lay, design, false)}\n</g>` : sequenceInside(model, lay, design, false)}
 </svg>
 `;
 }

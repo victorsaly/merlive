@@ -21,6 +21,7 @@ import { colourChecks, looksOf } from './design.mjs';
  * @property {'sequence'} type
  * @property {string} kindOfDiagram
  * @property {string} title
+ * @property {string} heading the title its author meant to be seen on the picture, not one written only for a reader who cannot see it
  * @property {string} describes
  * @property {Participant[]} participants in the order they stand, left to right
  * @property {Item[]} items everything that takes a row, in the order it was written
@@ -114,7 +115,7 @@ export function isSequence(/** @type {string} */ src) {
  */
 export function parseSequence(src) {
   /** @type {SequenceModel} */
-  const model = { type: 'sequence', kindOfDiagram: 'sequenceDiagram', title: '', describes: '', participants: [], items: [], blocks: [], groups: [], activations: [], warnings: [] };
+  const model = { type: 'sequence', kindOfDiagram: 'sequenceDiagram', title: '', heading: '', describes: '', participants: [], items: [], blocks: [], groups: [], activations: [], warnings: [] };
   /** @type {Map<string, Participant>} */
   const byId = new Map();
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
@@ -218,7 +219,7 @@ export function parseSequence(src) {
 
   const statement = (/** @type {string} */ s, /** @type {number} */ line) => {
     let m;
-    if ((m = /^title\s*:?\s+(.+)$/i.exec(s))) return void (model.title = wordsOf(m[1]).join(' '));
+    if ((m = /^title\s*:?\s+(.+)$/i.exec(s))) return void (model.title = model.heading = wordsOf(m[1]).join(' '));
     if ((m = /^autonumber(?:\s+(off|\d+)(?:\s+(\d+))?)?$/.exec(s))) {
       counting = m[1] !== 'off';
       if (m[1] && m[1] !== 'off') next = Number(m[1]);
@@ -290,7 +291,7 @@ export function parseSequence(src) {
     }
     if (front === 'in') {
       const title = /^title\s*:\s*(.*?)\s*$/.exec(raw);
-      if (title) model.title = title[1].replace(/^(["'])(.*)\1$/, '$2');
+      if (title) model.title = model.heading = title[1].replace(/^(["'])(.*)\1$/, '$2');
       if (text === '---') front = 'after';
       return;
     }

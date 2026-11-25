@@ -19,6 +19,7 @@ export const measure = {
   labelGlyph: 6.6, // px per character of a link's label at 11px
   widths: [128, 160, 192, 224, 256, 288], // the only box widths there are; a diagram uses one of them throughout
   lineHeight: 16,
+  boxPad: 28, // px a box is taller than its lines of words, top and bottom together
   pad: 28, // around the whole drawing
   laneGap: { TD: 64, LR: 40 }, // between a box and the one beside it
   rankGap: { TD: 48, LR: 72 }, // between a box and the next one along the flow
@@ -83,26 +84,36 @@ export const rowsRoom = (/** @type {number} */ width) => Math.floor((width - 2 *
 /** The compartments of a box that have something in them: one with nothing is not drawn. */
 export const compartmentsOf = (/** @type {{rows?:string[][]}} */ n) => (n.rows ?? []).filter((c) => c.length);
 
-/** How much taller than a plain box one is for what it lists under its name and the line above it. */
-export const extraHeight = (/** @type {{rows?:string[][],over?:string}} */ n) =>
-  (n.over ? measure.overLine : 0) + compartmentsOf(n).reduce((sum, c) => sum + 2 * measure.rowPad + measure.rowLine * c.length, 0);
+/**
+ * How much taller than a plain box one is: for what it lists under its name and the line above it, and, when
+ * it is a note, for every line of its words a plain box has no room for. A note is the one box whose words may
+ * run on: saying more than a name is what it is there to do.
+ */
+export const extraHeight = (/** @type {{rows?:string[][],over?:string,shape?:string}} */ n, /** @type {{w:number,h:number}} */ box) =>
+  (n.over ? measure.overLine : 0) +
+  compartmentsOf(n).reduce((sum, c) => sum + 2 * measure.rowPad + measure.rowLine * c.length, 0) +
+  (n.shape === 'note' ? Math.max(0, measure.boxPad + measure.lineHeight * linesOf(/** @type {import('./parse.mjs').Node} */ (n), box.w).length - box.h) : 0);
 
 /**
  * One box size for the whole diagram: the narrowest width in which a plain label takes two lines or fewer and
  * a label its author broke keeps the lines it was given.
  */
 function boxFor(/** @type {Model} */ model) {
-  const fits = (/** @type {number} */ w) =>
+  // A note takes the lines it needs and is as tall as they are. A width in which it keeps the lines its author
+  // broke it into, or runs to a few lines and no more, is looked for first; when no width does that, it wraps.
+  const fits = (/** @type {number} */ w, /** @type {boolean} */ anyNote) =>
     model.nodes.every((n) => {
-      const lines = linesOf(n, w);
-      return lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0)) && lines.every((l) => l.length <= roomFor(n, w));
+      const lines = linesOf(n, w), note = n.shape === 'note';
+      const few = note ? (n.breaks ? lines.length === n.breaks.length : lines.length <= measure.mostLines) || anyNote : lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0));
+      return few && lines.every((l) => l.length <= roomFor(n, w));
     });
   // A diagram whose boxes list rows may need a wider box than any label does: every row keeps its one line.
   const longest = Math.max(0, ...model.nodes.flatMap((n) => compartmentsOf(n).flat().map((row) => row.length)));
   const widths = longest ? [...measure.widths, ...measure.rowWidths] : measure.widths;
-  const w = widths.find((width) => fits(width) && rowsRoom(width) >= longest) ?? widths[widths.length - 1];
-  const most = Math.max(1, ...model.nodes.map((n) => linesOf(n, w).length));
-  return { w, h: 28 + measure.lineHeight * most };
+  const wide = (/** @type {boolean} */ anyNote) => widths.find((width) => fits(width, anyNote) && rowsRoom(width) >= longest);
+  const w = wide(false) ?? wide(true) ?? widths[widths.length - 1];
+  const most = Math.max(1, ...model.nodes.filter((n) => n.shape !== 'note').map((n) => linesOf(n, w).length));
+  return { w, h: measure.boxPad + measure.lineHeight * most };
 }
 
 // ---- geometry, shared with score.mjs ---------------------------------------------------------------------
@@ -149,7 +160,8 @@ export function meet(/** @type {Pt[]} */ one, /** @type {Pt[]} */ other) {
 export function layout(model) {
   // Boxes of different heights are placed top to bottom only, for now: across the flow they would need lanes
   // of different widths.
-  if (model.nodes.some((n) => extraHeight(n) > 0)) return placed(model, 'TD');
+  const box = boxFor(model);
+  if (model.nodes.some((n) => extraHeight(n, box) > 0)) return placed(model, 'TD');
   const first = placed(model, model.direction);
   // A flow written left to right that comes out wider than a screen cannot be read without scrolling sideways,
   // and nobody scrolls a diagram sideways. Top to bottom it is the same flow, and scrolls the way a page does.
@@ -287,7 +299,7 @@ function placed(model, dir) {
   // A box that lists rows is taller than one that does not. A rank is as tall as its tallest box, every box of
   // it sits on the rank's middle line, and the room to the next rank is the same whatever the heights.
   const byId = new Map(model.nodes.map((n) => [n.id, n]));
-  const high = (/** @type {string} */ id) => bh + (dir === 'LR' ? 0 : extraHeight(byId.get(id) ?? {}));
+  const high = (/** @type {string} */ id) => bh + (dir === 'LR' ? 0 : extraHeight(byId.get(id) ?? {}, box));
   const tall = Array.from({ length: ranks + 1 }, (_, r) => Math.max(bh, ...ids.filter((id) => rank.get(id) === r).map(high)));
   /** Where rank r begins along the flow: after every rank before it and its gap, and every wider gap. */
   const along = (/** @type {number} */ r) => measure.pad + tall.slice(0, r).reduce((a, b) => a + b + rankGap, 0) + wider.slice(0, r + 1).reduce((a, b) => a + b, 0);

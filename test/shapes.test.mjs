@@ -83,3 +83,21 @@ describe('shapes: where a line meets the outline', () => {
     }
   });
 });
+
+describe('shapes: a note', () => {
+  it('is a sheet with its top right corner folded, and the fold drawn', () => {
+    const { main, more } = outlineOf('note', 0, 0, w, h, 8);
+    assert.equal((main.match(/\d+(\.\d+)?,\d+(\.\d+)?/g) ?? []).length, 5, 'four corners, one of them cut');
+    assert.equal(more.length, 1);
+  });
+
+  it('is met on its outline where the corner is folded, and at the edge of its box everywhere else', () => {
+    assert.equal(inset('note', 'top', 0, w, h), 0);
+    assert.equal(inset('note', 'top', -w / 2, w, h), 0);
+    assert.ok(inset('note', 'top', w / 2 - 2, w, h) > 0, 'a line down onto the fold goes on to it');
+    assert.ok(inset('note', 'right', -h / 2 + 2, w, h) > 0, 'and so does one in from the right, at the top');
+    assert.equal(inset('note', 'right', h / 2, w, h), 0);
+    assert.equal(inset('note', 'bottom', w / 2, w, h), 0);
+    assert.equal(inset('note', 'left', -h / 2, w, h), 0);
+  });
+});
