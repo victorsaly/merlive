@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Why: the one command an agent runs. It reads a Markdown file's Mermaid flowcharts and sequence diagrams, places each by rule,
+// Why: the one command an agent runs. It reads a Markdown file's Mermaid flowcharts, state diagrams and sequence diagrams, places each by rule,
 // checks the rules, and only then writes a diagram; and, once for a project, it reads the project's own
 // colours and writes the design file, so nobody has to. This file is the only one that touches the disk and
 // the network; everything it decides with is in the pure files beside it.
@@ -36,7 +36,7 @@ const looks = {
   notASite: /(^|\.)(github\.com|gitlab\.com|bitbucket\.org|npmjs\.com)$/,
 };
 
-export const help = `Merlive ${version}: Mermaid flowcharts and sequence diagrams, placed by rule and made live.
+export const help = `Merlive ${version}: Mermaid flowcharts, state diagrams and sequence diagrams, placed by rule and made live.
 
   node merlive.mjs <file> [options]                   draw a file's flowcharts and sequence diagrams:
                                                       Markdown, a .mmd file, or a page or script that keeps

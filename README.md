@@ -1,5 +1,5 @@
 <h1 align="center">Merlive</h1>
-<h3 align="center">Your Mermaid flowcharts, placed by rule and made live.</h3>
+<h3 align="center">Your Mermaid diagrams, placed by rule and made live.</h3>
 
 <table align="center">
   <tr><th>Mermaid</th><th>Merlive</th></tr>
