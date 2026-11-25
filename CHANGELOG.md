@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0 (unreleased)
+
+More kinds of diagram that are boxes and links: requirement, C4, architecture and block diagrams.
+
 ## 0.2.0 (2026-11-25)
 
 Class diagrams and entity diagrams, and much that Mermaid drew and Merlive did not: people and feet in a
