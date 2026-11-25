@@ -115,6 +115,7 @@ export function score(model, lay, design) {
   const labels = edges.filter((e) => e.label);
   labels.forEach((e, i) => {
     const l = /** @type {NonNullable<typeof e.label>} */ (e.label);
+    if (l.x - l.w / 2 < 0 || l.y - l.h / 2 < 0 || l.x + l.w / 2 > lay.width || l.y + l.h / 2 > lay.height) covered.push(`the label "${l.text}" runs off the picture`);
     for (const n of nodes) if (overlap(l, n)) covered.push(`the label "${l.text}" sits on "${label(n.id)}"`);
     for (const o of labels.slice(i + 1)) if (o.label && overlap(l, o.label)) covered.push(`the labels "${l.text}" and "${o.label.text}" overlap`);
   });

@@ -70,6 +70,8 @@ The first version. It draws flowcharts and nothing else, and says so.
 - **An author's own styling is kept as what it means.** `style` and `classDef` give a box a broken outline, a
   heavy one, and a colour; `linkStyle` does the same for a link, by Mermaid's number for it. The colour is named
   for its hue and drawn in the design's own nearest colour, so the colour rules still hold.
+- **A link's words never run off the picture.** Words beside a line that goes round the near outside were cut
+  off by the edge. Everything now moves over to give them their margin, and P7 checks it.
 - **An icon in a label is drawn.** `fa:fa-truck Shipped` gets a truck beside its words, and `@{ icon: "fa:user" }`
   a user. The drawings are Merlive's own: seventy-two line icons of the things flowcharts point at, on a 16px grid
   in the weight of a box's edge, found by any name Font Awesome has given them across versions 4, 5 and 6.

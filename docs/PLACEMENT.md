@@ -88,7 +88,10 @@ the box.
 
 A link's words ("Yes", "No") are tried beside each run of its line, near where it leaves first: the first place
 that sits on no box and no other words wins, and of those, one no line passes through. Long words are wrapped,
-and wrapped again to fit a short run between two boxes.
+and wrapped again to fit a short run between two boxes. Words beside a line that goes round the outside stay
+inside the picture: everything moves over to give them the margin the boxes have.
+
+- **Fail:** the words of a line round the left side are cut off by the edge of the picture.
 
 ## Groups
 

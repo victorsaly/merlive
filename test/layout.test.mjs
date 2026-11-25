@@ -197,3 +197,19 @@ describe('layout: two boxes that each lead to the same two', () => {
   });
 });
 
+describe('layout: words on a line that goes round the outside', () => {
+  const life = 'stateDiagram-v2\n[*] --> Idle\nIdle --> Connecting: open\nConnecting --> Connected: ok\nConnecting --> Failed: timeout\nFailed --> Connecting: retry\nConnected --> Idle: close\nFailed --> [*]: give up';
+
+  it('stay inside the picture, with the margin everything else has', () => {
+    for (const src of [life, life.replace('stateDiagram-v2', 'stateDiagram-v2\ndirection LR')]) {
+      const lay = layout(parse(src));
+      for (const e of Object.values(lay.edges)) {
+        if (!e.label) continue;
+        const l = e.label;
+        assert.ok(l.x - l.w / 2 >= measure.pad / 2 && l.x + l.w / 2 <= lay.width - measure.pad / 2, `"${l.text}" runs from ${l.x - l.w / 2} to ${l.x + l.w / 2} in a picture ${lay.width} wide`);
+        assert.ok(l.y - l.h / 2 >= measure.pad / 2 && l.y + l.h / 2 <= lay.height - measure.pad / 2, `"${l.text}" runs from ${l.y - l.h / 2} to ${l.y + l.h / 2} in a picture ${lay.height} tall`);
+      }
+    }
+  });
+});
+

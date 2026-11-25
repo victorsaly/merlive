@@ -481,7 +481,7 @@ flowchart LR
 <article class="card" data-result="drawn">
 <h3>Words on a link, between bars</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-text-bars.png" width="547" height="70" style="--w:547" alt="Words on a link, between bars, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-text-bars.svg" width="584" height="100" style="--w:584" alt="Words on a link, between bars, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-text-bars.png" width="547" height="70" style="--w:547" alt="Words on a link, between bars, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-text-bars.svg" width="584" height="101" style="--w:584" alt="Words on a link, between bars, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Order] --&gt;|approved| B[Pick]
   B ---|same shelf| C[Pack]
@@ -490,7 +490,7 @@ flowchart LR
 <article class="card" data-result="drawn">
 <h3>Words on a link, written into it</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-text-inline.png" width="760" height="70" style="--w:760" alt="Words on a link, written into it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-text-inline.svg" width="784" height="100" style="--w:784" alt="Words on a link, written into it, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-text-inline.png" width="760" height="70" style="--w:760" alt="Words on a link, written into it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-text-inline.svg" width="784" height="101" style="--w:784" alt="Words on a link, written into it, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Order] -- approved --&gt; B[Pick]
   B -- same shelf --- C[Pack]
@@ -500,7 +500,7 @@ flowchart LR
 <article class="card" data-result="drawn">
 <h3>A dotted link, with and without words</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-dotted.png" width="638" height="70" style="--w:638" alt="A dotted link, with and without words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-dotted.svg" width="784" height="100" style="--w:784" alt="A dotted link, with and without words, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-dotted.png" width="638" height="70" style="--w:638" alt="A dotted link, with and without words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-dotted.svg" width="784" height="101" style="--w:784" alt="A dotted link, with and without words, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Order] -.-&gt; B[Pick]
   B -. if fragile .-&gt; C[Wrap]
@@ -653,7 +653,7 @@ flowchart LR
 <article class="card" data-result="drawn">
 <h3>Links to a group and between groups</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-links.png" width="371" height="502" style="--w:371" alt="Links to a group and between groups, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-links.svg" width="196" height="468" style="--w:196" alt="Links to a group and between groups, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-links.png" width="371" height="502" style="--w:371" alt="Links to a group and between groups, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-links.svg" width="196" height="480" style="--w:196" alt="Links to a group and between groups, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart TB
   subgraph buy [Buying]
     A[Quote] --&gt; B[Order]
@@ -681,7 +681,7 @@ flowchart LR
 <article class="card" data-result="partly">
 <h3>A group inside a group</h3>
 <p class="result"><b>Partly read</b> <span class="why">read 1 of 2 groups; line 4: a group inside a group is drawn as part of the outer one</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-nested.png" width="222" height="482" style="--w:222" alt="A group inside a group, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-nested.svg" width="196" height="376" style="--w:196" alt="A group inside a group, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-nested.png" width="222" height="482" style="--w:222" alt="A group inside a group, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-nested.svg" width="196" height="388" style="--w:196" alt="A group inside a group, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart TB
   subgraph site [Site]
     A[Receive]
@@ -1017,7 +1017,7 @@ flowchart LR
 <article class="card" data-result="less">
 <h3>A composite state with a direction of its own</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">The composite state's own direction is read past; it runs the way the rest does</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-direction-composite.png" width="345" height="246" style="--w:345" alt="A composite state with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-direction-composite.svg" width="784" height="112" style="--w:784" alt="A composite state with a direction of its own, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-direction-composite.png" width="345" height="246" style="--w:345" alt="A composite state with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-direction-composite.svg" width="784" height="124" style="--w:784" alt="A composite state with a direction of its own, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>stateDiagram-v2
   direction LR
   Draft --&gt; Checks

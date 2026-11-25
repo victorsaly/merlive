@@ -120,6 +120,15 @@ describe('score: a broken rule is named, with where', () => {
     assert.match(p7?.detail ?? '', /sits on "Manager approval".*overlap/);
   });
 
+  it('P7 when a label runs off the picture', () => {
+    const { model, lay } = check(orders);
+    const yes = lay.edges['C-D'].label;
+    assert.ok(yes);
+    yes.x = 2;
+    const p7 = score(model, lay, builtIn).checks.find((c) => c.id === 'P7');
+    assert.match(p7?.detail ?? '', /the label "Yes" runs off the picture/);
+  });
+
   it('D1 when words cannot be read, in the mode where they cannot', () => {
     const faint = designFrom({ name: 'faint', light: { text: '#c9cdd3' }, dark: { edge: '#0d2a30' } });
     const d1 = check(orders, faint).result.checks.find((c) => c.id === 'D1');

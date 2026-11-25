@@ -547,6 +547,27 @@ export function layout(model) {
     else groups.push(frame);
   }
 
+  // Words beside a line that goes round the near outside, or a frame's title, can reach past the top or the
+  // left of what the boxes and lines take up. Everything then moves over, so they keep the margin all else has.
+  const least = (/** @type {'x'|'y'} */ a) => Math.min(
+    ...Object.values(edges).flatMap((e) => (e.label ? [e.label[a] - (a === 'x' ? e.label.w : e.label.h) / 2] : [])),
+    ...groups.map((f) => f[a]),
+    measure.pad / 2,
+  );
+  const by = { x: measure.pad / 2 - least('x'), y: measure.pad / 2 - least('y') };
+  if (by.x > 0 || by.y > 0) {
+    const move = (/** @type {{x:number,y:number}} */ p) => {
+      p.x += by.x;
+      p.y += by.y;
+    };
+    all.forEach(move);
+    groups.forEach(move);
+    for (const e of Object.values(edges)) {
+      e.points.forEach(move);
+      if (e.label) move(e.label);
+    }
+  }
+
   const xs = [...all.map((n) => n.x + n.w / 2), ...groups.map((f) => f.x + f.w), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.x), ...(e.label ? [e.label.x + e.label.w / 2] : [])])];
   const ys = [...all.map((n) => n.y + n.h / 2), ...groups.map((f) => f.y + f.h), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.y), ...(e.label ? [e.label.y + e.label.h / 2] : [])])];
   const width = Math.ceil(Math.max(0, ...xs) + measure.pad), height = Math.ceil(Math.max(0, ...ys) + measure.pad);
