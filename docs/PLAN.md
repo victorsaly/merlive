@@ -80,8 +80,10 @@ Still to do, in this order:
 ## After 0.2.0, in this order
 
 1. **Where Mermaid still reads better**, from the comparison page:
-   - a sequence diagram's person is a pill, not a figure, and the typed participants (database, queue) are plain
-     boxes; an author's highlight colours become the design's tint;
+   - in a sequence diagram: a participant that is destroyed is not drawn again where it ends; the figure and the
+     marks are smaller than Mermaid's; the page's legend names only three kinds of participant; a foot is picked
+     by pointer and not by keyboard; a note over two participants may sit on an activation bar (not checked
+     whether that is new); an author's highlight colours become the design's tint;
    - a state diagram's fork and join are boxes, not bars; regions side by side (`--`) are drawn as one;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);

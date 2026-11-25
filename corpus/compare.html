@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 255 samples, Merlive draws 222 whole and 5 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>255</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>167</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>55</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>5</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>28</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 255 samples, Merlive draws 224 whole and 3 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>255</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>170</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>54</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>3</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>28</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -2086,7 +2086,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Participants named by the messages they are in</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-participants-implicit.png" width="450" height="259" style="--w:450" alt="Participants named by the messages they are in, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-participants-implicit.svg" width="280" height="208" style="--w:280" alt="Participants named by the messages they are in, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-participants-implicit.png" width="450" height="259" style="--w:450" alt="Participants named by the messages they are in, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-participants-implicit.svg" width="280" height="248" style="--w:280" alt="Participants named by the messages they are in, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   ERP--&gt;&gt;Buyer: Order number
@@ -2095,7 +2095,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Participants declared, in an order of their own</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-participants-declared.png" width="650" height="259" style="--w:650" alt="Participants declared, in an order of their own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-participants-declared.svg" width="408" height="208" style="--w:408" alt="Participants declared, in an order of their own, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-participants-declared.png" width="650" height="259" style="--w:650" alt="Participants declared, in an order of their own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-participants-declared.svg" width="408" height="248" style="--w:408" alt="Participants declared, in an order of their own, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Supplier
   participant Buyer
@@ -2107,7 +2107,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Actors: people, not systems</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-actors.png" width="650" height="259" style="--w:650" alt="Actors: people, not systems, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-actors.svg" width="456" height="208" style="--w:456" alt="Actors: people, not systems, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-actors.png" width="650" height="259" style="--w:650" alt="Actors: people, not systems, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-actors.svg" width="456" height="276" style="--w:456" alt="Actors: people, not systems, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   actor Buyer
   actor Manager
@@ -2116,10 +2116,10 @@ erDiagram
   ERP-&gt;&gt;Manager: Ask for approval
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>A participant with a type: boundary, control, entity, database, collections, queue</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">A database is a box of the kind &quot;data&quot;. The other five are plain boxes, told apart by their names, not by a symbol</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-participant-types.png" width="784" height="258" style="--w:784" alt="A participant with a type: boundary, control, entity, database, collections, queue, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-participant-types.svg" width="872" height="343" style="--w:872" alt="A participant with a type: boundary, control, entity, database, collections, queue, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-participant-types.png" width="784" height="258" style="--w:784" alt="A participant with a type: boundary, control, entity, database, collections, queue, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-participant-types.svg" width="872" height="411" style="--w:872" alt="A participant with a type: boundary, control, entity, database, collections, queue, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Shop@{ &quot;type&quot;: &quot;boundary&quot; }
   participant Rules@{ &quot;type&quot;: &quot;control&quot; }
@@ -2137,7 +2137,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A participant with a short id and a name, written with &quot;as&quot;</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-alias-as.png" width="450" height="259" style="--w:450" alt="A participant with a short id and a name, written with &quot;as&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-alias-as.svg" width="280" height="208" style="--w:280" alt="A participant with a short id and a name, written with &quot;as&quot;, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-alias-as.png" width="450" height="259" style="--w:450" alt="A participant with a short id and a name, written with &quot;as&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-alias-as.svg" width="280" height="248" style="--w:280" alt="A participant with a short id and a name, written with &quot;as&quot;, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant B as Buyer
   participant E as ERP
@@ -2148,7 +2148,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A name written inside the braces</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-alias-inline.png" width="450" height="264" style="--w:450" alt="A name written inside the braces, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-alias-inline.svg" width="288" height="208" style="--w:288" alt="A name written inside the braces, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-alias-inline.png" width="450" height="264" style="--w:450" alt="A name written inside the braces, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-alias-inline.svg" width="288" height="276" style="--w:288" alt="A name written inside the braces, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Shop@{ &quot;type&quot;: &quot;boundary&quot;, &quot;alias&quot;: &quot;Web shop&quot; }
   participant Db@{ &quot;type&quot;: &quot;database&quot;, &quot;alias&quot;: &quot;Order book&quot; }
@@ -2159,7 +2159,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A name inside the braces and another after &quot;as&quot;: the one after &quot;as&quot; wins</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-alias-precedence.png" width="450" height="264" style="--w:450" alt="A name inside the braces and another after &quot;as&quot;: the one after &quot;as&quot; wins, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-alias-precedence.svg" width="280" height="208" style="--w:280" alt="A name inside the braces and another after &quot;as&quot;: the one after &quot;as&quot; wins, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-alias-precedence.png" width="450" height="264" style="--w:450" alt="A name inside the braces and another after &quot;as&quot;: the one after &quot;as&quot; wins, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-alias-precedence.svg" width="280" height="276" style="--w:280" alt="A name inside the braces and another after &quot;as&quot;: the one after &quot;as&quot; wins, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Desk@{ &quot;type&quot;: &quot;boundary&quot;, &quot;alias&quot;: &quot;Inside name&quot; } as Order desk
   participant Db@{ &quot;type&quot;: &quot;database&quot;, &quot;alias&quot;: &quot;Inside book&quot; } as Order book
@@ -2170,7 +2170,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A participant made part way down, and one ended</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-create-destroy.png" width="784" height="443" style="--w:784" alt="A participant made part way down, and one ended, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-create-destroy.svg" width="680" height="432" style="--w:680" alt="A participant made part way down, and one ended, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-create-destroy.png" width="784" height="443" style="--w:784" alt="A participant made part way down, and one ended, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-create-destroy.svg" width="680" height="532" style="--w:680" alt="A participant made part way down, and one ended, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   create participant J as Pick job
@@ -2187,7 +2187,7 @@ erDiagram
 <article class="card" data-result="less">
 <h3>Participants grouped in boxes, with and without a colour and a title</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">A group's colour is read past: the look is the design's</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-box-groups.png" width="784" height="297" style="--w:784" alt="Participants grouped in boxes, with and without a colour and a title, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-box-groups.svg" width="556" height="293" style="--w:556" alt="Participants grouped in boxes, with and without a colour and a title, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-box-groups.png" width="784" height="297" style="--w:784" alt="Participants grouped in boxes, with and without a colour and a title, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-box-groups.svg" width="556" height="347" style="--w:556" alt="Participants grouped in boxes, with and without a colour and a title, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   box Aqua Buying
     participant B as Buyer
@@ -2207,7 +2207,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A message with no arrowhead, solid and dotted</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-line.png" width="450" height="259" style="--w:450" alt="A message with no arrowhead, solid and dotted, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-line.svg" width="312" height="208" style="--w:312" alt="A message with no arrowhead, solid and dotted, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-line.png" width="450" height="259" style="--w:450" alt="A message with no arrowhead, solid and dotted, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-line.svg" width="312" height="248" style="--w:312" alt="A message with no arrowhead, solid and dotted, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;ERP: Looks at the order
   ERP--&gt;Buyer: Shows it
@@ -2216,7 +2216,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A message with an arrowhead, solid and dotted</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-arrow.png" width="450" height="259" style="--w:450" alt="A message with an arrowhead, solid and dotted, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-arrow.svg" width="280" height="208" style="--w:280" alt="A message with an arrowhead, solid and dotted, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-arrow.png" width="450" height="259" style="--w:450" alt="A message with an arrowhead, solid and dotted, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-arrow.svg" width="280" height="248" style="--w:280" alt="A message with an arrowhead, solid and dotted, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   ERP--&gt;&gt;Buyer: Order number
@@ -2225,7 +2225,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A message with an arrowhead at both ends</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-both-ways.png" width="650" height="259" style="--w:650" alt="A message with an arrowhead at both ends, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-both-ways.svg" width="472" height="208" style="--w:472" alt="A message with an arrowhead at both ends, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-both-ways.png" width="650" height="259" style="--w:650" alt="A message with an arrowhead at both ends, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-both-ways.svg" width="472" height="248" style="--w:472" alt="A message with an arrowhead at both ends, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   ERP&lt;&lt;-&gt;&gt;Supplier: Agree a date
   ERP&lt;&lt;--&gt;&gt;Warehouse: Keep stock in step
@@ -2234,7 +2234,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A message that ends in a cross</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-cross.png" width="450" height="259" style="--w:450" alt="A message that ends in a cross, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-cross.svg" width="304" height="208" style="--w:304" alt="A message that ends in a cross, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-cross.png" width="450" height="259" style="--w:450" alt="A message that ends in a cross, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-cross.svg" width="304" height="248" style="--w:304" alt="A message that ends in a cross, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   ERP-xSupplier: Cancel the order
   Supplier--xERP: Too late
@@ -2243,7 +2243,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A message that does not wait: an open arrow</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-async.png" width="450" height="259" style="--w:450" alt="A message that does not wait: an open arrow, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-async.svg" width="296" height="208" style="--w:296" alt="A message that does not wait: an open arrow, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-async.png" width="450" height="259" style="--w:450" alt="A message that does not wait: an open arrow, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-async.svg" width="296" height="248" style="--w:296" alt="A message that does not wait: an open arrow, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   ERP-)Warehouse: Stock is coming
   Warehouse--)ERP: Noted
@@ -2252,17 +2252,17 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A message from a participant to itself</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-self.png" width="451" height="333" style="--w:451" alt="A message from a participant to itself, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-self.svg" width="379" height="252" style="--w:379" alt="A message from a participant to itself, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-message-self.png" width="451" height="333" style="--w:451" alt="A message from a participant to itself, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-message-self.svg" width="379" height="292" style="--w:379" alt="A message from a participant to itself, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   ERP-&gt;&gt;ERP: Check the budget
   ERP--&gt;&gt;Buyer: Within budget
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>Half arrows</h3>
-<p class="result"><b>Partly read</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-half-arrows.png" width="450" height="347" style="--w:450" alt="Half arrows, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 2 participants; read 0 of 4 messages; line 2: half arrows are not read yet: &quot;Buyer-|\ERP: Top half&quot;; line 3: half arrows are not read yet: &quot;ERP--|/Buyer: Bottom half&quot;; line 4: half arrows are not read yet: &quot;Buyer-\\ERP: Top stick&quot;; line 5: half arrows are not read yet: &quot;ERP--//Buyer: Bottom stick&quot;</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-half-arrows.png" width="450" height="347" style="--w:450" alt="Half arrows, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-half-arrows.svg" width="280" height="338" style="--w:280" alt="Half arrows, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-|\ERP: Top half
   ERP--|/Buyer: Bottom half
@@ -2270,10 +2270,10 @@ erDiagram
   ERP--//Buyer: Bottom stick
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>A message to or from the middle of a line</h3>
-<p class="result"><b>Partly read</b> <span class="why">read 0 of 3 messages; line 4: a message to the middle of a line, written with (), is not read yet: &quot;Buyer-&gt;&gt;()ERP: Raise order&quot;; line 5: a message to the middle of a line, written with (), is not read yet: &quot;Buyer()-&gt;&gt;ERP: Chase it&quot;; line 6: a message to the middle of a line, written with (), is not read yet: &quot;ERP()-&gt;&gt;()Buyer: Done&quot;</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-central-connection.png" width="450" height="303" style="--w:450" alt="A message to or from the middle of a line, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-central-connection.svg" width="280" height="118" style="--w:280" alt="A message to or from the middle of a line, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-central-connection.png" width="450" height="303" style="--w:450" alt="A message to or from the middle of a line, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-central-connection.svg" width="280" height="293" style="--w:280" alt="A message to or from the middle of a line, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Buyer
   participant ERP
@@ -2285,7 +2285,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A participant at work, written with activate and deactivate</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-activation-explicit.png" width="450" height="259" style="--w:450" alt="A participant at work, written with activate and deactivate, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-activation-explicit.svg" width="280" height="208" style="--w:280" alt="A participant at work, written with activate and deactivate, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-activation-explicit.png" width="450" height="259" style="--w:450" alt="A participant at work, written with activate and deactivate, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-activation-explicit.svg" width="280" height="248" style="--w:280" alt="A participant at work, written with activate and deactivate, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   activate ERP
@@ -2296,7 +2296,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A participant at work, written with + and -</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-activation-shortcut.png" width="450" height="259" style="--w:450" alt="A participant at work, written with + and -, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-activation-shortcut.svg" width="280" height="208" style="--w:280" alt="A participant at work, written with + and -, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-activation-shortcut.png" width="450" height="259" style="--w:450" alt="A participant at work, written with + and -, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-activation-shortcut.svg" width="280" height="248" style="--w:280" alt="A participant at work, written with + and -, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;+ERP: Raise order
   ERP--&gt;&gt;-Buyer: Order number
@@ -2305,7 +2305,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A participant at work twice at once</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-activation-stacked.png" width="458" height="347" style="--w:458" alt="A participant at work twice at once, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-activation-stacked.svg" width="320" height="298" style="--w:320" alt="A participant at work twice at once, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-activation-stacked.png" width="458" height="347" style="--w:458" alt="A participant at work twice at once, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-activation-stacked.svg" width="320" height="338" style="--w:320" alt="A participant at work twice at once, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;+ERP: Raise order
   Buyer-&gt;&gt;+ERP: And one more
@@ -2316,7 +2316,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A note to the right or the left of a participant</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-note-beside.png" width="650" height="309" style="--w:650" alt="A note to the right or the left of a participant, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-note-beside.svg" width="386" height="273" style="--w:386" alt="A note to the right or the left of a participant, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-note-beside.png" width="650" height="309" style="--w:650" alt="A note to the right or the left of a participant, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-note-beside.svg" width="386" height="313" style="--w:386" alt="A note to the right or the left of a participant, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Buyer
   participant ERP
@@ -2328,7 +2328,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A note over a participant</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-note-over.png" width="450" height="262" style="--w:450" alt="A note over a participant, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-note-over.svg" width="288" height="218" style="--w:288" alt="A note over a participant, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-note-over.png" width="450" height="262" style="--w:450" alt="A note over a participant, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-note-over.svg" width="288" height="258" style="--w:288" alt="A note over a participant, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Buyer
   participant ERP
@@ -2339,7 +2339,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A note over two participants</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-note-over-two.png" width="450" height="262" style="--w:450" alt="A note over two participants, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-note-over-two.svg" width="280" height="218" style="--w:280" alt="A note over two participants, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-note-over-two.png" width="450" height="262" style="--w:450" alt="A note over two participants, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-note-over-two.svg" width="280" height="258" style="--w:280" alt="A note over two participants, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   Note over Buyer,ERP: Both keep a copy
@@ -2348,7 +2348,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A line break in a message, a note and a name</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-line-breaks.png" width="450" height="296" style="--w:450" alt="A line break in a message, a note and a name, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-line-breaks.svg" width="288" height="264" style="--w:288" alt="A line break in a message, a note and a name, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-line-breaks.png" width="450" height="296" style="--w:450" alt="A line break in a message, a note and a name, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-line-breaks.svg" width="288" height="320" style="--w:288" alt="A line break in a message, a note and a name, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant W as Main&lt;br/&gt;warehouse
   ERP-&gt;&gt;W: Pick the order&lt;br/&gt;before noon
@@ -2358,7 +2358,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A loop</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-loop.png" width="650" height="358" style="--w:650" alt="A loop, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-loop.svg" width="408" height="299" style="--w:408" alt="A loop, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-loop.png" width="650" height="358" style="--w:650" alt="A loop, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-loop.svg" width="408" height="339" style="--w:408" alt="A loop, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   loop Every morning
@@ -2370,7 +2370,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>One way or another: alt and else</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-alt-else.png" width="450" height="403" style="--w:450" alt="One way or another: alt and else, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-alt-else.svg" width="296" height="323" style="--w:296" alt="One way or another: alt and else, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-alt-else.png" width="450" height="403" style="--w:450" alt="One way or another: alt and else, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-alt-else.svg" width="296" height="363" style="--w:296" alt="One way or another: alt and else, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   alt In stock
@@ -2383,7 +2383,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Something that may not happen: opt</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-opt.png" width="650" height="314" style="--w:650" alt="Something that may not happen: opt, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-opt.svg" width="456" height="254" style="--w:456" alt="Something that may not happen: opt, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-opt.png" width="650" height="314" style="--w:650" alt="Something that may not happen: opt, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-opt.svg" width="456" height="294" style="--w:456" alt="Something that may not happen: opt, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   opt Over the limit
@@ -2394,7 +2394,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Things done at once: par and and</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-par.png" width="650" height="447" style="--w:650" alt="Things done at once: par and and, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-par.svg" width="408" height="368" style="--w:408" alt="Things done at once: par and and, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-par.png" width="650" height="447" style="--w:650" alt="Things done at once: par and and, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-par.svg" width="408" height="408" style="--w:408" alt="Things done at once: par and and, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   par To the supplier
     ERP-&gt;&gt;Supplier: Send order
@@ -2408,7 +2408,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A block inside a block</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-par-nested.png" width="784" height="409" style="--w:784" alt="A block inside a block, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-par-nested.svg" width="676" height="438" style="--w:676" alt="A block inside a block, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-par-nested.png" width="784" height="409" style="--w:784" alt="A block inside a block, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-par-nested.svg" width="676" height="478" style="--w:676" alt="A block inside a block, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   par To the supplier
     ERP-&gt;&gt;Supplier: Send order
@@ -2425,7 +2425,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>What must happen, and what to do when it cannot: critical and option</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-critical.png" width="459" height="538" style="--w:459" alt="What must happen, and what to do when it cannot: critical and option, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-critical.svg" width="370" height="345" style="--w:370" alt="What must happen, and what to do when it cannot: critical and option, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-critical.png" width="459" height="538" style="--w:459" alt="What must happen, and what to do when it cannot: critical and option, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-critical.svg" width="370" height="385" style="--w:370" alt="What must happen, and what to do when it cannot: critical and option, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   critical Reserve the stock
     ERP--&gt;Warehouse: Reserve
@@ -2439,7 +2439,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A critical block with no options</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-critical-plain.png" width="450" height="270" style="--w:450" alt="A critical block with no options, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-critical-plain.svg" width="314" height="209" style="--w:314" alt="A critical block with no options, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-critical-plain.png" width="450" height="270" style="--w:450" alt="A critical block with no options, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-critical-plain.svg" width="314" height="249" style="--w:314" alt="A critical block with no options, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   critical Reserve the stock
     ERP--&gt;Warehouse: Reserve
@@ -2449,7 +2449,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Where the sequence stops: break</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-break.png" width="784" height="384" style="--w:784" alt="Where the sequence stops: break, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-break.svg" width="548" height="344" style="--w:548" alt="Where the sequence stops: break, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-break.png" width="784" height="384" style="--w:784" alt="Where the sequence stops: break, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-break.svg" width="548" height="384" style="--w:548" alt="Where the sequence stops: break, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer--&gt;ERP: Raise order
   ERP--&gt;Supplier: Send order
@@ -2462,7 +2462,7 @@ erDiagram
 <article class="card" data-result="less">
 <h3>Rows highlighted with a coloured background, one inside another</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">The highlight's colour is read past: it is drawn in the design's own tint</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-rect.png" width="458" height="498" style="--w:458" alt="Rows highlighted with a coloured background, one inside another, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-rect.svg" width="349" height="490" style="--w:349" alt="Rows highlighted with a coloured background, one inside another, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-rect.png" width="458" height="498" style="--w:458" alt="Rows highlighted with a coloured background, one inside another, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-rect.svg" width="349" height="530" style="--w:349" alt="Rows highlighted with a coloured background, one inside another, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Buyer
   participant ERP
@@ -2481,7 +2481,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Comments on lines of their own</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-comments.png" width="450" height="259" style="--w:450" alt="Comments on lines of their own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-comments.svg" width="280" height="208" style="--w:280" alt="Comments on lines of their own, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-comments.png" width="450" height="259" style="--w:450" alt="Comments on lines of their own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-comments.svg" width="280" height="248" style="--w:280" alt="Comments on lines of their own, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order
   %% the reply comes straight back
@@ -2491,7 +2491,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Characters written as entity codes</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-entity-codes.png" width="527" height="259" style="--w:527" alt="Characters written as entity codes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-entity-codes.svg" width="304" height="208" style="--w:304" alt="Characters written as entity codes, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-entity-codes.png" width="527" height="259" style="--w:527" alt="Characters written as entity codes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-entity-codes.svg" width="304" height="248" style="--w:304" alt="Characters written as entity codes, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: I #9829; this supplier
   ERP--&gt;&gt;Buyer: Noted #59; #infin; thanks
@@ -2500,7 +2500,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Messages numbered</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-autonumber.png" width="461" height="432" style="--w:461" alt="Messages numbered, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-autonumber.svg" width="384" height="306" style="--w:384" alt="Messages numbered, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-autonumber.png" width="461" height="432" style="--w:461" alt="Messages numbered, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-autonumber.svg" width="384" height="346" style="--w:384" alt="Messages numbered, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   autonumber
   Buyer-&gt;&gt;ERP: Raise order
@@ -2513,7 +2513,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Messages numbered from a start, by a step</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-autonumber-from.png" width="450" height="303" style="--w:450" alt="Messages numbered from a start, by a step, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-autonumber-from.svg" width="280" height="253" style="--w:280" alt="Messages numbered from a start, by a step, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-autonumber-from.png" width="450" height="303" style="--w:450" alt="Messages numbered from a start, by a step, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-autonumber-from.svg" width="280" height="293" style="--w:280" alt="Messages numbered from a start, by a step, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   autonumber 10 5
   Buyer-&gt;&gt;ERP: Raise order
@@ -2524,7 +2524,7 @@ erDiagram
 <article class="card" data-result="less">
 <h3>A menu of links on a participant</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">The menus are left out: a page of Merlive opens no links</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-actor-menus.png" width="450" height="259" style="--w:450" alt="A menu of links on a participant, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-actor-menus.svg" width="280" height="208" style="--w:280" alt="A menu of links on a participant, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-actor-menus.png" width="450" height="259" style="--w:450" alt="A menu of links on a participant, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-actor-menus.svg" width="280" height="248" style="--w:280" alt="A menu of links on a participant, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Buyer
   participant ERP
@@ -2537,7 +2537,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A title in the diagram</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-title.png" width="450" height="299" style="--w:450" alt="A title in the diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-title.svg" width="280" height="246" style="--w:280" alt="A title in the diagram, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-title.png" width="450" height="299" style="--w:450" alt="A title in the diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-title.svg" width="280" height="286" style="--w:280" alt="A title in the diagram, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   title: Raising an order
   Buyer-&gt;&gt;ERP: Raise order
@@ -2547,7 +2547,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>A title and a description for readers who cannot see it</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-accessibility.png" width="450" height="259" style="--w:450" alt="A title and a description for readers who cannot see it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-accessibility.svg" width="280" height="208" style="--w:280" alt="A title and a description for readers who cannot see it, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-accessibility.png" width="450" height="259" style="--w:450" alt="A title and a description for readers who cannot see it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-accessibility.svg" width="280" height="248" style="--w:280" alt="A title and a description for readers who cannot see it, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   accTitle: Raising an order
   accDescr: The buyer raises an order and the ERP answers with its number
@@ -2558,7 +2558,7 @@ erDiagram
 <article class="card" data-result="drawn">
 <h3>Statements parted by semicolons</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-semicolons.png" width="650" height="303" style="--w:650" alt="Statements parted by semicolons, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-semicolons.svg" width="408" height="253" style="--w:408" alt="Statements parted by semicolons, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-semicolons.png" width="650" height="303" style="--w:650" alt="Statements parted by semicolons, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-semicolons.svg" width="408" height="293" style="--w:408" alt="Statements parted by semicolons, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   Buyer-&gt;&gt;ERP: Raise order; ERP-&gt;&gt;Supplier: Send order; Supplier--&gt;&gt;ERP: Confirmed
 </pre></details>
@@ -2584,7 +2584,7 @@ sequenceDiagram
 <article class="card" data-result="drawn">
 <h3>Sequence diagram</h3>
 <p class="result"><b>Drawn</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/sequence.png" width="650" height="347" style="--w:650" alt="Sequence diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/sequence.svg" width="440" height="298" style="--w:440" alt="Sequence diagram, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/sequence.png" width="650" height="347" style="--w:650" alt="Sequence diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/sequence.svg" width="440" height="338" style="--w:440" alt="Sequence diagram, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant B as Buyer
   participant E as ERP

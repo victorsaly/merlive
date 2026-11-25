@@ -4,6 +4,13 @@
 
 Class diagrams and entity diagrams.
 
+- **A sequence diagram's participants are drawn as what they are.** An `actor` is a figure; a boundary, a
+  control, an entity, a database, a collection and a queue each have a drawing of their own. Each is drawn again
+  at the foot of its lifeline, unless `mirrorActors: false`.
+- **Half arrows and messages to the middle of a line are read and drawn.** No message is left out of a picture
+  any more.
+- **A group's title can be read.** In a sequence diagram it takes the design's quiet colour in light and dark,
+  sits inside its frame and wraps to it. In a still picture it was black on any page.
 - **A title is drawn on a still picture.** The `title` in a diagram's front matter (and a sequence diagram's own
   `title`) sits above the picture, wrapped to its width. A page already had it as its heading; a still picture
   had it only in what a screen reader is told. `accTitle` stays unseen, as it was written to be.

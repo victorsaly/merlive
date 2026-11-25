@@ -10,7 +10,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 - **State diagrams:** of 27 features, 16 are drawn as written, 10 are drawn less something, 1 are only partly read, and 0 are refused.
 - **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
-- **Sequence diagrams:** of 42 features, 35 are drawn as written, 5 are drawn less something, 2 are only partly read, and 0 are refused.
+- **Sequence diagrams:** of 42 features, 38 are drawn as written, 4 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Every kind of diagram:** of 32, 4 drawn (those with their own lists above), and 28 left as Mermaid and named.
 
 ## Flowcharts, feature by feature
@@ -237,7 +237,7 @@ and every rule in [SEQUENCE.md](SEQUENCE.md) passes.
 | Participants named by the messages they are in | Drawn |  | [source](../corpus/sequence/seq-participants-implicit.mmd) | [picture](../corpus/drawn/seq-participants-implicit.svg) |
 | Participants declared, in an order of their own | Drawn |  | [source](../corpus/sequence/seq-participants-declared.mmd) | [picture](../corpus/drawn/seq-participants-declared.svg) |
 | Actors: people, not systems | Drawn |  | [source](../corpus/sequence/seq-actors.mmd) | [picture](../corpus/drawn/seq-actors.svg) |
-| A participant with a type: boundary, control, entity, database, collections, queue | Drawn, less something | A database is a box of the kind "data". The other five are plain boxes, told apart by their names, not by a symbol | [source](../corpus/sequence/seq-participant-types.mmd) | [picture](../corpus/drawn/seq-participant-types.svg) |
+| A participant with a type: boundary, control, entity, database, collections, queue | Drawn |  | [source](../corpus/sequence/seq-participant-types.mmd) | [picture](../corpus/drawn/seq-participant-types.svg) |
 | A participant with a short id and a name, written with "as" | Drawn |  | [source](../corpus/sequence/seq-alias-as.mmd) | [picture](../corpus/drawn/seq-alias-as.svg) |
 | A name written inside the braces | Drawn |  | [source](../corpus/sequence/seq-alias-inline.mmd) | [picture](../corpus/drawn/seq-alias-inline.svg) |
 | A name inside the braces and another after "as": the one after "as" wins | Drawn |  | [source](../corpus/sequence/seq-alias-precedence.mmd) | [picture](../corpus/drawn/seq-alias-precedence.svg) |
@@ -249,8 +249,8 @@ and every rule in [SEQUENCE.md](SEQUENCE.md) passes.
 | A message that ends in a cross | Drawn |  | [source](../corpus/sequence/seq-message-cross.mmd) | [picture](../corpus/drawn/seq-message-cross.svg) |
 | A message that does not wait: an open arrow | Drawn |  | [source](../corpus/sequence/seq-message-async.mmd) | [picture](../corpus/drawn/seq-message-async.svg) |
 | A message from a participant to itself | Drawn |  | [source](../corpus/sequence/seq-message-self.mmd) | [picture](../corpus/drawn/seq-message-self.svg) |
-| Half arrows | Partly read | read 0 of 2 participants; read 0 of 4 messages; line 2: half arrows are not read yet: "Buyer-\|\ERP: Top half"; line 3: half arrows are not read yet: "ERP--\|/Buyer: Bottom half"; line 4: half arrows are not read yet: "Buyer-\\ERP: Top stick"; line 5: half arrows are not read yet: "ERP--//Buyer: Bottom stick" | [source](../corpus/sequence/seq-half-arrows.mmd) |  |
-| A message to or from the middle of a line | Partly read | read 0 of 3 messages; line 4: a message to the middle of a line, written with (), is not read yet: "Buyer->>()ERP: Raise order"; line 5: a message to the middle of a line, written with (), is not read yet: "Buyer()->>ERP: Chase it"; line 6: a message to the middle of a line, written with (), is not read yet: "ERP()->>()Buyer: Done" | [source](../corpus/sequence/seq-central-connection.mmd) | [picture](../corpus/drawn/seq-central-connection.svg) |
+| Half arrows | Drawn |  | [source](../corpus/sequence/seq-half-arrows.mmd) | [picture](../corpus/drawn/seq-half-arrows.svg) |
+| A message to or from the middle of a line | Drawn |  | [source](../corpus/sequence/seq-central-connection.mmd) | [picture](../corpus/drawn/seq-central-connection.svg) |
 | A participant at work, written with activate and deactivate | Drawn |  | [source](../corpus/sequence/seq-activation-explicit.mmd) | [picture](../corpus/drawn/seq-activation-explicit.svg) |
 | A participant at work, written with + and - | Drawn |  | [source](../corpus/sequence/seq-activation-shortcut.mmd) | [picture](../corpus/drawn/seq-activation-shortcut.svg) |
 | A participant at work twice at once | Drawn |  | [source](../corpus/sequence/seq-activation-stacked.mmd) | [picture](../corpus/drawn/seq-activation-stacked.svg) |
