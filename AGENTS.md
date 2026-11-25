@@ -11,6 +11,8 @@ For coding agents changing this repository. It follows the same habits as
   one that goes to the network (setup, reading a site). Everything it decides with is in the pure files.
 - `skills/merlive/scripts/parse.mjs`: Mermaid text to a model, and the Mermaid blocks of a Markdown file. Says
   what it did not read. Pure.
+- `skills/merlive/scripts/state.mjs`: a state diagram's lines, read into the model a flowchart gives, with the
+  tools parse.mjs lends it. It places and draws nothing: a state diagram is a flowchart from there on. Pure.
 - `skills/merlive/scripts/layout.mjs`: the model to coordinates, by the rules in `docs/PLACEMENT.md`. Every
   measured number is in `measure` at the top, with why. Pure.
 - `skills/merlive/scripts/shapes.mjs`: every shape Merlive draws: its outline, the room it leaves for words, and
@@ -34,8 +36,8 @@ For coding agents changing this repository. It follows the same habits as
 - `docs/PLACEMENT.md`: the rules, each with pass, fail and what to do. `docs/ROADMAP.md`: what comes next and what
   was borrowed from where.
 - `examples/`: a real document and what Merlive draws from it. Drawn again with `npm run examples`.
-- `corpus/`: one sample of every kind of diagram Mermaid documents and of every feature of its flowcharts, with
-  what each should be read as in `index.json`. `scripts/coverage.mjs` runs Merlive over all of it and writes
+- `corpus/`: one sample of every kind of diagram Mermaid documents and of every feature of its flowcharts and its
+  state diagrams, with what each should be read as in `index.json`. `scripts/coverage.mjs` runs Merlive over all of it and writes
   `docs/COVERAGE.md` and `corpus/drawn/`. Written again with `npm run coverage`; never edited by hand.
 - `corpus/compare.html`: every sample drawn twice, by Mermaid's own command and by Merlive, to look at side by
   side. `scripts/compare.mjs` writes it. Mermaid's pictures are kept in `corpus/mermaid/` and drawn again only by

@@ -1,0 +1,9 @@
+stateDiagram-v2
+  state split <<fork>>
+  state together <<join>>
+  Approved --> split
+  split --> Picking
+  split --> Invoicing
+  Picking --> together
+  Invoicing --> together
+  together --> Sent

@@ -13,12 +13,12 @@ const index = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8'));
 const again = 'Run "npm run coverage" and commit what it writes.';
 
 test('every sample is listed, and every sample listed is there', () => {
-  const listed = [...index.flowchart, ...index.kinds].map((s) => s.file).sort();
+  const listed = [...index.flowchart, ...index.state, ...index.kinds].map((s) => s.file).sort();
   assert.deepEqual(listed, samplesOnDisk());
 });
 
 test('every flowchart sample says what it should be read as, and every other kind its family', () => {
-  for (const s of index.flowchart) assert.ok(s.covers && Number.isInteger(s.boxes) && Number.isInteger(s.links), s.file);
+  for (const s of [...index.flowchart, ...index.state]) assert.ok(s.covers && Number.isInteger(s.boxes) && Number.isInteger(s.links), s.file);
   for (const s of index.kinds) assert.ok(s.covers && s.family, s.file);
 });
 

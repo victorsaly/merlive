@@ -1,0 +1,268 @@
+// Why: a state diagram is boxes and links, so it is read into the model a flowchart gives and placed by the
+// same rules. These hold the reading; the placement has its own tests, and is asked here only whether a real
+// state diagram passes every rule.
+
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { parse } from '../skills/merlive/scripts/parse.mjs';
+import { layout } from '../skills/merlive/scripts/layout.mjs';
+import { builtIn, designWith } from '../skills/merlive/scripts/design.mjs';
+import { score } from '../skills/merlive/scripts/score.mjs';
+import { exits, help, run } from '../skills/merlive/scripts/merlive.mjs';
+
+const state = (/** @type {string} */ body, head = 'stateDiagram-v2') => parse(`${head}\n${body}`);
+const boxes = (/** @type {import('../skills/merlive/scripts/parse.mjs').Model} */ m) => m.nodes.map((n) => [n.id, n.label, n.shape, n.kind]);
+const links = (/** @type {import('../skills/merlive/scripts/parse.mjs').Model} */ m) => m.edges.map((e) => [e.id, e.label]);
+
+describe('state: what it is taken for', () => {
+  it('is read as boxes and links, whichever way it is declared', () => {
+    for (const head of ['stateDiagram-v2', 'stateDiagram']) {
+      const m = state('Draft --> Submitted', head);
+      assert.equal(m.type, 'flowchart');
+      assert.equal(m.kindOfDiagram, head);
+      assert.deepEqual(links(m), [['Draft-Submitted', '']]);
+      assert.deepEqual(m.warnings, []);
+    }
+  });
+
+  it('is found behind front matter, with its title kept', () => {
+    const m = parse('---\ntitle: An order\n---\nstateDiagram-v2\n  Draft --> Submitted');
+    assert.equal(m.title, 'An order');
+    assert.equal(m.nodes.length, 2);
+  });
+
+  it('leaves a flowchart a flowchart: "A --> B : words" is not a link there', () => {
+    assert.match(parse('flowchart TD\nA --> B : words').warnings[0], /^line 2: not read/);
+  });
+});
+
+describe('state: states', () => {
+  it('reads a state by its id, by "state words as id", and by "id : words"', () => {
+    const m = state('Draft\nstate "Waiting for a manager" as Submitted\nApproved : Approved by a manager');
+    assert.deepEqual(boxes(m), [['Draft', 'Draft', 'box', 'step'], ['Submitted', 'Waiting for a manager', 'box', 'step'], ['Approved', 'Approved by a manager', 'box', 'step']]);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('gives words to a state named before or after they are written', () => {
+    const m = state('Draft --> Submitted\nSubmitted : Waiting for a manager\nDraft : Being written');
+    assert.deepEqual(m.nodes.map((n) => n.label), ['Being written', 'Waiting for a manager']);
+  });
+
+  it('keeps a description written over several lines as its author broke it', () => {
+    const m = state('Submitted : Waiting\nSubmitted : for a manager');
+    assert.deepEqual([m.nodes[0].label, m.nodes[0].breaks], ['Waiting for a manager', ['Waiting', 'for a manager']]);
+  });
+
+  it('reads entity codes in words, as a flowchart does', () => {
+    assert.equal(state('Held : On hold #amp; waiting').nodes[0].label, 'On hold & waiting');
+  });
+});
+
+describe('state: transitions', () => {
+  it('reads a transition with and without words', () => {
+    const m = state('Draft --> Submitted : submit\nSubmitted --> Approved\nSubmitted --> Draft: send back');
+    assert.deepEqual(links(m), [['Draft-Submitted', 'submit'], ['Submitted-Approved', ''], ['Submitted-Draft', 'send back']]);
+    assert.ok(m.edges.every((e) => e.head === 'arrow' && e.tail === 'none' && e.style === 'solid'));
+  });
+
+  it('names a second transition between the same two states apart from the first', () => {
+    assert.deepEqual(links(state('A --> B : one\nA --> B : two')), [['A-B', 'one'], ['A-B#2', 'two']]);
+  });
+
+  it('says a transition from a state to itself is not drawn', () => {
+    const m = state('Connecting --> Connecting : retry\nConnecting --> Open');
+    assert.match(m.warnings[0], /^line 2: a link from Connecting to itself is not drawn/);
+    assert.deepEqual(links(m), [['Connecting-Open', '']]);
+  });
+
+  it('reads past a comment at the end of a line and on a line of its own', () => {
+    const m = state('Draft --> Submitted %% sent by the buyer\n%% a manager looks next\nSubmitted --> Approved');
+    assert.deepEqual(links(m), [['Draft-Submitted', ''], ['Submitted-Approved', '']]);
+    assert.deepEqual(m.warnings, []);
+  });
+});
+
+describe('state: where it starts and ends', () => {
+  it('draws [*] as a start when it is left of the arrow and an end when it is right, one of each', () => {
+    const m = state('[*] --> Draft\nDraft --> Sent\n[*] --> Sent\nSent --> [*]\nDraft --> [*]');
+    assert.deepEqual(boxes(m), [['start', 'Start', 'pill', 'terminal'], ['Draft', 'Draft', 'box', 'step'], ['Sent', 'Sent', 'box', 'step'], ['end', 'End', 'pill', 'terminal']]);
+    assert.deepEqual(links(m).map(([id]) => id), ['start-Draft', 'Draft-Sent', 'start-Sent', 'Sent-end', 'Draft-end']);
+  });
+});
+
+describe('state: composite states', () => {
+  const review = '[*] --> Draft\nDraft --> Review : submit\nstate Review {\n  [*] --> Screening\n  Screening --> Decision\n  Decision --> [*]\n}\nReview --> Published : approved\nReview --> Draft : rejected';
+
+  it('draws a composite state as a group, with a start and an end of its own inside it', () => {
+    const m = parse(`stateDiagram-v2\n${review}`);
+    assert.deepEqual(m.groups, [{ id: 'Review', title: 'Review', members: ['Review_start', 'Screening', 'Decision', 'Review_end'] }]);
+    assert.deepEqual(m.nodes.filter((n) => n.shape === 'pill').map((n) => [n.id, n.label]), [['start', 'Start'], ['Review_start', 'Start'], ['Review_end', 'End']]);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('joins a transition to a composite state to where it starts, and one from it to where it ends', () => {
+    const m = parse(`stateDiagram-v2\n${review}`);
+    assert.ok(!m.nodes.some((n) => n.id === 'Review'), 'the composite state is a frame, not a box');
+    assert.deepEqual(links(m), [
+      ['start-Draft', ''], ['Draft-Review_start', 'submit'], ['Review_start-Screening', ''], ['Screening-Decision', ''], ['Decision-Review_end', ''],
+      ['Review_end-Published', 'approved'], ['Review_end-Draft', 'rejected'],
+    ]);
+  });
+
+  it('calls a composite state by its words, wherever they are written', () => {
+    assert.equal(state('Review : In review\nstate Review {\n  a --> b\n}').groups[0].title, 'In review');
+    assert.equal(state('state Review {\n  a --> b\n}\nReview : In review').groups[0].title, 'In review');
+    assert.equal(state('state "In review" as Review {\n  a --> b\n}').groups[0].title, 'In review');
+  });
+
+  it('draws a composite state inside another as part of the outer one, says so, and still joins what leads to it', () => {
+    const m = state('[*] --> Outer\nstate Outer {\n  [*] --> Inner\n  state Inner {\n    [*] --> deep\n    deep --> [*]\n  }\n  Inner --> last\n}');
+    assert.deepEqual(m.groups.map((g) => g.id), ['Outer']);
+    assert.match(m.warnings[0], /^line 5: a group inside a group is drawn as part of the outer one/);
+    assert.ok(!m.nodes.some((n) => n.id === 'Inner'));
+    assert.deepEqual(links(m).map(([id]) => id), ['start-Outer_start', 'Outer_start-Inner_start', 'Inner_start-deep', 'deep-Inner_end', 'Inner_end-last']);
+    assert.deepEqual(m.groups[0].members, ['Outer_start', 'Inner_start', 'deep', 'Inner_end', 'last']);
+  });
+
+  it('says so when a composite state is closed that was never opened, or never closed', () => {
+    assert.match(state('a --> b\n}').warnings[0], /^line 3: not read: a "}" with no composite state open/);
+    assert.match(state('state Review {\n  a --> b').warnings[0], /^line 2: the composite state Review is never closed; end it with a line of }/);
+  });
+
+  it('says concurrency is not read, and draws its regions as one', () => {
+    const m = state('state Active {\n  [*] --> NumOff\n  NumOff --> NumOn\n  --\n  [*] --> CapsOff\n  CapsOff --> CapsOn\n}');
+    assert.match(m.warnings[0], /^line 5: concurrency \("--"\) is not read: the regions it parts are drawn as one/);
+    assert.deepEqual(m.groups[0].members, ['Active_start', 'NumOff', 'NumOn', 'CapsOff', 'CapsOn']);
+  });
+});
+
+describe('state: choices, forks and joins', () => {
+  it('draws a choice as a decision', () => {
+    const m = state('state enough <<choice>>\nChecked --> enough\nenough --> Approved : in budget\nenough --> Held : over budget');
+    assert.deepEqual(boxes(m)[0], ['enough', 'enough', 'diamond', 'decision']);
+    assert.deepEqual(links(m).map(([, words]) => words), ['', 'in budget', 'over budget']);
+  });
+
+  it('gives a choice, a fork and a join their words when they have some', () => {
+    const m = state('state "In budget?" as enough <<choice>>\nstate "Both at once" as split <<fork>>\nstate together <<join>>');
+    assert.deepEqual(boxes(m), [['enough', 'In budget?', 'diamond', 'decision'], ['split', 'Both at once', 'box', 'step'], ['together', 'together', 'box', 'step']]);
+    assert.deepEqual(m.warnings, []);
+  });
+});
+
+describe('state: notes', () => {
+  it('keeps a note on a state as that box\'s note, on one line or several, from either side', () => {
+    const m = state('Draft --> Sent\nnote right of Draft : Only its author sees it.\nnote left of Sent\n  Sent to the supplier\n  by email.\nend note');
+    assert.deepEqual(m.notes, { Draft: 'Only its author sees it.', Sent: 'Sent to the supplier by email.' });
+    assert.deepEqual(m.nodes.map((n) => n.id), ['Draft', 'Sent'], 'a note makes no box');
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('says so when a note is on a state that is not there, or is never ended', () => {
+    assert.match(state('Draft --> Sent\nnote right of Lost : words').warnings[0], /^note for Lost: no such node/);
+    assert.match(state('Draft --> Sent\nnote right of Draft\n  words').warnings[0], /^line 3: the note on Draft is never ended; end it with a line of "end note"/);
+  });
+});
+
+describe('state: direction, kinds and what Mermaid sets', () => {
+  it('follows the direction it is given, and says which way it draws the two it does not have', () => {
+    assert.equal(state('direction LR\nA --> B').direction, 'LR');
+    assert.equal(state('direction TB\nA --> B').direction, 'TD');
+    const m = state('direction RL\nA --> B');
+    assert.equal(m.direction, 'LR');
+    assert.match(m.warnings[0], /^line 2: RL is drawn as LR/);
+  });
+
+  it('reads past the direction of a composite state, which runs the way the rest does', () => {
+    const m = state('direction LR\nstate B {\n  direction TB\n  a --> b\n}');
+    assert.equal(m.direction, 'LR');
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('takes a kind from classDef and class, and from ::: where a state is used', () => {
+    const m = state('classDef stopped stroke:#c62828\nclassDef fresh fill:#e8f5e9,stroke:#2e7d32;\n[*] --> Draft:::fresh\nDraft --> Held\nHeld:::stopped --> Cancelled\nclass Cancelled, Lost stopped');
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind]), [['start', 'terminal'], ['Draft', 'fresh'], ['Held', 'stopped'], ['Cancelled', 'stopped']]);
+    assert.deepEqual(m.classes, { stopped: '#c62828', fresh: '#2e7d32' });
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('reads past what only sets how Mermaid draws', () => {
+    const m = state('hide empty description\nscale 350 width\nA --> B;');
+    assert.deepEqual(links(m), [['A-B', '']]);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('keeps accTitle and accDescr', () => {
+    const m = state('accTitle: An order\naccDescr: From draft to delivered\nA --> B');
+    assert.deepEqual([m.title, m.describes], ['An order', 'From draft to delivered']);
+  });
+});
+
+describe("state: Merlive's own lines", () => {
+  it('reads notes, steps, the main path and the side as it does in a flowchart', () => {
+    const m = state('[*] --> Draft\nDraft --> Submitted\nSubmitted --> Draft : send back\nSubmitted --> [*]\n%% note Draft: Being written.\n%% step: Round again | loop 1 | Sent back to be changed.\n%% main: start>Draft>Submitted>end\n%% side: left');
+    assert.equal(m.notes.Draft, 'Being written.');
+    assert.deepEqual(m.steps[0].seq, ['Draft-Submitted', 'Submitted-Draft']);
+    assert.deepEqual(m.hints, { main: ['start', 'Draft', 'Submitted', 'end'], side: 'left' });
+    assert.deepEqual(m.warnings, []);
+  });
+});
+
+describe('state: what it does not read, it says', () => {
+  it('names a line it cannot read with its line, and leaves nothing of it behind', () => {
+    const m = state('Draft --> Submitted\nDraft ==> Lost\nstate "no id"\nSubmitted --> Approved');
+    assert.deepEqual(m.warnings, ['line 3: not read: "Draft ==> Lost"', 'line 4: not read: "state "no id""']);
+    assert.deepEqual(m.nodes.map((n) => n.id), ['Draft', 'Submitted', 'Approved']);
+  });
+});
+
+describe('state: drawn by the rules a flowchart is', () => {
+  const pictures = {
+    order: '[*] --> Draft\nDraft --> Submitted : submit\nSubmitted --> Approved : approve\nSubmitted --> Draft : send back\nApproved --> Sent : send\nSent --> Delivered : receive\nSent --> Cancelled : cancel\nDelivered --> [*]\nCancelled --> [*]',
+    document: '[*] --> Draft\nDraft --> Review : submit\nstate Review {\n  [*] --> Screening\n  Screening --> Decision\n  Decision --> [*]\n}\nReview --> Published : approved\nReview --> Draft : rejected\nPublished --> [*]',
+    connection: 'state ok <<choice>>\n[*] --> Closed\nClosed --> Connecting : open\nConnecting --> ok\nok --> Open : answered\nok --> Waiting : refused\nWaiting --> Connecting : try again\nOpen --> Closed : close\nWaiting --> Closed : give up',
+  };
+  for (const [name, body] of Object.entries(pictures)) {
+    it(`passes every rule for ${name}, top to bottom and left to right`, () => {
+      for (const way of ['TB', 'LR']) {
+        const m = state(`direction ${way}\n${body}`);
+        const result = score(m, layout(m), designWith(builtIn, m));
+        assert.deepEqual(result.checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), [], way);
+        assert.deepEqual(m.warnings, []);
+      }
+    });
+  }
+
+  it('puts the states of a composite state inside its frame', () => {
+    const m = state(pictures.document);
+    const lay = layout(m);
+    const frame = lay.groups[0];
+    for (const id of m.groups[0].members) {
+      const n = lay.nodes[id];
+      assert.ok(n.x - n.w / 2 >= frame.x && n.x + n.w / 2 <= frame.x + frame.w && n.y - n.h / 2 >= frame.y && n.y + n.h / 2 <= frame.y + frame.h, id);
+    }
+  });
+});
+
+describe('state: the command', () => {
+  it('draws the state diagram in a Markdown file as it draws a flowchart, into a temporary folder', async () => {
+    const cwd = mkdtempSync(join(tmpdir(), 'merlive-state-'));
+    writeFileSync(join(cwd, 'order.md'), '# An order\n\n```mermaid\nstateDiagram-v2\n  [*] --> Draft\n  Draft --> Sent : send\n  note right of Draft : Only its author sees it.\n  Sent --> [*]\n```\n\n```mermaid\nsequenceDiagram\n  A->>B: hello\n```\n');
+    /** @type {string[]} */
+    const said = [];
+    const code = await run(['order.md'], { cwd, say: (line) => said.push(line) });
+    assert.equal(code, exits.drawn);
+    assert.match(said.join('\n'), /drew .*order-1\.html \(4 boxes, 3 links/);
+    assert.match(said.join('\n'), /left as Mermaid: block 2 \(line \d+\) is a sequenceDiagram, and Merlive draws flowcharts and state diagrams for now/);
+    const page = readFileSync(join(cwd, 'diagrams/order-1.html'), 'utf8');
+    assert.ok(page.includes('Only its author sees it.') && page.includes('>Start<') && page.includes('>send<'));
+    assert.ok(!existsSync(join(cwd, 'diagrams/order-2.html')));
+  });
+
+  it('says in its help that a state diagram is drawn', () => {
+    assert.match(help, /A state diagram is drawn as a flowchart is\./);
+  });
+});

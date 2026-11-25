@@ -344,6 +344,141 @@
       "width": 258,
       "height": 70
     },
+    "state/state-declare-v2.mmd": {
+      "ok": true,
+      "width": 105,
+      "height": 236
+    },
+    "state/state-declare.mmd": {
+      "ok": true,
+      "width": 105,
+      "height": 236
+    },
+    "state/state-id.mmd": {
+      "ok": true,
+      "width": 205,
+      "height": 56
+    },
+    "state/state-as.mmd": {
+      "ok": true,
+      "width": 189,
+      "height": 146
+    },
+    "state/state-colon.mmd": {
+      "ok": true,
+      "width": 189,
+      "height": 146
+    },
+    "state/state-words-lines.mmd": {
+      "ok": true,
+      "width": 124,
+      "height": 171
+    },
+    "state/state-spaces.mmd": {
+      "ok": true,
+      "width": 209,
+      "height": 236
+    },
+    "state/state-transition.mmd": {
+      "ok": true,
+      "width": 105,
+      "height": 236
+    },
+    "state/state-transition-words.mmd": {
+      "ok": true,
+      "width": 157,
+      "height": 284
+    },
+    "state/state-self.mmd": {
+      "ok": true,
+      "width": 177,
+      "height": 245
+    },
+    "state/state-start-end.mmd": {
+      "ok": true,
+      "width": 237,
+      "height": 274
+    },
+    "state/state-composite.mmd": {
+      "ok": true,
+      "width": 175,
+      "height": 668
+    },
+    "state/state-composite-named.mmd": {
+      "ok": true,
+      "width": 188,
+      "height": 336
+    },
+    "state/state-composite-nested.mmd": {
+      "ok": true,
+      "width": 229,
+      "height": 753
+    },
+    "state/state-composite-links.mmd": {
+      "ok": true,
+      "width": 162,
+      "height": 654
+    },
+    "state/state-choice.mmd": {
+      "ok": true,
+      "width": 218,
+      "height": 248
+    },
+    "state/state-fork-join.mmd": {
+      "ok": true,
+      "width": 213,
+      "height": 364
+    },
+    "state/state-note-line.mmd": {
+      "ok": true,
+      "width": 556,
+      "height": 274
+    },
+    "state/state-note-block.mmd": {
+      "ok": true,
+      "width": 254,
+      "height": 324
+    },
+    "state/state-concurrency.mmd": {
+      "ok": true,
+      "width": 425,
+      "height": 573
+    },
+    "state/state-direction.mmd": {
+      "ok": true,
+      "width": 340,
+      "height": 56
+    },
+    "state/state-direction-composite.mmd": {
+      "ok": true,
+      "width": 345,
+      "height": 246
+    },
+    "state/state-comments.mmd": {
+      "ok": true,
+      "width": 105,
+      "height": 236
+    },
+    "state/state-class.mmd": {
+      "ok": true,
+      "width": 104,
+      "height": 236
+    },
+    "state/state-class-inline.mmd": {
+      "ok": true,
+      "width": 67,
+      "height": 146
+    },
+    "state/state-accessibility.mmd": {
+      "ok": true,
+      "width": 67,
+      "height": 146
+    },
+    "state/state-frontmatter.mmd": {
+      "ok": true,
+      "width": 86,
+      "height": 195
+    },
     "kinds/sequence.mmd": {
       "ok": true,
       "width": 650,

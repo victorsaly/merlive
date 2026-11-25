@@ -1,5 +1,5 @@
 {
-  "from": "The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart page sets out. The samples are our own.",
+  "from": "The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart page and its state diagram page set out. The samples are our own.",
   "flowchart": [
     {
       "file": "flowchart/declare-flowchart.mmd",
@@ -741,6 +741,238 @@
       "boxes": 2,
       "links": 1,
       "loses": "The link is left out"
+    }
+  ],
+  "state": [
+    {
+      "file": "state/state-declare-v2.mmd",
+      "covers": "A state diagram, declared with \"stateDiagram-v2\"",
+      "boxes": 3,
+      "links": 2
+    },
+    {
+      "file": "state/state-declare.mmd",
+      "covers": "A state diagram, declared with \"stateDiagram\"",
+      "boxes": 3,
+      "links": 2
+    },
+    {
+      "file": "state/state-id.mmd",
+      "covers": "States named by their id alone",
+      "boxes": 2,
+      "links": 0,
+      "has": [
+        "Draft",
+        "Submitted"
+      ]
+    },
+    {
+      "file": "state/state-as.mmd",
+      "covers": "A state with words, written \"state words as id\"",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Waiting for a manager"
+      ]
+    },
+    {
+      "file": "state/state-colon.mmd",
+      "covers": "A state with words, written \"id : words\"",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Waiting for a manager"
+      ]
+    },
+    {
+      "file": "state/state-words-lines.mmd",
+      "covers": "Words given a line at a time",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Waiting for a manager"
+      ]
+    },
+    {
+      "file": "state/state-spaces.mmd",
+      "covers": "A name with spaces, by way of an id",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "On hold with the supplier"
+      ]
+    },
+    {
+      "file": "state/state-transition.mmd",
+      "covers": "Transitions",
+      "boxes": 3,
+      "links": 3
+    },
+    {
+      "file": "state/state-transition-words.mmd",
+      "covers": "Transitions with words",
+      "boxes": 3,
+      "links": 3,
+      "has": [
+        "submit",
+        "approve",
+        "send back"
+      ]
+    },
+    {
+      "file": "state/state-self.mmd",
+      "covers": "A transition from a state to itself",
+      "boxes": 2,
+      "links": 2,
+      "has": [
+        "try again",
+        "answered"
+      ]
+    },
+    {
+      "file": "state/state-start-end.mmd",
+      "covers": "Where it starts and where it ends",
+      "boxes": 5,
+      "links": 5,
+      "has": [
+        "Start",
+        "End"
+      ],
+      "loses": "Where it starts and where it ends are pills that say so, not dots"
+    },
+    {
+      "file": "state/state-composite.mmd",
+      "covers": "A composite state",
+      "boxes": 7,
+      "links": 6,
+      "groups": 1,
+      "has": [
+        "Review"
+      ],
+      "loses": "A transition to a composite state is drawn to where it starts inside, and one from it from where it ends"
+    },
+    {
+      "file": "state/state-composite-named.mmd",
+      "covers": "A composite state named on a line of its own",
+      "boxes": 3,
+      "links": 2,
+      "groups": 1,
+      "has": [
+        "Checks before sending"
+      ],
+      "loses": "A transition to a composite state is drawn to where it starts inside, and one from it from where it ends"
+    },
+    {
+      "file": "state/state-composite-nested.mmd",
+      "covers": "A composite state inside another",
+      "boxes": 6,
+      "links": 5,
+      "groups": 2
+    },
+    {
+      "file": "state/state-composite-links.mmd",
+      "covers": "Transitions between composite states",
+      "boxes": 6,
+      "links": 5,
+      "groups": 2,
+      "loses": "A transition to a composite state is drawn to where it starts inside, and one from it from where it ends"
+    },
+    {
+      "file": "state/state-choice.mmd",
+      "covers": "A choice",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "in budget",
+        "over budget"
+      ],
+      "loses": "A choice is a decision the size of every box, with its name in it; Mermaid draws a small diamond with none"
+    },
+    {
+      "file": "state/state-fork-join.mmd",
+      "covers": "A fork and a join",
+      "boxes": 6,
+      "links": 6,
+      "loses": "A fork and a join are boxes with their names in them, not bars"
+    },
+    {
+      "file": "state/state-note-line.mmd",
+      "covers": "A note on one line, on either side",
+      "boxes": 2,
+      "links": 1,
+      "notes": 2,
+      "loses": "A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it"
+    },
+    {
+      "file": "state/state-note-block.mmd",
+      "covers": "A note written over several lines",
+      "boxes": 2,
+      "links": 1,
+      "notes": 1,
+      "loses": "A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it"
+    },
+    {
+      "file": "state/state-concurrency.mmd",
+      "covers": "Concurrency: regions of a composite state parted by --",
+      "boxes": 6,
+      "links": 5,
+      "groups": 1
+    },
+    {
+      "file": "state/state-direction.mmd",
+      "covers": "The direction of the diagram",
+      "boxes": 3,
+      "links": 2,
+      "direction": "LR"
+    },
+    {
+      "file": "state/state-direction-composite.mmd",
+      "covers": "A composite state with a direction of its own",
+      "boxes": 4,
+      "links": 3,
+      "groups": 1,
+      "direction": "LR",
+      "loses": "The composite state's own direction is read past; it runs the way the rest does"
+    },
+    {
+      "file": "state/state-comments.mmd",
+      "covers": "Comments, on a line of their own and at the end of one",
+      "boxes": 3,
+      "links": 2
+    },
+    {
+      "file": "state/state-class.mmd",
+      "covers": "A class made with classDef and given with class",
+      "boxes": 3,
+      "links": 2,
+      "kinds": [
+        "stopped"
+      ]
+    },
+    {
+      "file": "state/state-class-inline.mmd",
+      "covers": "A class given with :::",
+      "boxes": 2,
+      "links": 1,
+      "kinds": [
+        "fresh",
+        "stopped"
+      ]
+    },
+    {
+      "file": "state/state-accessibility.mmd",
+      "covers": "A title and a description for readers who cannot see it",
+      "boxes": 2,
+      "links": 1,
+      "title": "An order"
+    },
+    {
+      "file": "state/state-frontmatter.mmd",
+      "covers": "A title and settings in front matter",
+      "boxes": 2,
+      "links": 1,
+      "title": "An order",
+      "loses": "Mermaid's own settings are read past: the look is the design's"
     }
   ],
   "kinds": [

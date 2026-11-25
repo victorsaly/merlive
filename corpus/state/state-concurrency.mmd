@@ -1,0 +1,9 @@
+stateDiagram-v2
+  [*] --> Sending
+  state Sending {
+    [*] --> Picking
+    Picking --> Packed : pack
+    --
+    [*] --> Invoicing
+    Invoicing --> Paid : pay
+  }

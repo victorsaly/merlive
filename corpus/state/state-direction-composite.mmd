@@ -1,0 +1,8 @@
+stateDiagram-v2
+  direction LR
+  Draft --> Checks
+  state Checks {
+    direction TB
+    Credit --> Stock
+  }
+  Checks --> Sent

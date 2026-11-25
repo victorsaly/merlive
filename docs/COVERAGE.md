@@ -2,12 +2,13 @@
 
 Written by `npm run coverage`. Do not edit it by hand: change the code or the corpus and run it again.
 
-The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart page sets out. The samples are our own.
+The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart page and its state diagram page set out. The samples are our own.
 
 ## In short
 
 - **Flowcharts:** of 69 features, 44 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 3 are only partly read, and 0 are refused.
-- **Other kinds of diagram:** of 32, 0 are drawn and 32 are left as Mermaid and named.
+- **State diagrams:** of 27 features, 14 are drawn as written, 10 are drawn less something, 3 are only partly read, and 0 are refused.
+- **Every kind of diagram:** of 32, 1 drawn (flowcharts and state diagrams, which have their own lists above), and 31 left as Mermaid and named.
 
 ## Flowcharts, feature by feature
 
@@ -87,64 +88,100 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | A box that calls a function when clicked | Drawn, less something | The click is left out: a page of Merlive runs no code of yours | [source](../corpus/flowchart/click-callback.mmd) | [picture](../corpus/drawn/click-callback.svg) |
 | A box that opens a link when clicked | Drawn, less something | The link is left out | [source](../corpus/flowchart/click-link.mmd) | [picture](../corpus/drawn/click-link.svg) |
 
+## State diagrams, feature by feature
+
+A state diagram is boxes and links, so it is read into what a flowchart is read into and placed by the same
+rules. Held to the same measure as the flowcharts above.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| A state diagram, declared with "stateDiagram-v2" | Drawn |  | [source](../corpus/state/state-declare-v2.mmd) | [picture](../corpus/drawn/state-declare-v2.svg) |
+| A state diagram, declared with "stateDiagram" | Drawn |  | [source](../corpus/state/state-declare.mmd) | [picture](../corpus/drawn/state-declare.svg) |
+| States named by their id alone | Drawn |  | [source](../corpus/state/state-id.mmd) | [picture](../corpus/drawn/state-id.svg) |
+| A state with words, written "state words as id" | Drawn |  | [source](../corpus/state/state-as.mmd) | [picture](../corpus/drawn/state-as.svg) |
+| A state with words, written "id : words" | Drawn |  | [source](../corpus/state/state-colon.mmd) | [picture](../corpus/drawn/state-colon.svg) |
+| Words given a line at a time | Drawn |  | [source](../corpus/state/state-words-lines.mmd) | [picture](../corpus/drawn/state-words-lines.svg) |
+| A name with spaces, by way of an id | Drawn |  | [source](../corpus/state/state-spaces.mmd) | [picture](../corpus/drawn/state-spaces.svg) |
+| Transitions | Drawn |  | [source](../corpus/state/state-transition.mmd) | [picture](../corpus/drawn/state-transition.svg) |
+| Transitions with words | Drawn |  | [source](../corpus/state/state-transition-words.mmd) | [picture](../corpus/drawn/state-transition-words.svg) |
+| A transition from a state to itself | Partly read | read 1 of 2 links; "try again" is not among its words; line 2: a link from Connecting to itself is not drawn | [source](../corpus/state/state-self.mmd) | [picture](../corpus/drawn/state-self.svg) |
+| Where it starts and where it ends | Drawn, less something | Where it starts and where it ends are pills that say so, not dots | [source](../corpus/state/state-start-end.mmd) | [picture](../corpus/drawn/state-start-end.svg) |
+| A composite state | Drawn, less something | A transition to a composite state is drawn to where it starts inside, and one from it from where it ends | [source](../corpus/state/state-composite.mmd) | [picture](../corpus/drawn/state-composite.svg) |
+| A composite state named on a line of its own | Drawn, less something | A transition to a composite state is drawn to where it starts inside, and one from it from where it ends | [source](../corpus/state/state-composite-named.mmd) | [picture](../corpus/drawn/state-composite-named.svg) |
+| A composite state inside another | Partly read | read 1 of 2 groups; line 5: a group inside a group is drawn as part of the outer one | [source](../corpus/state/state-composite-nested.mmd) | [picture](../corpus/drawn/state-composite-nested.svg) |
+| Transitions between composite states | Drawn, less something | A transition to a composite state is drawn to where it starts inside, and one from it from where it ends | [source](../corpus/state/state-composite-links.mmd) | [picture](../corpus/drawn/state-composite-links.svg) |
+| A choice | Drawn, less something | A choice is a decision the size of every box, with its name in it; Mermaid draws a small diamond with none | [source](../corpus/state/state-choice.mmd) | [picture](../corpus/drawn/state-choice.svg) |
+| A fork and a join | Drawn, less something | A fork and a join are boxes with their names in them, not bars | [source](../corpus/state/state-fork-join.mmd) | [picture](../corpus/drawn/state-fork-join.svg) |
+| A note on one line, on either side | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/state/state-note-line.mmd) | [picture](../corpus/drawn/state-note-line.svg) |
+| A note written over several lines | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/state/state-note-block.mmd) | [picture](../corpus/drawn/state-note-block.svg) |
+| Concurrency: regions of a composite state parted by -- | Partly read | line 6: concurrency ("--") is not read: the regions it parts are drawn as one | [source](../corpus/state/state-concurrency.mmd) | [picture](../corpus/drawn/state-concurrency.svg) |
+| The direction of the diagram | Drawn |  | [source](../corpus/state/state-direction.mmd) | [picture](../corpus/drawn/state-direction.svg) |
+| A composite state with a direction of its own | Drawn, less something | The composite state's own direction is read past; it runs the way the rest does | [source](../corpus/state/state-direction-composite.mmd) | [picture](../corpus/drawn/state-direction-composite.svg) |
+| Comments, on a line of their own and at the end of one | Drawn |  | [source](../corpus/state/state-comments.mmd) | [picture](../corpus/drawn/state-comments.svg) |
+| A class made with classDef and given with class | Drawn |  | [source](../corpus/state/state-class.mmd) | [picture](../corpus/drawn/state-class.svg) |
+| A class given with ::: | Drawn |  | [source](../corpus/state/state-class-inline.mmd) | [picture](../corpus/drawn/state-class-inline.svg) |
+| A title and a description for readers who cannot see it | Drawn |  | [source](../corpus/state/state-accessibility.mmd) | [picture](../corpus/drawn/state-accessibility.svg) |
+| A title and settings in front matter | Drawn, less something | Mermaid's own settings are read past: the look is the design's | [source](../corpus/state/state-frontmatter.mmd) | [picture](../corpus/drawn/state-frontmatter.svg) |
+
 ## Other kinds of diagram
 
-Each is left exactly as it was written, and the command names it. The family says what it would take: a diagram
-of boxes and links could be placed by the rules Merlive already has; the others need a way of drawing of their own.
+One that is not drawn is left exactly as it was written, and the command names it. The family says what it would
+take: a diagram of boxes and links could be placed by the rules Merlive already has; the others need a way of
+drawing of their own.
 
 ### Steps in order
 
-| Kind | Result | Sample |
-|---|---|---|
-| Sequence diagram | Left as Mermaid | [source](../corpus/kinds/sequence.mmd) |
-| ZenUML sequence diagram | Left as Mermaid | [source](../corpus/kinds/zenuml.mmd) |
-| Event model | Left as Mermaid | [source](../corpus/kinds/eventmodeling.mmd) |
-| User journey | Left as Mermaid | [source](../corpus/kinds/journey.mmd) |
-| Timeline | Left as Mermaid | [source](../corpus/kinds/timeline.mmd) |
-| Gantt chart | Left as Mermaid | [source](../corpus/kinds/gantt.mmd) |
-| Git graph | Left as Mermaid | [source](../corpus/kinds/gitgraph.mmd) |
+| Kind | Result | Sample | Picture |
+|---|---|---|---|
+| Sequence diagram | Left as Mermaid | [source](../corpus/kinds/sequence.mmd) |  |
+| ZenUML sequence diagram | Left as Mermaid | [source](../corpus/kinds/zenuml.mmd) |  |
+| Event model | Left as Mermaid | [source](../corpus/kinds/eventmodeling.mmd) |  |
+| User journey | Left as Mermaid | [source](../corpus/kinds/journey.mmd) |  |
+| Timeline | Left as Mermaid | [source](../corpus/kinds/timeline.mmd) |  |
+| Gantt chart | Left as Mermaid | [source](../corpus/kinds/gantt.mmd) |  |
+| Git graph | Left as Mermaid | [source](../corpus/kinds/gitgraph.mmd) |  |
 
 ### Boxes and links
 
-| Kind | Result | Sample |
-|---|---|---|
-| Class diagram | Left as Mermaid | [source](../corpus/kinds/class.mmd) |
-| State diagram | Left as Mermaid | [source](../corpus/kinds/state.mmd) |
-| Entity relationship diagram | Left as Mermaid | [source](../corpus/kinds/er.mmd) |
-| Requirement diagram | Left as Mermaid | [source](../corpus/kinds/requirement.mmd) |
-| C4 diagram | Left as Mermaid | [source](../corpus/kinds/c4.mmd) |
-| Block diagram | Left as Mermaid | [source](../corpus/kinds/block.mmd) |
-| Architecture diagram | Left as Mermaid | [source](../corpus/kinds/architecture.mmd) |
-| Swimlane diagram | Left as Mermaid | [source](../corpus/kinds/swimlane.mmd) |
-| Use case diagram | Left as Mermaid | [source](../corpus/kinds/usecase.mmd) |
-| Agent flow | Left as Mermaid | [source](../corpus/kinds/agentflow.mmd) |
+| Kind | Result | Sample | Picture |
+|---|---|---|---|
+| Class diagram | Left as Mermaid | [source](../corpus/kinds/class.mmd) |  |
+| State diagram | Drawn | [source](../corpus/kinds/state.mmd) | [picture](../corpus/drawn/state.svg) |
+| Entity relationship diagram | Left as Mermaid | [source](../corpus/kinds/er.mmd) |  |
+| Requirement diagram | Left as Mermaid | [source](../corpus/kinds/requirement.mmd) |  |
+| C4 diagram | Left as Mermaid | [source](../corpus/kinds/c4.mmd) |  |
+| Block diagram | Left as Mermaid | [source](../corpus/kinds/block.mmd) |  |
+| Architecture diagram | Left as Mermaid | [source](../corpus/kinds/architecture.mmd) |  |
+| Swimlane diagram | Left as Mermaid | [source](../corpus/kinds/swimlane.mmd) |  |
+| Use case diagram | Left as Mermaid | [source](../corpus/kinds/usecase.mmd) |  |
+| Agent flow | Left as Mermaid | [source](../corpus/kinds/agentflow.mmd) |  |
 
 ### Tree
 
-| Kind | Result | Sample |
-|---|---|---|
-| Mindmap | Left as Mermaid | [source](../corpus/kinds/mindmap.mmd) |
-| Tree view | Left as Mermaid | [source](../corpus/kinds/treeview.mmd) |
-| Ishikawa (fishbone) diagram | Left as Mermaid | [source](../corpus/kinds/ishikawa.mmd) |
-| Kanban board | Left as Mermaid | [source](../corpus/kinds/kanban.mmd) |
+| Kind | Result | Sample | Picture |
+|---|---|---|---|
+| Mindmap | Left as Mermaid | [source](../corpus/kinds/mindmap.mmd) |  |
+| Tree view | Left as Mermaid | [source](../corpus/kinds/treeview.mmd) |  |
+| Ishikawa (fishbone) diagram | Left as Mermaid | [source](../corpus/kinds/ishikawa.mmd) |  |
+| Kanban board | Left as Mermaid | [source](../corpus/kinds/kanban.mmd) |  |
 
 ### Chart
 
-| Kind | Result | Sample |
-|---|---|---|
-| Treemap | Left as Mermaid | [source](../corpus/kinds/treemap.mmd) |
-| Pie chart | Left as Mermaid | [source](../corpus/kinds/pie.mmd) |
-| Quadrant chart | Left as Mermaid | [source](../corpus/kinds/quadrant.mmd) |
-| XY chart | Left as Mermaid | [source](../corpus/kinds/xychart.mmd) |
-| Sankey diagram | Left as Mermaid | [source](../corpus/kinds/sankey.mmd) |
-| Radar chart | Left as Mermaid | [source](../corpus/kinds/radar.mmd) |
-| Packet diagram | Left as Mermaid | [source](../corpus/kinds/packet.mmd) |
-| Venn diagram | Left as Mermaid | [source](../corpus/kinds/venn.mmd) |
-| Cynefin framework | Left as Mermaid | [source](../corpus/kinds/cynefin.mmd) |
-| Wardley map | Left as Mermaid | [source](../corpus/kinds/wardley.mmd) |
+| Kind | Result | Sample | Picture |
+|---|---|---|---|
+| Treemap | Left as Mermaid | [source](../corpus/kinds/treemap.mmd) |  |
+| Pie chart | Left as Mermaid | [source](../corpus/kinds/pie.mmd) |  |
+| Quadrant chart | Left as Mermaid | [source](../corpus/kinds/quadrant.mmd) |  |
+| XY chart | Left as Mermaid | [source](../corpus/kinds/xychart.mmd) |  |
+| Sankey diagram | Left as Mermaid | [source](../corpus/kinds/sankey.mmd) |  |
+| Radar chart | Left as Mermaid | [source](../corpus/kinds/radar.mmd) |  |
+| Packet diagram | Left as Mermaid | [source](../corpus/kinds/packet.mmd) |  |
+| Venn diagram | Left as Mermaid | [source](../corpus/kinds/venn.mmd) |  |
+| Cynefin framework | Left as Mermaid | [source](../corpus/kinds/cynefin.mmd) |  |
+| Wardley map | Left as Mermaid | [source](../corpus/kinds/wardley.mmd) |  |
 
 ### Grammar
 
-| Kind | Result | Sample |
-|---|---|---|
-| Railroad (syntax) diagram | Left as Mermaid | [source](../corpus/kinds/railroad.mmd) |
+| Kind | Result | Sample | Picture |
+|---|---|---|---|
+| Railroad (syntax) diagram | Left as Mermaid | [source](../corpus/kinds/railroad.mmd) |  |

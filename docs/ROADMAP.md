@@ -29,7 +29,9 @@ hand, and the colours are yours, read from your site, but checked, for contrast 
    from a light one when a site has none and the reader wants one; the setup page saving its settings itself.
 3. **0.3, bigger flowcharts.** A group's own direction (rows inside a column), groups inside groups, pan, zoom and a search
    box for diagrams past about twenty boxes.
-4. **0.4, state diagrams.** The same placement, with loops as first-class paths.
+4. **0.4, state diagrams.** Read and drawn already, by the placement flowcharts have. What is left is what a
+   state diagram needs that a flowchart seldom does: a link from a box to itself, a group inside a group, regions
+   side by side in one group, and a link's words kept inside the picture when it goes round the outside.
 5. **0.5, sequence diagrams.** Stepped through one message at a time, and played over a flowchart in the same
    document when the names match.
 6. **Later.** A build step for docs sites (Docusaurus first), an audit mode over a whole repository, evals for the

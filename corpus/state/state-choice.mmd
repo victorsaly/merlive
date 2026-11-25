@@ -1,0 +1,5 @@
+stateDiagram-v2
+  state enough <<choice>>
+  Checked --> enough
+  enough --> Approved : in budget
+  enough --> Held : over budget

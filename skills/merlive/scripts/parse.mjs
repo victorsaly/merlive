@@ -2,6 +2,7 @@
 // diagram is never drawn from a guess. Everything here is pure: text in, a model out.
 
 import { iconFor } from './icons.mjs';
+import { stateReader } from './state.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
 /** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string}} Node dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
@@ -11,7 +12,7 @@ import { iconFor } from './icons.mjs';
 /**
  * @typedef {object} Model
  * @property {'flowchart'|'unsupported'} type
- * @property {string} kindOfDiagram the first word of the source, for the message when it is not a flowchart
+ * @property {string} kindOfDiagram the first word of the source: which kind it is, and the message when it is one Merlive does not draw
  * @property {'TD'|'LR'} direction
  * @property {string} title what the author called the picture (accTitle), for a reader who cannot see it
  * @property {string} describes what the author says it shows (accDescr)
@@ -225,6 +226,9 @@ export function parse(src) {
   const ofBoxes = [];
   /** @type {[number[], ReturnType<typeof lookOf>][]} */
   const ofLinks = [];
+  // A state diagram's lines are read by state.mjs, into this same model.
+  /** @type {ReturnType<typeof stateReader>|null} */
+  let state = null;
 
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
 
@@ -321,6 +325,31 @@ export function parse(src) {
     return null;
   };
 
+  /** A link between two boxes, named apart from any other between the same two. */
+  const connect = (/** @type {Node} */ a, /** @type {Node} */ b, /** @type {Pick<Edge,'label'|'style'|'head'|'tail'>} */ l, /** @type {number} */ line) => {
+    if (a.id === b.id) {
+      warn(line, `a link from ${a.id} to itself is not drawn`);
+      return null;
+    }
+    const base = `${a.id}-${b.id}`;
+    const count = (seenEdge.get(base) ?? 0) + 1;
+    seenEdge.set(base, count);
+    /** @type {Edge} */
+    const made = { id: count === 1 ? base : `${base}#${count}`, from: a.id, to: b.id, label: l.label, style: l.style, head: l.head, tail: l.tail };
+    model.edges.push(made);
+    return made;
+  };
+
+  /** Opens a group. One opened inside another is drawn as part of the outer one, and said once. */
+  const frame = (/** @type {string} */ id, /** @type {string} */ title, /** @type {number} */ line) => {
+    if (open.length && !warnedNested) {
+      warn(line, 'a group inside a group is drawn as part of the outer one');
+      warnedNested = true;
+    }
+    if (!open.length) model.groups.push({ id, title, members: [] });
+    open.push(open[0] ?? id);
+  };
+
   /** Reads one box, or several joined by "&" (`A & B`), at pos. */
   const readBoxes = (/** @type {string} */ s, /** @type {number} */ pos) => {
     const first = readNode(s, pos);
@@ -368,19 +397,7 @@ export function parse(src) {
       // With "&", every box before the link is linked to every box after it. Mermaid numbers every link it
       // meets, drawn or not, and "linkStyle 2" means the third of those.
       for (const a of prev.nodes) {
-        for (const b of next.nodes) {
-          numbered.push(null);
-          if (link.style === 'hidden') continue;
-          if (a.id === b.id) {
-            warn(line, `a link from ${a.id} to itself is not drawn`);
-            continue;
-          }
-          const base = `${a.id}-${b.id}`;
-          const count = (seenEdge.get(base) ?? 0) + 1;
-          seenEdge.set(base, count);
-          model.edges.push({ id: count === 1 ? base : `${base}#${count}`, from: a.id, to: b.id, label: link.label, style: link.style, head: link.head, tail: link.tail });
-          numbered[numbered.length - 1] = model.edges[model.edges.length - 1];
-        }
+        for (const b of next.nodes) numbered.push(link.style === 'hidden' ? null : connect(a, b, /** @type {Pick<Edge,'label'|'style'|'head'|'tail'>} */ (link), line));
       }
       prev = next;
     }
@@ -433,6 +450,7 @@ export function parse(src) {
       header = true;
       const h = /^(flowchart|graph)\b\s*(TD|TB|BT|LR|RL)?/.exec(text);
       model.kindOfDiagram = text.split(/\s+/)[0];
+      if (/^stateDiagram(-v2)?;?$/.test(text)) return void (state = stateReader({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf }));
       if (!h) {
         model.type = 'unsupported';
         return;
@@ -442,19 +460,14 @@ export function parse(src) {
       return;
     }
     if (model.type === 'unsupported') return;
+    if (state?.read(text, line)) return;
 
     const group = /^subgraph\s+(.+)$/.exec(text);
     if (group) {
       // "subgraph id[Title]", or a title alone, which is then its name too.
       const named = /^([A-Za-z_][\w-]*)\s*\[\s*"?(.*?)"?\s*\]$/.exec(group[1]);
       const id = named ? named[1] : group[1].replace(/^"|"$/g, '').trim();
-      if (open.length && !warnedNested) {
-        warn(line, 'a group inside a group is drawn as part of the outer one');
-        warnedNested = true;
-      }
-      if (!open.length) model.groups.push({ id, title: named ? wordsOf(named[2]).join(' ') || id : id, members: [] });
-      open.push(open[0] ?? id);
-      return;
+      return frame(id, named ? wordsOf(named[2]).join(' ') || id : id, line);
     }
     if (text === 'end') return void open.pop();
     const classDef = /^classDef\s+([\w,]+)\s+(.*)$/.exec(text);
@@ -514,8 +527,10 @@ export function parse(src) {
 
   // A link to a group ("g1 --> g2") is a link from the end of one to the start of the next: the last box of the
   // first that leads to no other box in it, and the first box of the second that none of its own leads to.
-  for (const g of model.groups) {
-    if (!byId.has(g.id) || shaped.has(g.id) || g.members.includes(g.id)) continue;
+  state?.done();
+  for (const g of model.groups) join(g);
+  function join(/** @type {{id:string,title:string,members:string[]}} */ g) {
+    if (!byId.has(g.id) || shaped.has(g.id) || g.members.includes(g.id)) return;
     const within = model.edges.filter((e) => g.members.includes(e.from) && g.members.includes(e.to));
     const exit = [...g.members].reverse().find((id) => !within.some((e) => e.from === id));
     const entry = g.members.find((id) => !within.some((e) => e.to === id));

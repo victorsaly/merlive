@@ -50,6 +50,28 @@ Not read yet, each named in a `note,` line when met: a group inside a group (dra
 link from a box to itself, and `BT` and `RL`, which are drawn the other way round.
 [What is and is not drawn](https://github.com/victorsaly/merlive/blob/main/docs/COVERAGE.md), feature by feature.
 
+## A state diagram
+
+`stateDiagram` and `stateDiagram-v2` are read into the same boxes and links as a flowchart, so everything else on
+this page holds for them: the rules, the design, Merlive's own lines.
+
+| Written | Read as |
+|---|---|
+| `Draft`, `state "Being written" as Draft`, `Draft : Being written` | A state: a box. Words given a line at a time are kept as lines |
+| `Draft --> Sent`, `Draft --> Sent : send` | A transition: a link, with its words |
+| `[*] --> Draft`, `Sent --> [*]` | Where it starts and where it ends: one pill each, saying `Start` and `End`. In Merlive's own lines they are `start` and `end` (`%% main: start>Draft>Sent>end`) |
+| `state Review { … }` | A composite state: a group, with a start and an end of its own (`Review_start`, `Review_end`). A transition to it is drawn to where it starts inside, and one from it from where it ends |
+| `Review : In review`, `state "In review" as Review {` | What a composite state is called |
+| `state enough <<choice>>` | A decision, with its name or its words in it |
+| `state split <<fork>>`, `state together <<join>>` | A box, with its name or its words in it |
+| `note right of Draft : words`, `note left of Draft` … `end note` | The note on that box: what a reader sees on picking it |
+| `direction LR` | The way the diagram runs. A composite state's own direction is read past |
+| `classDef`, `class Held, Lost stopped`, `Held:::stopped` | Kinds, as in a flowchart |
+| `%% words` after a line, `hide empty description`, `scale 350 width` | Read past |
+
+Not read yet, each named in a `note,` line when met: a transition from a state to itself, a composite state
+inside another (drawn as part of the outer one), and concurrency (`--`), whose regions are drawn as one.
+
 ## Merlive's own lines
 
 All are Mermaid comments, anywhere in the block.

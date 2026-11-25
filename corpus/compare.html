@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 101 samples, Merlive draws 66 whole and 3 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>101</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>44</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>22</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>3</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>32</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 128 samples, Merlive draws 91 whole and 6 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>128</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>59</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>32</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>6</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>31</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -775,6 +775,316 @@ flowchart LR
 </pre></details>
 </article>
 </section>
+<section><h2>State diagrams, feature by feature</h2>
+<article class="card" data-result="drawn">
+<h3>A state diagram, declared with &quot;stateDiagram-v2&quot;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-declare-v2.png" width="105" height="236" style="--w:105" alt="A state diagram, declared with &quot;stateDiagram-v2&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-declare-v2.svg" width="184" height="284" style="--w:184" alt="A state diagram, declared with &quot;stateDiagram-v2&quot;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Draft --&gt; Submitted
+  Submitted --&gt; Approved
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A state diagram, declared with &quot;stateDiagram&quot;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-declare.png" width="105" height="236" style="--w:105" alt="A state diagram, declared with &quot;stateDiagram&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-declare.svg" width="184" height="284" style="--w:184" alt="A state diagram, declared with &quot;stateDiagram&quot;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram
+  Draft --&gt; Submitted
+  Submitted --&gt; Approved
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>States named by their id alone</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-id.png" width="205" height="56" style="--w:205" alt="States named by their id alone, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-id.svg" width="376" height="100" style="--w:376" alt="States named by their id alone, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Draft
+  Submitted
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A state with words, written &quot;state words as id&quot;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-as.png" width="189" height="146" style="--w:189" alt="A state with words, written &quot;state words as id&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-as.svg" width="184" height="224" style="--w:184" alt="A state with words, written &quot;state words as id&quot;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  state &quot;Waiting for a manager&quot; as Submitted
+  Draft --&gt; Submitted
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A state with words, written &quot;id : words&quot;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-colon.png" width="189" height="146" style="--w:189" alt="A state with words, written &quot;id : words&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-colon.svg" width="184" height="224" style="--w:184" alt="A state with words, written &quot;id : words&quot;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Submitted : Waiting for a manager
+  Draft --&gt; Submitted
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Words given a line at a time</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-words-lines.png" width="124" height="171" style="--w:124" alt="Words given a line at a time, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-words-lines.svg" width="184" height="224" style="--w:184" alt="Words given a line at a time, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Submitted : Waiting
+  Submitted : for a manager
+  Draft --&gt; Submitted
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A name with spaces, by way of an id</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-spaces.png" width="209" height="236" style="--w:209" alt="A name with spaces, by way of an id, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-spaces.svg" width="184" height="332" style="--w:184" alt="A name with spaces, by way of an id, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  OnHold : On hold with the supplier
+  Draft --&gt; OnHold
+  OnHold --&gt; Sent
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Transitions</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-transition.png" width="105" height="236" style="--w:105" alt="Transitions, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-transition.svg" width="210" height="284" style="--w:210" alt="Transitions, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Draft --&gt; Submitted
+  Submitted --&gt; Approved
+  Submitted --&gt; Draft
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Transitions with words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-transition-words.png" width="157" height="284" style="--w:157" alt="Transitions with words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-transition-words.svg" width="286" height="284" style="--w:286" alt="Transitions with words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Draft --&gt; Submitted : submit
+  Submitted --&gt; Approved: approve
+  Submitted --&gt; Draft : send back
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>A transition from a state to itself</h3>
+<p class="result"><b>Partly read</b> <span class="why">read 1 of 2 links; &quot;try again&quot; is not among its words; line 2: a link from Connecting to itself is not drawn</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-self.png" width="177" height="245" style="--w:177" alt="A transition from a state to itself, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-self.svg" width="190" height="192" style="--w:190" alt="A transition from a state to itself, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Connecting --&gt; Connecting : try again
+  Connecting --&gt; Open : answered
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Where it starts and where it ends</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Where it starts and where it ends are pills that say so, not dots</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-start-end.png" width="237" height="274" style="--w:237" alt="Where it starts and where it ends, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-start-end.svg" width="376" height="376" style="--w:376" alt="Where it starts and where it ends, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  [*] --&gt; Draft
+  Draft --&gt; Delivered
+  Draft --&gt; Cancelled
+  Delivered --&gt; [*]
+  Cancelled --&gt; [*]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A composite state</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A transition to a composite state is drawn to where it starts inside, and one from it from where it ends</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-composite.png" width="175" height="668" style="--w:175" alt="A composite state, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-composite.svg" width="196" height="652" style="--w:196" alt="A composite state, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  [*] --&gt; Draft
+  Draft --&gt; Review
+  state Review {
+    [*] --&gt; Screening
+    Screening --&gt; Decision
+    Decision --&gt; [*]
+  }
+  Review --&gt; Published
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A composite state named on a line of its own</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A transition to a composite state is drawn to where it starts inside, and one from it from where it ends</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-composite-named.png" width="188" height="336" style="--w:188" alt="A composite state named on a line of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-composite-named.svg" width="196" height="296" style="--w:196" alt="A composite state named on a line of its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Checks : Checks before sending
+  state Checks {
+    Credit --&gt; Stock
+  }
+  Draft --&gt; Checks
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>A composite state inside another</h3>
+<p class="result"><b>Partly read</b> <span class="why">read 1 of 2 groups; line 5: a group inside a group is drawn as part of the outer one</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-composite-nested.png" width="229" height="753" style="--w:229" alt="A composite state inside another, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-composite-nested.svg" width="196" height="572" style="--w:196" alt="A composite state inside another, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  [*] --&gt; Order
+  state Order {
+    [*] --&gt; Open
+    state Open {
+      [*] --&gt; Picking
+      Picking --&gt; Packing
+    }
+    Open --&gt; Closed
+  }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Transitions between composite states</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A transition to a composite state is drawn to where it starts inside, and one from it from where it ends</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-composite-links.png" width="162" height="654" style="--w:162" alt="Transitions between composite states, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-composite-links.svg" width="196" height="560" style="--w:196" alt="Transitions between composite states, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  [*] --&gt; Buying
+  Buying --&gt; Paying
+  state Buying {
+    Quoted --&gt; Ordered
+  }
+  state Paying {
+    Invoiced --&gt; Paid
+  }
+  Paying --&gt; [*]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A choice</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A choice is a decision the size of every box, with its name in it; Mermaid draws a small diamond with none</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-choice.png" width="218" height="248" style="--w:218" alt="A choice, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-choice.svg" width="376" height="284" style="--w:376" alt="A choice, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  state enough &lt;&lt;choice&gt;&gt;
+  Checked --&gt; enough
+  enough --&gt; Approved : in budget
+  enough --&gt; Held : over budget
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A fork and a join</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A fork and a join are boxes with their names in them, not bars</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-fork-join.png" width="213" height="364" style="--w:213" alt="A fork and a join, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-fork-join.svg" width="376" height="468" style="--w:376" alt="A fork and a join, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  state split &lt;&lt;fork&gt;&gt;
+  state together &lt;&lt;join&gt;&gt;
+  Approved --&gt; split
+  split --&gt; Picking
+  split --&gt; Invoicing
+  Picking --&gt; together
+  Invoicing --&gt; together
+  together --&gt; Sent
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A note on one line, on either side</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-note-line.png" width="556" height="274" style="--w:556" alt="A note on one line, on either side, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-note-line.svg" width="184" height="192" style="--w:184" alt="A note on one line, on either side, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Draft --&gt; Sent
+  note right of Draft : Only its author sees it.
+  note left of Sent : Sent by email.
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A note written over several lines</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-note-block.png" width="254" height="324" style="--w:254" alt="A note written over several lines, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-note-block.svg" width="184" height="192" style="--w:184" alt="A note written over several lines, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  Draft --&gt; Sent
+  note right of Sent
+    Sent to the supplier
+    by email.
+  end note
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>Concurrency: regions of a composite state parted by --</h3>
+<p class="result"><b>Partly read</b> <span class="why">line 6: concurrency (&quot;--&quot;) is not read: the regions it parts are drawn as one</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-concurrency.png" width="425" height="573" style="--w:425" alt="Concurrency: regions of a composite state parted by --, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-concurrency.svg" width="388" height="388" style="--w:388" alt="Concurrency: regions of a composite state parted by --, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  [*] --&gt; Sending
+  state Sending {
+    [*] --&gt; Picking
+    Picking --&gt; Packed : pack
+    --
+    [*] --&gt; Invoicing
+    Invoicing --&gt; Paid : pay
+  }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>The direction of the diagram</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-direction.png" width="340" height="56" style="--w:340" alt="The direction of the diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-direction.svg" width="584" height="100" style="--w:584" alt="The direction of the diagram, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  direction LR
+  Draft --&gt; Submitted
+  Submitted --&gt; Approved
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A composite state with a direction of its own</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The composite state's own direction is read past; it runs the way the rest does</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-direction-composite.png" width="345" height="246" style="--w:345" alt="A composite state with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-direction-composite.svg" width="784" height="112" style="--w:784" alt="A composite state with a direction of its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  direction LR
+  Draft --&gt; Checks
+  state Checks {
+    direction TB
+    Credit --&gt; Stock
+  }
+  Checks --&gt; Sent
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Comments, on a line of their own and at the end of one</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-comments.png" width="105" height="236" style="--w:105" alt="Comments, on a line of their own and at the end of one, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-comments.svg" width="184" height="284" style="--w:184" alt="Comments, on a line of their own and at the end of one, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  %% the happy path
+  Draft --&gt; Submitted %% sent by the buyer
+  Submitted --&gt; Approved
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class made with classDef and given with class</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-class.png" width="104" height="236" style="--w:104" alt="A class made with classDef and given with class, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-class.svg" width="184" height="284" style="--w:184" alt="A class made with classDef and given with class, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  classDef stopped stroke:#c62828,stroke-width:2px
+  Draft --&gt; Held
+  Held --&gt; Cancelled
+  class Held, Cancelled stopped
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class given with :::</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-class-inline.png" width="67" height="146" style="--w:67" alt="A class given with :::, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-class-inline.svg" width="184" height="192" style="--w:184" alt="A class given with :::, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  classDef fresh stroke:#2e7d32
+  classDef stopped stroke:#c62828
+  Draft:::fresh --&gt; Held:::stopped
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title and a description for readers who cannot see it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-accessibility.png" width="67" height="146" style="--w:67" alt="A title and a description for readers who cannot see it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-accessibility.svg" width="184" height="192" style="--w:184" alt="A title and a description for readers who cannot see it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>stateDiagram-v2
+  accTitle: An order
+  accDescr: From draft to sent
+  Draft --&gt; Sent
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A title and settings in front matter</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-frontmatter.png" width="86" height="195" style="--w:86" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-frontmatter.svg" width="184" height="192" style="--w:184" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: An order
+config:
+  theme: default
+  look: classic
+  layout: dagre
+---
+stateDiagram-v2
+  Draft --&gt; Sent
+</pre></details>
+</article>
+</section>
 <section><h2>Other kinds: steps in order</h2>
 <article class="card" data-result="left">
 <h3>Sequence diagram</h3>
@@ -885,10 +1195,10 @@ tf 03 evt OrderPlaced
   Order --&gt; Supplier
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>State diagram</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state.png" width="157" height="412" style="--w:157" alt="State diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a stateDiagram-v2 is not drawn yet</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state.png" width="157" height="412" style="--w:157" alt="State diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state.svg" width="286" height="468" style="--w:286" alt="State diagram, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>stateDiagram-v2
   [*] --&gt; Draft
   Draft --&gt; Submitted: submit

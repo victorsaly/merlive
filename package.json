@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "node --test 'test/*.test.mjs'",
-    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include='skills/**/parse.mjs' --test-coverage-include='skills/**/layout.mjs' --test-coverage-include='skills/**/score.mjs' --test-coverage-include='skills/**/design.mjs' --test-coverage-include='skills/**/site.mjs' --test-coverage-include='skills/**/shapes.mjs' --test-coverage-include='skills/**/icons.mjs' --test-coverage-lines=90 --test-coverage-branches=80 'test/*.test.mjs'",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include='skills/**/parse.mjs' --test-coverage-include='skills/**/state.mjs' --test-coverage-include='skills/**/layout.mjs' --test-coverage-include='skills/**/score.mjs' --test-coverage-include='skills/**/design.mjs' --test-coverage-include='skills/**/site.mjs' --test-coverage-include='skills/**/shapes.mjs' --test-coverage-include='skills/**/icons.mjs' --test-coverage-lines=90 --test-coverage-branches=80 'test/*.test.mjs'",
     "examples": "node skills/merlive/scripts/merlive.mjs examples/order-approval.md && node skills/merlive/scripts/merlive.mjs examples/order-approval.md --format svg",
     "coverage": "node scripts/coverage.mjs && node scripts/compare.mjs --page",
     "compare": "node scripts/compare.mjs",

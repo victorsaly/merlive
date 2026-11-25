@@ -1,0 +1,10 @@
+stateDiagram-v2
+  [*] --> Order
+  state Order {
+    [*] --> Open
+    state Open {
+      [*] --> Picking
+      Picking --> Packing
+    }
+    Open --> Closed
+  }

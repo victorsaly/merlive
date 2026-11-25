@@ -29,8 +29,9 @@ Three things hold throughout:
 - **Draw** a flowchart that has a path worth following: about six boxes or more, a loop, or a decision.
 - **Leave as Mermaid** a diagram of three or four boxes with nothing to step through. Say so; a live page adds
   nothing there.
-- **Only flowcharts for now** (`flowchart` or `graph`). Sequence, state, class and the rest are left as they are,
-  and the script names each one it leaves. Tell the person which were left.
+- **Flowcharts** (`flowchart` or `graph`) **and state diagrams** (`stateDiagram`, `stateDiagram-v2`), which are
+  placed by the same rules. Sequence, class and the rest are left as they are, and the script names each one it
+  leaves. Tell the person which were left.
 
 ## 2. Check first, then draw
 

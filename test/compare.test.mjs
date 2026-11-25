@@ -11,7 +11,7 @@ import { chromeAt, comparePage, compared, firstLineOf, pngSizeOf, show, sizeOf }
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const index = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8'));
-const samples = [...index.flowchart, ...index.kinds].map((s) => s.file);
+const samples = [...index.flowchart, ...index.state, ...index.kinds].map((s) => s.file);
 const again = 'Run "npm run coverage" and commit what it writes.';
 
 /** A row as coverage gives it, and what Mermaid made of the same sample. */

@@ -1,0 +1,9 @@
+stateDiagram-v2
+  [*] --> Draft
+  Draft --> Review
+  state Review {
+    [*] --> Screening
+    Screening --> Decision
+    Decision --> [*]
+  }
+  Review --> Published

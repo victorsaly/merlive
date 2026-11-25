@@ -30,7 +30,7 @@ self-contained page per flowchart, in your own design, that readers can step thr
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-000000?style=flat-square" alt="MIT licence" /></a>
 </p>
 
-> **0.1.0, not released yet.** It draws flowcharts and nothing else. Sequence, state and the other diagram kinds are
+> **0.1.0, not released yet.** It draws flowcharts and state diagrams. Sequence and the other diagram kinds are
 > left as Mermaid and named. [What it draws of Mermaid today](docs/COVERAGE.md), feature by feature. [What comes next](docs/ROADMAP.md).
 
 <a id="start"></a>

@@ -55,7 +55,7 @@ export const help = `Merlive ${version}: Mermaid flowcharts, placed by rule and 
 
 Ends with 0 when every flowchart was drawn, 1 when one broke a rule and was not written, 2 when something is
 missing (the file, an option's value, the design, a site that does not answer), 3 when the file has no flowchart.
-Blocks that are not flowcharts are left as they are and named.`;
+A state diagram is drawn as a flowchart is. Blocks of any other kind are left as they are and named.`;
 
 /**
  * @param {string[]} argv
@@ -254,7 +254,7 @@ export async function run(argv, io = {}) {
     const number = i + 1;
     if (o.only && o.only !== number) return;
     const model = parse(block.source);
-    if (model.type !== 'flowchart') return say(`left as Mermaid: block ${number} (line ${block.line}) is a ${model.kindOfDiagram || 'blank block'}, and Merlive draws flowcharts for now`);
+    if (model.type !== 'flowchart') return say(`left as Mermaid: block ${number} (line ${block.line}) is a ${model.kindOfDiagram || 'blank block'}, and Merlive draws flowcharts and state diagrams for now`);
     if (!model.nodes.length) return say(`left as Mermaid: block ${number} (line ${block.line}) has no boxes`);
 
     const lay = layout(model);

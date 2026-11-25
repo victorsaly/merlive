@@ -16,7 +16,7 @@ import { picture } from '../skills/merlive/scripts/render.mjs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],shapes?:string[],loses?:string,family?:string}} Sample
+ * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],shapes?:string[],notes?:number,direction?:string,loses?:string,family?:string}} Sample
  * @typedef {{sample:Sample,result:'drawn'|'less'|'partly'|'refused'|'left',why:string[],svg:string}} Row
  */
 
@@ -45,6 +45,8 @@ export function judge(sample, source) {
   count('boxes', sample.boxes, model.nodes.length);
   count('links', sample.links, model.edges.length);
   count('groups', sample.groups, lay.groups.length);
+  count('notes', sample.notes, Object.keys(model.notes).length);
+  if (sample.direction !== undefined && model.direction !== sample.direction) why.push(`drawn ${model.direction}, not ${sample.direction}`);
   const said = [...model.nodes.map((n) => n.label), ...model.edges.map((e) => e.label), ...model.groups.map((g) => g.title)];
   for (const text of sample.has ?? []) if (!said.includes(text)) why.push(`"${text}" is not among its words`);
   for (const kind of sample.kinds ?? []) if (!model.nodes.some((n) => n.kind === kind)) why.push(`no box is of the kind ${kind}`);
@@ -66,16 +68,17 @@ export function judge(sample, source) {
  * @returns {{rows:Row[],markdown:string,pictures:Record<string,string>}}
  */
 export function coverage(corpus = join(root, 'corpus')) {
-  /** @type {{from:string,flowchart:Sample[],kinds:Sample[]}} */
+  /** @type {{from:string,flowchart:Sample[],state:Sample[],kinds:Sample[]}} */
   const index = JSON.parse(readFileSync(join(corpus, 'index.json'), 'utf8'));
   const run = (/** @type {Sample[]} */ list) => list.map((s) => judge(s, readFileSync(join(corpus, s.file), 'utf8')));
-  const flow = run(index.flowchart), kinds = run(index.kinds);
+  const flow = run(index.flowchart), state = run(index.state), kinds = run(index.kinds);
   const tally = (/** @type {Row[]} */ rows, /** @type {Row['result']} */ r) => rows.filter((x) => x.result === r).length;
   const cell = (/** @type {string} */ s) => s.replace(/\|/g, '\\|').replace(/\n/g, ' ');
   const pic = (/** @type {Row} */ r) => `corpus/drawn/${basename(r.sample.file, '.mmd')}.svg`;
   /** @type {Record<string,string>} */
   const pictures = {};
-  for (const r of flow) if (r.svg && r.result !== 'refused') pictures[pic(r)] = r.svg;
+  for (const r of [...flow, ...state, ...kinds]) if (r.svg && r.result !== 'refused') pictures[pic(r)] = r.svg;
+  const table = (/** @type {Row[]} */ rows) => rows.map((r) => `| ${cell(r.sample.covers)} | ${words[r.result]} | ${cell(r.why.join('; '))} | [source](../corpus/${r.sample.file}) | ${pictures[pic(r)] ? `[picture](../${pic(r)})` : ''} |`).join('\n');
   const families = [...new Set(kinds.map((r) => r.sample.family ?? ''))];
 
   const markdown = `# What Merlive draws of Mermaid
@@ -87,7 +90,8 @@ ${index.from}
 ## In short
 
 - **Flowcharts:** of ${flow.length} features, ${tally(flow, 'drawn')} are drawn as written, ${tally(flow, 'less')} are drawn less something Merlive leaves out on purpose or does not have yet, ${tally(flow, 'partly')} are only partly read, and ${tally(flow, 'refused')} are refused.
-- **Other kinds of diagram:** of ${kinds.length}, ${kinds.length - tally(kinds, 'left')} are drawn and ${tally(kinds, 'left')} are left as Mermaid and named.
+- **State diagrams:** of ${state.length} features, ${tally(state, 'drawn')} are drawn as written, ${tally(state, 'less')} are drawn less something, ${tally(state, 'partly')} are only partly read, and ${tally(state, 'refused')} are refused.
+- **Every kind of diagram:** of ${kinds.length}, ${kinds.length - tally(kinds, 'left')} drawn (flowcharts and state diagrams, which have their own lists above), and ${tally(kinds, 'left')} left as Mermaid and named.
 
 ## Flowcharts, feature by feature
 
@@ -97,25 +101,35 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 
 | Feature | Result | What is missing | Sample | Picture |
 |---|---|---|---|---|
-${flow.map((r) => `| ${cell(r.sample.covers)} | ${words[r.result]} | ${cell(r.why.join('; '))} | [source](../corpus/${r.sample.file}) | ${pictures[pic(r)] ? `[picture](../${pic(r)})` : ''} |`).join('\n')}
+${table(flow)}
+
+## State diagrams, feature by feature
+
+A state diagram is boxes and links, so it is read into what a flowchart is read into and placed by the same
+rules. Held to the same measure as the flowcharts above.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+${table(state)}
 
 ## Other kinds of diagram
 
-Each is left exactly as it was written, and the command names it. The family says what it would take: a diagram
-of boxes and links could be placed by the rules Merlive already has; the others need a way of drawing of their own.
+One that is not drawn is left exactly as it was written, and the command names it. The family says what it would
+take: a diagram of boxes and links could be placed by the rules Merlive already has; the others need a way of
+drawing of their own.
 
 ${families.map((family) => `### ${family.charAt(0).toUpperCase() + family.slice(1)}
 
-| Kind | Result | Sample |
-|---|---|---|
-${kinds.filter((r) => r.sample.family === family).map((r) => `| ${cell(r.sample.covers)} | ${words[r.result]} | [source](../corpus/${r.sample.file}) |`).join('\n')}`).join('\n\n')}
+| Kind | Result | Sample | Picture |
+|---|---|---|---|
+${kinds.filter((r) => r.sample.family === family).map((r) => `| ${cell(r.sample.covers)} | ${words[r.result]} | [source](../corpus/${r.sample.file}) | ${pictures[pic(r)] ? `[picture](../${pic(r)})` : ''} |`).join('\n')}`).join('\n\n')}
 `;
-  return { rows: [...flow, ...kinds], markdown, pictures };
+  return { rows: [...flow, ...state, ...kinds], markdown, pictures };
 }
 
 /** The samples on disk, to hold the index to: every one is listed, and every one listed is there. */
 export const samplesOnDisk = (corpus = join(root, 'corpus')) =>
-  ['flowchart', 'kinds'].flatMap((folder) => readdirSync(join(corpus, folder)).filter((f) => f.endsWith('.mmd')).map((f) => `${folder}/${f}`)).sort();
+  ['flowchart', 'state', 'kinds'].flatMap((folder) => readdirSync(join(corpus, folder)).filter((f) => f.endsWith('.mmd')).map((f) => `${folder}/${f}`)).sort();
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const { rows, markdown, pictures } = coverage();
