@@ -1,8 +1,10 @@
 // Why: Merlive reads a small, honest part of Mermaid's flowchart language and says what it left out, so a
 // diagram is never drawn from a guess. Everything here is pure: text in, a model out.
 
+import { iconFor } from './icons.mjs';
+
 /** @typedef {import('./shapes.mjs').Shape} Shape */
-/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean}} Node dashed, heavy: what its author's own style says of its outline */
+/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string}} Node dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
 /** @typedef {'none'|'arrow'|'circle'|'cross'} Mark what is drawn at an end of a link */
 /** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',head:Mark,tail:Mark,kind?:string}} Edge head: at the box it leads to; tail: at the box it comes from; kind: the colour its author gave it, by name */
 /** @typedef {{title:string,text:string,path:string,seq:string[],loop:boolean}} Step */
@@ -65,8 +67,8 @@ const NAMED = { quot: '"', amp: '&', lt: '<', gt: '>', apos: "'", nbsp: ' ', hea
 
 /**
  * The words of a label as a reader should see them, in the author's own lines. Quotes come off; a Markdown
- * string keeps its words and its line breaks and loses its stars; a Font Awesome icon is left out, since a page
- * of Merlive fetches no font; an entity code becomes its character.
+ * string keeps its words and its line breaks and loses its stars; an icon's name comes out of the words (a box
+ * draws it beside them, see iconsIn); an entity code becomes its character.
  * @param {string} text
  * @returns {string[]}
  */
@@ -77,7 +79,7 @@ export function wordsOf(text) {
   return words
     .split(markdown ? /<br\s*\/?>|\n/i : /<br\s*\/?>/i)
     .map((line) => line
-      .replace(/\bfa[a-z]?:fa-[\w-]+/g, ' ')
+      .replace(ICON, ' ')
       .replace(/#(\d+|[a-z]+);/gi, (code, /** @type {string} */ name) => {
         if (!/^\d+$/.test(name)) return NAMED[/** @type {keyof typeof NAMED} */ (name)] ?? code;
         const point = Number(name);
@@ -110,6 +112,12 @@ const SHAPES = {
 
 // What "@{ … }" can say of a box. One that says none of these is about a link or a group, and makes no box.
 const OF_A_BOX = ['shape', 'label', 'icon', 'img', 'form', 'pos', 'w', 'h', 'constraint', 'row', 'column'];
+
+// An icon written into a label, the way Mermaid has it: "fa:fa-truck", "fab:fa-github".
+const ICON = /\bfa[a-z]?:fa-[\w-]+/g;
+
+/** The icons an author wrote into some words, as written. */
+export const iconsIn = (/** @type {string} */ text) => text.match(ICON) ?? [];
 
 /** Where the "@{ … }" that opens just before `from` closes: the first } that is not inside quotes, or -1. */
 function closeOf(/** @type {string} */ s, /** @type {number} */ from) {
@@ -204,6 +212,8 @@ export function parse(src) {
   const groupOf = new Map();
   const shaped = new Set();
   let warnedNested = false;
+  // The line being read, for what is said from deep inside it.
+  let reading = 0;
   // Every link in the order Mermaid numbers them; one that is not drawn keeps its number and has nothing.
   /** @type {(Edge|null)[]} */
   const numbered = [];
@@ -234,8 +244,19 @@ export function parse(src) {
   };
 
   /** Gives a box its words. Where an author broke a label, the lines are kept as written; the label itself is the words in one line. */
+  /** Gives a box the icon its author wrote, if Merlive has a drawing of it; one it has not is said, once. */
+  const mark = (/** @type {Node} */ n, /** @type {string[]} */ written) => {
+    delete n.icon;
+    for (const icon of written) {
+      const found = iconFor(icon);
+      if (found) n.icon ??= found.name;
+      else warn(reading, `the icon "${icon}" is not one Merlive has a drawing for; it is left out and its words kept`);
+    }
+  };
+
   const say = (/** @type {Node} */ n, /** @type {string} */ words) => {
     const lines = wordsOf(words);
+    mark(n, iconsIn(words));
     // A box that held only an icon has no words left, and takes its id like any box with none.
     n.label = lines.join(' ') || n.id;
     if (lines.length > 1) n.breaks = lines;
@@ -275,6 +296,7 @@ export function parse(src) {
       // An icon or an image is a box with its label: a page of Merlive fetches nothing, so neither is drawn.
       // Rows and columns are read past: where a box goes is Merlive's to say.
       if (data.label !== undefined) say(n, data.label);
+      if (data.icon) mark(n, [data.icon]);
       if (data.shape) shape(n, /** @type {Read|undefined} */ (Object.keys(SHAPES).find((k) => SHAPES[/** @type {Read} */ (k)].includes(data.shape))) ?? 'box');
       if (OF_A_BOX.some((k) => k in data)) shaped.add(n.id);
       p = end + 1;
@@ -380,6 +402,7 @@ export function parse(src) {
   let describing = null;
 
   const read = (/** @type {string} */ text, /** @type {number} */ line) => {
+    reading = line;
     // What the picture is called and what it shows, in Mermaid's own words for it.
     if (describing) {
       if (text === '}') {

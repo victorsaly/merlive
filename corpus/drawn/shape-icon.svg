@@ -8,6 +8,7 @@
 .mv-node .mv-detail{fill:none}
 [data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
 [data-outline~="heavy"] .mv-shape{stroke-width:2.6}
+.mv-icon{fill:none;stroke:var(--mv-text);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
@@ -21,5 +22,5 @@
 .mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
 .mv-group text{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
-<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="384" height="100" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge mv-main" data-edge="A-B" data-style="solid"><path class="mv-line" d="M156,50L221,50"/><polygon class="mv-head" points="228,50 219,45.5 219,54.5"/></g></g><g><g class="mv-node" data-node="A" data-kind="step"><rect class="mv-shape" x="28" y="28" width="128" height="44" rx="8"/><text><tspan x="92" y="54.5">Buyer</tspan></text></g><g class="mv-node" data-node="B" data-kind="step"><rect class="mv-shape" x="228" y="28" width="128" height="44" rx="8"/><text><tspan x="292" y="54.5">Approve</tspan></text></g></g>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="384" height="100" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge mv-main" data-edge="A-B" data-style="solid"><path class="mv-line" d="M156,50L221,50"/><polygon class="mv-head" points="228,50 219,45.5 219,54.5"/></g></g><g><g class="mv-node" data-node="A" data-kind="step"><rect class="mv-shape" x="28" y="28" width="128" height="44" rx="8"/><path class="mv-icon" transform="translate(63.3,42)" d="M5.3 5.2A2.7 2.7 0 1 0 10.7 5.2A2.7 2.7 0 1 0 5.3 5.2M2.8 14C2.8 11.3 5 9.9 8 9.9C11 9.9 13.2 11.3 13.2 14"/><text><tspan x="103" y="54.5">Buyer</tspan></text></g><g class="mv-node" data-node="B" data-kind="step"><rect class="mv-shape" x="228" y="28" width="128" height="44" rx="8"/><text><tspan x="292" y="54.5">Approve</tspan></text></g></g>
 </svg>

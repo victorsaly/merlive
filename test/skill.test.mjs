@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
-import { layout } from '../skills/merlive/scripts/layout.mjs';
+import { layout, roomFor } from '../skills/merlive/scripts/layout.mjs';
 import { builtIn, designFrom, designWith } from '../skills/merlive/scripts/design.mjs';
 import { page, picture } from '../skills/merlive/scripts/render.mjs';
 import { setupPage } from '../skills/merlive/scripts/setup.mjs';
@@ -130,6 +130,18 @@ describe('what is drawn', () => {
         assert.ok(Math.abs(Math.abs(p.x - b.x) / (b.w / 2) + Math.abs(p.y - b.y) / (b.h / 2) - 1) < 0.02, `${e.id} at ${id}: ${p.x},${p.y}`);
       }
     }
+  });
+
+  it('draws an icon beside the words of its box, and gives the words less room for it', () => {
+    const iconed = parse('flowchart LR\nA["fa:fa-truck Shipped to the customer"] --> B[Shipped to the customer]');
+    const lay = layout(iconed), svg = picture(iconed, lay, builtIn, { title: 'Icons' });
+    const box = (/** @type {string} */ id) => svg.match(new RegExp(`<g class="mv-node" data-node="${id}"[^]*?</g>`))?.[0] ?? '';
+    assert.match(box('A'), /<path class="mv-icon" transform="translate\([\d.]+,[\d.]+\)" d="M[^"]+"\/>/);
+    assert.doesNotMatch(box('B'), /mv-icon/);
+    assert.match(svg, /\.mv-icon\{fill:none;stroke:var\(--mv-text\)/);
+    const x = (/** @type {string} */ id) => Number(box(id).match(/<tspan x="([\d.]+)"/)?.[1]);
+    assert.ok(x('A') - lay.nodes.A.x > 5 && x('B') === lay.nodes.B.x, 'the words move over to make room, and only where there is an icon');
+    assert.ok(roomFor(iconed.nodes[0], 192) < roomFor(iconed.nodes[1], 192));
   });
 
   it('draws what is at each end of a link: an arrowhead, a circle or a cross, at either end or both', () => {

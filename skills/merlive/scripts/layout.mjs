@@ -34,6 +34,7 @@ export const measure = {
   frameTitle: 14, // more at the top, for what the group is called
   portStep: 20, // between two lines on one side of a box
   portShare: 0.31, // how far from the middle of a side a line may leave, as a share of the side
+  icon: 22, // px an icon takes beside a box's words: its 16px grid and the gap to the first letter
   clear: 4, // how close a line may come to a box it does not belong to
   wide: 1100, // past this a left-to-right flow no longer fits a laptop's reading column
 };
@@ -51,7 +52,7 @@ export function wrap(/** @type {string} */ label, /** @type {number} */ max) {
 }
 
 /** How many characters a line of words may run to in a box of this shape and width: shapes.mjs says how much room each leaves. */
-export const roomFor = (/** @type {{shape:import('./shapes.mjs').Shape}} */ n, /** @type {number} */ width) => Math.floor(roomIn(n.shape, width) / measure.glyph);
+export const roomFor = (/** @type {{shape:import('./shapes.mjs').Shape,icon?:string}} */ n, /** @type {number} */ width) => Math.floor((roomIn(n.shape, width) - (n.icon ? measure.icon : 0)) / measure.glyph);
 
 /**
  * The lines of a box's words in a box of some width. Where the author broke the label, each of their lines is

@@ -37,7 +37,7 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | Characters written as entity codes | Drawn |  | [source](../corpus/flowchart/node-entities.mmd) | [picture](../corpus/drawn/node-entities.svg) |
 | A line break in a label | Drawn |  | [source](../corpus/flowchart/node-line-break.mmd) | [picture](../corpus/drawn/node-line-break.svg) |
 | Markdown strings: bold, italic and a real line break | Drawn, less something | Bold and italic are drawn as plain words | [source](../corpus/flowchart/node-markdown.mmd) | [picture](../corpus/drawn/node-markdown.svg) |
-| A Font Awesome icon in a label | Drawn, less something | The icon is left out; its words are kept | [source](../corpus/flowchart/node-fontawesome.mmd) | [picture](../corpus/drawn/node-fontawesome.svg) |
+| A Font Awesome icon in a label | Drawn, less something | The icons are Merlive's own drawings of a truck and a tick, not Font Awesome's | [source](../corpus/flowchart/node-fontawesome.mmd) | [picture](../corpus/drawn/node-fontawesome.svg) |
 | Shape: Round edges | Drawn, less something | Its corners are the design's, the same as every box | [source](../corpus/flowchart/shape-round.mmd) | [picture](../corpus/drawn/shape-round.svg) |
 | Shape: Stadium | Drawn |  | [source](../corpus/flowchart/shape-stadium.mmd) | [picture](../corpus/drawn/shape-stadium.svg) |
 | Shape: Subroutine | Drawn |  | [source](../corpus/flowchart/shape-subroutine.mmd) | [picture](../corpus/drawn/shape-subroutine.svg) |
@@ -53,7 +53,7 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | Shape: Double circle | Drawn |  | [source](../corpus/flowchart/shape-double-circle.mmd) | [picture](../corpus/drawn/shape-double-circle.svg) |
 | Shapes written as @{ shape: … }, with a label | Drawn |  | [source](../corpus/flowchart/shape-at-syntax.mmd) | [picture](../corpus/drawn/shape-at-syntax.svg) |
 | Every one of the 53 newer shapes | Drawn, less something | Those Merlive has a drawing for are drawn as themselves; the rest are boxes | [source](../corpus/flowchart/shape-at-every.mmd) | [picture](../corpus/drawn/shape-at-every.svg) |
-| A box that is an icon | Drawn, less something | The icon is left out; its label is kept | [source](../corpus/flowchart/shape-icon.mmd) | [picture](../corpus/drawn/shape-icon.svg) |
+| A box that is an icon | Drawn, less something | The icon is Merlive's own drawing of a user, beside the label and not above it | [source](../corpus/flowchart/shape-icon.mmd) | [picture](../corpus/drawn/shape-icon.svg) |
 | A box that is an image | Drawn, less something | The image is left out (a page of Merlive fetches nothing); its label is kept | [source](../corpus/flowchart/shape-image.mmd) | [picture](../corpus/drawn/shape-image.svg) |
 | Boxes given a row and a column | Drawn, less something | The rows and columns are read past: placement is Merlive's | [source](../corpus/flowchart/grid-layout.mmd) | [picture](../corpus/drawn/grid-layout.svg) |
 | A link with an arrowhead | Drawn |  | [source](../corpus/flowchart/link-arrow.mmd) | [picture](../corpus/drawn/link-arrow.svg) |

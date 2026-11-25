@@ -17,9 +17,11 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A["Text with (brackets)"]` | A quoted label |
 | `A["one line<br/>and another"]` | A label in the author's own lines, up to four |
 | ``A["`**Bold** and *italic*`"]`` | A Markdown string: its words and its own line breaks, drawn plain |
-| `#quot;`, `#9829;`, `fa:fa-truck` | An entity code becomes its character. A Font Awesome icon is left out and its words kept: a page of Merlive fetches no font |
+| `#quot;`, `#9829;` | An entity code becomes its character |
+| `fa:fa-truck Shipped` | An icon is drawn beside its words. The drawing is Merlive's own (seventy-two of them, found by any name Font Awesome has used): nothing is fetched. One Merlive has no drawing for, or a brand's mark, is left out and named in a `note,` line |
 | `A@{ shape: diam, label: "In stock?" }` | A box written the newer way, on one line or several. Its label is kept. Every shape in the rows above is drawn as itself, by any of Mermaid's names for it; a shape Merlive has no drawing for is a box |
-| `A@{ icon: "fa:user", label: "Buyer" }`, `A@{ img: "…", label: "…" }` | A box with its label. The icon or image is left out: a page of Merlive fetches nothing |
+| `A@{ icon: "fa:user", label: "Buyer" }` | A box with its label, and Merlive's own drawing of the icon beside it |
+| `A@{ img: "…", label: "…" }` | A box with its label. The image is left out: a page of Merlive fetches nothing |
 | `A@{ row: 1, column: 2 }`, `g@{ view: collapsed }` | Read past: placement is Merlive's, and a group is drawn open |
 | `---` … `---` at the top | Front matter: its `title` is kept as the picture's name, and Mermaid's own settings are read past |
 | `accTitle: …`, `accDescr: …` | What the picture is called and what it shows, kept for readers who cannot see it |

@@ -5,6 +5,8 @@
 import { contrast, kindFill, looksOf, mix } from './design.mjs';
 import { runtime } from './runtime.mjs';
 import { outlineOf, wordsAt } from './shapes.mjs';
+import { iconMeasure, icons } from './icons.mjs';
+import { measure } from './layout.mjs';
 
 /** @typedef {import('./layout.mjs').Pt} Pt */
 
@@ -73,6 +75,7 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 .mv-node .mv-detail{fill:none}
 [data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
 [data-outline~="heavy"] .mv-shape{stroke-width:2.6}
+.mv-icon{fill:none;stroke:var(--mv-text);stroke-width:${iconMeasure.stroke};stroke-linecap:round;stroke-linejoin:round}
 .mv-node text{font-size:13px;font-weight:${design.weight};fill:var(--mv-text);text-anchor:middle}
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
@@ -135,8 +138,13 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     const b = lay.nodes[m.id], l = b.x - b.w / 2, t = b.y - b.h / 2, r = b.x + b.w / 2, u = b.y + b.h / 2;
     const { main, more } = outlineOf(m.shape, l, t, b.w, b.h, design.radius), at = wordsAt(m.shape, b.h);
     const shape = main + more.join('');
+    // An icon sits left of the words, on the middle of their block; the words move over by half its room, so
+    // icon and words together stay in the middle of the box.
+    const drawing = m.icon ? icons[m.icon] : '', over = drawing ? measure.icon / 2 : 0;
+    const widest = Math.max(...b.lines.map((line) => line.length)) * measure.glyph;
+    const icon = drawing ? `<path class="mv-icon" transform="translate(${n(b.x + at.dx + over - widest / 2 - measure.icon)},${n(b.y + at.dy - iconMeasure.grid / 2)})" d="${drawing}"/>` : '';
     const first = b.y + at.dy - ((b.lines.length - 1) * 16) / 2 + draw.baseline;
-    const words = b.lines.map((line, i) => `<tspan x="${n(b.x + at.dx)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
+    const words = b.lines.map((line, i) => `<tspan x="${n(b.x + at.dx + over)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${m.label}, ${kindName(m.kind)}`)}"` : '';
     // A box of a kind that means something carries a stripe of its colour down its near edge. Any other shape
     // already says what it is by its outline, and a plain step has nothing to say.
@@ -146,7 +154,7 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     // What its author's own style said of its outline: broken, heavy, or both.
     const said = [m.dashed ? 'dashed' : '', m.heavy ? 'heavy' : ''].filter(Boolean).join(' ');
     const outline = said ? ` data-outline="${said}"` : '';
-    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${outline}${role}>${shape}${stripe}<text>${words}</text></g>`;
+    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${outline}${role}>${shape}${stripe}${icon}<text>${words}</text></g>`;
   });
   // A group's frame, behind everything, with what the group is called at its top left.
   const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/><text x="${n(f.x + 10)}" y="${n(f.y + 16)}">${esc(f.title)}</text></g>`);

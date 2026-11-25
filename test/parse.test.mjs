@@ -156,15 +156,28 @@ describe('parse: words', () => {
     assert.deepEqual(m.nodes.map((n) => n.id), ['A', 'B']);
   });
 
-  it('leaves a Font Awesome icon out and keeps the words; a box that was only an icon takes its id', () => {
-    const m = flow('A["fa:fa-truck Shipped"] --> B[fa:fa-check Delivered]\nB --> done[fab:fa-github]');
-    assert.deepEqual(m.nodes.map((n) => n.label), ['Shipped', 'Delivered', 'done']);
+  it('keeps the icon an author wrote into a label, by the name of Merlive\'s own drawing of it, and the words beside it', () => {
+    const m = flow('A["fa:fa-truck Shipped"] --> B[fa:fa-check Delivered]\nB --> C["Settings fas:fa-cog"]');
+    assert.deepEqual(m.nodes.map((n) => [n.label, n.icon]), [['Shipped', 'truck'], ['Delivered', 'check'], ['Settings', 'gear']]);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('says so when an icon is one it has no drawing for, or is a brand\'s mark, and keeps the words', () => {
+    const m = flow('A["fa:fa-dragon Here be"] --> done[fab:fa-github]');
+    assert.deepEqual(m.nodes.map((n) => [n.label, n.icon ?? '']), [['Here be', ''], ['done', '']], 'a box that was only an icon takes its id');
+    assert.match(m.warnings[0], /^line 2: the icon "fa:fa-dragon" is not one Merlive has a drawing for; it is left out and its words kept$/);
+    assert.match(m.warnings[1], /^line 2: the icon "fab:fa-github"/);
+  });
+
+  it('reads the icon of a box written with @{ icon }', () => {
+    const m = flow('A@{ icon: "fa:user", form: "square", label: "Buyer", pos: "t", h: 60 } --> B');
+    assert.deepEqual([m.nodes[0].label, m.nodes[0].icon], ['Buyer', 'user']);
   });
 
   it('does the same for the title of a group and for a label written with @{ }', () => {
     const m = flow('subgraph wh ["Pick #amp; pack"]\n  A@{ label: "fa:fa-box Parcel #9829;" } --> B\nend');
     assert.equal(m.groups[0].title, 'Pick & pack');
-    assert.equal(m.nodes[0].label, 'Parcel ♥');
+    assert.deepEqual([m.nodes[0].label, m.nodes[0].icon], ['Parcel ♥', 'box']);
   });
 });
 

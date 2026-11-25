@@ -161,7 +161,7 @@
         "Shipped",
         "Delivered"
       ],
-      "loses": "The icon is left out; its words are kept"
+      "loses": "The icons are Merlive's own drawings of a truck and a tick, not Font Awesome's"
     },
     {
       "file": "flowchart/shape-round.mmd",
@@ -463,7 +463,7 @@
       "has": [
         "Buyer"
       ],
-      "loses": "The icon is left out; its label is kept"
+      "loses": "The icon is Merlive's own drawing of a user, beside the label and not above it"
     },
     {
       "file": "flowchart/shape-image.mmd",
