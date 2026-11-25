@@ -1,0 +1,8 @@
+C4Container
+  Person(buyer, "Buyer")
+  Container_Boundary(shop, "Web shop") {
+    Container(web, "Pages", "React")
+    Container(api, "Order API", "C#")
+  }
+  Rel(buyer, web, "Uses")
+  Rel(web, api, "Calls")

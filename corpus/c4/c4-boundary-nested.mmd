@@ -1,0 +1,12 @@
+C4Container
+  Enterprise_Boundary(firm, "The firm") {
+    System_Boundary(erp, "ERP") {
+      Container_Boundary(orders, "Ordering") {
+        Container(api, "Order API", "C#")
+        ContainerDb(db, "Orders", "SQL Server")
+      }
+      Container(stock, "Stock service", "C#")
+    }
+  }
+  Rel(api, db, "Saves to")
+  Rel(api, stock, "Asks")

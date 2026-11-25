@@ -1,0 +1,8 @@
+C4Component
+  Component(check, "Order checker", "C# class", "Checks an order against its budget")
+  Component(save, "Order store", "Repository", "Saves an order and its lines")
+  ComponentDb(cache, "Price cache", "Redis", "Prices read in the last hour")
+  ComponentQueue(out, "Outbox", "Table", "Events waiting to be sent")
+  Rel(check, cache, "Reads prices from")
+  Rel(check, save, "Hands a good order to")
+  Rel(save, out, "Writes to")

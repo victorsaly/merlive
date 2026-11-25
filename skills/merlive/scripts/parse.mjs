@@ -4,6 +4,7 @@
 import { iconFor } from './icons.mjs';
 import { stateReader } from './state.mjs';
 import { erReader } from './er.mjs';
+import { c4Reader } from './c4.mjs';
 import { classReader } from './class.mjs';
 import { architectureReader } from './architecture.mjs';
 import { requirementReader } from './requirement.mjs';
@@ -209,6 +210,7 @@ const READERS = /** @type {const} */ ([
   [/^erDiagram;?$/, erReader],
   [/^architecture(-beta)?;?$/, architectureReader],
   [/^requirementDiagram;?$/, requirementReader],
+  [/^C4(Context|Container|Component|Dynamic|Deployment)$/, c4Reader],
 ]);
 
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own

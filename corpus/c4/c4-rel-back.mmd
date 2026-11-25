@@ -1,0 +1,6 @@
+C4Context
+  Person(buyer, "Buyer")
+  System(erp, "ERP")
+  System(stock, "Stock control")
+  Rel(buyer, erp, "Raises orders in")
+  Rel_Back(buyer, stock, "Is warned of shortages by")

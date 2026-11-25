@@ -1,0 +1,8 @@
+C4Container
+  Container(api, "Order API", "C#")
+  Container_Ext(mail, "Mail service", "SMTP", "Sends confirmations")
+  ContainerDb_Ext(crm, "Customer records", "Dynamics", "Who the buyers are")
+  ContainerQueue_Ext(hook, "Web hooks", "HTTPS", "Tells partners")
+  Rel(api, mail, "Sends through")
+  Rel(api, crm, "Looks up buyers in")
+  Rel(api, hook, "Publishes to")

@@ -1,0 +1,4 @@
+C4Context
+  Person(buyer, "Buyer", "Raises orders", $sprite="users", $tags="v1", $link="https://example.com/buyer")
+  System(erp, "ERP", "Holds orders", $tags="v1+core", $link="https://example.com/erp")
+  Rel(buyer, erp, "Uses", $tags="async", $link="https://example.com/how")

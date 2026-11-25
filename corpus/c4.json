@@ -1,0 +1,894 @@
+[
+  {
+    "file": "c4/c4-context.mmd",
+    "covers": "A system in its context: a person, a system and one that is someone else's",
+    "boxes": 3,
+    "links": 2,
+    "has": [
+      "Buyer",
+      "«person»",
+      "«system»",
+      "«external system»",
+      "Raises orders in"
+    ],
+    "kinds": [
+      "external"
+    ],
+    "title": "Ordering, in context",
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-people.mmd",
+    "covers": "People: one of the firm and one outside it",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "«person»",
+      "«external person»"
+    ],
+    "kinds": [
+      "external"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-systems.mmd",
+    "covers": "Systems: a system, one that is a database and one that is a queue",
+    "boxes": 3,
+    "links": 2,
+    "has": [
+      "«system»",
+      "«system database»",
+      "«system queue»"
+    ],
+    "kinds": [
+      "data"
+    ],
+    "shapes": [
+      "box",
+      "cylinder",
+      "pill"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+  },
+  {
+    "file": "c4/c4-systems-external.mmd",
+    "covers": "Systems that are someone else's, a database and a queue among them",
+    "boxes": 4,
+    "links": 3,
+    "has": [
+      "«external system»",
+      "«external system database»",
+      "«external system queue»"
+    ],
+    "kinds": [
+      "external"
+    ],
+    "shapes": [
+      "box",
+      "box",
+      "cylinder",
+      "pill"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+  },
+  {
+    "file": "c4/c4-containers.mmd",
+    "covers": "Containers, with what each is made in and what it does",
+    "boxes": 4,
+    "links": 3,
+    "has": [
+      "«container: React»",
+      "«container: C#, ASP.NET»",
+      "«container database: SQL Server»",
+      "«container queue: Azure Service Bus»"
+    ],
+    "kinds": [
+      "data"
+    ],
+    "shapes": [
+      "box",
+      "box",
+      "cylinder",
+      "pill"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+  },
+  {
+    "file": "c4/c4-containers-external.mmd",
+    "covers": "Containers that are someone else's",
+    "boxes": 4,
+    "links": 3,
+    "has": [
+      "«external container: SMTP»",
+      "«external container database: Dynamics»",
+      "«external container queue: HTTPS»"
+    ],
+    "kinds": [
+      "external"
+    ],
+    "shapes": [
+      "box",
+      "box",
+      "cylinder",
+      "pill"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+  },
+  {
+    "file": "c4/c4-components.mmd",
+    "covers": "Components, with what each is made in and what it does",
+    "boxes": 4,
+    "links": 3,
+    "has": [
+      "«component: C# class»",
+      "«component database: Redis»",
+      "«component queue: Table»"
+    ],
+    "kinds": [
+      "data"
+    ],
+    "shapes": [
+      "box",
+      "box",
+      "cylinder",
+      "pill"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+  },
+  {
+    "file": "c4/c4-components-external.mmd",
+    "covers": "Components that are someone else's",
+    "boxes": 4,
+    "links": 3,
+    "has": [
+      "«external component: NuGet package»",
+      "«external component database: SQLite»",
+      "«external component queue: Kafka»"
+    ],
+    "kinds": [
+      "external"
+    ],
+    "shapes": [
+      "box",
+      "box",
+      "cylinder",
+      "pill"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+  },
+  {
+    "file": "c4/c4-boundary.mmd",
+    "covers": "A boundary round some of the elements",
+    "boxes": 3,
+    "links": 2,
+    "groups": 1,
+    "has": [
+      "The firm"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-boundary-type.mmd",
+    "covers": "A boundary that says what kind of boundary it is",
+    "boxes": 2,
+    "links": 1,
+    "groups": 1,
+    "has": [
+      "Buying [department]"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-boundary-enterprise.mmd",
+    "covers": "An enterprise's boundary with a system's boundary inside it",
+    "boxes": 3,
+    "links": 2,
+    "groups": 2,
+    "has": [
+      "The firm",
+      "Core systems"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "Mermaid writes [ENTERPRISE] and [SYSTEM] under the names of these boundaries; a type that was not written is not added"
+  },
+  {
+    "file": "c4/c4-boundary-container.mmd",
+    "covers": "A container's boundary",
+    "boxes": 3,
+    "links": 2,
+    "groups": 1,
+    "has": [
+      "Web shop"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "Mermaid writes [CONTAINER] under the name of this boundary; a type that was not written is not added"
+  },
+  {
+    "file": "c4/c4-boundary-nested.mmd",
+    "covers": "Boundaries three deep",
+    "boxes": 3,
+    "links": 2,
+    "groups": 3,
+    "has": [
+      "The firm",
+      "ERP",
+      "Ordering"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "Mermaid writes [ENTERPRISE], [SYSTEM] and [CONTAINER] under the names of these boundaries; a type that was not written is not added"
+  },
+  {
+    "file": "c4/c4-boundary-brace-below.mmd",
+    "covers": "A boundary whose { is on the line below it",
+    "boxes": 2,
+    "links": 1,
+    "groups": 1,
+    "has": [
+      "The firm"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-deployment.mmd",
+    "covers": "A deployment: nodes inside a node, and what runs on each",
+    "boxes": 2,
+    "links": 1,
+    "groups": 3,
+    "has": [
+      "Azure [West Europe]",
+      "App Service [Linux]",
+      "Azure SQL [General purpose]",
+      "Reads and writes [TDS]"
+    ],
+    "shapes": [
+      "box",
+      "cylinder"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-deployment-nodes.mmd",
+    "covers": "Nodes written as Node, Node_L and Node_R",
+    "boxes": 2,
+    "links": 1,
+    "groups": 3,
+    "has": [
+      "Data centre [Leeds]",
+      "Web server [nginx]",
+      "App server [IIS]"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-deployment-described.mmd",
+    "covers": "A node that is described as well as named",
+    "boxes": 2,
+    "links": 1,
+    "groups": 2,
+    "has": [
+      "Buyer's phone [iOS or Android]",
+      "Cloud [Azure]"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "says": "is described as \"Whatever the buyer carries\", which is not drawn",
+    "loses": "What a node is described as is not drawn: a group has a name and nothing more"
+  },
+  {
+    "file": "c4/c4-rel.mmd",
+    "covers": "A relation",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "Raises orders in"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-rel-technology.mmd",
+    "covers": "A relation that says how it is made, and one that is described",
+    "boxes": 3,
+    "links": 2,
+    "has": [
+      "Calls [JSON over HTTPS]",
+      "Reads and writes [TDS]"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-rel-both-ways.mmd",
+    "covers": "A relation that runs both ways",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "Reconciles with"
+    ],
+    "ends": [
+      [
+        "arrow",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-rel-back.mmd",
+    "covers": "A relation that runs back, from the second to the first",
+    "boxes": 3,
+    "links": 2,
+    "has": [
+      "Is warned of shortages by"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-rel-directions.mmd",
+    "covers": "Relations that say which way Mermaid should draw them",
+    "boxes": 5,
+    "links": 8,
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "Up, down, left and right are read past: where a box goes is Merlive's to say"
+  },
+  {
+    "file": "c4/c4-dynamic.mmd",
+    "covers": "A dynamic diagram: what happens, in order",
+    "boxes": 4,
+    "links": 4,
+    "has": [
+      "1: Fills in the order",
+      "2: Sends it [HTTPS]",
+      "3: Saves it",
+      "4: Answers with its number"
+    ],
+    "title": "Raising an order",
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-dynamic-index.mmd",
+    "covers": "Relations given an index",
+    "boxes": 3,
+    "links": 3,
+    "has": [
+      "1: Sends the order",
+      "2: Saves it",
+      "3: Answers with its number"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-named-arguments.mmd",
+    "covers": "Arguments given by name",
+    "boxes": 3,
+    "links": 2,
+    "has": [
+      "«container: C#»",
+      "«container database: SQL Server»",
+      "Raises orders through [HTTPS]",
+      "Saves to"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-tags-links-sprites.mmd",
+    "covers": "Tags, links and sprites",
+    "boxes": 2,
+    "links": 1,
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "A link is not followed: a page runs nothing of an author's. Tags and sprites are read past, as Mermaid reads past them"
+  },
+  {
+    "file": "c4/c4-empty-arguments.mmd",
+    "covers": "Arguments left empty",
+    "boxes": 3,
+    "links": 2,
+    "has": [
+      "«container»",
+      "«container database: SQL Server»",
+      "Calls"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-update-element-style.mmd",
+    "covers": "An element given colours of its own",
+    "boxes": 3,
+    "links": 2,
+    "kinds": [
+      "red"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "Its fill is the colour written, as the nearest colour of the design; the colours of its words and its edge are the design's"
+  },
+  {
+    "file": "c4/c4-update-element-style-named.mmd",
+    "covers": "An element given colours by name",
+    "boxes": 2,
+    "links": 1,
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "says": "a colour by name (\"grey\")",
+    "loses": "A colour given by name is not read: only one written as #rrggbb is"
+  },
+  {
+    "file": "c4/c4-update-rel-style.mmd",
+    "covers": "A relation given colours of its own, and its words moved",
+    "boxes": 2,
+    "links": 1,
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "says": "UpdateRelStyle colours a link",
+    "loses": "A link's colour is the design's; where its words sit is Merlive's to place"
+  },
+  {
+    "file": "c4/c4-update-rel-offset.mmd",
+    "covers": "A relation whose words are moved",
+    "boxes": 2,
+    "links": 1,
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-update-layout-config.mmd",
+    "covers": "How many elements and boundaries Mermaid should put in a row",
+    "boxes": 3,
+    "links": 2,
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-title.mmd",
+    "covers": "A title",
+    "boxes": 2,
+    "links": 1,
+    "title": "Containers of the ordering system",
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-frontmatter.mmd",
+    "covers": "Front matter with a title",
+    "boxes": 2,
+    "links": 1,
+    "title": "Ordering, from the front matter",
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-accessibility.mmd",
+    "covers": "accTitle and accDescr",
+    "boxes": 2,
+    "links": 1,
+    "title": "Who orders, and in what",
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-comments.mmd",
+    "covers": "Comments on lines of their own",
+    "boxes": 2,
+    "links": 1,
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-quotes.mmd",
+    "covers": "Commas, brackets and %% inside quotes",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "Buyer (purchasing)",
+      "ERP [live]",
+      "Raises orders in (daily, mostly)"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-line-breaks.mmd",
+    "covers": "A line break in a label and in a description",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "Buyer in purchasing"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-across-lines.mmd",
+    "covers": "Words in quotes that run on down the lines",
+    "boxes": 2,
+    "links": 1,
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-declared-twice.mmd",
+    "covers": "An element declared twice",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "ERP, the new one"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "c4/c4-whole.mmd",
+    "covers": "A whole diagram: people, a boundary of containers, a database, a queue and a system outside",
+    "boxes": 7,
+    "links": 6,
+    "groups": 1,
+    "has": [
+      "Ordering",
+      "«container: C#, ASP.NET»",
+      "Raises orders in [HTTPS]",
+      "Trades orders and answers with"
+    ],
+    "kinds": [
+      "external",
+      "data"
+    ],
+    "shapes": [
+      "box",
+      "box",
+      "box",
+      "box",
+      "cylinder",
+      "pill",
+      "box"
+    ],
+    "title": "Ordering: who uses it and what it is made of",
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "arrow",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+  }
+]

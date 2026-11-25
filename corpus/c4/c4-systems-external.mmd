@@ -1,0 +1,8 @@
+C4Context
+  System(erp, "ERP")
+  System_Ext(bank, "Bank", "Pays suppliers")
+  SystemDb_Ext(rates, "Exchange rates", "Kept by the bank")
+  SystemQueue_Ext(feed, "Payment feed", "Payments as they clear")
+  Rel(erp, bank, "Pays through")
+  Rel(bank, rates, "Reads")
+  Rel(bank, feed, "Writes to")

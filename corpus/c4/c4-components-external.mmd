@@ -1,0 +1,8 @@
+C4Component
+  Component(check, "Order checker", "C# class")
+  Component_Ext(tax, "Tax rules", "NuGet package", "Bought in")
+  ComponentDb_Ext(codes, "Tax codes", "SQLite", "Shipped with the package")
+  ComponentQueue_Ext(audit, "Audit trail", "Kafka", "Run by another team")
+  Rel(check, tax, "Asks")
+  Rel(tax, codes, "Reads")
+  Rel(check, audit, "Writes to")

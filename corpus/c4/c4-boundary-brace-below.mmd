@@ -1,0 +1,7 @@
+C4Context
+  System_Boundary(firm, "The firm")
+  {
+    System(erp, "ERP")
+    System(stock, "Stock control")
+  }
+  Rel(erp, stock, "Checks stock with")
