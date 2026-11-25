@@ -9,11 +9,13 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `flowchart TD`, `graph TD`, `TB` | Top to bottom |
 | `flowchart LR` | Left to right |
 | `BT`, `RL` | Drawn as `TD` and `LR`, with a note |
-| `A[Text]`, `A(Text)`, `A[[Text]]` | A box |
-| `A([Text])`, `A((Text))` | A start or end (a pill) |
+| `A[Text]`, `A(Text)`, `A[[Text]]`, `A>Text]`, `A[/Text/]`, `A[\Text\]`, `A[/Text\]`, `A[\Text/]` | A box. The flag and the four that lean are drawn as plain boxes |
+| `A([Text])`, `A((Text))`, `A(((Text)))` | A start or end (a pill) |
 | `A{Text}`, `A{{Text}}` | A decision (a box with cut corners, the same size as the others) |
 | `A["Text with (brackets)"]` | A quoted label |
 | `A["one line<br/>and another"]` | A label in the author's own lines, up to four |
+| ``A["`**Bold** and *italic*`"]`` | A Markdown string: its words and its own line breaks, drawn plain |
+| `#quot;`, `#9829;`, `fa:fa-truck` | An entity code becomes its character. A Font Awesome icon is left out and its words kept: a page of Merlive fetches no font |
 | `A[("Orders")]` | A store of data: a box of the `data` kind |
 | `A@{ shape: diam, label: "In stock?" }` | A box written the newer way, on one line or several. Its label is kept. A decision, a start or end and a store of data are drawn as those, by any of Mermaid's names for them; every other shape is a box |
 | `A@{ icon: "fa:user", label: "Buyer" }`, `A@{ img: "…", label: "…" }` | A box with its label. The icon or image is left out: a page of Merlive fetches nothing |
@@ -22,6 +24,8 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `accTitle: …`, `accDescr: …` | What the picture is called and what it shows, kept for readers who cannot see it |
 | `A --> B`, `A --- B` | A link, with or without an arrowhead |
 | `A -.-> B`, `A ==> B` | A dotted link, a thick link |
+| `A --o B`, `A --x B`, `A <--> B`, `A o--o B`, `A x--x B` | A circle, a cross or an arrowhead at either end, drawn as written |
+| `A ~~~ B` | An invisible link: its boxes are read, and no link is made. Where boxes go is Merlive's |
 | `A -->\|Yes\| B`, `A -- Yes --> B`, `A -- "two<br/>lines" --> B` | A link with words |
 | `A -. maybe .-> B`, `A == must ==> B`, `A ---> B` | Words in a dotted or thick link; an arrow drawn longer |
 | `subgraph id["Title"]` … `end`, `g1 --> g2` | A group, drawn as a frame with its title; a link between groups joins the end of one to the start of the next |
@@ -37,7 +41,7 @@ of a `.mmd` file; and, in any other file (an `.astro` page, a script), a string 
 a flowchart does. A string put together with `${…}` when the page runs cannot be read.
 
 Not read yet, each named in a `note,` line when met: a group inside a group (drawn as part of the outer one), a
-link from a box to itself, links that end in a circle or a cross or point both ways, and the invisible link.
+link from a box to itself, and `BT` and `RL`, which are drawn the other way round.
 [What is and is not drawn](https://github.com/victorsaly/merlive/blob/main/docs/COVERAGE.md), feature by feature.
 
 ## Merlive's own lines

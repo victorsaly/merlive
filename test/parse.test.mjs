@@ -32,9 +32,10 @@ describe('parse: boxes', () => {
 describe('parse: links', () => {
   it('reads arrows, their styles and their words', () => {
     const m = flow('A --> B\nA --- C\nA -.-> D\nA ==> E\nA -->|Yes| F\nA -- No --> G');
-    assert.deepEqual(m.edges.map((e) => [e.to, e.style, e.arrow, e.label]), [
-      ['B', 'solid', true, ''], ['C', 'solid', false, ''], ['D', 'dotted', true, ''], ['E', 'thick', true, ''], ['F', 'solid', true, 'Yes'], ['G', 'solid', true, 'No'],
+    assert.deepEqual(m.edges.map((e) => [e.to, e.style, e.head, e.label]), [
+      ['B', 'solid', 'arrow', ''], ['C', 'solid', 'none', ''], ['D', 'dotted', 'arrow', ''], ['E', 'thick', 'arrow', ''], ['F', 'solid', 'arrow', 'Yes'], ['G', 'solid', 'arrow', 'No'],
     ]);
+    assert.ok(m.edges.every((e) => e.tail === 'none'));
   });
 
   it('reads a chain as one link after another, and statements split by ;', () => {
@@ -43,6 +44,92 @@ describe('parse: links', () => {
 
   it('gives a second link between the same boxes a name of its own', () => {
     assert.deepEqual(flow('A --> B\nA -->|again| B').edges.map((e) => e.id), ['A-B', 'A-B#2']);
+  });
+});
+
+describe('parse: what is at each end of a link', () => {
+  const ends = (/** @type {string} */ body) => flow(body).edges.map((e) => [e.id, e.tail, e.head, e.style, e.label]);
+
+  it('reads a circle and a cross at the far end', () => {
+    assert.deepEqual(ends('A --o B\nB --x C'), [['A-B', 'none', 'circle', 'solid', ''], ['B-C', 'none', 'cross', 'solid', '']]);
+  });
+
+  it('reads a link that points both ways, and a circle or a cross at both ends', () => {
+    assert.deepEqual(ends('A <--> B\nB o--o C\nC x--x D'), [['A-B', 'arrow', 'arrow', 'solid', ''], ['B-C', 'circle', 'circle', 'solid', ''], ['C-D', 'cross', 'cross', 'solid', '']]);
+  });
+
+  it('reads them dotted and thick, longer, and with words either way', () => {
+    assert.deepEqual(ends('A <-.-> B\nB x==x C\nC o---o D\nD <-->|sync| E\nE <-- both --> F\nF -. maybe .-x G'), [
+      ['A-B', 'arrow', 'arrow', 'dotted', ''], ['B-C', 'cross', 'cross', 'thick', ''], ['C-D', 'circle', 'circle', 'solid', ''],
+      ['D-E', 'arrow', 'arrow', 'solid', 'sync'], ['E-F', 'arrow', 'arrow', 'solid', 'both'], ['F-G', 'none', 'cross', 'dotted', 'maybe'],
+    ]);
+  });
+
+  it('keeps a box whose name starts with o or x, when a space comes before it', () => {
+    const m = flow('A --- ops\nA --> xray');
+    assert.deepEqual(m.nodes.map((n) => n.id), ['A', 'ops', 'xray']);
+    assert.deepEqual(m.edges.map((e) => e.head), ['none', 'arrow']);
+  });
+
+  it('reads the boxes either side of an invisible link, and makes no link of it', () => {
+    const m = flow('A[Order] ~~~ B[Pick]\nB --> C[Pack]');
+    assert.deepEqual(m.nodes.map((n) => n.label), ['Order', 'Pick', 'Pack']);
+    assert.deepEqual(m.edges.map((e) => e.id), ['B-C']);
+    assert.deepEqual(m.warnings, []);
+  });
+});
+
+describe('parse: the older shapes', () => {
+  it('reads the flag, the double circle and the four that lean, with their words and nothing else', () => {
+    const m = flow('A>Flagged] --> B(((Stop)))\nC[/Input/] --> D[\\Output\\]\nE[/Manual step\\] --> F[\\Priority/]');
+    assert.deepEqual(m.nodes.map((n) => [n.label, n.shape]), [['Flagged', 'box'], ['Stop', 'pill'], ['Input', 'box'], ['Output', 'box'], ['Manual step', 'box'], ['Priority', 'box']]);
+    assert.deepEqual(m.edges.map((e) => e.id), ['A-B', 'C-D', 'E-F']);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('closes a leaning shape at its own end, not at the next one along', () => {
+    assert.deepEqual(flow('A[/Manual\\] --> B[/In/]').nodes.map((n) => n.label), ['Manual', 'In']);
+  });
+
+  it('leaves a plain box whose words begin with a slash as it was', () => {
+    assert.deepEqual(flow('A[/api/orders] --> B').nodes.map((n) => [n.label, n.shape]), [['/api/orders', 'box'], ['B', 'box']]);
+  });
+});
+
+describe('parse: words', () => {
+  it('turns entity codes into the characters they stand for, in a box and on a link', () => {
+    const m = flow('A["Marked #quot;rush#quot;"] -->|#gt; 100 #amp; up| B["Thanks #9829; #hearts;"]');
+    assert.deepEqual(m.nodes.map((n) => n.label), ['Marked "rush"', 'Thanks ♥ ♥']);
+    assert.equal(m.edges[0].label, '> 100 & up');
+  });
+
+  it('leaves a code it does not know, and one that is no character, as they were typed', () => {
+    assert.deepEqual(flow('A["Colour #fff; here"] --> B["Bell #7; and #1114112;"]').nodes.map((n) => n.label), ['Colour #fff; here', 'Bell #7; and #1114112;']);
+  });
+
+  it('reads a Markdown string as plain words, its own line breaks kept', () => {
+    const m = flow('A["`**Urgent** order`"] --> B["`Pick *today*\n  and _pack_ it`"]\nB --> C["`snake_case stays`"]');
+    assert.deepEqual(m.nodes.map((n) => n.label), ['Urgent order', 'Pick today and pack it', 'snake_case stays']);
+    assert.deepEqual(m.nodes[1].breaks, ['Pick today', 'and pack it']);
+    assert.deepEqual(m.edges.map((e) => e.id), ['A-B', 'B-C']);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('says so when a Markdown string is never closed', () => {
+    const m = flow('A --> B\nC["`Pick *today*\nC --> D');
+    assert.match(m.warnings[0], /^line 3: not read: a Markdown string that is never closed/);
+    assert.deepEqual(m.nodes.map((n) => n.id), ['A', 'B']);
+  });
+
+  it('leaves a Font Awesome icon out and keeps the words; a box that was only an icon takes its id', () => {
+    const m = flow('A["fa:fa-truck Shipped"] --> B[fa:fa-check Delivered]\nB --> done[fab:fa-github]');
+    assert.deepEqual(m.nodes.map((n) => n.label), ['Shipped', 'Delivered', 'done']);
+  });
+
+  it('does the same for the title of a group and for a label written with @{ }', () => {
+    const m = flow('subgraph wh ["Pick #amp; pack"]\n  A@{ label: "fa:fa-box Parcel #9829;" } --> B\nend');
+    assert.equal(m.groups[0].title, 'Pick & pack');
+    assert.equal(m.nodes[0].label, 'Parcel ♥');
   });
 });
 
@@ -95,7 +182,7 @@ describe('parse: front matter', () => {
 
   it('is only front matter on the first line: a --- further down is a link', () => {
     const m = flow('A[One]\nA --- B');
-    assert.deepEqual(m.edges.map((e) => [e.id, e.arrow]), [['A-B', false]]);
+    assert.deepEqual(m.edges.map((e) => [e.id, e.head]), [['A-B', 'none']]);
   });
 });
 

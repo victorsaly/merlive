@@ -43,7 +43,7 @@ node ${CLAUDE_SKILL_DIR}/scripts/merlive.mjs docs/orders.md           # diagrams
   `.astro` page, say). Each flowchart becomes `<file>-<n>.html` in a `diagrams` folder beside the Markdown file;
   `--out` puts them elsewhere, `--only 2` draws just the second block.
 - `--format svg` writes a still picture instead, for a wiki or anywhere a page cannot be opened.
-- A line starting `note,` is something the script could not read or draw (a link that points both ways, a group's frame left out): pass it on if it changes what
+- A line starting `note,` is something the script could not read or draw (a link from a box to itself, a group's frame left out): pass it on if it changes what
   the person will see.
 - Open the result and look at it before saying it is done. A diagram can pass every check and still not say what
   the document says.

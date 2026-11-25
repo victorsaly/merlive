@@ -2,7 +2,8 @@
 // diagram is never drawn from a guess. Everything here is pure: text in, a model out.
 
 /** @typedef {{id:string,label:string,shape:'box'|'pill'|'decision',kind:string,breaks?:string[]}} Node */
-/** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',arrow:boolean}} Edge */
+/** @typedef {'none'|'arrow'|'circle'|'cross'} Mark what is drawn at an end of a link */
+/** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',head:Mark,tail:Mark}} Edge head: at the box it leads to; tail: at the box it comes from */
 /** @typedef {{title:string,text:string,path:string,seq:string[],loop:boolean}} Step */
 /**
  * @typedef {object} Model
@@ -21,28 +22,68 @@
  * @property {string[]} warnings
  */
 
-// Longest opener first, so "([" is not read as "(" and then "[".
+// Longest opener first, so "([" is not read as "(" and then "[". A shape that leans may close either way, and
+// closes at whichever comes first. The flag (">words]") opens with no bracket at all.
 const OPENERS = /** @type {const} */ ([
-  ['([', '])', 'pill'],
-  ['((', '))', 'pill'],
-  ['[(', ')]', 'store'],
-  ['[[', ']]', 'box'],
-  ['{{', '}}', 'decision'],
-  ['[', ']', 'box'],
-  ['(', ')', 'box'],
-  ['{', '}', 'decision'],
+  ['(((', [')))'], 'pill'],
+  ['([', ['])'], 'pill'],
+  ['((', ['))'], 'pill'],
+  ['[(', [')]'], 'store'],
+  ['[[', [']]'], 'box'],
+  ['[/', ['/]', '\\]'], 'box'],
+  ['[\\', ['\\]', '/]'], 'box'],
+  ['{{', ['}}'], 'decision'],
+  ['>', [']'], 'box'],
+  ['[', [']'], 'box'],
+  ['(', [')'], 'box'],
+  ['{', ['}'], 'decision'],
 ]);
 
-// A link: an arrow or a plain line, solid, dotted or thick, drawn at any length, with its words after it between
-// bars or written into it ("-- words -->", "-. words .->", "== words ==>").
+// A link: solid, dotted or thick, drawn at any length, with an arrowhead, a circle, a cross or nothing at
+// either end ("-->", "--o", "x--x", "<-->"), and its words after it between bars or written into it
+// ("-- words -->", "-. words .->", "== words ==>"). Three tildes are a link that is not drawn.
+// Each gives: what is at the near end, the words (quoted or not), the rest of the link, the words between bars.
 const LINKS = /** @type {const} */ ([
-  [/^\s*--\s+(?:"([^"]*)"|([^"|]+?))\s*(-{2,}>|-{3,})/, 'solid'],
-  [/^\s*-\.\s+(?:"([^"]*)"|([^"|]+?))\s*(\.+->|\.+-)/, 'dotted'],
-  [/^\s*==\s+(?:"([^"]*)"|([^"|]+?))\s*(={2,}>|={3,})/, 'thick'],
-  [/^\s*(?:()())(-{2,}>|-{3,})\s*(?:\|([^|]*)\|)?/, 'solid'],
-  [/^\s*(?:()())(-\.+->|-\.+-)\s*(?:\|([^|]*)\|)?/, 'dotted'],
-  [/^\s*(?:()())(={2,}>|={3,})\s*(?:\|([^|]*)\|)?/, 'thick'],
+  [/^\s*([<ox]?)--\s+(?:"([^"]*)"|([^"|]+?))\s*(-{2,}[>ox]|-{3,})/, 'solid'],
+  [/^\s*([<ox]?)-\.\s+(?:"([^"]*)"|([^"|]+?))\s*(\.+-[>ox]?)/, 'dotted'],
+  [/^\s*([<ox]?)==\s+(?:"([^"]*)"|([^"|]+?))\s*(={2,}[>ox]|={3,})/, 'thick'],
+  [/^\s*([<ox]?)()()(-{2,}[>ox]|-{3,})\s*(?:\|([^|]*)\|)?/, 'solid'],
+  [/^\s*([<ox]?)()()(-\.+-[>ox]?)\s*(?:\|([^|]*)\|)?/, 'dotted'],
+  [/^\s*([<ox]?)()()(={2,}[>ox]|={3,})\s*(?:\|([^|]*)\|)?/, 'thick'],
+  [/^\s*()()()(~{3,})/, 'hidden'],
 ]);
+/** @type {Record<string, Mark>} */
+const MARKS = { '<': 'arrow', '>': 'arrow', o: 'circle', x: 'cross' };
+
+// The characters Mermaid's entity codes stand for ("#quot;", "#9829;"). A browser knows two thousand names;
+// these are the ones a diagram's words use. A code not here is left as it was typed.
+const NAMED = { quot: '"', amp: '&', lt: '<', gt: '>', apos: "'", nbsp: ' ', hearts: '♥', copy: '©', reg: '®', trade: '™', hellip: '…', mdash: '—', ndash: '–', larr: '←', rarr: '→', uarr: '↑', darr: '↓', harr: '↔', deg: '°', times: '×', divide: '÷', plusmn: '±', euro: '€', pound: '£', yen: '¥', cent: '¢', check: '✓', cross: '✗', bull: '•', middot: '·', laquo: '«', raquo: '»', lsquo: '‘', rsquo: '’', ldquo: '“', rdquo: '”', micro: 'µ', para: '¶', sect: '§', infin: '∞', ne: '≠', le: '≤', ge: '≥' };
+
+/**
+ * The words of a label as a reader should see them, in the author's own lines. Quotes come off; a Markdown
+ * string keeps its words and its line breaks and loses its stars; a Font Awesome icon is left out, since a page
+ * of Merlive fetches no font; an entity code becomes its character.
+ * @param {string} text
+ * @returns {string[]}
+ */
+function wordsOf(text) {
+  let words = text.trim().replace(/^"([^]*)"$/, '$1').trim();
+  const markdown = /^`[^]*`$/.test(words);
+  if (markdown) words = words.slice(1, -1).replace(/(\*\*|__)(?=\S)([^]*?\S)\1/g, '$2').replace(/(^|[^\w*])([*_])(?=\S)([^*_]*?\S)\2(?!\w)/g, '$1$3');
+  return words
+    .split(markdown ? /<br\s*\/?>|\n/i : /<br\s*\/?>/i)
+    .map((line) => line
+      .replace(/\bfa[a-z]?:fa-[\w-]+/g, ' ')
+      .replace(/#(\d+|[a-z]+);/gi, (code, /** @type {string} */ name) => {
+        if (!/^\d+$/.test(name)) return NAMED[/** @type {keyof typeof NAMED} */ (name)] ?? code;
+        const point = Number(name);
+        // Not a character a reader can see: a control code, half of a pair, or past the end of Unicode.
+        return point < 32 || (point > 126 && point < 160) || (point > 0xd7ff && point < 0xe000) || point > 0x10ffff ? code : String.fromCodePoint(point);
+      })
+      .replace(/\s+/g, ' ')
+      .trim())
+    .filter(Boolean);
+}
 
 // The newer shapes ("A@{ shape: diam }") that Merlive has a drawing for, by every name Mermaid gives them.
 // Any other is a box: a shape is never the only thing that says what a box is, its words are.
@@ -84,10 +125,10 @@ function dataIn(/** @type {string} */ text) {
   return out;
 }
 
-/** Whether a line opens an "@{" that it does not close, so the lines after it belong to it. */
+/** What a line opens and does not close, so the lines after it belong to it: an "@{", or a Markdown string. */
 function leftOpen(/** @type {string} */ text) {
-  for (let at = text.indexOf('@{'); at >= 0; at = text.indexOf('@{', at + 2)) if (closeOf(text, at + 2) < 0) return true;
-  return false;
+  for (let at = text.indexOf('@{'); at >= 0; at = text.indexOf('@{', at + 2)) if (closeOf(text, at + 2) < 0) return 'an @{';
+  return (text.split('`').length - 1) % 2 ? 'a Markdown string' : '';
 }
 
 // Mermaid styling lines. Merlive's look comes from the design file, so these are read past without a warning.
@@ -133,8 +174,9 @@ export function parse(src) {
 
   /** Gives a box its words. Where an author broke a label, the lines are kept as written; the label itself is the words in one line. */
   const say = (/** @type {Node} */ n, /** @type {string} */ words) => {
-    const lines = words.trim().replace(/^"|"$/g, '').split(/<br\s*\/?>/i).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
-    n.label = lines.join(' ');
+    const lines = wordsOf(words);
+    // A box that held only an icon has no words left, and takes its id like any box with none.
+    n.label = lines.join(' ') || n.id;
     if (lines.length > 1) n.breaks = lines;
     else delete n.breaks;
   };
@@ -151,13 +193,14 @@ export function parse(src) {
     if (!m) return null;
     let p = pos + m[0].length;
     const n = node(m[1]);
-    for (const [open, close, as] of OPENERS) {
+    for (const [open, closers, as] of OPENERS) {
       if (!s.startsWith(open, p)) continue;
       const start = p + open.length;
       // A quoted label may hold the closing bracket itself, so the closer is looked for after the quote ends.
       const quoted = s[start] === '"' ? s.indexOf('"', start + 1) : -1;
-      const end = s.indexOf(close, quoted > 0 ? quoted + 1 : start);
-      if (end < 0) return null;
+      const [end, close] = closers.map((c) => /** @type {[number,string]} */ ([s.indexOf(c, quoted > 0 ? quoted + 1 : start), c])).filter(([at]) => at >= 0).sort((a, b) => a[0] - b[0])[0] ?? [-1, ''];
+      // Not closed this way: "[/api/orders]" is a plain box whose words begin with a slash.
+      if (end < 0) continue;
       say(n, s.slice(start, end));
       shape(n, as);
       shaped.add(n.id);
@@ -190,8 +233,7 @@ export function parse(src) {
     for (const [like, style] of LINKS) {
       const m = like.exec(s.slice(pos));
       if (!m) continue;
-      const words = (m[1] || m[2] || m[4] || '').trim().replace(/^"|"$/g, '').replace(/<br\s*\/?>/gi, ' ').replace(/\s+/g, ' ').trim();
-      return { style, arrow: m[3].endsWith('>'), label: words, pos: pos + m[0].length };
+      return { style, tail: MARKS[m[1]] ?? 'none', head: MARKS[m[4].slice(-1)] ?? 'none', label: wordsOf(m[2] || m[3] || m[5] || '').join(' '), pos: pos + m[0].length };
     }
     return null;
   };
@@ -238,8 +280,9 @@ export function parse(src) {
       const link = readLink(s, prev.pos);
       const next = link && readBoxes(s, link.pos);
       if (!link || !next) return notRead();
+      // An invisible link is there to push Mermaid's boxes about. Its boxes are read; where they go is Merlive's.
       // With "&", every box before the link is linked to every box after it.
-      for (const a of prev.nodes) {
+      for (const a of link.style === 'hidden' ? [] : prev.nodes) {
         for (const b of next.nodes) {
           if (a.id === b.id) {
             warn(line, `a link from ${a.id} to itself is not drawn`);
@@ -248,21 +291,21 @@ export function parse(src) {
           const base = `${a.id}-${b.id}`;
           const count = (seenEdge.get(base) ?? 0) + 1;
           seenEdge.set(base, count);
-          model.edges.push({ id: count === 1 ? base : `${base}#${count}`, from: a.id, to: b.id, label: link.label, style: link.style, arrow: link.arrow });
+          model.edges.push({ id: count === 1 ? base : `${base}#${count}`, from: a.id, to: b.id, label: link.label, style: link.style, head: link.head, tail: link.tail });
         }
       }
       prev = next;
     }
   };
 
-  /** A line cut at each ; that is not inside quotes. */
+  /** A line cut at each ; that is not inside quotes and does not end an entity code ("#gt;"). */
   const statementsIn = (/** @type {string} */ text) => {
     /** @type {string[]} */
     const out = [''];
     let quoted = false;
     for (const c of text) {
       if (c === '"') quoted = !quoted;
-      if (c === ';' && !quoted) out.push('');
+      if (c === ';' && !quoted && !/#\w+$/.test(out[out.length - 1])) out.push('');
       else out[out.length - 1] += c;
     }
     return out.map((x) => x.trim()).filter(Boolean);
@@ -320,7 +363,7 @@ export function parse(src) {
         warn(line, 'a group inside a group is drawn as part of the outer one');
         warnedNested = true;
       }
-      if (!open.length) model.groups.push({ id, title: named ? named[2] : id, members: [] });
+      if (!open.length) model.groups.push({ id, title: named ? wordsOf(named[2]).join(' ') || id : id, members: [] });
       open.push(open[0] ?? id);
       return;
     }
@@ -371,7 +414,7 @@ export function parse(src) {
     }
   });
   if (front === 'in') warn(1, 'the front matter is never closed; end it with a line of ---');
-  if (held) warn(held.line, `not read: an @{ that is never closed, and everything after it: "${held.text.split('\n')[0]}"`);
+  if (held) warn(held.line, `not read: ${leftOpen(held.text)} that is never closed, and everything after it: "${held.text.split('\n')[0]}"`);
 
   // A link to a group ("g1 --> g2") is a link from the end of one to the start of the next: the last box of the
   // first that leads to no other box in it, and the first box of the second that none of its own leads to.

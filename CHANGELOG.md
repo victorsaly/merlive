@@ -57,6 +57,13 @@ The first version. It draws flowcharts and nothing else, and says so.
   drawn, and its `title` kept; `A & B --> C` links every box before the link to every box after it; and anything
   written with `@{ … }` is read, on one line or several: a box's shape and label, an icon or image kept as its
   label, a link's id, and what Mermaid sets on a link or a group read past.
+- **Links are drawn with what their author put at each end**: an arrowhead, a circle or a cross, at either end
+  or both (`--o`, `--x`, `<-->`, `o--o`, `x--x`), solid, dotted or thick. An invisible link (`~~~`) gives its
+  boxes and no link.
+- **Every bracket shape is read**: the flag, the double circle and the four that lean join the rest. They are
+  drawn as boxes and a pill, with their words and nothing else.
+- **Words are read as a reader should see them**: entity codes become their characters, a Markdown string keeps
+  its words and its own line breaks, and a Font Awesome icon is left out with its words kept.
 - **A crossing a diagram forces is allowed, and only that one.** Two boxes that each lead to the same two
   (`A & B --> C & D`) cannot be drawn without two lines crossing once. P4 counts such crossings exactly and
   allows them on top of one for every eight links; any other crossing is refused as before. The two lines no

@@ -105,6 +105,17 @@ describe('what is drawn', () => {
     assert.equal(html.includes('prefers-color-scheme:dark'), false);
   });
 
+  it('draws what is at each end of a link: an arrowhead, a circle or a cross, at either end or both', () => {
+    const ends = parse('flowchart LR\nA <--> B\nB --o C\nC x--x D\nD --- E');
+    const svg = picture(ends, layout(ends), builtIn, { title: 'Ends' });
+    const link = (/** @type {string} */ id) => svg.match(new RegExp(`<g class="mv-edge[^"]*" data-edge="${id}"[^]*?</g>`))?.[0] ?? '';
+    assert.equal(link('A-B').match(/<polygon class="mv-head"/g)?.length, 2);
+    assert.equal(link('B-C').match(/<circle class="mv-head"/g)?.length, 1);
+    assert.equal(link('C-D').match(/class="mv-cross"/g)?.length, 2);
+    assert.ok(link('D-E') && !/mv-head|mv-cross/.test(link('D-E')));
+    assert.match(svg, /\.mv-cross\{/);
+  });
+
   it('is a picture with the same boxes and no script', () => {
     const svg = picture(model, lay, designFrom({ radius: 22 }), { title: 'A <test>' });
     assert.equal(svg.match(/class="mv-node"/g)?.length, 3);

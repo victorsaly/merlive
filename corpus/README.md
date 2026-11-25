@@ -6,7 +6,7 @@ One small sample of everything Mermaid documents, to answer one question: what o
   with words to links played in steps.
 - `kinds/`: one sample of each other kind of diagram Mermaid documents.
 - `index.json`: for each sample, what it covers and what it should be read as: how many boxes, links and groups,
-  which words, which kinds, and anything Merlive is known to leave out (`loses`).
+  which words, which kinds, what is at the ends of its links, and anything Merlive is known to leave out (`loses`).
 - `drawn/`: what Merlive draws of each flowchart sample today.
 
 The answer is [docs/COVERAGE.md](../docs/COVERAGE.md). `npm run coverage` writes it and the pictures again, and

@@ -38,16 +38,14 @@ hand, and the colours are yours, read from your site, but checked, for contrast 
 ## What the corpus found
 
 `corpus/` holds one sample of everything Mermaid documents, and [COVERAGE.md](COVERAGE.md) says what Merlive
-draws of each, written again whenever the code changes. Its first run found seven things. Three are done: front
-matter, `&` between boxes, and everything written with `@{ … }`. What is left, worst first, is all flowchart
-features, so it comes before any new kind of diagram:
+draws of each, written again whenever the code changes. Its first run found seven things. Six are done: front
+matter, `&` between boxes, everything written with `@{ … }`, what is at the ends of a link, the older shapes,
+and words (entity codes, Markdown strings, icons). What is left of flowcharts:
 
-1. **Links that end in a circle or a cross, or point both ways**, and the invisible link.
-2. **Six of the older shapes**: the flag, the double circle, and the four leaning ones, which today keep their
-   slashes as words.
-3. **Words**: entity codes, Markdown strings and Font Awesome icons are drawn as they were typed.
-4. **Bottom-to-top and right-to-left** are drawn the other way round, and a group inside a group is drawn as part
-   of the outer one. Both are said when met.
+1. **Bottom-to-top and right-to-left** are drawn the other way round, and said.
+2. **A group inside a group** is drawn as part of the outer one, and said. A group's own direction is read past.
+3. **Shapes are read, not all drawn**: a store of data, a flag, a document and the rest are boxes that say what
+   they are in words. Whether any earns a drawing of its own is a question of design, not of reading.
 
 Reading `&` brought out a fourth thing, now done: two boxes that each lead to the same two (`A & B --> C & D`)
 were refused. The lines that swap sides no longer lie on each other, and P4 allows the one crossing such a

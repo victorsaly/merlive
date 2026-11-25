@@ -476,8 +476,8 @@
       "file": "flowchart/link-invisible.mmd",
       "covers": "An invisible link, used to nudge placement",
       "boxes": 3,
-      "links": 2,
-      "loses": "Read as a link that is not drawn; placement is Merlive's"
+      "links": 1,
+      "loses": "Its boxes are read and the link is left out: it is only there to nudge Mermaid's placement, and placement is Merlive's"
     },
     {
       "file": "flowchart/link-chain.mmd",
@@ -502,14 +502,36 @@
       "covers": "A link ending in a circle or a cross",
       "boxes": 3,
       "links": 2,
-      "loses": "The circle and the cross are drawn as an arrowhead"
+      "ends": [
+        [
+          "none",
+          "circle"
+        ],
+        [
+          "none",
+          "cross"
+        ]
+      ]
     },
     {
       "file": "flowchart/link-both-ways.mmd",
       "covers": "Arrows at both ends",
       "boxes": 4,
       "links": 3,
-      "loses": "Drawn with one arrowhead, at the far end"
+      "ends": [
+        [
+          "arrow",
+          "arrow"
+        ],
+        [
+          "circle",
+          "circle"
+        ],
+        [
+          "cross",
+          "cross"
+        ]
+      ]
     },
     {
       "file": "flowchart/link-length.mmd",

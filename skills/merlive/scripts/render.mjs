@@ -11,6 +11,7 @@ const draw = {
   corner: 8, // the round of a line's turn
   head: 9, // an arrowhead's length
   headHalf: 4.5, // and half its width
+  mark: 3.5, // the radius of a circle at a line's end, and how far a cross reaches from its middle
   cut: 0.36, // how much of a decision's height its corners are cut by
   baseline: 4.5, // from the middle of a 13px line of words down to its baseline
   dots: 16, // px between the dots of the ground: an eighth of the narrowest box
@@ -77,6 +78,7 @@ ${kinds.map((k) => `[data-kind="${k}"] .mv-stripe{fill:var(--mv-k-${k})}`).join(
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
 [data-style="thick"] .mv-line{stroke-width:2.8}
 .mv-head{fill:var(--mv-edge)}
+.mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
 .mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
 .mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
 .mv-group text{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}`;
@@ -90,23 +92,41 @@ function styleOf(/** @type {import('./design.mjs').Design} */ design, /** @type 
   return `${root}{${variables(one, kinds)}${scheme(first)}}${dark}\n${rulesFor(design, kinds)}`;
 }
 
+/**
+ * What is drawn at one end of a link, and how far the line stops short of the tip to make room for it. An
+ * arrowhead says which way; a circle and a cross are Mermaid's, kept because an author who wrote one meant it.
+ * @param {import('./parse.mjs').Mark} mark
+ * @param {Pt} tip where the line meets its box
+ * @param {Pt} from the point of the line before the tip
+ */
+function markAt(mark, tip, from) {
+  if (mark === 'arrow') {
+    const back = toward(tip, from, draw.head), dx = (tip.y - from.y) / (dist(from, tip) || 1), dy = -(tip.x - from.x) / (dist(from, tip) || 1);
+    return { inset: draw.head - 2, svg: `<polygon class="mv-head" points="${at(tip)} ${at({ x: back.x + dx * draw.headHalf, y: back.y + dy * draw.headHalf })} ${at({ x: back.x - dx * draw.headHalf, y: back.y - dy * draw.headHalf })}"/>` };
+  }
+  const m = draw.mark, c = toward(tip, from, m + 1);
+  if (mark === 'circle') return { inset: 2 * m, svg: `<circle class="mv-head" cx="${n(c.x)}" cy="${n(c.y)}" r="${m}"/>` };
+  if (mark === 'cross') return { inset: m + 1, svg: `<path class="mv-cross" d="M${at({ x: c.x - m, y: c.y - m })}L${at({ x: c.x + m, y: c.y + m })}M${at({ x: c.x - m, y: c.y + m })}L${at({ x: c.x + m, y: c.y - m })}"/>` };
+  return { inset: 0, svg: '' };
+}
+
 /** The drawing alone: the SVG's insides, the same for a page, a picture and the setup page. */
 export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {import('./layout.mjs').Layout} */ lay, /** @type {import('./design.mjs').Design} */ design, /** @type {boolean} */ live, tag = '') {
   // The main path, link by link: it is drawn heavier, so a reader's eye takes it first.
   const main = new Set(lay.spine.slice(1).map((id, i) => `${lay.spine[i]}>${id}`));
   const label = new Map(model.nodes.map((m) => [m.id, m.label]));
   const links = model.edges.map((e) => {
-    const r = lay.edges[e.id], pts = r.points, end = pts[pts.length - 1], before = pts[pts.length - 2];
-    // The line stops short of the tip so a thick stroke does not show past the arrowhead.
-    const line = e.arrow ? [...pts.slice(0, -1), toward(end, before, draw.head - 2)] : pts;
-    const back = toward(end, before, draw.head), dx = (end.y - before.y) / (dist(before, end) || 1), dy = -(end.x - before.x) / (dist(before, end) || 1);
-    const head = e.arrow ? `<polygon class="mv-head" points="${at(end)} ${at({ x: back.x + dx * draw.headHalf, y: back.y + dy * draw.headHalf })} ${at({ x: back.x - dx * draw.headHalf, y: back.y - dy * draw.headHalf })}"/>` : '';
+    const r = lay.edges[e.id], pts = r.points;
+    const head = markAt(e.head, pts[pts.length - 1], pts[pts.length - 2]), tail = markAt(e.tail, pts[0], pts[1]);
+    // The line stops short of each tip, so a thick stroke does not show past what is drawn there.
+    const line = [toward(pts[0], pts[1], tail.inset), ...pts.slice(1, -1), toward(pts[pts.length - 1], pts[pts.length - 2], head.inset)];
     const l = r.label;
     const words = l ? `<text class="mv-label">${l.lines.map((line, i) => `<tspan class="mv-label-line" x="${n(l.x)}" y="${n(l.y - ((l.lines.length - 1) * 14) / 2 + 4 + i * 14)}">${esc(line)}</tspan>`).join('')}</text>` : '';
     const mid = middleOf(pts);
     const extras = live ? `<path class="mv-hit" d="${pathOf(pts)}"/><g class="mv-seq" transform="translate(${at(mid)})"><circle r="8"/><text y="3.5"></text></g>` : '';
-    const role = live ? ` tabindex="0" role="button" aria-label="${esc(`Link from ${label.get(e.from)} to ${label.get(e.to)}${e.label ? `, ${e.label}` : ''}`)}"` : '';
-    return `<g class="mv-edge${main.has(`${e.from}>${e.to}`) ? ' mv-main' : ''}" data-edge="${esc(e.id)}" data-style="${e.style}"${role}><path class="mv-line" d="${pathOf(line)}"/>${head}${words}${extras}</g>`;
+    const said = e.tail === 'arrow' && e.head === 'arrow' ? `Link both ways between ${label.get(e.from)} and ${label.get(e.to)}` : `Link from ${label.get(e.from)} to ${label.get(e.to)}`;
+    const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${said}${e.label ? `, ${e.label}` : ''}`)}"` : '';
+    return `<g class="mv-edge${main.has(`${e.from}>${e.to}`) ? ' mv-main' : ''}" data-edge="${esc(e.id)}" data-style="${e.style}"${role}><path class="mv-line" d="${pathOf(line)}"/>${tail.svg}${head.svg}${words}${extras}</g>`;
   });
   const boxes = model.nodes.map((m) => {
     const b = lay.nodes[m.id], l = b.x - b.w / 2, t = b.y - b.h / 2, r = b.x + b.w / 2, u = b.y + b.h / 2;
@@ -229,6 +249,7 @@ summary{cursor:pointer;color:var(--mv-muted);font-size:13px}
 .mv-on .mv-line,.mv-sel .mv-line,.mv-edge:focus-visible .mv-line{stroke:var(--mv-accent);stroke-width:2.6}
 .mv-stage{border-radius:${Math.min(design.radius, 14)}px;padding:8px 0${design.ground === 'dots' ? `;background-image:radial-gradient(var(--mv-dot) 1px,transparent 1.3px);background-size:${draw.dots}px ${draw.dots}px` : ''}}
 .mv-on .mv-head,.mv-sel .mv-head{fill:var(--mv-accent)}
+.mv-on .mv-cross,.mv-sel .mv-cross{stroke:var(--mv-accent)}
 .mv-sel .mv-shape,.mv-node:focus-visible .mv-shape{stroke:var(--mv-accent);stroke-width:3}
 .mv-seq{display:none;pointer-events:none}
 .mv-on .mv-seq{display:block}

@@ -6,7 +6,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 ## In short
 
-- **Flowcharts:** of 69 features, 32 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 15 are only partly read, and 0 are refused.
+- **Flowcharts:** of 69 features, 35 are drawn as written, 31 are drawn less something Merlive leaves out on purpose or does not have yet, 3 are only partly read, and 0 are refused.
 - **Other kinds of diagram:** of 32, 0 are drawn and 32 are left as Mermaid and named.
 
 ## Flowcharts, feature by feature
@@ -34,23 +34,23 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | A box with words | Drawn |  | [source](../corpus/flowchart/node-text.mmd) | [picture](../corpus/drawn/node-text.svg) |
 | Words in other alphabets | Drawn |  | [source](../corpus/flowchart/node-unicode.mmd) | [picture](../corpus/drawn/node-unicode.svg) |
 | Brackets and signs inside quotes | Drawn |  | [source](../corpus/flowchart/node-quoted.mmd) | [picture](../corpus/drawn/node-quoted.svg) |
-| Characters written as entity codes | Partly read | "Marked "rush"" is not among its words; "Thanks ♥" is not among its words | [source](../corpus/flowchart/node-entities.mmd) | [picture](../corpus/drawn/node-entities.svg) |
+| Characters written as entity codes | Drawn |  | [source](../corpus/flowchart/node-entities.mmd) | [picture](../corpus/drawn/node-entities.svg) |
 | A line break in a label | Drawn |  | [source](../corpus/flowchart/node-line-break.mmd) | [picture](../corpus/drawn/node-line-break.svg) |
-| Markdown strings: bold, italic and a real line break | Partly read | read 0 of 2 boxes; read 0 of 1 links; "Urgent order" is not among its words; "Pick today and pack" is not among its words; line 2: not read: "A["`**Urgent** order`"] --> B["`Pick *today*"; line 3: not read: "and pack`"]" | [source](../corpus/flowchart/node-markdown.mmd) |  |
-| A Font Awesome icon in a label | Partly read | "Shipped" is not among its words; "Delivered" is not among its words | [source](../corpus/flowchart/node-fontawesome.mmd) | [picture](../corpus/drawn/node-fontawesome.svg) |
+| Markdown strings: bold, italic and a real line break | Drawn, less something | Bold and italic are drawn as plain words | [source](../corpus/flowchart/node-markdown.mmd) | [picture](../corpus/drawn/node-markdown.svg) |
+| A Font Awesome icon in a label | Drawn, less something | The icon is left out; its words are kept | [source](../corpus/flowchart/node-fontawesome.mmd) | [picture](../corpus/drawn/node-fontawesome.svg) |
 | Shape: Round edges | Drawn, less something | Its corners are the design's, the same as every box | [source](../corpus/flowchart/shape-round.mmd) | [picture](../corpus/drawn/shape-round.svg) |
 | Shape: Stadium | Drawn |  | [source](../corpus/flowchart/shape-stadium.mmd) | [picture](../corpus/drawn/shape-stadium.svg) |
 | Shape: Subroutine | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-subroutine.mmd) | [picture](../corpus/drawn/shape-subroutine.svg) |
 | Shape: Cylinder, a database | Drawn, less something | Drawn as a box of the kind "data", not as a cylinder | [source](../corpus/flowchart/shape-cylinder.mmd) | [picture](../corpus/drawn/shape-cylinder.svg) |
 | Shape: Circle | Drawn, less something | Drawn as a pill | [source](../corpus/flowchart/shape-circle.mmd) | [picture](../corpus/drawn/shape-circle.svg) |
-| Shape: Asymmetric, a flag | Partly read | read 0 of 3 boxes; read 0 of 2 links; "Before" is not among its words; "Flagged" is not among its words; "After" is not among its words; line 2: not read: "A[Before] --> B>Flagged] --> C[After]" | [source](../corpus/flowchart/shape-asymmetric.mmd) |  |
+| Shape: Asymmetric, a flag | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-asymmetric.mmd) | [picture](../corpus/drawn/shape-asymmetric.svg) |
 | Shape: Rhombus, a decision | Drawn |  | [source](../corpus/flowchart/shape-rhombus.mmd) | [picture](../corpus/drawn/shape-rhombus.svg) |
 | Shape: Hexagon | Drawn, less something | Drawn as a decision | [source](../corpus/flowchart/shape-hexagon.mmd) | [picture](../corpus/drawn/shape-hexagon.svg) |
-| Shape: Parallelogram | Partly read | "Input" is not among its words | [source](../corpus/flowchart/shape-parallelogram.mmd) | [picture](../corpus/drawn/shape-parallelogram.svg) |
-| Shape: Parallelogram, leaning back | Partly read | "Output" is not among its words | [source](../corpus/flowchart/shape-parallelogram-alt.mmd) | [picture](../corpus/drawn/shape-parallelogram-alt.svg) |
-| Shape: Trapezoid | Partly read | "Manual step" is not among its words | [source](../corpus/flowchart/shape-trapezoid.mmd) | [picture](../corpus/drawn/shape-trapezoid.svg) |
-| Shape: Trapezoid, upside down | Partly read | "Priority" is not among its words | [source](../corpus/flowchart/shape-trapezoid-alt.mmd) | [picture](../corpus/drawn/shape-trapezoid-alt.svg) |
-| Shape: Double circle | Partly read | read 0 of 3 boxes; read 0 of 2 links; "Before" is not among its words; "Stop" is not among its words; "After" is not among its words; line 2: not read: "A[Before] --> B(((Stop))) --> C[After]" | [source](../corpus/flowchart/shape-double-circle.mmd) |  |
+| Shape: Parallelogram | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-parallelogram.mmd) | [picture](../corpus/drawn/shape-parallelogram.svg) |
+| Shape: Parallelogram, leaning back | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-parallelogram-alt.mmd) | [picture](../corpus/drawn/shape-parallelogram-alt.svg) |
+| Shape: Trapezoid | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-trapezoid.mmd) | [picture](../corpus/drawn/shape-trapezoid.svg) |
+| Shape: Trapezoid, upside down | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-trapezoid-alt.mmd) | [picture](../corpus/drawn/shape-trapezoid-alt.svg) |
+| Shape: Double circle | Drawn, less something | Drawn as a pill | [source](../corpus/flowchart/shape-double-circle.mmd) | [picture](../corpus/drawn/shape-double-circle.svg) |
 | Shapes written as @{ shape: … }, with a label | Drawn |  | [source](../corpus/flowchart/shape-at-syntax.mmd) | [picture](../corpus/drawn/shape-at-syntax.svg) |
 | Every one of the 53 newer shapes | Drawn, less something | Each is drawn as a box, a pill or a decision; the shape itself is not | [source](../corpus/flowchart/shape-at-every.mmd) | [picture](../corpus/drawn/shape-at-every.svg) |
 | A box that is an icon | Drawn, less something | The icon is left out; its label is kept | [source](../corpus/flowchart/shape-icon.mmd) | [picture](../corpus/drawn/shape-icon.svg) |
@@ -62,12 +62,12 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | Words on a link, written into it | Drawn |  | [source](../corpus/flowchart/link-text-inline.mmd) | [picture](../corpus/drawn/link-text-inline.svg) |
 | A dotted link, with and without words | Drawn |  | [source](../corpus/flowchart/link-dotted.mmd) | [picture](../corpus/drawn/link-dotted.svg) |
 | A thick link, with and without words | Drawn |  | [source](../corpus/flowchart/link-thick.mmd) | [picture](../corpus/drawn/link-thick.svg) |
-| An invisible link, used to nudge placement | Partly read | read 2 of 3 boxes; read 1 of 2 links; line 2: not read: "A[Order] ~~~ B[Pick]" | [source](../corpus/flowchart/link-invisible.mmd) | [picture](../corpus/drawn/link-invisible.svg) |
+| An invisible link, used to nudge placement | Drawn, less something | Its boxes are read and the link is left out: it is only there to nudge Mermaid's placement, and placement is Merlive's | [source](../corpus/flowchart/link-invisible.mmd) | [picture](../corpus/drawn/link-invisible.svg) |
 | Links chained in one line | Drawn |  | [source](../corpus/flowchart/link-chain.mmd) | [picture](../corpus/drawn/link-chain.svg) |
 | One line linking to several boxes with & | Drawn |  | [source](../corpus/flowchart/link-chain-and.mmd) | [picture](../corpus/drawn/link-chain-and.svg) |
 | Several boxes to several boxes with & | Drawn |  | [source](../corpus/flowchart/link-and-both.mmd) | [picture](../corpus/drawn/link-and-both.svg) |
-| A link ending in a circle or a cross | Partly read | read 0 of 3 boxes; read 0 of 2 links; line 2: not read: "A[Order] --o B[Line items]"; line 3: not read: "B --x C[Cancelled]" | [source](../corpus/flowchart/link-circle-cross.mmd) |  |
-| Arrows at both ends | Partly read | read 0 of 4 boxes; read 0 of 3 links; line 2: not read: "A[ERP] <--> B[Warehouse]"; line 3: not read: "B o--o C[Carrier]"; line 4: not read: "C x--x D[Blocked]" | [source](../corpus/flowchart/link-both-ways.mmd) |  |
+| A link ending in a circle or a cross | Drawn |  | [source](../corpus/flowchart/link-circle-cross.mmd) | [picture](../corpus/drawn/link-circle-cross.svg) |
+| Arrows at both ends | Drawn |  | [source](../corpus/flowchart/link-both-ways.mmd) | [picture](../corpus/drawn/link-both-ways.svg) |
 | Links drawn longer, to push a box further on | Drawn, less something | The extra length is read past: placement is Merlive's | [source](../corpus/flowchart/link-length.mmd) | [picture](../corpus/drawn/link-length.svg) |
 | A link given an id | Drawn |  | [source](../corpus/flowchart/link-id.mmd) | [picture](../corpus/drawn/link-id.svg) |
 | A link set to animate | Drawn, less something | Mermaid's animation is read past: movement is the design's, and starts when a reader asks | [source](../corpus/flowchart/link-animate.mmd) | [picture](../corpus/drawn/link-animate.svg) |
