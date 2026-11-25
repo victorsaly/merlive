@@ -7,7 +7,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 ## In short
 
 - **Flowcharts:** of 70 features, 48 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 0 are only partly read, and 0 are refused.
-- **State diagrams:** of 27 features, 16 are drawn as written, 10 are drawn less something, 1 are only partly read, and 0 are refused.
+- **State diagrams:** of 27 features, 17 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Sequence diagrams:** of 42 features, 38 are drawn as written, 4 are drawn less something, 0 are only partly read, and 0 are refused.
@@ -118,7 +118,7 @@ rules. Held to the same measure as the flowcharts above.
 | A fork and a join | Drawn, less something | A fork and a join are boxes with their names in them, not bars | [source](../corpus/state/state-fork-join.mmd) | [picture](../corpus/drawn/state-fork-join.svg) |
 | A note on one line, on either side | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/state/state-note-line.mmd) | [picture](../corpus/drawn/state-note-line.svg) |
 | A note written over several lines | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/state/state-note-block.mmd) | [picture](../corpus/drawn/state-note-block.svg) |
-| Concurrency: regions of a composite state parted by -- | Partly read | line 6: concurrency ("--") is not read: the regions it parts are drawn as one | [source](../corpus/state/state-concurrency.mmd) | [picture](../corpus/drawn/state-concurrency.svg) |
+| Concurrency: regions of a composite state parted by -- | Drawn |  | [source](../corpus/state/state-concurrency.mmd) | [picture](../corpus/drawn/state-concurrency.svg) |
 | The direction of the diagram | Drawn |  | [source](../corpus/state/state-direction.mmd) | [picture](../corpus/drawn/state-direction.svg) |
 | A composite state with a direction of its own | Drawn, less something | The composite state's own direction is read past; it runs the way the rest does | [source](../corpus/state/state-direction-composite.mmd) | [picture](../corpus/drawn/state-direction-composite.svg) |
 | Comments, on a line of their own and at the end of one | Drawn |  | [source](../corpus/state/state-comments.mmd) | [picture](../corpus/drawn/state-comments.svg) |

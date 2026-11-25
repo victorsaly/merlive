@@ -925,9 +925,9 @@
     {
       "file": "state/state-concurrency.mmd",
       "covers": "Concurrency: regions of a composite state parted by --",
-      "boxes": 6,
-      "links": 5,
-      "groups": 1
+      "boxes": 7,
+      "links": 6,
+      "groups": 3
     },
     {
       "file": "state/state-direction.mmd",

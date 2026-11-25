@@ -28,7 +28,7 @@ hand, and the colours are yours, read from your site, but checked, for contrast 
    diagram has rules of its own ([SEQUENCE.md](SEQUENCE.md)) and is gone through one message at a time.
 2. **0.2, class diagrams and entity diagrams (in hand).** Boxes that list rows under their name, in one width and
    their own height; links that end in "is a", "has" or how many.
-3. **Next, where Mermaid still reads better.** Forks and joins as bars and regions side by side in a state diagram; a group's own
+3. **Next, where Mermaid still reads better.** Forks and joins as bars in a state diagram; a group's own
    direction; the rest of the newer shapes.
 4. **Then the other kinds**, picked by what real documents use: those of boxes and links first (requirement, C4,
    block, architecture), which the placement there is can draw; then timelines, charts and trees, each of which

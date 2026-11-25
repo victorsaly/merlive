@@ -679,10 +679,11 @@ function placed(model, dir, reversed = false) {
     const own = g.members.map((id) => nodes[id]).filter(Boolean);
     const inner = made.filter((f) => parentOf.get(f.id) === g.id);
     const l = Math.min(...own.map((n) => n.x - n.w / 2), ...inner.map((f) => f.x)) - measure.framePad;
-    const t = Math.min(...own.map((n) => n.y - n.h / 2), ...inner.map((f) => f.y)) - measure.framePad - measure.frameTitle;
+    // A frame with no name (a region of a composite state) keeps no room for one.
+    const t = Math.min(...own.map((n) => n.y - n.h / 2), ...inner.map((f) => f.y)) - measure.framePad - (g.title ? measure.frameTitle : 0);
     const r = Math.max(...own.map((n) => n.x + n.w / 2), ...inner.map((f) => f.x + f.w)) + measure.framePad;
     const u = Math.max(...own.map((n) => n.y + n.h / 2), ...inner.map((f) => f.y + f.h)) + measure.framePad;
-    const frame = { name: { x: 0, y: 0, w: 0, h: 0, plate: false }, id: g.id, title: g.title, x: l, y: t, w: r - l, h: u - t };
+    const frame = { name: { x: l, y: t, w: 0, h: 0, plate: false }, id: g.id, title: g.title, x: l, y: t, w: r - l, h: u - t };
     const stranger = all.find((n) => !g.members.includes(n.id) && meets(frame, n));
     // A frame inside this one, or round it, is where it should be; any other it meets is one it has run into.
     const other = made.find((f) => !within(f.id, g.id) && !within(g.id, f.id) && meets(frame, { x: f.x + f.w / 2, y: f.y + f.h / 2, w: f.w, h: f.h }));
@@ -698,6 +699,7 @@ function placed(model, dir, reversed = false) {
   // on a plate of the frame's own colour: the line passes behind it, and the name can still be read.
   const drawn = Object.values(edges).map((e) => e.points);
   for (const f of groups) {
+    if (!f.title) continue;
     const w = Math.round(f.title.length * measure.nameGlyph), h = measure.nameLine, y = f.y + measure.nameDown;
     const struck = (/** @type {number} */ x) => drawn.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, { x, y, w, h }, measure.clear)));
     const first = f.x + measure.nameIn + w / 2, last = f.x + f.w - measure.nameIn - w / 2;

@@ -11,6 +11,9 @@ Class diagrams and entity diagrams.
   any more.
 - **A group's title can be read.** In a sequence diagram it takes the design's quiet colour in light and dark,
   sits inside its frame and wraps to it. In a still picture it was black on any page.
+- **A composite state's regions are drawn.** What `--` parts are frames side by side inside the composite
+  state, each with a start of its own, and a link into the composite state goes into every one. They were drawn
+  as one, with a note.
 - **Bottom to top and right to left are drawn as written.** `flowchart BT`, `flowchart RL` and a state diagram's
   `direction BT` or `RL` were drawn top to bottom and left to right, with a note. They are now the same flow
   begun at the far end, every arrow pointing the way its author drew it.

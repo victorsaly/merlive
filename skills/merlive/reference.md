@@ -66,10 +66,10 @@ this page holds for them: the rules, the design, Merlive's own lines.
 | `note right of Draft : words`, `note left of Draft` … `end note` | The note on that box: what a reader sees on picking it |
 | `direction LR`, `direction BT`, `direction RL` | The way the diagram runs. A composite state's own direction is read past |
 | `classDef`, `class Held, Lost stopped`, `Held:::stopped` | Kinds, as in a flowchart |
+| `--` inside a composite state | Regions that run side by side: each is a frame with no name inside the composite state, with a start of its own. A link into the composite state goes into every region |
 | `%% words` after a line, `hide empty description`, `scale 350 width` | Read past |
 
-Not read yet, named in a `note,` line when met: concurrency (`--`), whose regions are drawn as one. A composite
-state inside another is a group inside a group.
+A composite state inside another is a group inside a group.
 
 ## A class diagram
 

@@ -8,7 +8,7 @@ import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
-import { layout } from '../skills/merlive/scripts/layout.mjs';
+import { layout, measure } from '../skills/merlive/scripts/layout.mjs';
 import { builtIn, designWith } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { exits, help, run } from '../skills/merlive/scripts/merlive.mjs';
@@ -132,10 +132,58 @@ describe('state: composite states', () => {
     assert.match(state('state Review {\n  a --> b').warnings[0], /^line 2: the composite state Review is never closed; end it with a line of }/);
   });
 
-  it('says concurrency is not read, and draws its regions as one', () => {
-    const m = state('state Active {\n  [*] --> NumOff\n  NumOff --> NumOn\n  --\n  [*] --> CapsOff\n  CapsOff --> CapsOn\n}');
-    assert.match(m.warnings[0], /^line 5: concurrency \("--"\) is not read: the regions it parts are drawn as one/);
-    assert.deepEqual(m.groups[0].members, ['Active_start', 'NumOff', 'NumOn', 'CapsOff', 'CapsOn']);
+});
+
+describe('state: regions that run side by side', () => {
+  const keys = 'state Active {\n  [*] --> NumOff\n  NumOff --> NumOn\n  --\n  [*] --> CapsOff\n  CapsOff --> CapsOn\n}';
+
+  it('reads what "--" parts as regions: groups with no name inside the composite state, each with a start of its own', () => {
+    const m = state(keys);
+    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(m.groups, [
+      { id: 'Active', title: 'Active', members: ['Active_start', 'NumOff', 'NumOn', 'Active_2_start', 'CapsOff', 'CapsOn'] },
+      { id: 'Active/1', title: '', members: ['Active_start', 'NumOff', 'NumOn'], parent: 'Active' },
+      { id: 'Active/2', title: '', members: ['Active_2_start', 'CapsOff', 'CapsOn'], parent: 'Active' },
+    ]);
+    assert.deepEqual(m.nodes.filter((n) => n.label === 'Start').map((n) => n.id), ['Active_start', 'Active_2_start']);
+    assert.deepEqual(m.edges.map((e) => e.id), ['Active_start-NumOff', 'NumOff-NumOn', 'Active_2_start-CapsOff', 'CapsOff-CapsOn']);
+  });
+
+  it('reads any number of regions, and passes one with nothing in it', () => {
+    const m = state('state S {\n  a --> b\n  --\n  --\n  c --> d\n  --\n  e --> f\n}');
+    assert.deepEqual(m.groups.map((g) => [g.id, g.members.join(' ')]), [['S', 'a b c d e f'], ['S/1', 'a b'], ['S/3', 'c d'], ['S/4', 'e f']]);
+  });
+
+  it('puts a composite state written inside a region in that region', () => {
+    const m = state('state S {\n  state In {\n    a --> b\n  }\n  --\n  state Out {\n    c --> d\n  }\n}');
+    assert.deepEqual(m.groups.map((g) => [g.id, g.parent]), [['S', undefined], ['S/1', 'S'], ['In', 'S/1'], ['S/2', 'S'], ['Out', 'S/2']]);
+  });
+
+  it('takes a link into the composite state into every region: going in starts them all', () => {
+    const m = state(`[*] --> Active\n${keys}\nActive --> [*]`);
+    assert.deepEqual(m.edges.filter((e) => e.from === 'start').map((e) => e.to), ['Active_start', 'Active_2_start']);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('says so when "--" parts nothing', () => {
+    assert.deepEqual(state('A --> B\n--\nB --> C').warnings, ['line 3: not read: "--" parts the regions of a composite state, and none is open here']);
+  });
+
+  it('draws each region in a frame of its own inside the composite state, side by side or one above the other, never across each other', () => {
+    const m = state(`[*] --> Active\n${keys}`), lay = layout(m);
+    assert.deepEqual(lay.warnings, []);
+    assert.deepEqual(lay.groups.map((f) => f.id), ['Active', 'Active/1', 'Active/2']);
+    const [whole, one, two] = lay.groups;
+    for (const f of [one, two]) assert.ok(f.x > whole.x && f.y > whole.y && f.x + f.w < whole.x + whole.w && f.y + f.h < whole.y + whole.h, f.id);
+    assert.ok(one.x + one.w <= two.x || two.x + two.w <= one.x || one.y + one.h <= two.y || two.y + two.h <= one.y, 'the two regions are apart');
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+  });
+
+  it('gives a frame with no name no room for one', () => {
+    const m = state(keys), lay = layout(m), one = lay.groups[1];
+    const top = Math.min(...['Active_start', 'NumOff', 'NumOn'].map((id) => lay.nodes[id].y - lay.nodes[id].h / 2));
+    assert.equal(one.y, top - measure.framePad);
+    assert.deepEqual([one.name.w, one.name.h], [0, 0]);
   });
 });
 

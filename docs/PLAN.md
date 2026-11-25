@@ -84,7 +84,7 @@ Still to do, in this order:
      marks are smaller than Mermaid's; the page's legend names only three kinds of participant; a foot is picked
      by pointer and not by keyboard; a note over two participants may sit on an activation bar (not checked
      whether that is new); an author's highlight colours become the design's tint;
-   - a state diagram's fork and join are boxes, not bars; regions side by side (`--`) are drawn as one;
+   - a state diagram's fork and join are boxes, not bars;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
    - the name of a narrow group usually has its line pass behind it, and the arrowhead sits close under it;

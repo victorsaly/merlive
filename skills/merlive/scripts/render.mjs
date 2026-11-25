@@ -230,7 +230,7 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
   const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/></g>`);
   // A group's name is drawn over the lines, with the frame's own colour round its letters: where a line has to
   // pass, it passes behind the name.
-  const names = lay.groups.map((f) => `<text class="mv-name" x="${n(f.name.x)}" y="${n(f.name.y + 4)}">${esc(f.title)}</text>`);
+  const names = lay.groups.filter((f) => f.title).map((f) => `<text class="mv-name" x="${n(f.name.x)}" y="${n(f.name.y + 4)}">${esc(f.title)}</text>`);
   // The ground: the grid the boxes are placed on, shown as dots faint enough to sit behind everything.
   // A live page spreads them over its whole stage instead, so they do not stop at the drawing's edge.
   const ground = design.ground === 'dots' && !live
