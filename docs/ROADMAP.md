@@ -7,7 +7,8 @@ live. The Mermaid stays the source: it is what people edit, and it still renders
 
 | Idea | From | In Merlive |
 |---|---|---|
-| A design asked for once and kept in a file | Impeccable | `merlive.design.json`; a picker page to choose it by looking is next |
+| A design asked for once and kept in a file | Impeccable | `merlive.design.json`: the colours are the project's own |
+| Colours a colour-blind reader can tell apart | Okabe and Ito, Paul Tol | Rule D2, checked on every palette; Merlive's dark kinds are Okabe-Ito's |
 | Rules checked before output, not left to the model | Impeccable, Archify | `score.mjs`: nothing is written that breaks a rule |
 | A typed model between the text and the drawing | Archify | `parse.mjs` gives a model; layout and drawing never read Mermaid |
 | Step-by-step walkthroughs a reader can leave and come back to | Ilograph | `%% step:` comments |
@@ -17,13 +18,16 @@ live. The Mermaid stays the source: it is what people edit, and it still renders
 | Colours as variables, so a theme is a few values | beautiful-mermaid | The design's palette |
 | A still version for where a page cannot go | D2, Archify | `--format svg`; notes print as an appendix |
 
-What is Merlive's own: Mermaid stays the source of truth, placement is by named rule, and the design is yours.
+What is Merlive's own: Mermaid stays the source of truth, placement is by named rule, and the colours are yours
+but checked, for contrast and for colour-blind readers, before anything is drawn in them.
 
 ## Milestones
 
-1. **0.1, flowcharts (this version).** Parse, place, check, draw; steps and notes; three designs and a design file.
-2. **0.2, the design picker.** `merlive.mjs --design-picker` writes one page showing one of your own diagrams in
-   each direction, with controls, and a button that copies the design file. The skill asks once per project.
+1. **0.1, flowcharts (this version).** Parse, place, check, draw; steps and notes; a look of its own in light and
+   dark, and a design file for a project's own colours, checked.
+2. **0.2, the design page.** `merlive.mjs --design-page` writes one page showing one of your own diagrams in your
+   colours, light and dark side by side, with each colour editable, the two colour rules checked as you change
+   them, and a button that copies the design file. A dark made from your light when you give only one.
 3. **0.3, bigger flowcharts.** Subgraph outlines, branches on both sides of the spine, pan, zoom and a search
    box for diagrams past about twenty boxes.
 4. **0.4, state diagrams.** The same placement, with loops as first-class paths.

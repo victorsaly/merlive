@@ -5,7 +5,7 @@ import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout } from '../skills/merlive/scripts/layout.mjs';
-import { presets } from '../skills/merlive/scripts/design.mjs';
+import { builtIn, designFrom } from '../skills/merlive/scripts/design.mjs';
 import { page, picture } from '../skills/merlive/scripts/render.mjs';
 import { runtime } from '../skills/merlive/scripts/runtime.mjs';
 import { run, version } from '../skills/merlive/scripts/merlive.mjs';
@@ -70,7 +70,7 @@ describe('one version everywhere', () => {
 describe('the rules, in the docs and in the code', () => {
   it('has a heading in docs/PLACEMENT.md for every check, and names each in reference.md', () => {
     const rules = read('docs/PLACEMENT.md'), reference = read(`${skill}/reference.md`);
-    for (const id of ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'D1']) {
+    for (const id of ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'D1', 'D2']) {
       assert.match(rules, new RegExp(`^## ${id}\\. `, 'm'), id);
       assert.ok(reference.includes(`${id} `), id);
     }
@@ -83,7 +83,7 @@ describe('what is drawn', () => {
   const lay = layout(model);
 
   it('is a page with every box and link, words made safe, and the steps', () => {
-    const html = page(model, lay, presets.quiet, { title: 'A <test>', source: src, version });
+    const html = page(model, lay, builtIn, { title: 'A <test>', source: src, version });
     assert.match(html, /^<!doctype html>/);
     assert.ok(html.includes('<title>A &lt;test&gt;</title>'));
     assert.equal(html.match(/class="mv-node"/g)?.length, 3);
@@ -91,6 +91,7 @@ describe('what is drawn', () => {
     assert.ok(html.includes('Go &lt;now&gt;'));
     assert.ok(html.includes('data-style="dotted"'));
     assert.ok(html.includes('id="mv-next"'));
+    assert.ok(html.includes('"kindName":"Start or end"'), 'a box says its kind in words, not only in colour');
     assert.ok(html.includes('prefers-color-scheme:dark'));
     assert.ok(html.includes(`content="Merlive ${version}"`));
     assert.doesNotMatch(html.slice(html.indexOf('<script>')), /<\/script>[\s\S]*<\/script>/, 'nothing in the data ends the script early');
@@ -98,16 +99,16 @@ describe('what is drawn', () => {
 
   it('has no step buttons when there are no steps, and no dark look when the design has none', () => {
     const plain = parse('flowchart TD\nA --> B');
-    const html = page(plain, layout(plain), presets.bold, { title: 'Plain', source: '', version });
+    const html = page(plain, layout(plain), designFrom({ light: { accent: '#0a5cc2' } }), { title: 'Plain', source: '', version });
     assert.equal(html.includes('id="mv-next"'), false);
     assert.equal(html.includes('prefers-color-scheme:dark'), false);
   });
 
   it('is a picture with the same boxes and no script', () => {
-    const svg = picture(model, lay, presets.soft, { title: 'A <test>' });
+    const svg = picture(model, lay, designFrom({ radius: 22 }), { title: 'A <test>' });
     assert.equal(svg.match(/class="mv-node"/g)?.length, 3);
     assert.doesNotMatch(svg, /<script|tabindex/);
-    assert.ok(svg.includes('rx="22"'), 'a pill, and the soft corner');
+    assert.ok(svg.includes('rx="22"'), 'the corner the design asks for');
   });
 
   it('hands the page a function that needs nothing from outside itself', () => {
@@ -129,7 +130,7 @@ describe('the examples', () => {
     const md = read('examples/order-approval.md');
     const block = md.split('```mermaid\n')[1].split('\n```')[0];
     const model = parse(block);
-    assert.equal(read('examples/diagrams/order-approval-1.svg'), picture(model, layout(model), presets.quiet, { title: 'Purchase order approval' }));
-    assert.equal(read('examples/diagrams/order-approval-1.html'), page(model, layout(model), presets.quiet, { title: 'Purchase order approval', source: block, version }));
+    assert.equal(read('examples/diagrams/order-approval-1.svg'), picture(model, layout(model), builtIn, { title: 'Purchase order approval' }));
+    assert.equal(read('examples/diagrams/order-approval-1.html'), page(model, layout(model), builtIn, { title: 'Purchase order approval', source: block, version }));
   });
 });

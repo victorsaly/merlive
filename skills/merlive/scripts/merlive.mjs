@@ -8,7 +8,7 @@ import { basename, dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { blocksOf, parse } from './parse.mjs';
 import { layout } from './layout.mjs';
-import { designFrom, presets } from './design.mjs';
+import { designFrom } from './design.mjs';
 import { score } from './score.mjs';
 import { page, picture } from './render.mjs';
 
@@ -22,8 +22,8 @@ export const help = `Merlive ${version}: Mermaid flowcharts, placed by rule and 
   node merlive.mjs <file.md | file.mmd> [options]
 
   --out <folder>      where the diagrams go (default: a "diagrams" folder beside the file)
-  --design <name>     ${Object.keys(presets).join(', ')}, or the path of a design file
-                      (default: merlive.design.json in this folder if there is one, else quiet)
+  --design <file>     a design file to draw with (default: merlive.design.json in this folder if there is
+                      one, else Merlive's own look, in light and dark)
   --format <html|svg> a live page, or a still picture for wikis (default: html)
   --only <n>          just the nth Mermaid block of the file
   --check             say what would be drawn and whether it passes its rules; write nothing
@@ -66,19 +66,19 @@ export function optionsFrom(argv) {
   return o;
 }
 
-/** The design to draw with: the one named, the folder's own, or quiet. */
+/** The design to draw with: the file named, the folder's own, or Merlive's. */
 function designFor(/** @type {string} */ asked, /** @type {string} */ cwd) {
   const own = join(cwd, 'merlive.design.json');
-  const path = asked && !presets[asked] ? resolve(cwd, asked) : !asked && existsSync(own) ? own : '';
-  if (!path) return designFrom(asked || 'quiet');
-  if (!existsSync(path)) throw new Error(`No design at ${path}. Name a preset (${Object.keys(presets).join(', ')}) or a design file.`);
+  const path = asked ? resolve(cwd, asked) : existsSync(own) ? own : '';
+  if (!path) return designFrom();
+  if (!existsSync(path)) throw new Error(`No design file at ${path}. Leave --design out to draw in Merlive's own look.`);
   let json;
   try {
     json = JSON.parse(readFileSync(path, 'utf8'));
   } catch (e) {
     throw new Error(`${path} is not valid JSON: ${/** @type {Error} */ (e).message}`, { cause: e });
   }
-  return designFrom(basename(path, '.json'), json);
+  return designFrom(json);
 }
 
 /**

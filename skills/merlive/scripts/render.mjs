@@ -128,7 +128,7 @@ ${inside(model, lay, design, false)}
 export function page(model, lay, design, about) {
   const kinds = kindsIn(model);
   const data = {
-    nodes: model.nodes.map((m) => ({ id: m.id, label: m.label, kind: m.kind, note: model.notes[m.id] ?? '' })),
+    nodes: model.nodes.map((m) => ({ id: m.id, label: m.label, kind: m.kind, kindName: kindName(m.kind), note: model.notes[m.id] ?? '' })),
     edges: model.edges.map((e) => ({ id: e.id, from: e.from, to: e.to, label: e.label })),
     steps: model.steps.map((s) => ({ title: s.title, text: s.text, seq: s.seq, loop: s.loop })),
     motion: design.motion,

@@ -6,7 +6,7 @@
 <meta name="generator" content="Merlive 0.1.0">
 <title>Supplier onboarding</title>
 <style>
-:root{--mv-bg:#f6f7f9;--mv-node:#ffffff;--mv-stroke:#c3cad5;--mv-text:#18202b;--mv-muted:#566070;--mv-edge:#7a8696;--mv-accent:#1f5fd1;--mv-k-step:#c3cad5;--mv-kf-step:#ffffff;--mv-k-decision:#8a5a00;--mv-kf-decision:#f0eade;--mv-k-terminal:#0f7a5a;--mv-kf-terminal:#e0eeea}@media (prefers-color-scheme:dark){:root{--mv-bg:#11141a;--mv-node:#1a1f27;--mv-stroke:#3a4352;--mv-text:#eceef2;--mv-muted:#a3adbb;--mv-edge:#7c8798;--mv-accent:#7fb0ff;--mv-k-step:#3a4352;--mv-kf-step:#1a1f27;--mv-k-decision:#e0a93a;--mv-kf-decision:#343129;--mv-k-terminal:#4fc79c;--mv-kf-terminal:#213536;color-scheme:dark}}
+:root{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-k-decision:#b87a00;--mv-kf-decision:#f6eede;--mv-k-terminal:#2c7d4f;--mv-kf-terminal:#e4eee8}@media (prefers-color-scheme:dark){:root{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-k-decision:#e69f00;--mv-kf-decision:#29392a;--mv-k-terminal:#009e73;--mv-kf-terminal:#0b3939;color-scheme:dark}}
 .mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
 .mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
 [data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
@@ -167,6 +167,8 @@ body[data-motion="lively"].mv-playing .mv-on .mv-line{stroke-dasharray:7 6;anima
       byId('mv-note').textContent = n?.note ?? '';
       const from = data.edges.filter((e) => e.to === id).map((e) => name(e.from));
       const to = data.edges.filter((e) => e.from === id).map((e) => name(e.to) + (e.label ? ` (${e.label})` : ''));
+      // The kind in words: colour alone must never be the only thing that says it.
+      fact('Kind', n?.kindName ?? '');
       fact('Comes from', from.length ? from.join(', ') : 'Nothing: the flow starts here');
       fact('Goes to', to.length ? to.join(', ') : 'Nothing: the flow ends here');
     } else {
@@ -278,6 +280,6 @@ body[data-motion="lively"].mv-playing .mv-on .mv-line{stroke-dasharray:7 6;anima
     else if (ev.key === 'Escape') pick(null);
   });
   show(0);
-})({"nodes":[{"id":"req","label":"Request supplier","kind":"step","note":""},{"id":"chk","label":"Already known?","kind":"decision","note":""},{"id":"use","label":"Use existing","kind":"terminal","note":""},{"id":"form","label":"Collect details","kind":"step","note":""},{"id":"vet","label":"Finance check","kind":"step","note":""},{"id":"rej","label":"Rejected","kind":"terminal","note":""},{"id":"add","label":"Add to ERP","kind":"step","note":""}],"edges":[{"id":"req-chk","from":"req","to":"chk","label":""},{"id":"chk-use","from":"chk","to":"use","label":"Yes"},{"id":"chk-form","from":"chk","to":"form","label":"No"},{"id":"form-vet","from":"form","to":"vet","label":""},{"id":"vet-rej","from":"vet","to":"rej","label":"Fails"},{"id":"vet-add","from":"vet","to":"add","label":"Passes"},{"id":"add-use","from":"add","to":"use","label":""}],"steps":[],"motion":"calm"});</script>
+})({"nodes":[{"id":"req","label":"Request supplier","kind":"step","kindName":"Step","note":""},{"id":"chk","label":"Already known?","kind":"decision","kindName":"Decision","note":""},{"id":"use","label":"Use existing","kind":"terminal","kindName":"Start or end","note":""},{"id":"form","label":"Collect details","kind":"step","kindName":"Step","note":""},{"id":"vet","label":"Finance check","kind":"step","kindName":"Step","note":""},{"id":"rej","label":"Rejected","kind":"terminal","kindName":"Start or end","note":""},{"id":"add","label":"Add to ERP","kind":"step","kindName":"Step","note":""}],"edges":[{"id":"req-chk","from":"req","to":"chk","label":""},{"id":"chk-use","from":"chk","to":"use","label":"Yes"},{"id":"chk-form","from":"chk","to":"form","label":"No"},{"id":"form-vet","from":"form","to":"vet","label":""},{"id":"vet-rej","from":"vet","to":"rej","label":"Fails"},{"id":"vet-add","from":"vet","to":"add","label":"Passes"},{"id":"add-use","from":"add","to":"use","label":""}],"steps":[],"motion":"calm"});</script>
 </body>
 </html>

@@ -40,38 +40,50 @@ A step's path must follow links that exist; one that does not is named in a `not
 
 ## The design file
 
-`merlive.design.json` in the project's folder. Everything is optional; what is left out comes from the design
-named in `extends` (default `quiet`).
+The colours are the project's own. `merlive.design.json` in the project's folder sets them; everything in it is
+optional, and what is left out comes from Merlive's own look.
 
 ```json
 {
   "name": "storm",
-  "extends": "quiet",
   "font": "\"IBM Plex Sans\", system-ui, sans-serif",
   "weight": 500,
   "radius": 6,
   "motion": "calm",
   "light": {
-    "bg": "#f6f7f9",
+    "bg": "#f4f6fa",
     "node": "#ffffff",
     "stroke": "#c3cad5",
     "text": "#18202b",
     "muted": "#566070",
     "edge": "#7a8696",
-    "accent": "#1f5fd1",
-    "kinds": { "decision": "#8a5a00", "terminal": "#0f7a5a", "rework": "#b3391f" }
+    "accent": "#0a5cc2",
+    "kinds": { "decision": "#b87a00", "rework": "#a8327a", "vendor": "#5a4fcf" }
   },
   "dark": { "bg": "#11141a", "node": "#1a1f27", "text": "#eceef2" }
 }
 ```
 
+| Colour | What it is |
+|---|---|
+| `bg` | The page behind the drawing |
+| `node`, `stroke` | A plain box's fill and its edge |
+| `text`, `muted` | Words, and quieter words (link labels, the legend) |
+| `edge` | A line |
+| `accent` | The picked thing and the path being shown |
+| `kinds` | A colour for each kind of box that means something |
+
 - Colours are six-digit hex. A colour that is not is refused, with its name.
-- `kinds` gives a colour to each kind of box that means something. The names are yours: any name used in a
-  `class` line can have a colour. A box's fill is its kind's colour thinned into `node`; its edge is the colour.
-- Leave `dark` out and the diagram keeps its one look whatever the reader's system asks for.
+- `kinds` names are yours: any name used in a `class` line can have a colour. A box's edge is its kind's colour,
+  and its fill is that colour thinned into `node`. Merlive's own kinds are `decision`, `terminal` (a start or
+  end), `rework`, `external`, `data` and `risk`.
+- **Light and dark.** A file that sets `light` and no `dark` gives one look whatever the reader's system asks
+  for. Give `dark` too for both. A file that touches no colour (only `radius`, say) keeps Merlive's light and dark.
 - `font` is a CSS font stack. The page fetches nothing, so name faces the reader is likely to have, and end with
   a system face.
 - `motion`: `none`, `calm` or `lively`.
+- `--check` holds the file to two rules before anything is drawn: D1, words and lines can be read, and D2, the
+  kinds can be told apart, also by people who do not see red and green apart. The message names the colour.
 
 ## How it ends
 
@@ -85,5 +97,5 @@ named in `extends` (default `quiet`).
 ## The rules it checks
 
 P1 the main path is straight. P2 boxes are one size with room between. P3 no line through a box. P4 few
-crossings. P5 no two lines share a path. P6 words fit. P7 link labels sit clear. D1 contrast. Each is set out,
+crossings. P5 no two lines share a path. P6 words fit. P7 link labels sit clear. D1 contrast. D2 kinds can be told apart. Each is set out,
 with what passes and fails, in `docs/PLACEMENT.md` of the repository.

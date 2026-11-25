@@ -14,8 +14,9 @@ For coding agents changing this repository. It follows the same habits as
   measured number is in `measure` at the top, with why. Pure.
 - `skills/merlive/scripts/score.mjs`: the rules as checks. A rule in `docs/PLACEMENT.md` with no check here is a
   bug. Pure.
-- `skills/merlive/scripts/design.mjs`: the three designs that come with it, a design file laid over one, and the
-  colour sums (mixing, contrast). Pure.
+- `skills/merlive/scripts/design.mjs`: Merlive's own look in light and dark, a project's design file laid over
+  it, and the colour sums (mixing, contrast, how far apart two colours look to ordinary and colour-blind sight).
+  Pure. The colours are the user's: do not add ready-made palettes to choose from.
 - `skills/merlive/scripts/render.mjs`: a model, a layout and a design to one HTML page or one SVG. Pure.
 - `skills/merlive/scripts/runtime.mjs`: handed to the page as source and run there, so browser globals, not
   Node's, and nothing from outside the function.
@@ -48,6 +49,8 @@ can still look wrong; when it does, the fix is a new rule and a check for it, no
 ## Rules
 
 - Write the failing test first, then the fix.
+- **Until 0.1.0 is released, work goes straight to `main`**, and the changelog entry for 0.1.0 grows with it.
+  After that:
 - One pull request is one release: bump `.claude-plugin/plugin.json`, SKILL.md's `metadata.version`, `version` in
   merlive.mjs, the README badge and a changelog entry marked `(unreleased)` in the same pull request. `npm test`
   fails when they disagree.

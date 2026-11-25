@@ -6,7 +6,7 @@
 
 /**
  * @param {{
- *   nodes:{id:string,label:string,kind:string,note:string}[],
+ *   nodes:{id:string,label:string,kind:string,kindName:string,note:string}[],
  *   edges:{id:string,from:string,to:string,label:string}[],
  *   steps:{title:string,text:string,seq:string[],loop:boolean}[],
  *   motion:'none'|'calm'|'lively'
@@ -76,6 +76,8 @@ export function runtime(data) {
       byId('mv-note').textContent = n?.note ?? '';
       const from = data.edges.filter((e) => e.to === id).map((e) => name(e.from));
       const to = data.edges.filter((e) => e.from === id).map((e) => name(e.to) + (e.label ? ` (${e.label})` : ''));
+      // The kind in words: colour alone must never be the only thing that says it.
+      fact('Kind', n?.kindName ?? '');
       fact('Comes from', from.length ? from.join(', ') : 'Nothing: the flow starts here');
       fact('Goes to', to.length ? to.join(', ') : 'Nothing: the flow ends here');
     } else {

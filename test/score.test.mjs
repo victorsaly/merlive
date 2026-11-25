@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout } from '../skills/merlive/scripts/layout.mjs';
-import { contrast, designFrom, kindFill, mix, presets } from '../skills/merlive/scripts/design.mjs';
+import { apart, builtIn, contrast, designFrom, kindFill, mix, sights } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 
-const check = (/** @type {string} */ src, design = presets.quiet) => {
+const check = (/** @type {string} */ src, design = builtIn) => {
   const model = parse(src);
   const lay = layout(model);
   return { model, lay, result: score(model, lay, design) };
@@ -25,16 +25,23 @@ const orders = `flowchart TD
   class E rework`;
 
 describe('score: what Merlive places itself passes', () => {
-  it('passes every rule for the example, in each design that comes with it', () => {
-    for (const design of Object.values(presets)) {
-      const { result } = check(orders, design);
-      assert.deepEqual(failed(result), [], design.name);
-      assert.equal(result.pass, true);
-    }
+  it('passes every rule for the example, in light and in dark', () => {
+    const { result } = check(orders);
+    assert.deepEqual(failed(result), []);
+    assert.equal(result.pass, true);
+    assert.match(result.checks.find((c) => c.id === 'D1')?.detail ?? '', /light and dark/);
+  });
+
+  it('passes with every kind of box the built-in look has a colour for, all in one diagram', () => {
+    const kinds = Object.keys(builtIn.light.kinds);
+    const all = `flowchart TD\n${kinds.map((k, i) => `N${i}[A ${k}]:::${k}${i ? '' : ' --> N1'}${i > 1 ? `\nN${i - 1} --> N${i}` : ''}`).join('\n')}`;
+    const { model, result } = check(all);
+    assert.deepEqual([...new Set(model.nodes.map((n) => n.kind))].sort(), [...kinds].sort());
+    assert.deepEqual(failed(result), []);
   });
 
   it('has a check for each rule in docs/PLACEMENT.md', () => {
-    assert.deepEqual(check(orders).result.checks.map((c) => c.id), ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'D1']);
+    assert.deepEqual(check(orders).result.checks.map((c) => c.id), ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'D1', 'D2']);
   });
 });
 
@@ -42,7 +49,7 @@ describe('score: a broken rule is named, with where', () => {
   it('P1 when a box of the main path is off the line', () => {
     const { model, lay } = check(orders);
     lay.nodes.C.x += 40;
-    const p1 = score(model, lay, presets.quiet).checks[0];
+    const p1 = score(model, lay, builtIn).checks[0];
     assert.equal(p1.ok, false);
     assert.match(p1.detail, /"Within budget\?" is off the line/);
   });
@@ -51,13 +58,13 @@ describe('score: a broken rule is named, with where', () => {
     const { model, lay } = check(orders);
     lay.nodes.E.y = lay.nodes.G.y;
     lay.nodes.E.x = lay.nodes.G.x + lay.box.w + 4;
-    assert.ok(failed(score(model, lay, presets.quiet)).includes('P2'));
+    assert.ok(failed(score(model, lay, builtIn)).includes('P2'));
   });
 
   it('P3 when a line passes through a box', () => {
     const { model, lay } = check(orders);
     lay.edges['E-B'].points = [{ x: lay.nodes.A.x, y: lay.nodes.H.y }, { x: lay.nodes.A.x, y: lay.nodes.A.y }];
-    const p3 = score(model, lay, presets.quiet).checks.find((c) => c.id === 'P3');
+    const p3 = score(model, lay, builtIn).checks.find((c) => c.id === 'P3');
     assert.match(p3?.detail ?? '', /the link E to B passes through "Manager approval"/);
   });
 
@@ -66,7 +73,7 @@ describe('score: a broken rule is named, with where', () => {
     const between = (lay.nodes.D.y + lay.nodes.F.y) / 2; // a row with no boxes, only the lines that pass it
     lay.edges['C-E'].points = [{ x: 0, y: between }, { x: 600, y: between }];
     lay.edges['F-E'].points = lay.edges['G-H'].points.map((p) => ({ ...p }));
-    const out = failed(score(model, lay, presets.quiet));
+    const out = failed(score(model, lay, builtIn));
     assert.ok(out.includes('P4') && out.includes('P5'), out.join());
   });
 
@@ -83,49 +90,110 @@ describe('score: a broken rule is named, with where', () => {
     assert.ok(yes && no);
     Object.assign(yes, { x: lay.nodes.D.x, y: lay.nodes.D.y });
     Object.assign(no, { x: lay.nodes.D.x, y: lay.nodes.D.y });
-    const p7 = score(model, lay, presets.quiet).checks.find((c) => c.id === 'P7');
+    const p7 = score(model, lay, builtIn).checks.find((c) => c.id === 'P7');
     assert.match(p7?.detail ?? '', /sits on "Manager approval".*overlap/);
   });
 
   it('D1 when words cannot be read, in the mode where they cannot', () => {
-    const faint = designFrom('faint', { light: { text: '#c9cdd3' }, dark: { edge: '#1a1f27' } });
+    const faint = designFrom({ name: 'faint', light: { text: '#c9cdd3' }, dark: { edge: '#0d2a30' } });
     const d1 = check(orders, faint).result.checks.find((c) => c.id === 'D1');
     assert.equal(d1?.ok, false);
     assert.match(d1?.detail ?? '', /light: text on a step box is 1\.\d to 1, and needs 4\.5/);
     assert.match(d1?.detail ?? '', /dark: a line on the page/);
   });
+
+  it('D2 when two kinds of box are the same colour to everyone', () => {
+    const same = designFrom({ light: { kinds: { rework: '#2c7d4f' } } });
+    const d2 = check(orders, same).result.checks.find((c) => c.id === 'D2');
+    assert.equal(d2?.ok, false);
+    assert.match(d2?.detail ?? '', /^light: terminal and rework boxes look alike \(0 apart, and need 12\)$/);
+  });
+
+  it('D2 when two kinds differ only to people who see red and green apart', () => {
+    // A red and a green of the same lightness: plain to most, one colour to about one man in twelve.
+    const redGreen = designFrom({ light: { kinds: { terminal: '#3a8f3a', rework: '#c05a3a' } } });
+    assert.ok(apart('#3a8f3a', '#c05a3a') > 40);
+    const d2 = check(orders, redGreen).result.checks.find((c) => c.id === 'D2');
+    assert.match(d2?.detail ?? '', /terminal and rework boxes look alike to someone who does not see red and green apart \(\d+ apart, and need 12\)/);
+  });
+
+  it('D2 only for the kinds a diagram uses, and only those the design gives a colour', () => {
+    const same = designFrom({ light: { kinds: { external: '#0a84c4' } } }); // the same as data, and neither is in the diagram
+    assert.equal(check(orders, same).result.checks.find((c) => c.id === 'D2')?.ok, true);
+    const own = check('flowchart TD\nA[One]:::vendor --> B[Two]:::partner').result.checks.find((c) => c.id === 'D2');
+    assert.equal(own?.ok, true);
+  });
 });
 
-describe('design', () => {
+describe('design: the sums', () => {
   it('mixes and measures colours', () => {
     assert.equal(mix('#000000', '#ffffff', 0.5), '#808080');
     assert.equal(Math.round(contrast('#000000', '#ffffff')), 21);
     assert.equal(contrast('#777777', '#777777'), 1);
-    assert.equal(kindFill(presets.quiet.light, 'step'), presets.quiet.light.node);
-    assert.notEqual(kindFill(presets.quiet.light, 'rework'), presets.quiet.light.node);
+    assert.equal(kindFill(builtIn.light, 'step'), builtIn.light.node);
+    assert.notEqual(kindFill(builtIn.light, 'rework'), builtIn.light.node);
   });
 
-  it('lays a design file over the one it extends, kinds and all', () => {
-    const d = designFrom('storm', { extends: 'soft', radius: 4, light: { accent: '#112233', kinds: { vendor: '#445566' } } });
-    assert.equal(d.name, 'storm');
+  it('says how far apart two colours look: nothing for the same, about 100 for black and white', () => {
+    assert.equal(apart('#336699', '#336699'), 0);
+    assert.equal(Math.round(apart('#000000', '#ffffff')), 100);
+  });
+
+  it('leaves a grey the same grey for every kind of sight', () => {
+    for (const [name, rows] of Object.entries(sights)) {
+      for (const row of rows) assert.ok(Math.abs(row[0] + row[1] + row[2] - 1) < 1e-5, name);
+      assert.ok(apart('#808080', '#808080', /** @type {keyof typeof sights} */ (name)) === 0);
+    }
+    assert.ok(Math.abs(apart('#404040', '#c0c0c0', 'protan') - apart('#404040', '#c0c0c0')) < 0.01);
+  });
+
+  it('brings a red and a green close together for red-green colour blindness, and leaves blue and yellow apart', () => {
+    assert.ok(apart('#3a8f3a', '#c05a3a', 'deutan') < apart('#3a8f3a', '#c05a3a') / 3);
+    assert.ok(apart('#1d5fbf', '#c9a400', 'deutan') > 60);
+    assert.ok(apart('#1d5fbf', '#c9a400', 'protan') > 60);
+  });
+});
+
+describe('design: the built-in look', () => {
+  it('has a light and a dark, with the same kinds in each', () => {
+    assert.equal(builtIn.name, 'merlive');
+    assert.deepEqual(Object.keys(builtIn.dark?.kinds ?? {}), Object.keys(builtIn.light.kinds));
+    assert.equal(designFrom(), builtIn);
+  });
+
+  it('keeps every two of its kinds further apart than the limit, for every kind of sight, with room', () => {
+    for (const p of [builtIn.light, /** @type {import('../skills/merlive/scripts/design.mjs').Palette} */ (builtIn.dark)]) {
+      const colours = Object.values(p.kinds);
+      for (const sight of /** @type {(keyof typeof sights)[]} */ (Object.keys(sights))) {
+        colours.forEach((a, i) => colours.slice(i + 1).forEach((b) => assert.ok(apart(a, b, sight) >= 17, `${a} and ${b}, ${sight}`)));
+      }
+    }
+  });
+});
+
+describe('design: a project\'s own file', () => {
+  it('is laid over the built-in look, kinds and all, and is called "your" design unless it has a name', () => {
+    const d = designFrom({ radius: 4, light: { accent: '#112233', kinds: { vendor: '#445566' } } });
+    assert.equal(d.name, 'your');
     assert.equal(d.radius, 4);
-    assert.equal(d.font, presets.soft.font);
+    assert.equal(d.font, builtIn.font);
     assert.equal(d.light.accent, '#112233');
     assert.equal(d.light.kinds.vendor, '#445566');
-    assert.equal(d.light.kinds.rework, presets.soft.light.kinds.rework);
-    assert.equal(d.dark, undefined);
+    assert.equal(d.light.kinds.rework, builtIn.light.kinds.rework);
+    assert.equal(designFrom({ name: 'storm' }).name, 'storm');
   });
 
-  it('keeps the dark look of the design it extends only when the light one is left alone', () => {
-    assert.ok(designFrom('a', { radius: 2 }).dark);
-    assert.equal(designFrom('b', { light: { bg: '#ffffff' } }).dark, undefined);
-    assert.equal(designFrom('c', { light: { bg: '#ffffff' }, dark: { bg: '#000000' } }).dark?.bg, '#000000');
+  it('keeps the built-in dark only when it leaves the light colours alone', () => {
+    assert.ok(designFrom({ radius: 2 }).dark);
+    assert.equal(designFrom({ light: { bg: '#ffffff' } }).dark, undefined);
+    assert.equal(designFrom({ light: { bg: '#ffffff' }, dark: { bg: '#000000' } }).dark?.bg, '#000000');
+    assert.equal(designFrom({ dark: { bg: '#000000' } }).light.bg, builtIn.light.bg);
   });
 
-  it('refuses a colour that is not one, a motion that is not one, and a preset that is not there, each with what to do', () => {
-    assert.throws(() => designFrom('x', { light: { bg: 'blue' } }), /light\.bg must be a colour like #1f5fd1, not "blue"/);
-    assert.throws(() => designFrom('x', { light: { kinds: { risk: '#fff' } } }), /light\.kinds\.risk must be a colour/);
-    assert.throws(() => designFrom('x', { motion: 'wild' }), /motion must be none, calm or lively/);
-    assert.throws(() => designFrom('loud'), /No design called "loud"\. Use one of: quiet, bold, soft/);
+  it('refuses a colour that is not one, a motion that is not one, and a file that is not an object, each with what to do', () => {
+    assert.throws(() => designFrom({ light: { bg: 'blue' } }), /light\.bg must be a colour like #1f5fd1, not "blue"/);
+    assert.throws(() => designFrom({ light: { kinds: { risk: '#fff' } } }), /light\.kinds\.risk must be a colour/);
+    assert.throws(() => designFrom({ motion: 'wild' }), /motion must be none, calm or lively/);
+    assert.throws(() => designFrom([]), /A design file holds one JSON object/);
   });
 });

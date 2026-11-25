@@ -40,15 +40,17 @@ node skills/merlive/scripts/merlive.mjs examples/order-approval.md --format svg
 - **A diagram that looks planned.** The main path runs in one straight line and everything else sits to one side.
   Every box is the same size, on a grid. A decision is a box with cut corners, not a diamond twice the size of its
   neighbours. Lines turn at right angles, each with a port of its own, and go round boxes.
-- **Rules that are checked.** Seven placement rules and one for contrast run before anything is written. A diagram
-  that breaks one is not written, and the message says which rule, where, and what to change in the Mermaid.
+- **Rules that are checked.** Seven placement rules and two for colour run before anything is written. A diagram
+  that breaks one is not written, and the message says which rule, where, and what to change.
   [The rules](docs/PLACEMENT.md).
 - **Your Mermaid, unchanged.** It stays the thing people edit and still renders anywhere Mermaid does. Steps and
   notes are `%%` comments other renderers ignore.
 - **A page readers can use.** Pick a box or a line to see only what it connects to. Walk the steps the author
   wrote. Nothing moves until the reader presses play, and then one dot follows the path.
-- **Your own design, set once.** Three come with it (quiet, bold, soft); a `merlive.design.json` in the project
-  sets colours, face, corner and how much may move, and every diagram follows it.
+- **Your colours, held to account.** A `merlive.design.json` in the project sets colours, face, corner and how
+  much may move, once, and every diagram follows it. Merlive does not choose your palette; it checks it: words
+  can be read, and the kinds of box can be told apart, also by the one man in twelve who does not see red and
+  green apart. Until you set one, it draws in a look of its own, in light and dark.
 - **One file, nothing fetched.** The page works offline and prints with its notes as an appendix. `--format svg`
   gives a still picture for wikis.
 
@@ -75,7 +77,7 @@ goes. The full list, and the Mermaid that is read, is in [reference.md](skills/m
 | Layer | Who decides | What |
 |---|---|---|
 | Rules | Merlive | Where boxes go, their size, how lines run. A design cannot switch them off |
-| Design | You, once | Colours, face, corner, motion |
+| Design | You, once | Colours, face, corner, motion. Checked, not chosen, by Merlive |
 | Hints | The author, per diagram | The main path, the side loops go |
 
 ## Working on it

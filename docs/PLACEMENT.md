@@ -9,7 +9,7 @@ There are three layers, and it matters which one a thing belongs to.
 | Layer | Who decides | What is in it |
 |---|---|---|
 | **Rules** | Merlive | Where boxes go, their size, how lines run. This file. A design cannot switch them off. |
-| **Design** | You, once | Colours, face, corner, how much may move. `merlive.design.json`. |
+| **Design** | You, once | Colours, face, corner, how much may move. `merlive.design.json`. Merlive checks it (D1, D2) but does not choose it. |
 | **Hints** | The author, per diagram | Which path is the main one, which side loops go. `%%` comments in the Mermaid. |
 
 A hint says what the author means. It never says where a box goes: no coordinates, anywhere.
@@ -73,6 +73,21 @@ Text against its box is at least 4.5 to 1 (WCAG AA), in every kind of box the di
 the accent are at least 3 to 1 against the page. Checked in light and in dark when the design has both.
 
 - **What to do when it fails:** change the colour named in the message, in the design file.
+
+## D2. Kinds of box can be told apart
+
+Every two kinds of box a diagram uses (decision, rework, your own) have colours at least 12 apart in CIELAB, as
+most people see them and as someone with either common form of red-green colour blindness does, about one man in
+twelve. Checked in light and in dark. Only kinds the design gives a colour are compared.
+
+- **Pass:** Merlive's own colours: the closest two are 24 apart in light and 18 in dark.
+- **Fail:** a red "rework" and a green "done" of the same lightness. Plain to most readers, one colour to some.
+- **Why 12:** the sets made for colour-blind readers (Okabe-Ito, Paul Tol's bright) keep their closest pair at 16
+  to 17. Twelve lets those through with room and stops what is clearly too close.
+- **What to do when it fails:** change one of the two colours the message names, in the design file. Making one
+  lighter or darker helps more than changing its hue.
+- **And never colour alone:** a decision and a start or end also differ in shape, the legend names every kind,
+  and a picked box says its kind in words.
 
 ## Motion is not a placement rule, but it has one of its own
 

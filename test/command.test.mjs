@@ -19,8 +19,8 @@ const go = (/** @type {string[]} */ argv, cwd = temp()) => {
 
 describe('options', () => {
   it('reads each option', () => {
-    assert.deepEqual(optionsFrom(['a.md', '--out', 'o', '--design', 'bold', '--format', 'svg', '--only', '2', '--check', '--force']), {
-      file: 'a.md', out: 'o', design: 'bold', format: 'svg', only: 2, check: true, force: true, help: false,
+    assert.deepEqual(optionsFrom(['a.md', '--out', 'o', '--design', 'd.json', '--format', 'svg', '--only', '2', '--check', '--force']), {
+      file: 'a.md', out: 'o', design: 'd.json', format: 'svg', only: 2, check: true, force: true, help: false,
     });
   });
 
@@ -44,7 +44,7 @@ describe('the command', () => {
     const out = temp();
     const { code, text } = go([example, '--out', out]);
     assert.equal(code, exits.drawn);
-    assert.match(text, /drew .*order-approval-1\.html \(8 boxes, 9 links, 0 crossings, quiet design\)/);
+    assert.match(text, /drew .*order-approval-1\.html \(8 boxes, 9 links, 0 crossings, merlive design\)/);
     assert.match(text, /left as Mermaid: block 3 \(line \d+\) is a sequenceDiagram/);
     const page = readFileSync(join(out, 'order-approval-1.html'), 'utf8');
     assert.match(page, /<title>Purchase order approval<\/title>/);
@@ -107,7 +107,11 @@ describe('the command', () => {
 });
 
 describe('the command: the design', () => {
-  it("uses the folder's own design file when there is one", () => {
+  it("draws in Merlive's own look when the folder has no design file", () => {
+    assert.match(go([example, '--check']).text, /merlive design/);
+  });
+
+  it("uses the folder's own design file when there is one, by its name", () => {
     const cwd = temp();
     writeFileSync(join(cwd, 'merlive.design.json'), JSON.stringify({ name: 'storm', light: { accent: '#0a5cc2' } }));
     const { code, text } = go([example, '--check'], cwd);
@@ -115,11 +119,11 @@ describe('the command: the design', () => {
     assert.match(text, /storm design/);
   });
 
-  it('uses a preset by name, or a file by path', () => {
+  it('uses a design file named by --design, before the folder\'s own', () => {
     const cwd = temp();
-    writeFileSync(join(cwd, 'mine.json'), JSON.stringify({ extends: 'bold' }));
-    assert.match(go([example, '--check', '--design', 'soft'], cwd).text, /soft design/);
-    assert.match(go([example, '--check', '--design', 'mine.json'], cwd).text, /mine design/);
+    writeFileSync(join(cwd, 'merlive.design.json'), JSON.stringify({ name: 'storm' }));
+    writeFileSync(join(cwd, 'mine.json'), JSON.stringify({ radius: 0 }));
+    assert.match(go([example, '--check', '--design', 'mine.json'], cwd).text, /your design/);
   });
 
   it('does not draw in a design whose words cannot be read', () => {
@@ -128,6 +132,14 @@ describe('the command: the design', () => {
     const { code, text } = go([example, '--check'], cwd);
     assert.equal(code, exits.brokeARule);
     assert.match(text, /D1 Words and lines can be read/);
+  });
+
+  it('does not draw in a design whose kinds of box cannot be told apart', () => {
+    const cwd = temp();
+    writeFileSync(join(cwd, 'merlive.design.json'), JSON.stringify({ light: { kinds: { rework: '#2c7d4f' } } }));
+    const { code, text } = go([example, '--check', '--only', '1'], cwd);
+    assert.equal(code, exits.brokeARule);
+    assert.match(text, /D2 Kinds of box can be told apart: light: terminal and rework boxes look alike/);
   });
 });
 
@@ -138,7 +150,7 @@ describe('the command: what is missing ends with 2, nothing to draw with 3', () 
     for (const [argv, words] of /** @type {[string[], RegExp][]} */ ([
       [[], /Which file\?/],
       [['nowhere.md'], /No file at .*nowhere\.md/],
-      [[example, '--design', 'nowhere.json'], /No design at .*nowhere\.json\. Name a preset/],
+      [[example, '--design', 'nowhere.json'], /No design file at .*nowhere\.json\./],
       [[example, '--design', 'bad.json'], /bad\.json is not valid JSON/],
       [[example, '--frmat', 'svg'], /There is no option --frmat/],
     ])) {

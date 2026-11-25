@@ -2,7 +2,7 @@
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
 import { hitsBox, meet, measure, roomFor, segmentsOf } from './layout.mjs';
-import { contrast, kindFill } from './design.mjs';
+import { apart, contrast, kindFill } from './design.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
 
@@ -13,6 +13,10 @@ export const limits = {
   textContrast: 4.5, // WCAG AA for words
   lineContrast: 3, // WCAG AA for lines and edges of boxes
   boxGap: 16, // the least room between two boxes
+  // The least two kinds' colours may differ, in CIELAB. The sets made for colour-blind readers (Okabe-Ito, Paul
+  // Tol's bright) keep their closest pair at 16 to 17, so they pass with room; two outlines closer than this
+  // read as one colour with a legend beside them.
+  tellApart: 12,
 };
 
 const overlap = (/** @type {{x:number,y:number,w:number,h:number}} */ a, /** @type {{x:number,y:number,w:number,h:number}} */ b, gap = 0) =>
@@ -105,6 +109,25 @@ export function score(model, lay, design) {
     for (const k of kinds) if (p.kinds[k]) need(`the edge of a ${k} box`, p.kinds[k], p.bg, limits.lineContrast);
   }
   add('D1', 'Words and lines can be read against what is behind them', faint, `${design.name} passes in ${design.dark ? 'light and dark' : 'its one look'}`);
+
+  // D2
+  /** @type {string[]} */
+  const alike = [];
+  let told = 0;
+  for (const [mode, p] of /** @type {[string, import('./design.mjs').Palette|undefined][]} */ ([['light', design.light], ['dark', design.dark]])) {
+    if (!p) continue;
+    // Only kinds the design gives a colour: the rest share the plain box on purpose.
+    const coloured = kinds.filter((k) => p.kinds[k]);
+    told = coloured.length;
+    coloured.forEach((a, i) => coloured.slice(i + 1).forEach((b) => {
+      const plain = apart(p.kinds[a], p.kinds[b]);
+      const redGreen = Math.min(apart(p.kinds[a], p.kinds[b], 'protan'), apart(p.kinds[a], p.kinds[b], 'deutan'));
+      // Said once for a pair: as everyone sees it if that is already too close, else as red-green sight does.
+      if (plain < limits.tellApart) alike.push(`${mode}: ${a} and ${b} boxes look alike (${Math.round(plain)} apart, and need ${limits.tellApart})`);
+      else if (redGreen < limits.tellApart) alike.push(`${mode}: ${a} and ${b} boxes look alike to someone who does not see red and green apart (${Math.round(redGreen)} apart, and need ${limits.tellApart})`);
+    }));
+  }
+  add('D2', 'Kinds of box can be told apart', alike, `${told} coloured kinds, apart in ordinary and red-green colour-blind sight`);
 
   return { pass: checks.every((c) => c.ok), checks };
 }

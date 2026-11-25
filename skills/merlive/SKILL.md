@@ -57,6 +57,7 @@ Mermaid, with the person's agreement:
 | P4 too many crossings | Name the main path with `%% main:`, or split the diagram in two |
 | P3 a line through a box | Name the main path with `%% main:` so the box in the way moves aside |
 | D1 contrast | Change the colour the message names, in the design file |
+| D2 kinds look alike | Make one of the two colours named lighter or darker, in the design file |
 
 `--force` writes the diagram anyway. Use it only when the person has seen the message and asks for it.
 
@@ -78,17 +79,21 @@ renderer ignores them and the file still renders anywhere:
 - `loop 1` is the shortest loop in the graph, `loop 2` the next. The syntax in full is in
   [reference.md](reference.md).
 
-## 5. The design
+## 5. The design is the project's own
 
-- The script uses `merlive.design.json` in the project's folder when there is one, else the `quiet` design.
-  `--design bold` or `--design soft` tries another; `--design path/to/file.json` uses a file elsewhere.
-- **The first time in a project with no design file**, draw one of their diagrams in each of the three designs
-  into a scratch folder (`--design quiet --out /tmp/merlive/quiet`, and so on), show them, and ask which is
-  closest and what to change. Then write `merlive.design.json` (its fields are in [reference.md](reference.md))
-  and draw everything with it from then on.
-- A design sets colours, the face, the corner, and how much may move: `none`, `calm` (one dot, when the reader
+The colours are the user's to set, once, in `merlive.design.json` in the project's folder. Until there is one,
+the script draws in Merlive's own look, which has a light and a dark.
+
+- **The first time in a project with no design file**, draw with Merlive's own look, show the result, and ask
+  whether they want their own colours. If they do, ask for what they have (a brand colour, a site's stylesheet, a
+  design system) and write the file from that: `accent` from the brand colour, the rest only as far as they say.
+  Its fields are in [reference.md](reference.md). Do not invent a palette for them.
+- **Run `--check` after writing or changing it.** Two rules hold any palette to account, and the message names
+  the colour to change: D1, words and lines can be read, and D2, the kinds of box can be told apart, also by
+  people who do not see red and green apart. Pass the message on; change a colour only with their agreement.
+- `light` alone gives one look; add `dark` for both. `--design path/to/file.json` draws with a file elsewhere.
+- A design also sets the face, the corner, and how much may move: `none`, `calm` (one dot, when the reader
   presses play) or `lively` (the path flows too). Leave it at `calm` unless asked.
-- A design that fails the contrast check is not used until its colours are fixed.
 
 ## 6. Say what you did
 
