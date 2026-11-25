@@ -141,7 +141,9 @@ export function score(model, lay, design) {
 
   // D1, D2: the sums are in design.mjs, where the setup page uses them too.
   const kinds = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])];
-  const [d1, d2] = colourChecks(design, kinds, model.nodes.some((n) => n.table));
+  // Only what is drawn shaded is checked: every second row of a table, so a table of one row has none.
+  const shaded = [...new Set(model.nodes.filter((n) => (n.table?.length ?? 0) > 1).map((n) => n.kind))];
+  const [d1, d2] = colourChecks(design, kinds, shaded);
   const looks = looksOf(design).map(([mode]) => mode).join(' and ');
   add('D1', 'Words and lines can be read against what is behind them', d1.broken, `${design.name} passes in ${looks}`);
   add('D2', 'Kinds of box can be told apart', d2.broken, 'apart in ordinary and red-green colour-blind sight');

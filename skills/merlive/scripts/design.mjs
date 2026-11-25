@@ -148,10 +148,10 @@ export const looksOf = (/** @type {Design} */ d) =>
  * page as colours are changed, so both say the same.
  * @param {Design} design
  * @param {string[]} kinds
- * @param {boolean} [shaded] whether the diagram has a table, whose every second row is shaded
+ * @param {string[]} [shaded] the kinds of box that have a shaded row: a table of two rows or more
  * @returns {{id:'D1'|'D2',broken:string[]}[]}
  */
-export function colourChecks(design, kinds, shaded = false) {
+export function colourChecks(design, kinds, shaded = []) {
   /** @type {string[]} */
   const faint = [];
   /** @type {string[]} */
@@ -162,7 +162,7 @@ export function colourChecks(design, kinds, shaded = false) {
       if (c < least) faint.push(`${mode}: ${what} is ${c.toFixed(1)} to 1, and needs ${least}`);
     };
     for (const k of kinds) need(`text on a ${k} box`, p.text, kindFill(p, k), colourLimits.text);
-    if (shaded) for (const k of kinds) need(`text on a shaded row of a ${k} box`, p.text, shadedFill(p, kindFill(p, k)), colourLimits.text);
+    for (const k of shaded) need(`text on a shaded row of a ${k} box`, p.text, shadedFill(p, kindFill(p, k)), colourLimits.text);
     need('quiet text on the page', p.muted, p.bg, colourLimits.text);
     need('a line on the page', p.edge, p.bg, colourLimits.line);
     need('the accent on the page', p.accent, p.bg, colourLimits.line);
