@@ -58,6 +58,9 @@ For coding agents changing this repository. It follows the same habits as
 npm run check   # the tests, with coverage
 ```
 
+GitHub runs the same command on every push and pull request, on Linux and macOS (`.github/workflows/check.yml`).
+It installs nothing: the tests need Node and nothing else.
+
 Change what is read or how anything is drawn, and run `npm run examples` and `npm run coverage` and look at the
 pictures; the tests fail while `docs/COVERAGE.md` says something the code no longer does. A layout that passes its checks
 can still look wrong; when it does, the fix is a new rule and a check for it, not a special case.

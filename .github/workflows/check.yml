@@ -1,0 +1,36 @@
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Reads the code and nothing else: no token that can write.
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    # Linux for CI, and macOS, where most people run Merlive.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      # Actions are pinned to a commit, not a tag that can be moved; Dependabot keeps the pins current.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      # Nothing to install: Merlive and its tests need Node and nothing else. The tests hold the code, the
+      # examples, docs/COVERAGE.md and the comparison page to each other; Mermaid's own pictures are kept in the
+      # repository, so neither Mermaid nor a browser is needed here.
+      - run: npm run check

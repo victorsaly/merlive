@@ -70,6 +70,8 @@ The first version. It draws flowcharts and sequence diagrams, and says what it l
 - **An author's own styling is kept as what it means.** `style` and `classDef` give a box a broken outline, a
   heavy one, and a colour; `linkStyle` does the same for a link, by Mermaid's number for it. The colour is named
   for its hue and drawn in the design's own nearest colour, so the colour rules still hold.
+- **Every push is checked.** GitHub runs `npm run check` on Linux and macOS for every push and pull request,
+  with nothing installed.
 - **A group inside a group has a frame of its own**, inside the outer one, each with its name on a line of its
   own. Where frames inside one another begin or end at the same rank, that rank sits further on to make room.
   The same goes for a composite state inside another.
