@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 25 November 2026, with 0.3.0 in hand.
+Last brought up to date: 25 November 2026, as 0.3.0 was closed.
 
 ## Released
 
@@ -41,16 +41,14 @@ What 0.2.0 left, each said by the command when met or named on the comparison pa
   or in Victor's diagrams has two subgraphs with one id, but it is a change of behaviour, so say so in the pull
   request.
 
-## In hand: 0.3.0, more kinds that are boxes and links
+**0.3.0** (25 November 2026). Requirement, C4, architecture and block diagrams (`requirement.mjs`, `c4.mjs`,
+`architecture.mjs`, `block.mjs`, and `grid.mjs` for a block diagram placed on its author's grid), a box's
+sentence (`Node.text`), a junction as a dot, room for words that run into a group or sit by a turn. It went to
+`main` together with 0.2.0: Victor merged its first pull request into the 0.2.0 branch, so one pull request
+(`class-er`) carries both. Every sample Merlive reads is drawn with no rule broken.
 
-On the branch `kinds`, stacked on `class-er` until the 0.2.0 pull request is merged. One pull request, one release.
+What 0.3.0 left, in the order worth doing:
 
-Done: readers for requirement, C4, architecture and block diagrams (`requirement.mjs`, `c4.mjs`,
-`architecture.mjs`, `block.mjs`), each with its tests, its list in `corpus/index.json` and its section in
-`skills/merlive/reference.md`; a box's sentence (`Node.text`); room for words that run into a group or sit by a
-turn; the line over a name fitted to its box. Every sample is drawn with no rule broken.
-
-Left, in the order worth doing:
 
 1. **A grid its author placed** is drawn (`grid.mjs`, `model.placedBy = 'grid'`). What is weak in it: the room
    between cells holds three lines, and a fourth through one gap is not routed (a warning, and P3 refuses);
@@ -66,13 +64,12 @@ Left, in the order worth doing:
    box's sentence is dropped; the page's side panel does not show a box's sentence.
 4. **Look, sample by sample**, at the requirement samples on `corpus/compare.html`: the C4, architecture and
    block samples were looked through on contact sheets, the requirement ones only by their rules passing.
-5. **Release**: the changelog's date, the README's status line, the pull request.
-
 ## Waiting on Victor
 
 - **The tags.** No session so far could push a tag. In a clone, `v0.1.0` first:
-  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0" && git push origin v0.1.0`. Then, once the 0.2.0 pull request is
-  merged, on the merge commit: `git tag -a v0.2.0 -m "Merlive 0.2.0" && git push origin v0.2.0`.
+  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0" && git push origin v0.1.0`. Then `v0.2.0` at the last commit that was only 0.2.0:
+  `git tag -a v0.2.0 faa35cd -m "Merlive 0.2.0" && git push origin v0.2.0`. Then, once the pull request from
+  `class-er` is merged, `v0.3.0` on the merge commit.
 - **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11) takes "not released
   yet" off Merlive's page; merge it after the tag. Then, in the skills repository: `npm install`,
   `npm run build` (the Merlive page has never been built: it could not be, where it was written),

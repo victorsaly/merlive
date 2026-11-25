@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (unreleased)
+## 0.3.0 (2026-11-25)
 
 More kinds of diagram that are boxes and links: requirement, C4, architecture and block diagrams.
 
