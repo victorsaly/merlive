@@ -4763,7 +4763,7 @@
         "box",
         "box",
         "box",
-        "pill"
+        "point"
       ],
       "loses": "A junction is drawn as a round box with no words, the size of every other box, not as the point where lines meet"
     },

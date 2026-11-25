@@ -14,7 +14,7 @@ describe('shapes: every shape Merlive draws', () => {
       const { main, more } = outlineOf(shape, 0, 0, w, h, 8);
       assert.match(main, /^<(rect|polygon|path) class="mv-shape/, shape);
       for (const extra of more) assert.match(extra, /class="mv-shape mv-detail/, shape);
-      assert.ok(roomIn(shape, w) > 40 && roomIn(shape, w) <= w - 28, `${shape} leaves ${roomIn(shape, w)}px for words`);
+      if (shape !== 'point') assert.ok(roomIn(shape, w) > 40 && roomIn(shape, w) <= w - 28, `${shape} leaves ${roomIn(shape, w)}px for words`);
       const at = wordsAt(shape, h);
       assert.ok(Math.abs(at.dx) <= 8 && Math.abs(at.dy) <= 8, shape);
     }
@@ -109,5 +109,20 @@ describe('shapes: a pill taller than a plain box', () => {
     assert.equal(inset('pill', 'left', 0, 200, 140), 0, 'the middle of a tall side is flat');
     assert.ok(inset('pill', 'left', 68, 200, 140) > 0, 'and the corner is still round');
     assert.equal(outlineOf('pill', 0, 0, 160, 44, 8).main.includes('rx="22"'), true, 'a plain pill is as it was');
+  });
+});
+
+describe('shapes: a point', () => {
+  it('is a dot in the middle of its box, with no room for words', () => {
+    const { main, more } = outlineOf('point', 0, 0, w, h, 8);
+    assert.match(main, new RegExp(`x="${w / 2 - form.point}" y="${h / 2 - form.point}" width="${2 * form.point}" height="${2 * form.point}" rx="${form.point}"`));
+    assert.deepEqual(more, []);
+  });
+
+  it('is met at the dot: a line runs on from the edge of the box to it', () => {
+    assert.equal(inset('point', 'top', 0, w, h), h / 2 - form.point);
+    assert.equal(inset('point', 'left', 0, w, h), w / 2 - form.point);
+    assert.ok(inset('point', 'top', 5, w, h) > h / 2 - form.point, 'off its middle, a little further');
+    assert.equal(inset('point', 'top', 40, w, h), h / 2, 'and past the dot, to the line through its middle');
   });
 });

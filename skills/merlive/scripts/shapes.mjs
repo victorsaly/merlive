@@ -4,11 +4,11 @@
 // words, and where a line meets it. Layout and drawing both ask here, so a line always ends on the outline.
 // Pure.
 
-/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'|'note'} Shape */
+/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'|'note'|'point'} Shape */
 /** @typedef {'top'|'bottom'|'left'|'right'} Side */
 
 /** @type {Shape[]} */
-export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag', 'note'];
+export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag', 'note', 'point'];
 
 // What is measured, named once.
 export const form = {
@@ -22,6 +22,7 @@ export const form = {
   ring: 4, // px between the two lines of a double circle
   notch: 14, // px a flag is cut in at the middle of its left side
   pillMost: 30, // px a pill's ends are rounded at most: a taller one (it says a sentence, or lists things) keeps flat sides for its words
+  point: 7, // px from the middle of a point to its edge: a dot where lines meet and part, a little wider than a line's turn
   fold: 12, // px of a note's top right corner that is folded over: enough to see, not enough to take a word's room
 };
 
@@ -65,6 +66,8 @@ export function inset(shape, side, off, w, h) {
   const within = (/** @type {number} */ v) => Math.max(0, Math.min(across / 2, v));
   switch (shape) {
     case 'diamond': return within((a / (along / 2)) * (across / 2));
+    // A point is a dot in the middle of its box: a line runs on to it, or, past its edge, to the line through its middle.
+    case 'point': return across / 2 - (a < form.point ? Math.sqrt(form.point ** 2 - a ** 2) : 0);
     case 'pill': case 'double-circle': {
       // The ends are half circles: a side port meets one; a top port only past where the flat part ends.
       const r = Math.min(h / 2, form.pillMost), past = Math.max(0, a - ((flat ? w : h) / 2 - r));
@@ -106,6 +109,7 @@ export function outlineOf(shape, l, t, w, h, radius) {
   const corner = Math.min(radius, h / 2);
   switch (shape) {
     case 'pill': return { main: rect('mv-shape mv-pill', 0, Math.min(h / 2, form.pillMost)), more: [] };
+    case 'point': return { main: `<rect class="mv-shape mv-point" x="${n(x - form.point)}" y="${n(y - form.point)}" width="${n(2 * form.point)}" height="${n(2 * form.point)}" rx="${n(form.point)}"/>`, more: [] };
     case 'double-circle': return { main: rect('mv-shape mv-pill', 0, h / 2), more: [rect('mv-shape mv-detail mv-pill', form.ring, h / 2 - form.ring)] };
     case 'diamond': return { main: polygon([[x, t], [r, y], [x, u], [l, y]]), more: [] };
     case 'hexagon': {

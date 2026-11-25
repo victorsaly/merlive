@@ -58,8 +58,8 @@ Left, in the order worth doing:
    column width for a grid and one height for a row, a block of span `s` as wide as `s` columns and their gaps
    (P2 needs a clause and a check for that), a group cell as a frame round its own grid, a block-arrow shape in
    `shapes.mjs`, and links routed at right angles in the gaps between cells, never through one.
-2. **A junction** in an architecture diagram is an empty pill the size of a box. It should be a point: a shape
-   with no room for words, and a box smaller than the one box size.
+2. **A junction** is a dot (the `point` shape) in a footprint as big as any box, so the room round it is a
+   box's. A box smaller than the one box size would let the diagram close up round it.
 3. **Smaller things**: an edge out of a group (`a{group}:R`) is drawn from the service named, not from the frame;
    a group has nowhere to keep an icon or a description (a Deployment_Node's); `disk` is drawn with the database
    icon; `contains` in a requirement diagram ends in a circle where Mermaid has a crossed ring; emphasis inside a

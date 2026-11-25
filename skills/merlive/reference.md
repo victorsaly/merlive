@@ -233,7 +233,7 @@ flowchart, so everything else on this page holds for it: the rules, the design, 
 | `(logos:aws-lambda)` | An icon from a pack is somebody's mark, which Merlive neither fetches nor draws: it is left out, the words are kept, and it is said once for each such icon. A name from a set Merlive knows (`fa:fa-key`) gets its drawing |
 | `group cloud(cloud)[Azure]`, `group office[Head office]` | A group, drawn as a frame with its title. Its icon is read past |
 | `service api(server)[Orders API] in cloud`, `group net(server)[Network] in cloud` | What is in a group, and a group inside a group, to any depth. A group may be declared after what is in it |
-| `junction split`, `junction split in cloud` | Where edges meet and part: a round box with no words, of the kind `junction` |
+| `junction split`, `junction split in cloud` | Where edges meet and part: a dot, of the kind `junction` |
 | `api:R -- L:db` | An edge: a link with nothing at either end |
 | `shop:R --> L:api`, `api:R <-- L:db`, `api:B <--> T:erp` | An arrowhead on the service it points into: the second, the first, or both |
 | `api:R -[saves to]- L:db`, `api:R <-[reads and writes]-> L:db` | The words on a link |
