@@ -18,7 +18,8 @@ squeezed into a column, a legend that said "Red", and code in a face the site do
 - **`%% kind red: Read-only data` says what a kind of box means.** The legend and a picked box say it instead of
   "Red". A kind its author named for a colour, with no such line, is named in a `note,` line that says how.
 - **Code is set in the site's own face for code.** Setup reads the `font-family` of `code` and `pre`, writes it
-  as `mono` in the design file, and the Mermaid a page shows and the rows a class or an entity lists use it.
+  as `mono` in the design file, and the Mermaid a page shows and the rows a class lists use it. An
+  entity's table stays in the page's own face, which its columns are measured for.
 - **The agent offers the choices once, after setup.** Motion, look, output and steps, each with setup's own as
   the recommendation (SKILL.md, section 5). A colour, a face or a corner is still never asked: it is read.
 

@@ -132,7 +132,7 @@ export function readingOf(sheets) {
       else if (page && (name === 'background' || name === 'background-color')) set[mode].bg = value;
       else if (page && name === 'color') set[mode].text = value;
       else if (page && name === 'font-family') face = value;
-      // The face its code is set in: what the Mermaid a page shows, and the rows a box lists, are set in.
+      // The face its code is set in: what the Mermaid a page shows, and the rows a class lists, are set in.
       else if (name === 'font-family' && !code && parts.some((s) => /^(?:code|pre|kbd|samp)$/.test(s))) code = value;
       else if (name === 'color' && parts.some((s) => s === 'a' || s === 'a:link')) set[mode].link = value;
       else if (name === 'border-radius') corners.push(value);
