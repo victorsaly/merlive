@@ -1,0 +1,33 @@
+{
+  // Why: to watch Merlive work on a file, open that file, press F5, and step through the command.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Merlive: draw the open file",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/skills/merlive/scripts/merlive.mjs",
+      "args": ["${file}"],
+      "cwd": "${fileDirname}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Merlive: say what would be drawn of the open file",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/skills/merlive/scripts/merlive.mjs",
+      "args": ["${file}", "--check"],
+      "cwd": "${fileDirname}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Merlive: draw the example",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/skills/merlive/scripts/merlive.mjs",
+      "args": ["examples/order-approval.md"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}

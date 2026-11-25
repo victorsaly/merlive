@@ -117,6 +117,11 @@ npm run coverage   # run every sample in corpus/ and write docs/COVERAGE.md and 
 npm run compare    # draw Mermaid's side of corpus/compare.html again (needs mermaid-cli and Chrome)
 ```
 
+In Visual Studio Code: open a Markdown file with a flowchart in it and press F5 to draw it ("Merlive: draw the
+open file"), with the debugger on the command. Right-click the page it writes and choose "Show Preview" to see it
+beside the source (the Live Preview extension, which the workspace recommends). The four commands above are
+under Terminal, Run Task.
+
 [AGENTS.md](AGENTS.md) says how the code is laid out and written.
 
 ## Licence

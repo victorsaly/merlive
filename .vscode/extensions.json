@@ -1,0 +1,4 @@
+{
+  // Live Preview shows a page Merlive wrote inside the editor: right-click it, "Show Preview".
+  "recommendations": ["ms-vscode.live-server"]
+}

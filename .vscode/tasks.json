@@ -1,0 +1,10 @@
+{
+  // Why: the four things done most while working on Merlive, one keystroke away (Terminal, Run Task).
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Merlive: check (tests with coverage)", "type": "npm", "script": "check", "group": { "kind": "test", "isDefault": true }, "problemMatcher": [] },
+    { "label": "Merlive: draw the examples", "type": "npm", "script": "examples", "group": { "kind": "build", "isDefault": true }, "problemMatcher": [] },
+    { "label": "Merlive: coverage of Mermaid, and the comparison page", "type": "npm", "script": "coverage", "problemMatcher": [] },
+    { "label": "Merlive: draw Mermaid's side of the comparison", "type": "npm", "script": "compare", "problemMatcher": [] }
+  ]
+}
