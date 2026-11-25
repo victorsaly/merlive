@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 25 November 2026, on the branch `class-er`.
+Last brought up to date: 25 November 2026, as 0.2.0 was closed.
 
 ## Released
 
@@ -13,54 +13,39 @@ Last brought up to date: 25 November 2026, on the branch `class-er`.
 checked, drawn in a project's own design, with the Mermaid left as the source. What each draws of Mermaid, feature
 by feature, is in [COVERAGE.md](COVERAGE.md), which the tests hold to the code.
 
-## In hand: 0.2.0, class diagrams and entity diagrams
+**0.2.0** (25 November 2026), the pull request from the branch `class-er`. Class diagrams and entity diagrams:
+a box that lists rows (`rows`, and `table` for an entity's cells), links that end in "is a", "has" or how many,
+two readers (`class.mjs`, `er.mjs`) behind one table (`READERS` in `parse.mjs`). And what Victor found beside
+Mermaid's own drawings on the comparison page: a picture's title, a class diagram's notes, entities as ruled
+tables, a sequence diagram's people, typed participants, feet, dots and half arrows, a group's title in the
+design's colour, bottom to top and right to left, a composite state's regions, bold and italic. Every sample of
+the corpus that Merlive draws is read in full: none is partly read, none refused.
 
-On the branch `class-er`, to be one pull request and one release.
+What 0.2.0 left, each said by the command when met or named on the comparison page:
 
-Done on the branch:
-
-- **The model holds them** (`parse.mjs` typedefs): a box may list `rows` (a compartment at a time) and carry a
-  short line `over` its name; a link may end in `triangle`, `diamond`, `diamond-open`, `one`, `zero-or-one`,
-  `one-or-many` or `zero-or-many`, and carry a few words `near` and `far`.
-- **They are placed and drawn** (`layout.mjs`, `render.mjs`, `score.mjs`; `test/rows.test.mjs`): one width for
-  the diagram, each box as tall as what it lists, a rank as tall as its tallest box, rows in a fixed-width face
-  with their spaces kept, the new ends of a line, the words at a line's ends, and no path drawn heavier in a
-  diagram of things.
-- **They are read** (`class.mjs`, `er.mjs`, each a reader in `READERS` in `parse.mjs`, with `test/class.test.mjs`
-  and `test/er.test.mjs`), and held to a corpus: the lists `class` and `er` in `corpus/index.json`, shown in
-  `docs/COVERAGE.md` and on the comparison page, with their sections in `skills/merlive/reference.md`.
-
-Still to do, in this order:
-
-1. **Look, sample by sample.** Open `corpus/compare.html` and go through every class and entity sample beside
-   Mermaid's. Only four were looked at closely (`class-whole`, `class`, `er`, and two made by hand). A picture
-   that passes its checks and looks wrong gets a new rule and a check, not a special case. Known to look at:
-   where the words at a line's ends land when several lines meet one box; a line entering the side of a tall box
-   among its rows; a class with a very long method; a lollipop interface.
-2. **What is known to be missing**, each said by the command when met: a direction other than top to bottom,
-   for either kind (boxes of different heights are only placed top to bottom); attributes written on the line
-   that opens an entity. A picked class is called "Step" on the page, since a class has no kind of its own.
-3. **An attribute's comment is not on the picture.** An entity is drawn as a table of type, name and keys. A
-   comment (`string number PK "As printed"`) is Mermaid's fourth column; here it is in the note on the entity,
-   since one sentence would make every box of the diagram as wide as itself. To draw it, a comment column needs
-   to wrap inside its cell and make only its own row taller.
-4. **Notes in a state diagram are not drawn yet.** A class diagram's notes are (a `note` shape, a box of kind
-   `note`, a dotted link with nothing at its ends: `class.mjs`). A state diagram's (`note right of X`) are still
-   only what a reader sees on picking the state. Drawing them the same way needs one thing first: a state
-   diagram has a main path and steps, and a note's link must not be taken for part of the flow (a note has
-   nothing coming in, so it looks like a place to start). A note is drawn in the design's own colours, not
-   Mermaid's yellow: the colours are the user's.
-5. **One thing the class reader changed for flowcharts too**: two groups with one id are now one group
-   (`frame()` in `parse.mjs` reopens a group whose id exists). Dotted namespaces need it. Nothing in the corpus
-   or in Victor's diagrams has two subgraphs with one id, but it is a change of behaviour, so say so in the pull
-   request.
-6. **Release.** The pull request for `class-er`, with the changelog's `0.2.0 (unreleased)` given its date on
-   the day it is merged; then the tag.
+- **What is known to be missing**, each said by the command when met: a direction other than top to bottom,
+  for either kind (boxes of different heights are only placed top to bottom); attributes written on the line
+  that opens an entity. A picked class is called "Step" on the page, since a class has no kind of its own.
+- **An attribute's comment is not on the picture.** An entity is drawn as a table of type, name and keys. A
+  comment (`string number PK "As printed"`) is Mermaid's fourth column; here it is in the note on the entity,
+  since one sentence would make every box of the diagram as wide as itself. To draw it, a comment column needs
+  to wrap inside its cell and make only its own row taller.
+- **Notes in a state diagram are not drawn yet.** A class diagram's notes are (a `note` shape, a box of kind
+  `note`, a dotted link with nothing at its ends: `class.mjs`). A state diagram's (`note right of X`) are still
+  only what a reader sees on picking the state. Drawing them the same way needs one thing first: a state
+  diagram has a main path and steps, and a note's link must not be taken for part of the flow (a note has
+  nothing coming in, so it looks like a place to start). A note is drawn in the design's own colours, not
+  Mermaid's yellow: the colours are the user's.
+- **One thing the class reader changed for flowcharts too**: two groups with one id are now one group
+  (`frame()` in `parse.mjs` reopens a group whose id exists). Dotted namespaces need it. Nothing in the corpus
+  or in Victor's diagrams has two subgraphs with one id, but it is a change of behaviour, so say so in the pull
+  request.
 
 ## Waiting on Victor
 
-- **The tag `v0.1.0`.** The session that released 0.1.0 could not push tags. In a clone:
-  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0" && git push origin v0.1.0`.
+- **The tags.** No session so far could push a tag. In a clone, `v0.1.0` first:
+  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0" && git push origin v0.1.0`. Then, once the 0.2.0 pull request is
+  merged, on the merge commit: `git tag -a v0.2.0 -m "Merlive 0.2.0" && git push origin v0.2.0`.
 - **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11) takes "not released
   yet" off Merlive's page; merge it after the tag. Then, in the skills repository: `npm install`,
   `npm run build` (the Merlive page has never been built: it could not be, where it was written),
@@ -77,7 +62,7 @@ Still to do, in this order:
 - **Open questions on the site page**: the mark and the wordmark are proposals; whether Merlive wants a film as
   SideShot has.
 
-## After 0.2.0, in this order
+## Next, in this order
 
 1. **Where Mermaid still reads better**, from the comparison page:
    - in a sequence diagram: a participant that is destroyed is not drawn again where it ends; the figure and the
@@ -90,7 +75,8 @@ Still to do, in this order:
    - the name of a narrow group usually has its line pass behind it, and the arrowhead sits close under it;
    - a group's own direction is read past;
    - of the newer `@{ shape }` list, twelve shapes are drawn and the rest are boxes.
-2. **The other kinds**, picked by what Victor's own repositories use, not by Mermaid's list. Thirty are left.
+2. **The other kinds**, picked by what Victor's own repositories use, not by Mermaid's list. Twenty-eight are
+   left as Mermaid (the `kinds` list of `corpus/index.json`). This is 0.3.0, on a branch of its own.
    A kind of boxes and links (requirement, C4, block, architecture) can use the placement there is; a chart or a
    tree needs a way of drawing of its own, as a sequence diagram did (`sequence.mjs` is the pattern: read, place,
    check, with its rules written down first).

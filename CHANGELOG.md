@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.2.0 (unreleased)
+## 0.2.0 (2026-11-25)
 
-Class diagrams and entity diagrams.
+Class diagrams and entity diagrams, and much that Mermaid drew and Merlive did not: people and feet in a
+sequence diagram, titles, notes, bold, bottom to top, regions side by side.
 
 - **A sequence diagram's participants are drawn as what they are.** An `actor` is a figure; a boundary, a
   control, an entity, a database, a collection and a queue each have a drawing of their own. Each is drawn again
