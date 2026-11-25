@@ -16,7 +16,7 @@ import { picture } from '../skills/merlive/scripts/render.mjs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],loses?:string,family?:string}} Sample
+ * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],shapes?:string[],loses?:string,family?:string}} Sample
  * @typedef {{sample:Sample,result:'drawn'|'less'|'partly'|'refused'|'left',why:string[],svg:string}} Row
  */
 
@@ -50,6 +50,7 @@ export function judge(sample, source) {
   for (const kind of sample.kinds ?? []) if (!model.nodes.some((n) => n.kind === kind)) why.push(`no box is of the kind ${kind}`);
   if (sample.title !== undefined && model.title !== sample.title) why.push('its title is not kept');
   if (sample.ends && JSON.stringify(model.edges.map((e) => [e.tail, e.head])) !== JSON.stringify(sample.ends)) why.push('what is at the ends of its links is not kept');
+  if (sample.shapes && JSON.stringify(model.nodes.map((n) => n.shape)) !== JSON.stringify(sample.shapes)) why.push(`its shapes are read as ${model.nodes.map((n) => n.shape).join(', ')}`);
   // That a flow is wide is true of the sample, not a thing Merlive failed to read.
   why.push(...model.warnings, ...lay.warnings.filter((w) => !w.includes('will scroll on most screens')));
   const broken = score(model, lay, design).checks.filter((c) => !c.ok);

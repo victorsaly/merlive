@@ -114,7 +114,7 @@ export const kindFill = (/** @type {Palette} */ p, /** @type {string} */ kind) =
  * @returns {Design}
  */
 export function designWith(design, model) {
-  const strangers = [...new Set(model.nodes.map((n) => n.kind))].filter((k) => !design.light.kinds[k] && HEX.test(model.classes[k] ?? ''));
+  const strangers = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])].filter((k) => !design.light.kinds[k] && HEX.test(model.classes[k] ?? ''));
   if (!strangers.length) return design;
   const more = (/** @type {Palette} */ p) => {
     const nearest = (/** @type {string} */ c) => Object.values(p.kinds).reduce((a, b) => (apart(b, c) < apart(a, c) ? b : a));

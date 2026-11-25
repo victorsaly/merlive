@@ -6,6 +6,9 @@
 .mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
 [data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
 [data-kind="stopped"] .mv-shape{fill:var(--mv-kf-stopped);stroke:var(--mv-k-stopped)}
+.mv-node .mv-detail{fill:none}
+[data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
+[data-outline~="heavy"] .mv-shape{stroke-width:2.6}
 .mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}

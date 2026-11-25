@@ -121,7 +121,7 @@ export function score(model, lay, design) {
   add('P7', "A link's words sit clear of boxes and of each other", covered, `${labels.length} labels clear`);
 
   // D1, D2: the sums are in design.mjs, where the setup page uses them too.
-  const kinds = [...new Set(model.nodes.map((n) => n.kind))];
+  const kinds = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])];
   const [d1, d2] = colourChecks(design, kinds);
   const looks = looksOf(design).map(([mode]) => mode).join(' and ');
   add('D1', 'Words and lines can be read against what is behind them', d1.broken, `${design.name} passes in ${looks}`);

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { blocksOf, findLoops, parse } from '../skills/merlive/scripts/parse.mjs';
+import { blocksOf, findLoops, hueOf, parse } from '../skills/merlive/scripts/parse.mjs';
 
 const flow = (/** @type {string} */ body) => parse(`flowchart TD\n${body}`);
 
@@ -8,8 +8,8 @@ describe('parse: boxes', () => {
   it('reads each bracket as its shape, and gives each a kind', () => {
     const m = flow('A[Box] --> B(Round)\nB --> C([Pill])\nC --> D{Ask}\nD --> E((Circle))\nE --> F[[Sub]]\nF --> G{{Hex}}');
     assert.deepEqual(m.nodes.map((n) => [n.id, n.label, n.shape, n.kind]), [
-      ['A', 'Box', 'box', 'step'], ['B', 'Round', 'box', 'step'], ['C', 'Pill', 'pill', 'terminal'], ['D', 'Ask', 'decision', 'decision'],
-      ['E', 'Circle', 'pill', 'terminal'], ['F', 'Sub', 'box', 'step'], ['G', 'Hex', 'decision', 'decision'],
+      ['A', 'Box', 'box', 'step'], ['B', 'Round', 'box', 'step'], ['C', 'Pill', 'pill', 'terminal'], ['D', 'Ask', 'diamond', 'decision'],
+      ['E', 'Circle', 'pill', 'terminal'], ['F', 'Sub', 'subroutine', 'step'], ['G', 'Hex', 'hexagon', 'decision'],
     ]);
   });
 
@@ -82,7 +82,7 @@ describe('parse: what is at each end of a link', () => {
 describe('parse: the older shapes', () => {
   it('reads the flag, the double circle and the four that lean, with their words and nothing else', () => {
     const m = flow('A>Flagged] --> B(((Stop)))\nC[/Input/] --> D[\\Output\\]\nE[/Manual step\\] --> F[\\Priority/]');
-    assert.deepEqual(m.nodes.map((n) => [n.label, n.shape]), [['Flagged', 'box'], ['Stop', 'pill'], ['Input', 'box'], ['Output', 'box'], ['Manual step', 'box'], ['Priority', 'box']]);
+    assert.deepEqual(m.nodes.map((n) => [n.label, n.shape]), [['Flagged', 'flag'], ['Stop', 'double-circle'], ['Input', 'lean-right'], ['Output', 'lean-left'], ['Manual step', 'trapezoid'], ['Priority', 'trapezoid-alt']]);
     assert.deepEqual(m.edges.map((e) => e.id), ['A-B', 'C-D', 'E-F']);
     assert.deepEqual(m.warnings, []);
   });
@@ -93,6 +93,41 @@ describe('parse: the older shapes', () => {
 
   it('leaves a plain box whose words begin with a slash as it was', () => {
     assert.deepEqual(flow('A[/api/orders] --> B').nodes.map((n) => [n.label, n.shape]), [['/api/orders', 'box'], ['B', 'box']]);
+  });
+});
+
+describe("parse: an author's own styling", () => {
+  it('keeps a broken and a heavy outline, and names a colour by its hue', () => {
+    const m = flow('A[Order] --> B[On hold] --> C[Done]\nstyle B fill:#fde,stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5\nstyle C stroke:#2e7d32');
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind, n.dashed ?? false, n.heavy ?? false]), [['A', 'step', false, false], ['B', 'red', true, true], ['C', 'green', false, false]]);
+    assert.deepEqual(m.classes, { red: '#cc0000', green: '#2e7d32' });
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('styles several boxes at once, and one named further down', () => {
+    const m = flow('style A,B stroke-dasharray: 4 2\nA --> B --> C');
+    assert.deepEqual(m.nodes.map((n) => n.dashed ?? false), [true, true, false]);
+  });
+
+  it('leaves the kind a class gave, and takes the outline a class asks for', () => {
+    const m = flow('A[One]:::risk --> B[Two]:::draft\nstyle A stroke:#0000cc,stroke-width:4px\nclassDef draft stroke:#888,stroke-dasharray: 3 3');
+    assert.deepEqual(m.nodes.map((n) => [n.kind, n.dashed ?? false, n.heavy ?? false]), [['risk', false, true], ['draft', true, false]]);
+  });
+
+  it('styles links by the number Mermaid gives them, counting those that are not drawn', () => {
+    const m = flow('A --> B\nB ~~~ C\nC --> C\nC --> D & E\nlinkStyle 0 stroke:#c00,stroke-width:4px\nlinkStyle 3,4 stroke:#00c,stroke-dasharray: 5 5\nlinkStyle 1,2,9 stroke:#0c0');
+    assert.deepEqual(m.edges.map((e) => [e.id, e.style, e.kind ?? '']), [['A-B', 'thick', 'red'], ['C-D', 'dotted', 'blue'], ['C-E', 'dotted', 'blue']]);
+  });
+
+  it('reads past a default for every box and for every link: that look is the design\'s', () => {
+    const m = flow('A --> B\nclassDef default fill:#f9f,stroke:#333,stroke-width:4px,stroke-dasharray: 5 5\nlinkStyle default stroke:#c00,stroke-width:4px');
+    assert.deepEqual(m.nodes.map((n) => [n.kind, n.dashed ?? false, n.heavy ?? false]), [['step', false, false], ['step', false, false]]);
+    assert.deepEqual(m.edges.map((e) => [e.style, e.kind ?? '']), [['solid', '']]);
+  });
+
+  it('calls a colour by the plain name of its hue, and one with none grey', () => {
+    assert.deepEqual(['#cc0000', '#e69f00', '#ffd400', '#2e7d32', '#00a3a3', '#0a84c4', '#7a3fd0', '#d04090', '#888888', '#ffffff', '#000000'].map(hueOf),
+      ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink', 'grey', 'grey', 'grey']);
   });
 });
 
@@ -190,15 +225,18 @@ describe('parse: @{ … }', () => {
   it('reads a box written with a shape and a label', () => {
     const m = flow('A@{ shape: rect, label: "Take the order" } --> B@{ shape: diam, label: "In stock?" }\nB --> C@{ shape: cyl, label: "Orders" }\nB --> D@{ shape: stadium, label: Done }');
     assert.deepEqual(m.nodes.map((n) => [n.id, n.label, n.shape, n.kind]), [
-      ['A', 'Take the order', 'box', 'step'], ['B', 'In stock?', 'decision', 'decision'], ['C', 'Orders', 'box', 'data'], ['D', 'Done', 'pill', 'terminal'],
+      ['A', 'Take the order', 'box', 'step'], ['B', 'In stock?', 'diamond', 'decision'], ['C', 'Orders', 'cylinder', 'data'], ['D', 'Done', 'pill', 'terminal'],
     ]);
     assert.deepEqual(m.edges.map((e) => e.id), ['A-B', 'B-C', 'B-D']);
     assert.deepEqual(m.warnings, []);
   });
 
   it('knows a shape by any of its names, and draws one it has no drawing for as a box', () => {
-    const m = flow('A@{ shape: decision }\nB@{ shape: database }\nC@{ shape: terminal }\nD@{ shape: lightning-bolt }\nE@{ shape: hex }\nF@{ shape: dbl-circ }');
-    assert.deepEqual(m.nodes.map((n) => [n.shape, n.kind]), [['decision', 'decision'], ['box', 'data'], ['pill', 'terminal'], ['box', 'step'], ['decision', 'decision'], ['pill', 'terminal']]);
+    const m = flow('A@{ shape: decision }\nB@{ shape: database }\nC@{ shape: terminal }\nD@{ shape: lightning-bolt }\nE@{ shape: hex }\nF@{ shape: dbl-circ }\nG@{ shape: subproc }\nH@{ shape: in-out }\nI@{ shape: manual }\nJ@{ shape: odd }\nK@{ shape: datastore }');
+    assert.deepEqual(m.nodes.map((n) => [n.shape, n.kind]), [
+      ['diamond', 'decision'], ['cylinder', 'data'], ['pill', 'terminal'], ['box', 'step'], ['hexagon', 'decision'], ['double-circle', 'terminal'],
+      ['subroutine', 'step'], ['lean-right', 'step'], ['trapezoid-alt', 'step'], ['flag', 'step'], ['box', 'data'],
+    ]);
     assert.deepEqual(m.warnings, []);
   });
 
@@ -214,7 +252,7 @@ describe('parse: @{ … }', () => {
 
   it('adds to a box that already has its words, and to one named on an earlier line', () => {
     const m = flow('A[Quote]@{ row: 1, column: 1 } --> B[Order]\nB@{ shape: diam }');
-    assert.deepEqual(m.nodes.map((n) => [n.label, n.shape]), [['Quote', 'box'], ['Order', 'decision']]);
+    assert.deepEqual(m.nodes.map((n) => [n.label, n.shape]), [['Quote', 'box'], ['Order', 'diamond']]);
     assert.deepEqual(m.warnings, []);
   });
 
@@ -226,7 +264,7 @@ describe('parse: @{ … }', () => {
 
   it('reads one written over several lines', () => {
     const m = flow('A@{\n  shape: diam\n  label: "In stock?"\n}\nA --> B');
-    assert.deepEqual(m.nodes.map((n) => [n.id, n.label, n.shape]), [['A', 'In stock?', 'decision'], ['B', 'B', 'box']]);
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.label, n.shape]), [['A', 'In stock?', 'diamond'], ['B', 'B', 'box']]);
     assert.deepEqual(m.warnings, []);
   });
 

@@ -44,8 +44,8 @@ and words (entity codes, Markdown strings, icons). What is left of flowcharts:
 
 1. **Bottom-to-top and right-to-left** are drawn the other way round, and said.
 2. **A group inside a group** is drawn as part of the outer one, and said. A group's own direction is read past.
-3. **Shapes are read, not all drawn**: a store of data, a flag, a document and the rest are boxes that say what
-   they are in words. Whether any earns a drawing of its own is a question of design, not of reading.
+3. **Twelve shapes are drawn as themselves; the newer ones are not yet**: a document, a cloud, a person and the
+   rest of the `@{ shape }` list are boxes that say what they are in words.
 
 Reading `&` brought out a fourth thing, now done: two boxes that each lead to the same two (`A & B --> C & D`)
 were refused. The lines that swap sides no longer lie on each other, and P4 allows the one crossing such a

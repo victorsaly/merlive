@@ -5,7 +5,7 @@ import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout } from '../skills/merlive/scripts/layout.mjs';
-import { builtIn, designFrom } from '../skills/merlive/scripts/design.mjs';
+import { builtIn, designFrom, designWith } from '../skills/merlive/scripts/design.mjs';
 import { page, picture } from '../skills/merlive/scripts/render.mjs';
 import { setupPage } from '../skills/merlive/scripts/setup.mjs';
 import { runtime } from '../skills/merlive/scripts/runtime.mjs';
@@ -103,6 +103,33 @@ describe('what is drawn', () => {
     const html = page(plain, layout(plain), designFrom({ light: { accent: '#0a5cc2' } }), { title: 'Plain', source: '', version });
     assert.equal(html.includes('id="mv-next"'), false);
     assert.equal(html.includes('prefers-color-scheme:dark'), false);
+  });
+
+  it('draws each shape as its author chose it, and what their own style said of a box and a link', () => {
+    const shaped = parse('flowchart TD\nA{Ask} --> B[(Orders)] --> C[[Sub]]\nC --> D[/In/] --> E(((End)))\nstyle C stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5\nlinkStyle 0 stroke:#00c,stroke-width:4px');
+    const svg = picture(shaped, layout(shaped), designWith(builtIn, shaped), { title: 'Shapes' });
+    const box = (/** @type {string} */ id) => svg.match(new RegExp(`<g class="mv-node" data-node="${id}"[^]*?</g>`))?.[0] ?? '';
+    assert.match(box('A'), /<polygon class="mv-shape" points="(\S+ ){3}\S+"\/>/, 'a rhombus has four corners');
+    assert.match(box('B'), /<path class="mv-shape" d="M[^"]*A[^"]*"\/><path class="mv-shape mv-detail"/, 'a cylinder has a curved top and a rim');
+    assert.match(box('C'), /data-kind="red" data-outline="dashed heavy"/);
+    assert.match(box('C'), /<rect class="mv-shape"[^>]*\/><path class="mv-shape mv-detail"/, 'a subroutine has its two rails');
+    assert.equal(box('E').match(/mv-pill/g)?.length, 2, 'a double circle has two lines');
+    assert.match(svg, /<g class="mv-edge[^"]*" data-edge="A-B" data-style="thick" data-kind="blue">/);
+    assert.match(svg, /\[data-kind="blue"\] \.mv-line,/);
+    assert.match(svg, /--mv-k-red:#[0-9a-f]{6}/, 'the red is the design\'s own');
+  });
+
+  it('brings every line to the outline of the shape it meets', () => {
+    const m = parse('flowchart TD\nA{Ask} -->|Yes| B[One]\nA -->|No| C[Two]\nA -->|Maybe| D[Three]\nB & C & D --> E{End?}');
+    const lay = layout(m);
+    for (const e of m.edges) {
+      for (const [p, id] of /** @type {const} */ ([[lay.edges[e.id].points[0], e.from], [lay.edges[e.id].points.at(-1), e.to]])) {
+        if (m.nodes.find((n) => n.id === id)?.shape !== 'diamond' || !p) continue;
+        const b = lay.nodes[id];
+        // On a rhombus, how far a point is from the middle, across and up, adds to one.
+        assert.ok(Math.abs(Math.abs(p.x - b.x) / (b.w / 2) + Math.abs(p.y - b.y) / (b.h / 2) - 1) < 0.02, `${e.id} at ${id}: ${p.x},${p.y}`);
+      }
+    }
   });
 
   it('draws what is at each end of a link: an arrowhead, a circle or a cross, at either end or both', () => {

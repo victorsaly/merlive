@@ -1,9 +1,10 @@
 // Why: Merlive reads a small, honest part of Mermaid's flowchart language and says what it left out, so a
 // diagram is never drawn from a guess. Everything here is pure: text in, a model out.
 
-/** @typedef {{id:string,label:string,shape:'box'|'pill'|'decision',kind:string,breaks?:string[]}} Node */
+/** @typedef {import('./shapes.mjs').Shape} Shape */
+/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean}} Node dashed, heavy: what its author's own style says of its outline */
 /** @typedef {'none'|'arrow'|'circle'|'cross'} Mark what is drawn at an end of a link */
-/** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',head:Mark,tail:Mark}} Edge head: at the box it leads to; tail: at the box it comes from */
+/** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',head:Mark,tail:Mark,kind?:string}} Edge head: at the box it leads to; tail: at the box it comes from; kind: the colour its author gave it, by name */
 /** @typedef {{title:string,text:string,path:string,seq:string[],loop:boolean}} Step */
 /**
  * @typedef {object} Model
@@ -22,22 +23,25 @@
  * @property {string[]} warnings
  */
 
-// Longest opener first, so "([" is not read as "(" and then "[". A shape that leans may close either way, and
-// closes at whichever comes first. The flag (">words]") opens with no bracket at all.
-const OPENERS = /** @type {const} */ ([
-  ['(((', [')))'], 'pill'],
-  ['([', ['])'], 'pill'],
-  ['((', ['))'], 'pill'],
-  ['[(', [')]'], 'store'],
-  ['[[', [']]'], 'box'],
-  ['[/', ['/]', '\\]'], 'box'],
-  ['[\\', ['\\]', '/]'], 'box'],
-  ['{{', ['}}'], 'decision'],
-  ['>', [']'], 'box'],
-  ['[', [']'], 'box'],
-  ['(', [')'], 'box'],
-  ['{', ['}'], 'decision'],
-]);
+// Longest opener first, so "([" is not read as "(" and then "[". A shape that leans may close either way: it
+// closes at whichever comes first, and which it is says which shape. The flag (">words]") opens with no bracket.
+// "store" is not a shape: it is a plain box of the kind that holds data.
+/** @typedef {Shape|'store'} Read */
+/** @type {[string, [string, Read][]][]} */
+const OPENERS = [
+  ['(((', [[')))', 'double-circle']]],
+  ['([', [['])', 'pill']]],
+  ['((', [['))', 'pill']]],
+  ['[(', [[')]', 'cylinder']]],
+  ['[[', [[']]', 'subroutine']]],
+  ['[/', [['/]', 'lean-right'], ['\\]', 'trapezoid']]],
+  ['[\\', [['\\]', 'lean-left'], ['/]', 'trapezoid-alt']]],
+  ['{{', [['}}', 'hexagon']]],
+  ['>', [[']', 'flag']]],
+  ['[', [[']', 'box']]],
+  ['(', [[')', 'box']]],
+  ['{', [['}', 'diamond']]],
+];
 
 // A link: solid, dotted or thick, drawn at any length, with an arrowhead, a circle, a cross or nothing at
 // either end ("-->", "--o", "x--x", "<-->"), and its words after it between bars or written into it
@@ -66,7 +70,7 @@ const NAMED = { quot: '"', amp: '&', lt: '<', gt: '>', apos: "'", nbsp: ' ', hea
  * @param {string} text
  * @returns {string[]}
  */
-function wordsOf(text) {
+export function wordsOf(text) {
   let words = text.trim().replace(/^"([^]*)"$/, '$1').trim();
   const markdown = /^`[^]*`$/.test(words);
   if (markdown) words = words.slice(1, -1).replace(/(\*\*|__)(?=\S)([^]*?\S)\1/g, '$2').replace(/(^|[^\w*])([*_])(?=\S)([^*_]*?\S)\2(?!\w)/g, '$1$3');
@@ -87,11 +91,22 @@ function wordsOf(text) {
 
 // The newer shapes ("A@{ shape: diam }") that Merlive has a drawing for, by every name Mermaid gives them.
 // Any other is a box: a shape is never the only thing that says what a box is, its words are.
-const SHAPES = /** @type {const} */ ({
-  pill: ['stadium', 'pill', 'terminal', 'circle', 'circ', 'sm-circ', 'small-circle', 'start', 'f-circ', 'filled-circle', 'junction', 'fr-circ', 'framed-circle', 'stop', 'dbl-circ', 'double-circle', 'cross-circ', 'crossed-circle', 'summary'],
-  decision: ['diam', 'decision', 'diamond', 'question', 'hex', 'hexagon', 'prepare'],
-  store: ['cyl', 'cylinder', 'database', 'db', 'h-cyl', 'das', 'horizontal-cylinder', 'lin-cyl', 'disk', 'lined-cylinder', 'datastore', 'data-store', 'bow-rect', 'bow-tie-rectangle', 'stored-data'],
-});
+/** @type {Record<Read, string[]>} */
+const SHAPES = {
+  box: [],
+  pill: ['stadium', 'pill', 'terminal', 'circle', 'circ', 'sm-circ', 'small-circle', 'start', 'f-circ', 'filled-circle', 'junction', 'fr-circ', 'framed-circle', 'stop', 'cross-circ', 'crossed-circle', 'summary'],
+  'double-circle': ['dbl-circ', 'double-circle'],
+  diamond: ['diam', 'decision', 'diamond', 'question'],
+  hexagon: ['hex', 'hexagon', 'prepare'],
+  cylinder: ['cyl', 'cylinder', 'database', 'db', 'h-cyl', 'das', 'horizontal-cylinder', 'lin-cyl', 'disk', 'lined-cylinder'],
+  store: ['datastore', 'data-store', 'bow-rect', 'bow-tie-rectangle', 'stored-data'],
+  subroutine: ['fr-rect', 'framed-rectangle', 'subproc', 'subprocess', 'subroutine'],
+  'lean-right': ['lean-r', 'lean-right', 'in-out'],
+  'lean-left': ['lean-l', 'lean-left', 'out-in'],
+  trapezoid: ['trap-b', 'priority', 'trapezoid', 'trapezoid-bottom'],
+  'trapezoid-alt': ['trap-t', 'inv-trapezoid', 'manual', 'trapezoid-top'],
+  flag: ['odd'],
+};
 
 // What "@{ … }" can say of a box. One that says none of these is about a link or a group, and makes no box.
 const OF_A_BOX = ['shape', 'label', 'icon', 'img', 'form', 'pos', 'w', 'h', 'constraint', 'row', 'column'];
@@ -131,8 +146,43 @@ function leftOpen(/** @type {string} */ text) {
   return (text.split('`').length - 1) % 2 ? 'a Markdown string' : '';
 }
 
-// Mermaid styling lines. Merlive's look comes from the design file, so these are read past without a warning.
-const STYLING = /^(style|linkStyle|click|direction)\b/;
+// Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own
+// direction is not followed yet.
+const PASSED = /^(click|direction)\b/;
+
+/**
+ * What an author's own styling says, kept as what it means and not as its numbers: a colour, a broken outline, a
+ * heavy one. The colour of its edge says most; else its fill; else its words.
+ * @param {string} css "fill:#fde,stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5"
+ */
+function lookOf(css) {
+  const hex = ['stroke', 'fill', 'color'].map((k) => new RegExp(`(?:^|,)\\s*${k}\\s*:\\s*#([0-9a-f]{6}|[0-9a-f]{3})\\b`, 'i').exec(css)?.[1]).find(Boolean);
+  const width = Number(/(?:^|,)\s*stroke-width\s*:\s*([\d.]+)/i.exec(css)?.[1] ?? 0);
+  return {
+    colour: hex ? `#${(hex.length === 3 ? [...hex].map((c) => c + c).join('') : hex).toLowerCase()}` : '',
+    dashed: /(?:^|,)\s*stroke-dasharray\s*:\s*(?!0\b|none\b)\S/i.test(css),
+    heavy: width >= looks.heavy,
+  };
+}
+
+// What is measured in an author's styling, named once.
+const looks = {
+  heavy: 3, // px of stroke-width from which an outline or a line is drawn heavy: Mermaid's own thick link is 3.5
+  grey: 0.15, // a colour less saturated than this has no hue to speak of
+};
+
+/**
+ * The plain name of a colour's hue. A box its author coloured without saying why ("style B stroke:#c00") is
+ * of the kind "red": the design then draws it in its own nearest colour, and a reader is told the same word.
+ * @param {string} colour "#cc0000"
+ */
+export function hueOf(colour) {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(colour.slice(i, i + 2), 16) / 255);
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min, l = (max + min) / 2;
+  if (d === 0 || d / (1 - Math.abs(2 * l - 1)) < looks.grey) return 'grey';
+  const h = 60 * (max === r ? ((g - b) / d + 6) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4);
+  return h < 15 ? 'red' : h < 45 ? 'orange' : h < 70 ? 'yellow' : h < 165 ? 'green' : h < 200 ? 'teal' : h < 260 ? 'blue' : h < 300 ? 'purple' : h < 345 ? 'pink' : 'red';
+}
 
 
 /**
@@ -154,6 +204,17 @@ export function parse(src) {
   const groupOf = new Map();
   const shaped = new Set();
   let warnedNested = false;
+  // Every link in the order Mermaid numbers them; one that is not drawn keeps its number and has nothing.
+  /** @type {(Edge|null)[]} */
+  const numbered = [];
+  // What an author's styling says of a class, of single boxes, and of links by their number, kept until the
+  // whole block is read: a style may come before the box it is about.
+  /** @type {Map<string, ReturnType<typeof lookOf>>} */
+  const ofClass = new Map();
+  /** @type {[string[], ReturnType<typeof lookOf>][]} */
+  const ofBoxes = [];
+  /** @type {[number[], ReturnType<typeof lookOf>][]} */
+  const ofLinks = [];
 
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
 
@@ -181,10 +242,10 @@ export function parse(src) {
     else delete n.breaks;
   };
 
-  /** Gives a box its shape. A store of data (Mermaid's cylinder) is a box like any other, of the kind that holds data. */
-  const shape = (/** @type {Node} */ n, /** @type {'box'|'pill'|'decision'|'store'} */ as) => {
+  /** Gives a box its shape. A cylinder is a store of data, and so is of the kind that holds data, like one only named as a store. */
+  const shape = (/** @type {Node} */ n, /** @type {Read} */ as) => {
     n.shape = as === 'store' ? 'box' : as;
-    if (as === 'store' && !n.kind) n.kind = 'data';
+    if ((as === 'store' || as === 'cylinder') && !n.kind) n.kind = 'data';
   };
 
   /** Reads `A`, `A[Label]`, `A{Label}:::kind`, `A@{ shape: diam, label: "Label" }` at pos. */
@@ -193,12 +254,12 @@ export function parse(src) {
     if (!m) return null;
     let p = pos + m[0].length;
     const n = node(m[1]);
-    for (const [open, closers, as] of OPENERS) {
+    for (const [open, closers] of OPENERS) {
       if (!s.startsWith(open, p)) continue;
       const start = p + open.length;
       // A quoted label may hold the closing bracket itself, so the closer is looked for after the quote ends.
       const quoted = s[start] === '"' ? s.indexOf('"', start + 1) : -1;
-      const [end, close] = closers.map((c) => /** @type {[number,string]} */ ([s.indexOf(c, quoted > 0 ? quoted + 1 : start), c])).filter(([at]) => at >= 0).sort((a, b) => a[0] - b[0])[0] ?? [-1, ''];
+      const [end, close, as] = closers.map(([c, shaped]) => /** @type {[number,string,Read]} */ ([s.indexOf(c, quoted > 0 ? quoted + 1 : start), c, shaped])).filter(([at]) => at >= 0).sort((a, b) => a[0] - b[0])[0] ?? [-1, '', 'box'];
       // Not closed this way: "[/api/orders]" is a plain box whose words begin with a slash.
       if (end < 0) continue;
       say(n, s.slice(start, end));
@@ -214,7 +275,7 @@ export function parse(src) {
       // An icon or an image is a box with its label: a page of Merlive fetches nothing, so neither is drawn.
       // Rows and columns are read past: where a box goes is Merlive's to say.
       if (data.label !== undefined) say(n, data.label);
-      if (data.shape) shape(n, /** @type {'pill'|'decision'|'store'|undefined} */ (Object.keys(SHAPES).find((k) => SHAPES[/** @type {keyof typeof SHAPES} */ (k)].some((name) => name === data.shape))) ?? 'box');
+      if (data.shape) shape(n, /** @type {Read|undefined} */ (Object.keys(SHAPES).find((k) => SHAPES[/** @type {Read} */ (k)].includes(data.shape))) ?? 'box');
       if (OF_A_BOX.some((k) => k in data)) shaped.add(n.id);
       p = end + 1;
     }
@@ -254,7 +315,7 @@ export function parse(src) {
   };
 
   const statement = (/** @type {string} */ s, /** @type {number} */ line) => {
-    const had = { nodes: model.nodes.length, edges: model.edges.length };
+    const had = { nodes: model.nodes.length, edges: model.edges.length, numbered: numbered.length };
     // A line that could not be read leaves nothing behind: no box from its first word, no half of a chain.
     const notRead = (/** @type {string} */ what = `not read: "${s}"`) => {
       for (const n of model.nodes.splice(had.nodes)) {
@@ -265,6 +326,7 @@ export function parse(src) {
         groupOf.delete(n.id);
       }
       for (const e of model.edges.splice(had.edges)) seenEdge.set(`${e.from}-${e.to}`, (seenEdge.get(`${e.from}-${e.to}`) ?? 1) - 1);
+      numbered.length = had.numbered;
       warn(line, what);
     };
     // What is set on a link or a group ("e1@{ animate: true }", "g@{ view: collapsed }") is read past and makes
@@ -281,9 +343,12 @@ export function parse(src) {
       const next = link && readBoxes(s, link.pos);
       if (!link || !next) return notRead();
       // An invisible link is there to push Mermaid's boxes about. Its boxes are read; where they go is Merlive's.
-      // With "&", every box before the link is linked to every box after it.
-      for (const a of link.style === 'hidden' ? [] : prev.nodes) {
+      // With "&", every box before the link is linked to every box after it. Mermaid numbers every link it
+      // meets, drawn or not, and "linkStyle 2" means the third of those.
+      for (const a of prev.nodes) {
         for (const b of next.nodes) {
+          numbered.push(null);
+          if (link.style === 'hidden') continue;
           if (a.id === b.id) {
             warn(line, `a link from ${a.id} to itself is not drawn`);
             continue;
@@ -292,6 +357,7 @@ export function parse(src) {
           const count = (seenEdge.get(base) ?? 0) + 1;
           seenEdge.set(base, count);
           model.edges.push({ id: count === 1 ? base : `${base}#${count}`, from: a.id, to: b.id, label: link.label, style: link.style, head: link.head, tail: link.tail });
+          numbered[numbered.length - 1] = model.edges[model.edges.length - 1];
         }
       }
       prev = next;
@@ -370,12 +436,19 @@ export function parse(src) {
     if (text === 'end') return void open.pop();
     const classDef = /^classDef\s+([\w,]+)\s+(.*)$/.exec(text);
     if (classDef) {
-      // The colour of its edge says most about what the author meant; else its fill; else its words.
-      const colour = ['stroke', 'fill', 'color'].map((k) => new RegExp(`(?:^|,)\\s*${k}\\s*:\\s*#([0-9a-f]{6}|[0-9a-f]{3})\\b`, 'i').exec(classDef[2])?.[1]).find(Boolean);
-      if (colour) for (const name of classDef[1].split(',')) model.classes[name] = `#${(colour.length === 3 ? [...colour].map((c) => c + c).join('') : colour).toLowerCase()}`;
+      const look = lookOf(classDef[2]);
+      for (const name of classDef[1].split(',')) {
+        if (look.colour) model.classes[name] = look.colour;
+        // A default for every box is a look for the whole diagram, and that is the design's to give.
+        if (name !== 'default') ofClass.set(name, look);
+      }
       return;
     }
-    if (STYLING.test(text)) return;
+    const styled = /^style\s+([A-Za-z_][\w,]*)\s+(\S.*)$/.exec(text);
+    if (styled) return void ofBoxes.push([styled[1].split(',').filter(Boolean), lookOf(styled[2])]);
+    const linkStyled = /^linkStyle\s+(default|\d+(?:\s*,\s*\d+)*)\s+(\S.*)$/.exec(text);
+    if (linkStyled) return void (linkStyled[1] === 'default' || ofLinks.push([linkStyled[1].split(',').map(Number), lookOf(linkStyled[2])]));
+    if (PASSED.test(text) || /^(style|linkStyle)\b/.test(text)) return;
     const cls = /^class\s+([\w,\s]+?)\s+(\w+)\s*;?$/.exec(text);
     if (cls) {
       for (const id of cls[1].split(',').map((x) => x.trim())) if (byId.has(id)) node(id).kind = cls[2];
@@ -441,7 +514,33 @@ export function parse(src) {
   }
   model.groups = model.groups.filter((g) => g.members.length);
 
-  for (const n of model.nodes) if (!n.kind) n.kind = n.shape === 'decision' ? 'decision' : n.shape === 'pill' ? 'terminal' : 'step';
+  // An author's own styling, as what it means. A colour makes a box or a link of the kind named for its hue,
+  // unless a class already said what kind it is; a broken or a heavy outline is kept as that.
+  const hued = (/** @type {string} */ colour) => {
+    const name = hueOf(colour);
+    model.classes[name] ??= colour;
+    return name;
+  };
+  for (const [ids, look] of ofBoxes) {
+    for (const n of ids.map((id) => byId.get(id)).filter((x) => x !== undefined)) {
+      if (look.colour && !n.kind) n.kind = hued(look.colour);
+      if (look.dashed) n.dashed = true;
+      if (look.heavy) n.heavy = true;
+    }
+  }
+  for (const n of model.nodes) {
+    const look = ofClass.get(n.kind);
+    if (look?.dashed) n.dashed = true;
+    if (look?.heavy) n.heavy = true;
+  }
+  for (const [numbers, look] of ofLinks) {
+    for (const e of numbers.map((i) => numbered[i]).filter((x) => x !== null && x !== undefined)) {
+      if (look.colour) e.kind = hued(look.colour);
+      if (look.heavy) e.style = 'thick';
+      else if (look.dashed) e.style = 'dotted';
+    }
+  }
+  for (const n of model.nodes) if (!n.kind) n.kind = n.shape === 'diamond' || n.shape === 'hexagon' ? 'decision' : n.shape === 'pill' || n.shape === 'double-circle' ? 'terminal' : 'step';
   for (const id of Object.keys(model.notes)) if (!byId.has(id)) model.warnings.push(`note for ${id}: no such node`);
   resolveSteps(model);
   return model;

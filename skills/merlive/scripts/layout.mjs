@@ -2,6 +2,8 @@
 // on a grid by rule: the main path is one straight spine, everything else sits to one side, every box is the
 // same size, and lines turn at right angles and never share a port. Pure: a model in, coordinates out.
 
+import { inset, roomIn } from './shapes.mjs';
+
 /** @typedef {import('./parse.mjs').Model} Model */
 /** @typedef {{x:number,y:number}} Pt */
 /** @typedef {'top'|'bottom'|'left'|'right'} Side */
@@ -16,8 +18,6 @@ export const measure = {
   glyph: 7.1, // px per character at 13px
   labelGlyph: 6.6, // px per character of a link's label at 11px
   widths: [128, 160, 192, 224, 256, 288], // the only box widths there are; a diagram uses one of them throughout
-  padBox: 28, // left and right inside a box
-  padDecision: 52, // a decision's cut corners leave less room for words
   lineHeight: 16,
   pad: 28, // around the whole drawing
   laneGap: { TD: 64, LR: 40 }, // between a box and the one beside it
@@ -50,8 +50,8 @@ export function wrap(/** @type {string} */ label, /** @type {number} */ max) {
   return lines.length ? lines : [''];
 }
 
-export const roomFor = (/** @type {{shape:string}} */ n, /** @type {number} */ width) =>
-  Math.floor((width - (n.shape === 'decision' ? measure.padDecision : measure.padBox)) / measure.glyph);
+/** How many characters a line of words may run to in a box of this shape and width: shapes.mjs says how much room each leaves. */
+export const roomFor = (/** @type {{shape:import('./shapes.mjs').Shape}} */ n, /** @type {number} */ width) => Math.floor(roomIn(n.shape, width) / measure.glyph);
 
 /**
  * The lines of a box's words in a box of some width. Where the author broke the label, each of their lines is
@@ -504,6 +504,21 @@ export function layout(model) {
   /** @type {Record<string, Routed>} */
   const edges = {};
   for (const r of routes) edges[r.e.id] = { id: r.e.id, points: tidy(r.points.map(place)), back: back.has(r.e.id), label: null };
+  // A route ends at the edge of its box. A rhombus, a pill or a side that leans is further in than that, so each
+  // line runs on until it meets the outline: it only ever gets longer, along the way it was already going.
+  const shapeOfBox = new Map(model.nodes.map((n) => [n.id, n.shape]));
+  const meetOutline = (/** @type {Pt} */ p, /** @type {string} */ id) => {
+    const n = nodes[id], shape = shapeOfBox.get(id) ?? 'box', near = (/** @type {number} */ a, /** @type {number} */ b) => Math.abs(a - b) < 0.5;
+    if (near(p.y, n.y - n.h / 2)) p.y += inset(shape, 'top', p.x - n.x, n.w, n.h);
+    else if (near(p.y, n.y + n.h / 2)) p.y -= inset(shape, 'bottom', p.x - n.x, n.w, n.h);
+    else if (near(p.x, n.x - n.w / 2)) p.x += inset(shape, 'left', p.y - n.y, n.w, n.h);
+    else if (near(p.x, n.x + n.w / 2)) p.x -= inset(shape, 'right', p.y - n.y, n.w, n.h);
+  };
+  for (const e of model.edges) {
+    const points = edges[e.id].points;
+    meetOutline(points[0], e.from);
+    meetOutline(points[points.length - 1], e.to);
+  }
   // Each link's words, one link at a time, each where it sits on no box, no other words and, if it can, no line.
   /** @type {Words[]} */
   const worded = [];

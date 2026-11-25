@@ -33,6 +33,12 @@ test('the pictures in corpus/drawn are the ones the code draws today', () => {
   for (const [path, svg] of Object.entries(pictures)) assert.equal(readFileSync(join(root, path), 'utf8'), svg, `${path}: ${again}`);
 });
 
+test('every picture is well formed: each attribute has a value, so it opens on its own and inside a page', () => {
+  for (const [path, svg] of Object.entries(coverage().pictures)) {
+    for (const tag of svg.match(/<[a-zA-Z][^>]*>/g) ?? []) assert.match(tag, /^<[\w:-]+(\s+[\w:-]+="[^"]*")*\s*\/?>$/, `${path}: ${tag.slice(0, 80)}`);
+  }
+});
+
 test('every link on the page leads somewhere', () => {
   for (const [, to] of coverage().markdown.matchAll(/\]\((\.\.\/[^)]+)\)/g)) assert.ok(existsSync(join(root, 'docs', to)), to);
 });

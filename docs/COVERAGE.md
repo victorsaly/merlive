@@ -6,7 +6,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 ## In short
 
-- **Flowcharts:** of 69 features, 35 are drawn as written, 31 are drawn less something Merlive leaves out on purpose or does not have yet, 3 are only partly read, and 0 are refused.
+- **Flowcharts:** of 69 features, 44 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 3 are only partly read, and 0 are refused.
 - **Other kinds of diagram:** of 32, 0 are drawn and 32 are left as Mermaid and named.
 
 ## Flowcharts, feature by feature
@@ -40,19 +40,19 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | A Font Awesome icon in a label | Drawn, less something | The icon is left out; its words are kept | [source](../corpus/flowchart/node-fontawesome.mmd) | [picture](../corpus/drawn/node-fontawesome.svg) |
 | Shape: Round edges | Drawn, less something | Its corners are the design's, the same as every box | [source](../corpus/flowchart/shape-round.mmd) | [picture](../corpus/drawn/shape-round.svg) |
 | Shape: Stadium | Drawn |  | [source](../corpus/flowchart/shape-stadium.mmd) | [picture](../corpus/drawn/shape-stadium.svg) |
-| Shape: Subroutine | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-subroutine.mmd) | [picture](../corpus/drawn/shape-subroutine.svg) |
-| Shape: Cylinder, a database | Drawn, less something | Drawn as a box of the kind "data", not as a cylinder | [source](../corpus/flowchart/shape-cylinder.mmd) | [picture](../corpus/drawn/shape-cylinder.svg) |
-| Shape: Circle | Drawn, less something | Drawn as a pill | [source](../corpus/flowchart/shape-circle.mmd) | [picture](../corpus/drawn/shape-circle.svg) |
-| Shape: Asymmetric, a flag | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-asymmetric.mmd) | [picture](../corpus/drawn/shape-asymmetric.svg) |
+| Shape: Subroutine | Drawn |  | [source](../corpus/flowchart/shape-subroutine.mmd) | [picture](../corpus/drawn/shape-subroutine.svg) |
+| Shape: Cylinder, a database | Drawn |  | [source](../corpus/flowchart/shape-cylinder.mmd) | [picture](../corpus/drawn/shape-cylinder.svg) |
+| Shape: Circle | Drawn, less something | Drawn as a pill: a circle the height of a box would hold three letters | [source](../corpus/flowchart/shape-circle.mmd) | [picture](../corpus/drawn/shape-circle.svg) |
+| Shape: Asymmetric, a flag | Drawn |  | [source](../corpus/flowchart/shape-asymmetric.mmd) | [picture](../corpus/drawn/shape-asymmetric.svg) |
 | Shape: Rhombus, a decision | Drawn |  | [source](../corpus/flowchart/shape-rhombus.mmd) | [picture](../corpus/drawn/shape-rhombus.svg) |
-| Shape: Hexagon | Drawn, less something | Drawn as a decision | [source](../corpus/flowchart/shape-hexagon.mmd) | [picture](../corpus/drawn/shape-hexagon.svg) |
-| Shape: Parallelogram | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-parallelogram.mmd) | [picture](../corpus/drawn/shape-parallelogram.svg) |
-| Shape: Parallelogram, leaning back | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-parallelogram-alt.mmd) | [picture](../corpus/drawn/shape-parallelogram-alt.svg) |
-| Shape: Trapezoid | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-trapezoid.mmd) | [picture](../corpus/drawn/shape-trapezoid.svg) |
-| Shape: Trapezoid, upside down | Drawn, less something | Drawn as a plain box | [source](../corpus/flowchart/shape-trapezoid-alt.mmd) | [picture](../corpus/drawn/shape-trapezoid-alt.svg) |
-| Shape: Double circle | Drawn, less something | Drawn as a pill | [source](../corpus/flowchart/shape-double-circle.mmd) | [picture](../corpus/drawn/shape-double-circle.svg) |
+| Shape: Hexagon | Drawn |  | [source](../corpus/flowchart/shape-hexagon.mmd) | [picture](../corpus/drawn/shape-hexagon.svg) |
+| Shape: Parallelogram | Drawn |  | [source](../corpus/flowchart/shape-parallelogram.mmd) | [picture](../corpus/drawn/shape-parallelogram.svg) |
+| Shape: Parallelogram, leaning back | Drawn |  | [source](../corpus/flowchart/shape-parallelogram-alt.mmd) | [picture](../corpus/drawn/shape-parallelogram-alt.svg) |
+| Shape: Trapezoid | Drawn |  | [source](../corpus/flowchart/shape-trapezoid.mmd) | [picture](../corpus/drawn/shape-trapezoid.svg) |
+| Shape: Trapezoid, upside down | Drawn |  | [source](../corpus/flowchart/shape-trapezoid-alt.mmd) | [picture](../corpus/drawn/shape-trapezoid-alt.svg) |
+| Shape: Double circle | Drawn |  | [source](../corpus/flowchart/shape-double-circle.mmd) | [picture](../corpus/drawn/shape-double-circle.svg) |
 | Shapes written as @{ shape: … }, with a label | Drawn |  | [source](../corpus/flowchart/shape-at-syntax.mmd) | [picture](../corpus/drawn/shape-at-syntax.svg) |
-| Every one of the 53 newer shapes | Drawn, less something | Each is drawn as a box, a pill or a decision; the shape itself is not | [source](../corpus/flowchart/shape-at-every.mmd) | [picture](../corpus/drawn/shape-at-every.svg) |
+| Every one of the 53 newer shapes | Drawn, less something | Those Merlive has a drawing for are drawn as themselves; the rest are boxes | [source](../corpus/flowchart/shape-at-every.mmd) | [picture](../corpus/drawn/shape-at-every.svg) |
 | A box that is an icon | Drawn, less something | The icon is left out; its label is kept | [source](../corpus/flowchart/shape-icon.mmd) | [picture](../corpus/drawn/shape-icon.svg) |
 | A box that is an image | Drawn, less something | The image is left out (a page of Merlive fetches nothing); its label is kept | [source](../corpus/flowchart/shape-image.mmd) | [picture](../corpus/drawn/shape-image.svg) |
 | Boxes given a row and a column | Drawn, less something | The rows and columns are read past: placement is Merlive's | [source](../corpus/flowchart/grid-layout.mmd) | [picture](../corpus/drawn/grid-layout.svg) |
@@ -79,8 +79,8 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | A group with a direction of its own | Drawn, less something | The group's own direction is read past; it runs the way the rest does | [source](../corpus/flowchart/subgraph-direction.mmd) | [picture](../corpus/drawn/subgraph-direction.svg) |
 | A group inside a group | Partly read | read 1 of 2 groups; line 4: a group inside a group is drawn as part of the outer one | [source](../corpus/flowchart/subgraph-nested.mmd) | [picture](../corpus/drawn/subgraph-nested.svg) |
 | A group shown collapsed | Drawn, less something | Drawn open: a picture cannot be opened and closed | [source](../corpus/flowchart/subgraph-collapsed.mmd) | [picture](../corpus/drawn/subgraph-collapsed.svg) |
-| A box styled on its own | Drawn, less something | The style is read past: the look is the design's | [source](../corpus/flowchart/style-node.mmd) | [picture](../corpus/drawn/style-node.svg) |
-| Links styled by their number | Drawn, less something | The style is read past: the look is the design's | [source](../corpus/flowchart/style-link.mmd) | [picture](../corpus/drawn/style-link.svg) |
+| A box styled on its own | Drawn, less something | Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's | [source](../corpus/flowchart/style-node.mmd) | [picture](../corpus/drawn/style-node.svg) |
+| Links styled by their number | Drawn, less something | The link is heavy and red as written, in the design's own red; a default for every link is read past | [source](../corpus/flowchart/style-link.mmd) | [picture](../corpus/drawn/style-link.svg) |
 | A class made and given to boxes | Drawn |  | [source](../corpus/flowchart/class-def.mmd) | [picture](../corpus/drawn/class-def.svg) |
 | A class given with ::: | Drawn |  | [source](../corpus/flowchart/class-inline.mmd) | [picture](../corpus/drawn/class-inline.svg) |
 | A default class for every box | Drawn, less something | The default class is read past: the look is the design's | [source](../corpus/flowchart/class-default.mmd) | [picture](../corpus/drawn/class-default.svg) |

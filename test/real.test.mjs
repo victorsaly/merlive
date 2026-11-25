@@ -254,9 +254,9 @@ describe('more real diagrams: read', () => {
     assert.deepEqual(m.edges.map((e) => [e.style, e.label]), [['dotted', 'saved for later'], ['thick', 'must'], ['solid', ''], ['dotted', ''], ['dotted', 'maybe']]);
   });
 
-  it('reads a store of data, the cylinder, as a box of the data kind', () => {
+  it('reads a store of data, the cylinder, as a cylinder of the data kind', () => {
     const m = parse('flowchart TD\nA --> DB[("AdventureWorks<br/>read-only")]');
-    assert.deepEqual([m.nodes[1].label, m.nodes[1].shape, m.nodes[1].kind], ['AdventureWorks read-only', 'box', 'data']);
+    assert.deepEqual([m.nodes[1].label, m.nodes[1].shape, m.nodes[1].kind], ['AdventureWorks read-only', 'cylinder', 'data']);
   });
 
   it("keeps the colour an author gave a class, to find what it means", () => {

@@ -13,6 +13,8 @@ For coding agents changing this repository. It follows the same habits as
   what it did not read. Pure.
 - `skills/merlive/scripts/layout.mjs`: the model to coordinates, by the rules in `docs/PLACEMENT.md`. Every
   measured number is in `measure` at the top, with why. Pure.
+- `skills/merlive/scripts/shapes.mjs`: every shape Merlive draws: its outline, the room it leaves for words, and
+  where a line meets it. Layout and drawing both ask here. Its measured numbers are in `form`. Pure.
 - `skills/merlive/scripts/score.mjs`: the rules as checks. A rule in `docs/PLACEMENT.md` with no check here is a
   bug. Pure.
 - `skills/merlive/scripts/design.mjs`: Merlive's own look in light and dark, a project's design file laid over
@@ -54,8 +56,8 @@ can still look wrong; when it does, the fix is a new rule and a check for it, no
 - Comments say why, in plain words. The docs say "boxes", "links" and "lines", not "nodes" and "edges", and use
   British spelling (colour, licence).
 - The skill needs nothing but Node 22. No dependencies in `skills/`.
-- A number that is measured is named and explained where it is defined (`measure` in layout.mjs, `limits` in
-  score.mjs, `draw` in render.mjs), not left in the code.
+- A number that is measured is named and explained where it is defined (`measure` in layout.mjs, `form` in
+  shapes.mjs, `limits` in score.mjs, `draw` in render.mjs), not left in the code.
 - Errors say what to do next, in a sentence an agent can act on; exit 1 when a diagram broke a rule, 2 for what is
   missing, 3 for nothing to draw.
 - The Mermaid a person wrote is never changed by a script.

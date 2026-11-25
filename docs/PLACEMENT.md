@@ -33,8 +33,10 @@ in crossings, and the lanes it leaves empty are closed up.
 ## P2. Boxes are one size, on a grid, with room between them
 
 A diagram uses one box width (128, 160, 192 or 224 px: the narrowest that fits every label in two lines) and one
-height. Decisions are the same box with its corners cut, not a diamond twice the size of its neighbours. No two
-boxes come closer than 16 px.
+height. A shape is what its author drew (a rhombus, a hexagon, a cylinder, a subroutine, a side that leans, a
+double circle, a flag), in the same footprint as every other box: a rhombus is as wide and as tall as the boxes
+round it, not a diamond twice their size. Each line runs on to the outline of the shape it meets. No two boxes
+come closer than 16 px.
 
 - **Pass:** eight boxes, all 128 by 60.
 - **Fail:** a diamond 180 px wide beside a 90 px rectangle.

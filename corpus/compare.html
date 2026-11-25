@@ -30,7 +30,7 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
 <p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 101 samples, Merlive draws 66 whole and 3 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>101</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>35</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>31</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>3</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>32</b></button></div>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>101</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>44</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>22</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>3</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>32</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -234,17 +234,17 @@ flowchart LR
   A[Before] --&gt; B([Start here]) --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Shape: Subroutine</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-subroutine.png" width="436" height="70" style="--w:436" alt="Shape: Subroutine, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-subroutine.svg" width="584" height="100" style="--w:584" alt="Shape: Subroutine, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-subroutine.png" width="436" height="70" style="--w:436" alt="Shape: Subroutine, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-subroutine.svg" width="584" height="116" style="--w:584" alt="Shape: Subroutine, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[[Price lookup]] --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Shape: Cylinder, a database</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a box of the kind &quot;data&quot;, not as a cylinder</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-cylinder.png" width="381" height="81" style="--w:381" alt="Shape: Cylinder, a database, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-cylinder.svg" width="584" height="100" style="--w:584" alt="Shape: Cylinder, a database, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[(Orders)] --&gt; C[After]
@@ -252,15 +252,15 @@ flowchart LR
 </article>
 <article class="card" data-result="less">
 <h3>Shape: Circle</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a pill</span></p>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a pill: a circle the height of a box would hold three letters</span></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-circle.png" width="362" height="70" style="--w:362" alt="Shape: Circle, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-circle.svg" width="584" height="100" style="--w:584" alt="Shape: Circle, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B((Hub)) --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Shape: Asymmetric, a flag</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-asymmetric.png" width="400" height="70" style="--w:400" alt="Shape: Asymmetric, a flag, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-asymmetric.svg" width="584" height="100" style="--w:584" alt="Shape: Asymmetric, a flag, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B&gt;Flagged] --&gt; C[After]
@@ -274,49 +274,49 @@ flowchart LR
   A[Before] --&gt; B{In stock?} --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Shape: Hexagon</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a decision</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-hexagon.png" width="409" height="70" style="--w:409" alt="Shape: Hexagon, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-hexagon.svg" width="584" height="100" style="--w:584" alt="Shape: Hexagon, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B{{Prepare}} --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Shape: Parallelogram</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-parallelogram.png" width="407" height="70" style="--w:407" alt="Shape: Parallelogram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-parallelogram.svg" width="584" height="100" style="--w:584" alt="Shape: Parallelogram, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[/Input/] --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Shape: Parallelogram, leaning back</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-parallelogram-alt.png" width="419" height="70" style="--w:419" alt="Shape: Parallelogram, leaning back, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-parallelogram-alt.svg" width="584" height="100" style="--w:584" alt="Shape: Parallelogram, leaning back, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[\Output\] --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Shape: Trapezoid</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-trapezoid.png" width="459" height="70" style="--w:459" alt="Shape: Trapezoid, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-trapezoid.svg" width="584" height="100" style="--w:584" alt="Shape: Trapezoid, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[/Manual step\] --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Shape: Trapezoid, upside down</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-trapezoid-alt.png" width="451" height="70" style="--w:451" alt="Shape: Trapezoid, upside down, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-trapezoid-alt.svg" width="584" height="100" style="--w:584" alt="Shape: Trapezoid, upside down, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[\Priority/] --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Shape: Double circle</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a pill</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-double-circle.png" width="380" height="79" style="--w:380" alt="Shape: Double circle, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-double-circle.svg" width="584" height="100" style="--w:584" alt="Shape: Double circle, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B(((Stop))) --&gt; C[After]
@@ -335,7 +335,7 @@ flowchart LR
 </article>
 <article class="card" data-result="less">
 <h3>Every one of the 53 newer shapes</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">Each is drawn as a box, a pill or a decision; the shape itself is not</span></p>
+<p class="result"><b>Drawn, less something</b> <span class="why">Those Merlive has a drawing for are drawn as themselves; the rest are boxes</span></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><p class="none">Mermaid could not draw this: Error: No such shape: browser.</p></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-at-every.svg" width="1720" height="560" style="--w:1720" alt="Every one of the 53 newer shapes, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart TD
   n0@{ shape: bang, label: &quot;bang&quot; }
@@ -708,7 +708,7 @@ flowchart LR
 </article>
 <article class="card" data-result="less">
 <h3>A box styled on its own</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">The style is read past: the look is the design's</span></p>
+<p class="result"><b>Drawn, less something</b> <span class="why">Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's</span></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/style-node.png" width="283" height="70" style="--w:283" alt="A box styled on its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/style-node.svg" width="384" height="100" style="--w:384" alt="A box styled on its own, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Order] --&gt; B[On hold]
@@ -717,7 +717,7 @@ flowchart LR
 </article>
 <article class="card" data-result="less">
 <h3>Links styled by their number</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">The style is read past: the look is the design's</span></p>
+<p class="result"><b>Drawn, less something</b> <span class="why">The link is heavy and red as written, in the design's own red; a default for every link is read past</span></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/style-link.png" width="403" height="70" style="--w:403" alt="Links styled by their number, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/style-link.svg" width="584" height="100" style="--w:584" alt="Links styled by their number, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Order] --&gt; B[Pick] --&gt; C[Pack]

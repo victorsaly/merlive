@@ -9,15 +9,16 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `flowchart TD`, `graph TD`, `TB` | Top to bottom |
 | `flowchart LR` | Left to right |
 | `BT`, `RL` | Drawn as `TD` and `LR`, with a note |
-| `A[Text]`, `A(Text)`, `A[[Text]]`, `A>Text]`, `A[/Text/]`, `A[\Text\]`, `A[/Text\]`, `A[\Text/]` | A box. The flag and the four that lean are drawn as plain boxes |
-| `A([Text])`, `A((Text))`, `A(((Text)))` | A start or end (a pill) |
-| `A{Text}`, `A{{Text}}` | A decision (a box with cut corners, the same size as the others) |
+| `A[Text]`, `A(Text)` | A box |
+| `A([Text])`, `A((Text))` | A start or end (a pill) |
+| `A{Text}` | A rhombus, as wide and as tall as the boxes round it |
+| `A{{Text}}`, `A[(Text)]`, `A[[Text]]`, `A(((Text)))`, `A>Text]` | A hexagon, a cylinder (a store of data, of the `data` kind), a subroutine, a double circle, a flag: each drawn as itself, in the footprint every box shares |
+| `A[/Text/]`, `A[\Text\]`, `A[/Text\]`, `A[\Text/]` | The two that lean and the two trapezoids, drawn as themselves |
 | `A["Text with (brackets)"]` | A quoted label |
 | `A["one line<br/>and another"]` | A label in the author's own lines, up to four |
 | ``A["`**Bold** and *italic*`"]`` | A Markdown string: its words and its own line breaks, drawn plain |
 | `#quot;`, `#9829;`, `fa:fa-truck` | An entity code becomes its character. A Font Awesome icon is left out and its words kept: a page of Merlive fetches no font |
-| `A[("Orders")]` | A store of data: a box of the `data` kind |
-| `A@{ shape: diam, label: "In stock?" }` | A box written the newer way, on one line or several. Its label is kept. A decision, a start or end and a store of data are drawn as those, by any of Mermaid's names for them; every other shape is a box |
+| `A@{ shape: diam, label: "In stock?" }` | A box written the newer way, on one line or several. Its label is kept. Every shape in the rows above is drawn as itself, by any of Mermaid's names for it; a shape Merlive has no drawing for is a box |
 | `A@{ icon: "fa:user", label: "Buyer" }`, `A@{ img: "…", label: "…" }` | A box with its label. The icon or image is left out: a page of Merlive fetches nothing |
 | `A@{ row: 1, column: 2 }`, `g@{ view: collapsed }` | Read past: placement is Merlive's, and a group is drawn open |
 | `---` … `---` at the top | Front matter: its `title` is kept as the picture's name, and Mermaid's own settings are read past |
@@ -34,7 +35,10 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A e1@--> B`, `e1@{ animate: true }` | A link with an id is a link; what Mermaid sets on it (animation, a step, a curve) is read past |
 | `class A,B rework`, `A:::rework` | The kind of a box: its colour comes from the design's `kinds` |
 | `classDef red stroke:#c62828` | The class's colour is read for what it means: a kind the design has no colour for takes the design's own nearest colour (this red becomes `risk`) |
-| `style`, `linkStyle`, `click`, `direction` | Read past: the look comes from the design |
+| `style B stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5` | What the author's own style means is kept: a broken outline, a heavy one, and a colour, named for its hue (`red`) and drawn in the design's own nearest colour. The fill is the design's |
+| `linkStyle 0 stroke:#c00,stroke-width:4px` | The same for a link, by the number Mermaid gives it: heavy, broken, and in the design's nearest colour |
+| `classDef default …`, `linkStyle default …` | Read past: a look for every box or every link is the design's |
+| `click`, `direction` | Read past |
 
 Where the Mermaid is kept decides how it is found: fenced `mermaid` blocks in Markdown (`.md`, `.mdx`); the whole
 of a `.mmd` file; and, in any other file (an `.astro` page, a script), a string between backticks that starts as

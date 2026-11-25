@@ -58,8 +58,8 @@ node skills/merlive/scripts/merlive.mjs --setup --from https://your.site        
 ## What you get
 
 - **A diagram that looks planned.** The main path runs in one straight line and everything else sits to one side.
-  Every box is the same size, on a grid. A decision is a box with cut corners, not a diamond twice the size of its
-  neighbours. Lines turn at right angles, each with a port of its own, and go round boxes.
+  Every box is the same size, on a grid. A rhombus, a cylinder or a hexagon is the shape its author drew, in the
+  same footprint as the boxes round it, not a diamond twice their size. Lines turn at right angles, each with a port of its own, and go round boxes.
 - **Character that means something.** The main path is drawn heavier. A box of a kind carries a stripe of its
   colour. A group sits in a faintly filled frame. Boxes lift off a ground of dots, the grid they are placed on.
   Nothing is decoration, and a site with no shadows gets diagrams with none.

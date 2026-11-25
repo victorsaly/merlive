@@ -173,6 +173,11 @@
         "Before",
         "Checked",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "box"
       ]
     },
     {
@@ -184,6 +189,11 @@
         "Before",
         "Start here",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "pill",
+        "box"
       ]
     },
     {
@@ -191,11 +201,15 @@
       "covers": "Shape: Subroutine",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a plain box",
       "has": [
         "Before",
         "Price lookup",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "subroutine",
+        "box"
       ]
     },
     {
@@ -203,11 +217,15 @@
       "covers": "Shape: Cylinder, a database",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a box of the kind \"data\", not as a cylinder",
       "has": [
         "Before",
         "Orders",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "cylinder",
+        "box"
       ]
     },
     {
@@ -215,11 +233,16 @@
       "covers": "Shape: Circle",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a pill",
+      "loses": "Drawn as a pill: a circle the height of a box would hold three letters",
       "has": [
         "Before",
         "Hub",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "pill",
+        "box"
       ]
     },
     {
@@ -227,11 +250,15 @@
       "covers": "Shape: Asymmetric, a flag",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a plain box",
       "has": [
         "Before",
         "Flagged",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "flag",
+        "box"
       ]
     },
     {
@@ -243,6 +270,11 @@
         "Before",
         "In stock?",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "diamond",
+        "box"
       ]
     },
     {
@@ -250,11 +282,15 @@
       "covers": "Shape: Hexagon",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a decision",
       "has": [
         "Before",
         "Prepare",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "hexagon",
+        "box"
       ]
     },
     {
@@ -262,11 +298,15 @@
       "covers": "Shape: Parallelogram",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a plain box",
       "has": [
         "Before",
         "Input",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "lean-right",
+        "box"
       ]
     },
     {
@@ -274,11 +314,15 @@
       "covers": "Shape: Parallelogram, leaning back",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a plain box",
       "has": [
         "Before",
         "Output",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "lean-left",
+        "box"
       ]
     },
     {
@@ -286,11 +330,15 @@
       "covers": "Shape: Trapezoid",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a plain box",
       "has": [
         "Before",
         "Manual step",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "trapezoid",
+        "box"
       ]
     },
     {
@@ -298,11 +346,15 @@
       "covers": "Shape: Trapezoid, upside down",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a plain box",
       "has": [
         "Before",
         "Priority",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "trapezoid-alt",
+        "box"
       ]
     },
     {
@@ -310,11 +362,15 @@
       "covers": "Shape: Double circle",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn as a pill",
       "has": [
         "Before",
         "Stop",
         "After"
+      ],
+      "shapes": [
+        "box",
+        "double-circle",
+        "box"
       ]
     },
     {
@@ -328,6 +384,13 @@
         "Orders",
         "Back order note",
         "Done"
+      ],
+      "shapes": [
+        "box",
+        "diamond",
+        "cylinder",
+        "box",
+        "pill"
       ]
     },
     {
@@ -335,7 +398,7 @@
       "covers": "Every one of the 53 newer shapes",
       "boxes": 53,
       "links": 44,
-      "loses": "Each is drawn as a box, a pill or a decision; the shape itself is not",
+      "loses": "Those Merlive has a drawing for are drawn as themselves; the rest are boxes",
       "has": [
         "bang",
         "browser",
@@ -627,14 +690,17 @@
       "covers": "A box styled on its own",
       "boxes": 2,
       "links": 1,
-      "loses": "The style is read past: the look is the design's"
+      "loses": "Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's",
+      "kinds": [
+        "red"
+      ]
     },
     {
       "file": "flowchart/style-link.mmd",
       "covers": "Links styled by their number",
       "boxes": 3,
       "links": 2,
-      "loses": "The style is read past: the look is the design's"
+      "loses": "The link is heavy and red as written, in the design's own red; a default for every link is read past"
     },
     {
       "file": "flowchart/class-def.mmd",

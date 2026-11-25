@@ -57,6 +57,13 @@ The first version. It draws flowcharts and nothing else, and says so.
   drawn, and its `title` kept; `A & B --> C` links every box before the link to every box after it; and anything
   written with `@{ … }` is read, on one line or several: a box's shape and label, an icon or image kept as its
   label, a link's id, and what Mermaid sets on a link or a group read past.
+- **A shape is what its author drew.** A rhombus, a hexagon, a cylinder, a subroutine, the two that lean, the
+  two trapezoids, a double circle and a flag are each drawn as themselves, written the old way or with
+  `@{ shape: … }`. All share the one footprint every box has, so the grid holds and no shape is bigger than its
+  neighbours, and every line runs on to the outline it meets.
+- **An author's own styling is kept as what it means.** `style` and `classDef` give a box a broken outline, a
+  heavy one, and a colour; `linkStyle` does the same for a link, by Mermaid's number for it. The colour is named
+  for its hue and drawn in the design's own nearest colour, so the colour rules still hold.
 - **The README opens on one real pair**: the example's Mermaid block as Mermaid draws it, beside what Merlive
   draws of it. `npm run compare` draws Mermaid's half, so it is never made by hand.
 - **Links are drawn with what their author put at each end**: an arrowhead, a circle or a cross, at either end
