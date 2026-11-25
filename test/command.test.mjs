@@ -83,9 +83,9 @@ describe('the command', () => {
 
   it('draws a sequence diagram as a still picture, says what would be drawn, and refuses one that breaks a rule', async () => {
     const cwd = temp();
-    writeFileSync(join(cwd, 'calls.mmd'), 'sequenceDiagram\n  Buyer->>ERP: Raise order\n  ERP-|\\Buyer: half\n');
+    writeFileSync(join(cwd, 'calls.mmd'), 'sequenceDiagram\n  Buyer->>ERP: Raise order\n  wibble wobble\n');
     const checked = await go(['calls.mmd', '--check'], cwd);
-    assert.match(checked.text, /note, block 1: line 3: half arrows are not read yet/);
+    assert.match(checked.text, /note, block 1: line 3: not read: "wibble wobble"/);
     assert.match(checked.text, /would draw calls-1\.html \(2 participants, 1 messages, merlive design\)/);
     assert.equal((await go(['calls.mmd', '--format', 'svg'], cwd)).code, exits.drawn);
     assert.match(readFileSync(join(cwd, 'diagrams/calls-1.svg'), 'utf8'), /^<svg xmlns/);

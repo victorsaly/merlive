@@ -46,7 +46,7 @@ describe('sequence: participants', () => {
 
   it('reads an actor as a person from outside, and a database as a store of data', () => {
     const m = seq('actor B as Buyer\nparticipant D@{ "type": "database" } as Orders\nparticipant Q@{ "type": "queue", "alias": "Jobs" }\nB->>D: Save');
-    assert.deepEqual(m.participants.map((p) => [p.label, p.role, p.kind, p.shape]), [['Buyer', 'actor', 'external', 'pill'], ['Orders', 'database', 'data', 'box'], ['Jobs', 'queue', 'step', 'box']]);
+    assert.deepEqual(m.participants.map((p) => [p.label, p.role, p.kind, p.shape]), [['Buyer', 'actor', 'external', 'person'], ['Orders', 'database', 'data', 'database'], ['Jobs', 'queue', 'step', 'queue']]);
   });
 
   it('lets the name after "as" win over the one inside the braces, and keeps a line break', () => {
@@ -155,10 +155,8 @@ describe('sequence: what is around it, and what is not read', () => {
   });
 
   it('says what it could not read, with its line, and leaves nothing of that line behind', () => {
-    const m = seq('A->>B: hi\nA-|\\B: half\nA->>()B: central\nwibble wobble\nB-->>A: bye');
-    assert.match(m.warnings[0], /^line 3: half arrows are not read yet/);
-    assert.match(m.warnings[1], /^line 4: a message to the middle of a line, written with \(\), is not read yet/);
-    assert.match(m.warnings[2], /^line 5: not read: "wibble wobble"/);
+    const m = seq('A->>B: hi\nwibble wobble\nB-->>A: bye');
+    assert.match(m.warnings[0], /^line 3: not read: "wibble wobble"/);
     assert.equal(messages(m).length, 2);
     assert.deepEqual(m.participants.map((p) => p.id), ['A', 'B']);
   });
@@ -272,10 +270,30 @@ describe('sequence: placement', () => {
     assert.ok(Job.to < ERP.to && Job.to >= l.messages.m3.y);
   });
 
-  it('repeats the participants at the foot of a long diagram, and not of a short one', () => {
+  it('repeats every participant at the foot of its lifeline, however short the diagram, as Mermaid does', () => {
     const long = layoutSequence(seq(Array.from({ length: 14 }, (_, i) => `A->>B: Message ${i}`).join('\n')));
     assert.equal(long.feet, true);
-    assert.equal(lay.feet, false);
+    assert.equal(lay.feet, true);
+    for (const stood of Object.values(lay.participants)) {
+      assert.equal(stood.foot, stood.to + stood.h / 2, 'its foot begins where its lifeline ends');
+      assert.ok(/** @type {number} */ (stood.foot) + stood.h / 2 <= lay.height - across.pad + 0.5, 'and is inside the picture');
+    }
+  });
+
+  it('leaves the foot off when the author turned it off, in front matter or in a directive', () => {
+    for (const src of ['---\nconfig:\n  sequence:\n    mirrorActors: false\n---\nsequenceDiagram\nA->>B: hi', '%%{init: {"sequence": {"mirrorActors": false}}}%%\nsequenceDiagram\nA->>B: hi']) {
+      const m = parseSequence(src), l = layoutSequence(m);
+      assert.equal(m.mirror, false, src);
+      assert.equal(l.feet, false);
+      assert.equal(l.participants.A.foot, null);
+    }
+    assert.equal(parseSequence('---\nconfig:\n  sequence:\n    mirrorActors: true\n---\nsequenceDiagram\nA->>B: hi').mirror, true);
+  });
+
+  it('gives a participant that is ended no foot: its line stopped at the cross', () => {
+    const l = layoutSequence(seq('A->>B: Start\ndestroy B\nA-xB: Stop\nA->>A: Carry on'));
+    assert.equal(l.participants.B.foot, null);
+    assert.notEqual(l.participants.A.foot, null);
   });
 
   it('leaves room all round, and sizes the drawing to what is in it', () => {
@@ -455,5 +473,192 @@ describe('sequence: a title its author gave the picture', () => {
       assert.match(svg, /<text class="mv-title"[^>]*><tspan[^>]*>Placing an order<\/tspan><\/text>/);
       assert.ok(Number(/viewBox="0 0 \d+ (\d+)"/.exec(svg)?.[1]) > lay.height);
     }
+  });
+});
+
+describe('sequence: who a participant is, drawn', () => {
+  const types = 'participant Shop@{ "type": "boundary" }\nparticipant Rules@{ "type": "control" }\nparticipant Order@{ "type": "entity" }\nparticipant Orders@{ "type": "database" }\nparticipant Lines@{ "type": "collections" }\nparticipant Jobs@{ "type": "queue" }\nactor Buyer\nparticipant ERP\nBuyer->>Shop: Order\nShop->>ERP: Pass on';
+
+  it('reads each kind of participant as a shape of its own', () => {
+    assert.deepEqual(seq(types).participants.map((p) => p.shape), ['boundary', 'control', 'entity', 'database', 'collections', 'queue', 'person', 'box']);
+  });
+
+  it('keeps one footprint for all of them, tall enough for a mark with its name under it', () => {
+    const m = seq(types), l = layoutSequence(m);
+    assert.ok(l.head.h >= across.mark + across.markGap + across.headLine + across.markFoot);
+    for (const p of m.participants) assert.deepEqual([l.participants[p.id].w, l.participants[p.id].h], [l.head.w, l.head.h], p.id);
+    // A plain diagram is no taller for marks it does not have.
+    assert.equal(layoutSequence(seq(order)).head.h, across.headPad + across.headLine);
+  });
+
+  it('draws a person as a figure with the name beneath, not as a box', () => {
+    const m = seq('actor Buyer\nparticipant ERP\nBuyer->>ERP: Order'), l = layoutSequence(m);
+    const svg = sequencePicture(m, l, builtIn, { title: 't' });
+    const buyer = /<g class="mv-node" data-node="Buyer"[^>]*data-mark="person"[^>]*>(.*?)<\/g>/.exec(svg)?.[1] ?? '';
+    assert.match(buyer, /<circle class="mv-shape"/);
+    assert.match(buyer, /<path class="mv-mark"/);
+    assert.doesNotMatch(buyer, /<rect/);
+    // The name is under the figure: below the middle of the footprint, and above its foot, where the lifeline starts.
+    const stood = l.participants.Buyer, y = Number(/<tspan x="[\d.]+" y="([\d.]+)">Buyer</.exec(buyer)?.[1]);
+    assert.ok(y > stood.y && y < stood.y + stood.h / 2, `${y} in ${stood.y}..${stood.y + stood.h / 2}`);
+    assert.equal(stood.from, stood.y + stood.h / 2);
+  });
+
+  it('gives every typed participant a drawing no other has', () => {
+    const m = seq(types), svg = sequencePicture(m, layoutSequence(m), builtIn, { title: 't' });
+    const drawn = m.participants.map((p) => (new RegExp(`<g class="mv-node" data-node="${p.id}"[^>]*>(.*?)<text>`).exec(svg)?.[1] ?? '').replace(/[\d.]+/g, '#'));
+    assert.equal(new Set(drawn).size, drawn.length, 'eight participants, eight outlines');
+    for (const id of ['Shop', 'Rules', 'Order', 'Orders']) assert.match(svg, new RegExp(`data-node="${id}"[^>]*data-mark=`), `${id} has its name under its mark`);
+    for (const id of ['Lines', 'Jobs', 'ERP']) assert.doesNotMatch(svg, new RegExp(`data-node="${id}"[^>]*data-mark=`), `${id} has its name inside`);
+  });
+
+  it('draws each again at the foot, the same drawing, and says what each is to a reader who cannot see it', () => {
+    const m = seq(types), l = layoutSequence(m);
+    const svg = sequencePicture(m, l, builtIn, { title: 't' });
+    for (const p of m.participants) assert.equal(svg.split(`data-node="${p.id}"`).length - 1, 2, p.id);
+    const page = sequencePage(m, l, builtIn, { title: 't', source: 's', version: '0' });
+    for (const [name, what] of [['Buyer', 'a person'], ['Shop', 'a boundary'], ['Rules', 'a control'], ['Order', 'an entity'], ['Orders', 'a database'], ['Lines', 'a collection'], ['Jobs', 'a queue'], ['ERP', 'a participant']]) assert.match(page, new RegExp(`aria-label="${name}, ${what}"`));
+    // One of the two is what the keyboard reaches; a pointer may pick either.
+    assert.equal(page.split('aria-label="Buyer, a person"').length - 1, 1);
+  });
+
+  it('passes its rules with every kind of participant, one made part way down, and a foot on each', () => {
+    for (const body of [types, 'actor Buyer\nBuyer->>ERP: Order\ncreate actor Clerk\nERP->>Clerk: Ask\nClerk-->>ERP: Yes', 'participant Q@{ "type": "queue" } as A long queue name here\nparticipant C@{ "type": "collections" } as Lines of orders\nQ->>C: Go']) {
+      const model = seq(body), l = layoutSequence(model);
+      assert.deepEqual(failed(scoreSequence(model, l, builtIn)), [], body);
+    }
+  });
+
+  it('brings a message to the mark of a person made part way down, not to the edge of an empty footprint', () => {
+    const m = seq('participant ERP\nERP->>ERP: Think\ncreate actor Clerk\nERP->>Clerk: Ask'), l = layoutSequence(m);
+    const clerk = l.participants.Clerk, sent = l.messages.m2;
+    assert.equal(sent.y, clerk.y - clerk.h / 2 + across.mark / 2, 'the line meets the middle of the figure');
+    assert.equal(sent.points[1].x, clerk.x - across.markHalf);
+  });
+
+  it('holds a foot to the rule: a foot that sits on the last message is a fault', () => {
+    const model = seq(order), l = layoutSequence(model);
+    for (const stood of Object.values(l.participants)) stood.foot = /** @type {number} */ (stood.foot) - 60;
+    assert.match(scoreSequence(model, l, builtIn).checks[0].detail, /is drawn again at the foot over the last row/);
+  });
+});
+
+describe('sequence: half arrows and messages to the middle of a line', () => {
+  it('reads every half arrow, solid and dotted, and keeps which half it is', () => {
+    const m = seq('A-|\\B: a\nA--|\\B: b\nA-|/B: c\nA--|/B: d\nA-\\\\B: e\nA--\\\\B: f\nA-//B: g\nA--//B: h');
+    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(messages(m).map((x) => [x.from, x.to, x.style, x.head, x.tail]), [
+      ['A', 'B', 'solid', 'half-top', 'none'], ['A', 'B', 'dotted', 'half-top', 'none'], ['A', 'B', 'solid', 'half-bottom', 'none'], ['A', 'B', 'dotted', 'half-bottom', 'none'],
+      ['A', 'B', 'solid', 'stick-top', 'none'], ['A', 'B', 'dotted', 'stick-top', 'none'], ['A', 'B', 'solid', 'stick-bottom', 'none'], ['A', 'B', 'dotted', 'stick-bottom', 'none'],
+    ]);
+  });
+
+  it('reads a reversed half arrow as Mermaid draws it: a line back to the one named first, the same side up', () => {
+    const m = seq('A/|-B: a\nA\\|--B: b\nA//-B: c\nA\\\\--B: d');
+    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(m.participants.map((p) => p.id), ['A', 'B'], 'the one named first still stands first');
+    // Above the line when read from A to B is the right-hand side of a line that travels from B to A.
+    assert.deepEqual(messages(m).map((x) => [x.from, x.to, x.style, x.head]), [['B', 'A', 'solid', 'half-bottom'], ['B', 'A', 'dotted', 'half-top'], ['B', 'A', 'solid', 'stick-bottom'], ['B', 'A', 'dotted', 'stick-top']]);
+  });
+
+  it('draws half of an arrowhead on the side its author chose, and a stick as one stroke', () => {
+    const m = seq('A-|\\B: top\nA-|/B: bottom\nA-\\\\B: stick\nB-|/A: back'), l = layoutSequence(m);
+    const svg = sequencePicture(m, l, builtIn, { title: 't' });
+    const head = (/** @type {string} */ id) => new RegExp(`data-edge="${id}"[^>]*><path class="mv-line"[^>]*/>(<[a-z]+ class="mv-(?:head|open)" points="([^"]+)"/>)`).exec(svg) ?? [];
+    const ys = (/** @type {string} */ id) => head(id)[2].split(' ').map((pt) => Number(pt.split(',')[1]));
+    const line = (/** @type {string} */ id) => l.messages[id].y;
+    assert.ok(Math.min(...ys('m1')) < line('m1') && Math.max(...ys('m1')) <= line('m1') + 0.1, 'top: above a line that goes right');
+    assert.ok(Math.max(...ys('m2')) > line('m2') && Math.min(...ys('m2')) >= line('m2') - 0.1, 'bottom: below a line that goes right');
+    assert.match(head('m3')[1], /^<polyline class="mv-open"/);
+    assert.equal(head('m3')[2].split(' ').length, 2, 'a stick is one stroke');
+    assert.ok(Math.min(...ys('m4')) < line('m4'), 'bottom, on a line that goes left, is above it: Mermaid turns the head with the line');
+  });
+
+  it('reads a message to or from the middle of a line, and keeps which end has the dot', () => {
+    const m = seq('participant Buyer\nparticipant ERP\nBuyer->>()ERP: Raise order\nBuyer()->>ERP: Chase it\nERP()->>()Buyer: Done');
+    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(m.participants.map((p) => p.id), ['Buyer', 'ERP']);
+    assert.deepEqual(messages(m).map((x) => [x.from, x.to, x.label, Boolean(x.tailDot), Boolean(x.headDot)]), [['Buyer', 'ERP', 'Raise order', false, true], ['Buyer', 'ERP', 'Chase it', true, false], ['ERP', 'Buyer', 'Done', true, true]]);
+  });
+
+  it('draws the dot on the lifeline, the arrowhead short of it, and the line from dot to dot', () => {
+    const m = seq('participant Buyer\nparticipant ERP\nBuyer->>+ERP: Start\nBuyer->>()ERP: Raise order\nERP()->>()Buyer: Done'), l = layoutSequence(m);
+    const svg = sequencePicture(m, l, builtIn, { title: 't' });
+    // The middle of the line, even when the participant is at work and a plain message would stop at its bar.
+    assert.equal(l.messages.m2.points[1].x, l.participants.ERP.x);
+    assert.notEqual(l.messages.m1.points[1].x, l.participants.ERP.x);
+    const edge = (/** @type {string} */ id) => new RegExp(`<g class="mv-edge" data-edge="${id}".*?</g>`).exec(svg)?.[0] ?? '';
+    const dots = (/** @type {string} */ id) => [...edge(id).matchAll(/<circle class="mv-head mv-dot" cx="([\d.]+)" cy="([\d.]+)"/g)].map((d) => [Number(d[1]), Number(d[2])]);
+    assert.deepEqual(dots('m1'), []);
+    assert.deepEqual(dots('m2'), [[l.participants.ERP.x, l.messages.m2.y]]);
+    assert.deepEqual(dots('m3').map((d) => d[0]).sort((a, b) => a - b), [l.participants.Buyer.x, l.participants.ERP.x]);
+    const tip = Math.max(...(/<polygon class="mv-head" points="([^"]+)"/.exec(edge('m2'))?.[1] ?? '').split(' ').map((pt) => Number(pt.split(',')[0])));
+    assert.ok(tip < l.participants.ERP.x - 3 && tip > l.participants.ERP.x - 8, `the arrowhead stops at the dot's edge: ${tip}`);
+  });
+
+  it('never drops a message: every line of both corpus samples is a message in the picture', () => {
+    for (const body of ['Buyer-|\\ERP: Top half\nERP--|/Buyer: Bottom half\nBuyer-\\\\ERP: Top stick\nERP--//Buyer: Bottom stick', 'participant Buyer\nparticipant ERP\nBuyer->>()ERP: Raise order\nBuyer()->>ERP: Chase it\nERP()->>()Buyer: Done']) {
+      const model = seq(body), l = layoutSequence(model);
+      assert.equal(messages(model).length, body.split('\n').filter((x) => x.includes(':')).length);
+      assert.deepEqual(failed(scoreSequence(model, l, builtIn)), [], body);
+    }
+  });
+});
+
+describe('sequence: the title of a group of participants', () => {
+  const grouped = 'box Aqua Buying\nparticipant B as Buyer\nparticipant E as ERP\nend\nbox rgb(33,66,99)\nparticipant W as Warehouse\nend\nbox Outside the firm\nparticipant S as Supplier\nend\nB->>E: Raise order\nE->>W: Check stock\nE->>S: Send order';
+  const inside = (/** @type {{x:number,y:number,w:number,h:number}} */ name, /** @type {{x:number,y:number,w:number,h:number}} */ g) => name.x - name.w / 2 >= g.x && name.x + name.w / 2 <= g.x + g.w && name.y - name.h / 2 >= g.y && name.y + name.h / 2 <= g.y + g.h;
+
+  it('sits inside its frame, above its participants, and a group with no title has none', () => {
+    const m = seq(grouped), l = layoutSequence(m);
+    assert.deepEqual(l.groups.map((g) => g.name?.lines.join(' ') ?? null), ['Buying', null, 'Outside the firm']);
+    for (const g of l.groups) {
+      if (!g.name) continue;
+      assert.ok(inside(g.name, g), g.title);
+      assert.ok(g.name.y + g.name.h / 2 <= l.participants.B.y - l.participants.B.h / 2, 'clear of the participants');
+      assert.ok(g.name.x - g.name.w / 2 >= 0 && g.name.x + g.name.w / 2 <= l.width, 'inside the picture');
+    }
+  });
+
+  it('wraps a title wider than its frame, and makes the row of titles as tall as the longest needs', () => {
+    const m = seq(grouped), l = layoutSequence(m);
+    const outside = l.groups[2];
+    assert.ok((outside.name?.lines.length ?? 0) > 1, 'three words over one narrow participant take more than a line');
+    assert.equal(l.groups[0].y, outside.y, 'every group starts at the same height');
+    assert.deepEqual(failed(scoreSequence(m, l, builtIn)), []);
+  });
+
+  it('makes every participant wide enough for the longest word of a title no wrapping can help', () => {
+    const m = seq('box Counterparties\nparticipant S\nend\nparticipant B\nS->>B: hi'), l = layoutSequence(m);
+    assert.ok(l.head.w > across.widths[0]);
+    assert.ok(inside(/** @type {NonNullable<typeof l.groups[0]['name']>} */ (l.groups[0].name), l.groups[0]));
+    assert.deepEqual(failed(scoreSequence(m, l, builtIn)), []);
+  });
+
+  it('says so when a word of a title is too long for any frame, and when a title is moved out of its frame', () => {
+    const long = seq('box Supercalifragilisticexpialidocious\nparticipant S\nend\nS->>S: hi');
+    assert.match(scoreSequence(long, layoutSequence(long), builtIn).checks.find((c) => c.id === 'S7')?.detail ?? '', /the title "Supercalifragilisticexpialidocious" has a word too long for its group/);
+    const m = seq(grouped), l = layoutSequence(m);
+    /** @type {NonNullable<typeof l.groups[0]['name']>} */ (l.groups[0].name).y -= 40;
+    assert.match(scoreSequence(m, l, builtIn).checks.find((c) => c.id === 'S7')?.detail ?? '', /the title "Buying" is not inside its group/);
+  });
+
+  it("is drawn in the design's quiet text colour, in the still picture as on the page, in light and in dark", () => {
+    const m = seq(grouped), l = layoutSequence(m);
+    const svg = sequencePicture(m, l, builtIn, { title: 't' });
+    assert.match(svg, /<text class="mv-group-name">(<tspan [^>]*>[^<]+<\/tspan>)+<\/text>/);
+    assert.match(svg, /\.mv-group-name\{[^}]*fill:var\(--mv-muted\)/);
+    assert.match(sequencePage(m, l, builtIn, { title: 't', source: 's', version: '0' }), /\.mv-group-name\{[^}]*fill:var\(--mv-muted\)/);
+    // No words in the drawing are left to the colour a browser gives text that was given none.
+    assert.doesNotMatch(svg, /<g class="mv-group">(?:(?!<\/g>).)*<text>/, 'a title with no class of its own is black, whatever the page');
+  });
+
+  it("holds that colour to the rule: quiet text on a group's own fill must be readable", () => {
+    const m = seq(grouped), l = layoutSequence(m);
+    const faint = designFrom({ name: 'Faint', light: { ...builtIn.light, muted: '#dfe9e7' } });
+    const d1 = scoreSequence(m, l, faint).checks.find((c) => c.id === 'D1');
+    assert.match(d1?.detail ?? '', /the title of a group/);
+    const plain = seq(order);
+    assert.doesNotMatch(scoreSequence(plain, layoutSequence(plain), faint).checks.find((c) => c.id === 'D1')?.detail ?? '', /the title of a group/);
   });
 });

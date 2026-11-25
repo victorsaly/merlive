@@ -2734,8 +2734,7 @@
         "database",
         "collections",
         "queue"
-      ],
-      "loses": "A database is a box of the kind \"data\". The other five are plain boxes, told apart by their names, not by a symbol"
+      ]
     },
     {
       "file": "sequence/seq-alias-as.mmd",
@@ -2900,13 +2899,63 @@
       "file": "sequence/seq-half-arrows.mmd",
       "covers": "Half arrows",
       "participants": 2,
-      "messages": 4
+      "messages": 4,
+      "ends": [
+        [
+          "solid",
+          "none",
+          "half-top"
+        ],
+        [
+          "dotted",
+          "none",
+          "half-bottom"
+        ],
+        [
+          "solid",
+          "none",
+          "stick-top"
+        ],
+        [
+          "dotted",
+          "none",
+          "stick-bottom"
+        ]
+      ],
+      "has": [
+        "Top half",
+        "Bottom half",
+        "Top stick",
+        "Bottom stick"
+      ]
     },
     {
       "file": "sequence/seq-central-connection.mmd",
       "covers": "A message to or from the middle of a line",
       "participants": 2,
-      "messages": 3
+      "messages": 3,
+      "ends": [
+        [
+          "solid",
+          "none",
+          "arrow"
+        ],
+        [
+          "solid",
+          "none",
+          "arrow"
+        ],
+        [
+          "solid",
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "Raise order",
+        "Chase it",
+        "Done"
+      ]
     },
     {
       "file": "sequence/seq-activation-explicit.mmd",
