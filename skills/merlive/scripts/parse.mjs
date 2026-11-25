@@ -44,6 +44,52 @@ const LINKS = /** @type {const} */ ([
   [/^\s*(?:()())(={2,}>|={3,})\s*(?:\|([^|]*)\|)?/, 'thick'],
 ]);
 
+// The newer shapes ("A@{ shape: diam }") that Merlive has a drawing for, by every name Mermaid gives them.
+// Any other is a box: a shape is never the only thing that says what a box is, its words are.
+const SHAPES = /** @type {const} */ ({
+  pill: ['stadium', 'pill', 'terminal', 'circle', 'circ', 'sm-circ', 'small-circle', 'start', 'f-circ', 'filled-circle', 'junction', 'fr-circ', 'framed-circle', 'stop', 'dbl-circ', 'double-circle', 'cross-circ', 'crossed-circle', 'summary'],
+  decision: ['diam', 'decision', 'diamond', 'question', 'hex', 'hexagon', 'prepare'],
+  store: ['cyl', 'cylinder', 'database', 'db', 'h-cyl', 'das', 'horizontal-cylinder', 'lin-cyl', 'disk', 'lined-cylinder', 'datastore', 'data-store', 'bow-rect', 'bow-tie-rectangle', 'stored-data'],
+});
+
+// What "@{ … }" can say of a box. One that says none of these is about a link or a group, and makes no box.
+const OF_A_BOX = ['shape', 'label', 'icon', 'img', 'form', 'pos', 'w', 'h', 'constraint', 'row', 'column'];
+
+/** Where the "@{ … }" that opens just before `from` closes: the first } that is not inside quotes, or -1. */
+function closeOf(/** @type {string} */ s, /** @type {number} */ from) {
+  let quoted = false;
+  for (let i = from; i < s.length; i++) {
+    if (s[i] === '"') quoted = !quoted;
+    else if (s[i] === '}' && !quoted) return i;
+  }
+  return -1;
+}
+
+/** What is written between "@{" and "}": "key: value" pairs, parted by commas or line ends outside quotes. */
+function dataIn(/** @type {string} */ text) {
+  /** @type {Record<string,string>} */
+  const out = {};
+  let part = '', quoted = false;
+  const keep = () => {
+    const m = /^\s*([\w-]+)\s*:\s*([^]*?)\s*$/.exec(part);
+    if (m) out[m[1]] = m[2].replace(/^"|"$/g, '');
+    part = '';
+  };
+  for (const c of text) {
+    if (c === '"') quoted = !quoted;
+    if ((c === ',' || c === '\n') && !quoted) keep();
+    else part += c;
+  }
+  keep();
+  return out;
+}
+
+/** Whether a line opens an "@{" that it does not close, so the lines after it belong to it. */
+function leftOpen(/** @type {string} */ text) {
+  for (let at = text.indexOf('@{'); at >= 0; at = text.indexOf('@{', at + 2)) if (closeOf(text, at + 2) < 0) return true;
+  return false;
+}
+
 // Mermaid styling lines. Merlive's look comes from the design file, so these are read past without a warning.
 const STYLING = /^(style|linkStyle|click|direction)\b/;
 
@@ -85,30 +131,49 @@ export function parse(src) {
     return n;
   };
 
-  /** Reads `A`, `A[Label]`, `A{Label}:::kind` at pos. */
+  /** Gives a box its words. Where an author broke a label, the lines are kept as written; the label itself is the words in one line. */
+  const say = (/** @type {Node} */ n, /** @type {string} */ words) => {
+    const lines = words.trim().replace(/^"|"$/g, '').split(/<br\s*\/?>/i).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+    n.label = lines.join(' ');
+    if (lines.length > 1) n.breaks = lines;
+    else delete n.breaks;
+  };
+
+  /** Gives a box its shape. A store of data (Mermaid's cylinder) is a box like any other, of the kind that holds data. */
+  const shape = (/** @type {Node} */ n, /** @type {'box'|'pill'|'decision'|'store'} */ as) => {
+    n.shape = as === 'store' ? 'box' : as;
+    if (as === 'store' && !n.kind) n.kind = 'data';
+  };
+
+  /** Reads `A`, `A[Label]`, `A{Label}:::kind`, `A@{ shape: diam, label: "Label" }` at pos. */
   const readNode = (/** @type {string} */ s, /** @type {number} */ pos) => {
     const m = /^\s*([A-Za-z_]\w*)/.exec(s.slice(pos));
     if (!m) return null;
     let p = pos + m[0].length;
     const n = node(m[1]);
-    for (const [open, close, shape] of OPENERS) {
+    for (const [open, close, as] of OPENERS) {
       if (!s.startsWith(open, p)) continue;
       const start = p + open.length;
       // A quoted label may hold the closing bracket itself, so the closer is looked for after the quote ends.
       const quoted = s[start] === '"' ? s.indexOf('"', start + 1) : -1;
       const end = s.indexOf(close, quoted > 0 ? quoted + 1 : start);
       if (end < 0) return null;
-      // Where an author broke a label, the lines are kept as written; the label itself is the words in one line.
-      const lines = s.slice(start, end).trim().replace(/^"|"$/g, '').split(/<br\s*\/?>/i).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
-      n.label = lines.join(' ');
-      if (lines.length > 1) n.breaks = lines;
-      else delete n.breaks;
-      // A store of data (Mermaid's cylinder) is a box like any other, of the kind that holds data.
-      n.shape = shape === 'store' ? 'box' : shape;
-      if (shape === 'store' && !n.kind) n.kind = 'data';
+      say(n, s.slice(start, end));
+      shape(n, as);
       shaped.add(n.id);
       p = end + close.length;
       break;
+    }
+    if (s.startsWith('@{', p)) {
+      const end = closeOf(s, p + 2);
+      if (end < 0) return null;
+      const data = dataIn(s.slice(p + 2, end));
+      // An icon or an image is a box with its label: a page of Merlive fetches nothing, so neither is drawn.
+      // Rows and columns are read past: where a box goes is Merlive's to say.
+      if (data.label !== undefined) say(n, data.label);
+      if (data.shape) shape(n, /** @type {'pill'|'decision'|'store'|undefined} */ (Object.keys(SHAPES).find((k) => SHAPES[/** @type {keyof typeof SHAPES} */ (k)].some((name) => name === data.shape))) ?? 'box');
+      if (OF_A_BOX.some((k) => k in data)) shaped.add(n.id);
+      p = end + 1;
     }
     const cls = /^:::(\w+)/.exec(s.slice(p));
     if (cls) {
@@ -120,6 +185,8 @@ export function parse(src) {
 
   /** Reads `-->`, `-->|Yes|`, `-- Yes -->` and the dotted and thick forms at pos. */
   const readLink = (/** @type {string} */ s, /** @type {number} */ pos) => {
+    // A link may carry an id ("A e1@--> B"), there for Mermaid to set things on it. Merlive names links itself.
+    pos += /^\s*[A-Za-z_]\w*@(?!\{)/.exec(s.slice(pos))?.[0].length ?? 0;
     for (const [like, style] of LINKS) {
       const m = like.exec(s.slice(pos));
       if (!m) continue;
@@ -127,6 +194,21 @@ export function parse(src) {
       return { style, arrow: m[3].endsWith('>'), label: words, pos: pos + m[0].length };
     }
     return null;
+  };
+
+  /** Reads one box, or several joined by "&" (`A & B`), at pos. */
+  const readBoxes = (/** @type {string} */ s, /** @type {number} */ pos) => {
+    const first = readNode(s, pos);
+    if (!first) return null;
+    const nodes = [first.node];
+    let p = first.pos;
+    for (let and = /^\s*&/.exec(s.slice(p)); and; and = /^\s*&/.exec(s.slice(p))) {
+      const next = readNode(s, p + and[0].length);
+      if (!next) return null;
+      nodes.push(next.node);
+      p = next.pos;
+    }
+    return { nodes, pos: p };
   };
 
   const statement = (/** @type {string} */ s, /** @type {number} */ line) => {
@@ -143,25 +225,33 @@ export function parse(src) {
       for (const e of model.edges.splice(had.edges)) seenEdge.set(`${e.from}-${e.to}`, (seenEdge.get(`${e.from}-${e.to}`) ?? 1) - 1);
       warn(line, what);
     };
-    const first = readNode(s, 0);
-    if (!first) return notRead();
-    let pos = first.pos;
-    let prev = first.node;
-    while (s.slice(pos).trim() !== '') {
-      if (/^\s*&/.test(s.slice(pos))) return notRead(`"&" between nodes is not read yet; write one link per line: "${s}"`);
-      const link = readLink(s, pos);
-      const next = link && readNode(s, link.pos);
+    // What is set on a link or a group ("e1@{ animate: true }", "g@{ view: collapsed }") is read past and makes
+    // no box: movement is the design's, and a picture is drawn open.
+    const set = /^[A-Za-z_]\w*@\{/.exec(s);
+    if (set) {
+      const end = closeOf(s, set[0].length);
+      if (end === s.length - 1 && !OF_A_BOX.some((k) => k in dataIn(s.slice(set[0].length, end)))) return;
+    }
+    let prev = readBoxes(s, 0);
+    if (!prev) return notRead();
+    while (s.slice(prev.pos).trim() !== '') {
+      const link = readLink(s, prev.pos);
+      const next = link && readBoxes(s, link.pos);
       if (!link || !next) return notRead();
-      if (prev.id === next.node.id) {
-        warn(line, `a link from ${prev.id} to itself is not drawn`);
-      } else {
-        const base = `${prev.id}-${next.node.id}`;
-        const count = (seenEdge.get(base) ?? 0) + 1;
-        seenEdge.set(base, count);
-        model.edges.push({ id: count === 1 ? base : `${base}#${count}`, from: prev.id, to: next.node.id, label: link.label, style: link.style, arrow: link.arrow });
+      // With "&", every box before the link is linked to every box after it.
+      for (const a of prev.nodes) {
+        for (const b of next.nodes) {
+          if (a.id === b.id) {
+            warn(line, `a link from ${a.id} to itself is not drawn`);
+            continue;
+          }
+          const base = `${a.id}-${b.id}`;
+          const count = (seenEdge.get(base) ?? 0) + 1;
+          seenEdge.set(base, count);
+          model.edges.push({ id: count === 1 ? base : `${base}#${count}`, from: a.id, to: b.id, label: link.label, style: link.style, arrow: link.arrow });
+        }
       }
-      prev = next.node;
-      pos = next.pos;
+      prev = next;
     }
   };
 
@@ -180,10 +270,7 @@ export function parse(src) {
   /** @type {string[]|null} */
   let describing = null;
 
-  src.split(/\r?\n/).forEach((raw, i) => {
-    const line = i + 1;
-    const text = raw.trim();
-    if (!text) return;
+  const read = (/** @type {string} */ text, /** @type {number} */ line) => {
     // What the picture is called and what it shows, in Mermaid's own words for it.
     if (describing) {
       if (text === '}') {
@@ -252,7 +339,39 @@ export function parse(src) {
       return;
     }
     for (const part of statementsIn(text)) statement(part, line);
+  };
+
+  // Front matter is Mermaid's own settings and a title. It is only front matter when the block opens with it;
+  // anywhere else, --- is a link.
+  /** @type {'before'|'in'|'after'} */
+  let front = 'before';
+  /** @type {{text:string,line:number}|null} */
+  let held = null;
+  src.split(/\r?\n/).forEach((raw, i) => {
+    const text = raw.trim();
+    if (!text) return;
+    if (front === 'before') {
+      front = text === '---' ? 'in' : 'after';
+      if (front === 'in') return;
+    }
+    if (front === 'in') {
+      // Only a title at the left edge is the picture's: one further in belongs to something else.
+      const title = /^title\s*:\s*(.*?)\s*$/.exec(raw);
+      if (title) model.title = title[1].replace(/^(["'])(.*)\1$/, '$2');
+      if (text === '---') front = 'after';
+      return;
+    }
+    // An "@{" left open carries on down the lines to its "}", and is read as one line from where it began.
+    if (held) held.text += `\n${text}`;
+    else if (!text.startsWith('%%') && leftOpen(text)) held = { text, line: i + 1 };
+    else return read(text, i + 1);
+    if (!leftOpen(held.text)) {
+      read(held.text, held.line);
+      held = null;
+    }
   });
+  if (front === 'in') warn(1, 'the front matter is never closed; end it with a line of ---');
+  if (held) warn(held.line, `not read: an @{ that is never closed, and everything after it: "${held.text.split('\n')[0]}"`);
 
   // A link to a group ("g1 --> g2") is a link from the end of one to the start of the next: the last box of the
   // first that leads to no other box in it, and the first box of the second that none of its own leads to.

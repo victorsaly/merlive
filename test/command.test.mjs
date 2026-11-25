@@ -128,8 +128,8 @@ describe('the command', () => {
 
   it('passes on what the Mermaid held that it could not read', async () => {
     const cwd = temp();
-    writeFileSync(join(cwd, 'amp.mmd'), 'flowchart TD\nA --> B\nA & B --> C\n');
-    assert.match((await go(['amp.mmd', '--check'], cwd)).text, /note, block 1: line 3: "&" between nodes is not read yet/);
+    writeFileSync(join(cwd, 'odd.mmd'), 'flowchart TD\nA --> B\nA ~~> C\n');
+    assert.match((await go(['odd.mmd', '--check'], cwd)).text, /note, block 1: line 3: not read: "A ~~> C"/);
   });
 });
 

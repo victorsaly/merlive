@@ -38,19 +38,19 @@ hand, and the colours are yours, read from your site, but checked, for contrast 
 ## What the corpus found
 
 `corpus/` holds one sample of everything Mermaid documents, and [COVERAGE.md](COVERAGE.md) says what Merlive
-draws of each, written again whenever the code changes. Its first run found these, worst first. All of them are
-flowchart features, so they come before any new kind of diagram:
+draws of each, written again whenever the code changes. Its first run found seven things. Three are done: front
+matter, `&` between boxes, and everything written with `@{ … }`. What is left, worst first, is all flowchart
+features, so it comes before any new kind of diagram:
 
-1. **A flowchart with front matter is not drawn at all.** The `---` at the top is taken for the kind of diagram.
-2. **Anything written with `@{ … }` stops the line being read**: the newer shapes, icons and images, rows and
-   columns, a link's id and what is set on it, a group shown collapsed. The label is to be kept, and what Merlive
-   does not draw read past.
-3. **`&` between boxes**, which one line of a real document often leans on.
-4. **Links that end in a circle or a cross, or point both ways**, and the invisible link.
-5. **Six of the older shapes**: the flag, the double circle, and the four leaning ones, which today keep their
+1. **Two boxes that each lead to the same two boxes are refused** (`A & B --> C & D`). Reading `&` brought this
+   out. The two lines that swap sides share a stretch of path, which breaks P5; and drawn right they must cross
+   once, which P4 does not allow a diagram of fewer than eight links. The first is a fault in placement. The
+   second is a question about the rule.
+2. **Links that end in a circle or a cross, or point both ways**, and the invisible link.
+3. **Six of the older shapes**: the flag, the double circle, and the four leaning ones, which today keep their
    slashes as words.
-6. **Words**: entity codes, Markdown strings and Font Awesome icons are drawn as they were typed.
-7. **Bottom-to-top and right-to-left** are drawn the other way round, and a group inside a group is drawn as part
+4. **Words**: entity codes, Markdown strings and Font Awesome icons are drawn as they were typed.
+5. **Bottom-to-top and right-to-left** are drawn the other way round, and a group inside a group is drawn as part
    of the outer one. Both are said when met.
 
 And one thing no check caught, seen in the pictures: a line coming into a group from above runs through the

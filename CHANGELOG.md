@@ -53,9 +53,13 @@ The first version. It draws flowcharts and nothing else, and says so.
   red-green colour blindness. The message names the two colours. Merlive's own kinds were chosen by that measure:
   in dark they are six of the Okabe-Ito colours.
 - **A picked box says its kind in words**, so colour is never the only thing that carries it.
+- **More of a flowchart is read**, the first three things the corpus found: a flowchart with front matter is
+  drawn, and its `title` kept; `A & B --> C` links every box before the link to every box after it; and anything
+  written with `@{ … }` is read, on one line or several: a box's shape and label, an icon or image kept as its
+  label, a link's id, and what Mermaid sets on a link or a group read past.
 - **What Merlive draws of Mermaid is written down, and checked.** `corpus/` holds one sample of each of the 32
   other kinds of diagram Mermaid documents and of 69 features of its flowcharts; `npm run coverage` runs Merlive
   over all of it and writes `docs/COVERAGE.md` and a picture of each flowchart sample. The tests fail when the
   page no longer says what the code does.
 - **What is not a flowchart is left as Mermaid and named**: sequence diagrams, timelines and the rest come later.
-  `&` between nodes and links from a box to itself are not drawn yet, and each is said when met.
+  Links from a box to itself are not drawn yet, and each is said when met.

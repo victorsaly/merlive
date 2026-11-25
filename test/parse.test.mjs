@@ -46,11 +46,128 @@ describe('parse: links', () => {
   });
 });
 
+describe('parse: & between boxes', () => {
+  it('links every box before a link to every box after it', () => {
+    const m = flow('A[Web] & B[Phone] --> C[Pick] & D[Bill]');
+    assert.deepEqual(m.edges.map((e) => e.id), ['A-C', 'A-D', 'B-C', 'B-D']);
+    assert.deepEqual(m.nodes.map((n) => n.label), ['Web', 'Phone', 'Pick', 'Bill']);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('carries on down a chain, with the words and the style of each link', () => {
+    const m = flow('A -->|go| B & C -.-> D');
+    assert.deepEqual(m.edges.map((e) => [e.id, e.style, e.label]), [['A-B', 'solid', 'go'], ['A-C', 'solid', 'go'], ['B-D', 'dotted', ''], ['C-D', 'dotted', '']]);
+  });
+
+  it('names boxes with no link between them, and gives each its class', () => {
+    const m = flow('A[One]:::risk & B[Two]');
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind]), [['A', 'risk'], ['B', 'step']]);
+    assert.deepEqual(m.edges, []);
+  });
+});
+
+describe('parse: front matter', () => {
+  it('reads past it to the flowchart, and keeps its title', () => {
+    const m = parse('---\ntitle: Order to cash\nconfig:\n  look: handDrawn\n  title: not this one\n---\nflowchart LR\n  A[Order] --> B[Cash]');
+    assert.equal(m.type, 'flowchart');
+    assert.equal(m.direction, 'LR');
+    assert.equal(m.title, 'Order to cash');
+    assert.deepEqual(m.edges.map((e) => e.id), ['A-B']);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('takes a quoted title without its quotes, and lets accTitle say otherwise', () => {
+    assert.equal(parse('---\ntitle: "Order: to cash"\n---\nflowchart LR\nA --> B').title, 'Order: to cash');
+    assert.equal(parse('---\ntitle: One\n---\nflowchart LR\naccTitle: Two\nA --> B').title, 'Two');
+  });
+
+  it('still names another kind of diagram behind it', () => {
+    const m = parse('---\ntitle: Calls\n---\nsequenceDiagram\n  A->>B: hello');
+    assert.equal(m.type, 'unsupported');
+    assert.equal(m.kindOfDiagram, 'sequenceDiagram');
+  });
+
+  it('says so when it is never closed, and draws nothing from a guess', () => {
+    const m = parse('---\ntitle: Order to cash\nflowchart LR\nA --> B');
+    assert.equal(m.nodes.length, 0);
+    assert.match(m.warnings[0], /^line 1: the front matter is never closed; end it with a line of ---/);
+  });
+
+  it('is only front matter on the first line: a --- further down is a link', () => {
+    const m = flow('A[One]\nA --- B');
+    assert.deepEqual(m.edges.map((e) => [e.id, e.arrow]), [['A-B', false]]);
+  });
+});
+
+describe('parse: @{ … }', () => {
+  it('reads a box written with a shape and a label', () => {
+    const m = flow('A@{ shape: rect, label: "Take the order" } --> B@{ shape: diam, label: "In stock?" }\nB --> C@{ shape: cyl, label: "Orders" }\nB --> D@{ shape: stadium, label: Done }');
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.label, n.shape, n.kind]), [
+      ['A', 'Take the order', 'box', 'step'], ['B', 'In stock?', 'decision', 'decision'], ['C', 'Orders', 'box', 'data'], ['D', 'Done', 'pill', 'terminal'],
+    ]);
+    assert.deepEqual(m.edges.map((e) => e.id), ['A-B', 'B-C', 'B-D']);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('knows a shape by any of its names, and draws one it has no drawing for as a box', () => {
+    const m = flow('A@{ shape: decision }\nB@{ shape: database }\nC@{ shape: terminal }\nD@{ shape: lightning-bolt }\nE@{ shape: hex }\nF@{ shape: dbl-circ }');
+    assert.deepEqual(m.nodes.map((n) => [n.shape, n.kind]), [['decision', 'decision'], ['box', 'data'], ['pill', 'terminal'], ['box', 'step'], ['decision', 'decision'], ['pill', 'terminal']]);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('keeps a comma, a colon and a closing brace that are inside a quoted label', () => {
+    const m = flow('A@{ label: "Pick, pack: {all}", shape: rect } --> B');
+    assert.equal(m.nodes[0].label, 'Pick, pack: {all}');
+    assert.deepEqual(m.edges.map((e) => e.id), ['A-B']);
+  });
+
+  it('keeps where an author broke the label', () => {
+    assert.deepEqual(flow('A@{ label: "Check stock<br/>in both" }').nodes[0].breaks, ['Check stock', 'in both']);
+  });
+
+  it('adds to a box that already has its words, and to one named on an earlier line', () => {
+    const m = flow('A[Quote]@{ row: 1, column: 1 } --> B[Order]\nB@{ shape: diam }');
+    assert.deepEqual(m.nodes.map((n) => [n.label, n.shape]), [['Quote', 'box'], ['Order', 'decision']]);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('keeps the label of an icon and of an image, and nothing else of them', () => {
+    const m = flow('A@{ icon: "fa:user", form: "square", label: "Buyer", pos: "t", h: 60 } --> B@{ img: "https://example.com/a.svg", label: "Supplier", w: 60 }');
+    assert.deepEqual(m.nodes.map((n) => [n.label, n.shape]), [['Buyer', 'box'], ['Supplier', 'box']]);
+    assert.ok(!JSON.stringify(m).includes('example.com'));
+  });
+
+  it('reads one written over several lines', () => {
+    const m = flow('A@{\n  shape: diam\n  label: "In stock?"\n}\nA --> B');
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.label, n.shape]), [['A', 'In stock?', 'decision'], ['B', 'B', 'box']]);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('reads a link that has an id, and past what is set on it', () => {
+    const m = flow('A e1@--> B\nB e2@==>|go| C\nC e3@-- back --> A\ne1@{ animate: true }\ne2@{ animation: fast }\ne3@{ curve: linear, step: 2 }');
+    assert.deepEqual(m.edges.map((e) => [e.id, e.style, e.label]), [['A-B', 'solid', ''], ['B-C', 'thick', 'go'], ['C-A', 'solid', 'back']]);
+    assert.deepEqual(m.nodes.map((n) => n.id), ['A', 'B', 'C'], 'what is set on a link makes no box');
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('reads past a group shown collapsed', () => {
+    const m = flow('Start --> one\nsubgraph one [Checks]\n  A --> B\nend\none --> End\none@{ view: collapsed }');
+    assert.deepEqual(m.nodes.map((n) => n.id), ['Start', 'A', 'B', 'End']);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('says so when one is never closed, and leaves nothing of it behind', () => {
+    const m = flow('A --> B\nC@{ shape: diam, label: "In stock?"\nC --> D');
+    assert.match(m.warnings[0], /^line 3: not read: an @\{ that is never closed/);
+    assert.deepEqual(m.nodes.map((n) => n.id), ['A', 'B']);
+  });
+});
+
 describe('parse: what it does not read, it says', () => {
-  it('names &, a link to itself and a line it cannot read, each with its line', () => {
-    const m = flow('A & B --> C\nD --> D\nE --> F\nG ~~> H');
+  it('names a link to itself and a line it cannot read, each with its line', () => {
+    const m = flow('A & --> C\nD --> D\nE --> F\nG ~~> H');
     assert.equal(m.warnings.length, 3);
-    assert.match(m.warnings[0], /^line 2: "&"/);
+    assert.match(m.warnings[0], /^line 2: not read/);
     assert.match(m.warnings[1], /^line 3: a link from D to itself/);
     assert.match(m.warnings[2], /^line 5: not read/);
     assert.deepEqual(m.nodes.map((n) => n.id), ['D', 'E', 'F'], 'what could be read is kept, and nothing of what could not');

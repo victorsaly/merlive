@@ -15,6 +15,10 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A["Text with (brackets)"]` | A quoted label |
 | `A["one line<br/>and another"]` | A label in the author's own lines, up to four |
 | `A[("Orders")]` | A store of data: a box of the `data` kind |
+| `A@{ shape: diam, label: "In stock?" }` | A box written the newer way, on one line or several. Its label is kept. A decision, a start or end and a store of data are drawn as those, by any of Mermaid's names for them; every other shape is a box |
+| `A@{ icon: "fa:user", label: "Buyer" }`, `A@{ img: "…", label: "…" }` | A box with its label. The icon or image is left out: a page of Merlive fetches nothing |
+| `A@{ row: 1, column: 2 }`, `g@{ view: collapsed }` | Read past: placement is Merlive's, and a group is drawn open |
+| `---` … `---` at the top | Front matter: its `title` is kept as the picture's name, and Mermaid's own settings are read past |
 | `accTitle: …`, `accDescr: …` | What the picture is called and what it shows, kept for readers who cannot see it |
 | `A --> B`, `A --- B` | A link, with or without an arrowhead |
 | `A -.-> B`, `A ==> B` | A dotted link, a thick link |
@@ -22,6 +26,8 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A -. maybe .-> B`, `A == must ==> B`, `A ---> B` | Words in a dotted or thick link; an arrow drawn longer |
 | `subgraph id["Title"]` … `end`, `g1 --> g2` | A group, drawn as a frame with its title; a link between groups joins the end of one to the start of the next |
 | `A --> B --> C` | A chain |
+| `A & B --> C & D` | Every box before the link, linked to every box after it |
+| `A e1@--> B`, `e1@{ animate: true }` | A link with an id is a link; what Mermaid sets on it (animation, a step, a curve) is read past |
 | `class A,B rework`, `A:::rework` | The kind of a box: its colour comes from the design's `kinds` |
 | `classDef red stroke:#c62828` | The class's colour is read for what it means: a kind the design has no colour for takes the design's own nearest colour (this red becomes `risk`) |
 | `style`, `linkStyle`, `click`, `direction` | Read past: the look comes from the design |
@@ -30,8 +36,9 @@ Where the Mermaid is kept decides how it is found: fenced `mermaid` blocks in Ma
 of a `.mmd` file; and, in any other file (an `.astro` page, a script), a string between backticks that starts as
 a flowchart does. A string put together with `${…}` when the page runs cannot be read.
 
-Not read yet, each named in a `note,` line when met: a group inside a group (drawn as part of the outer one),
-`A & B --> C`, a link from a box to itself.
+Not read yet, each named in a `note,` line when met: a group inside a group (drawn as part of the outer one), a
+link from a box to itself, links that end in a circle or a cross or point both ways, and the invisible link.
+[What is and is not drawn](https://github.com/victorsaly/merlive/blob/main/docs/COVERAGE.md), feature by feature.
 
 ## Merlive's own lines
 
