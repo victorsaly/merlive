@@ -35,6 +35,27 @@ hand, and the colours are yours, read from your site, but checked, for contrast 
 6. **Later.** A build step for docs sites (Docusaurus first), an audit mode over a whole repository, evals for the
    skill, a film export.
 
+## What the corpus found
+
+`corpus/` holds one sample of everything Mermaid documents, and [COVERAGE.md](COVERAGE.md) says what Merlive
+draws of each, written again whenever the code changes. Its first run found these, worst first. All of them are
+flowchart features, so they come before any new kind of diagram:
+
+1. **A flowchart with front matter is not drawn at all.** The `---` at the top is taken for the kind of diagram.
+2. **Anything written with `@{ … }` stops the line being read**: the newer shapes, icons and images, rows and
+   columns, a link's id and what is set on it, a group shown collapsed. The label is to be kept, and what Merlive
+   does not draw read past.
+3. **`&` between boxes**, which one line of a real document often leans on.
+4. **Links that end in a circle or a cross, or point both ways**, and the invisible link.
+5. **Six of the older shapes**: the flag, the double circle, and the four leaning ones, which today keep their
+   slashes as words.
+6. **Words**: entity codes, Markdown strings and Font Awesome icons are drawn as they were typed.
+7. **Bottom-to-top and right-to-left** are drawn the other way round, and a group inside a group is drawn as part
+   of the outer one. Both are said when met.
+
+And one thing no check caught, seen in the pictures: a line coming into a group from above runs through the
+group's name. By this project's habit that is a new rule and a check for it, not a nudge.
+
 ## What it will not become
 
 - A diagram editor. The Mermaid is edited as text; Merlive never asks anyone to drag a box.

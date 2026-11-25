@@ -1,0 +1,7 @@
+flowchart TD
+  A[Order] --> B{In stock?}
+  B -->|Yes| C[Pick]
+  B ---->|No| D[Back order]
+  C -- then ---> E[Ship]
+  D -...-> E
+  A ====> E

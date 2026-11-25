@@ -1,0 +1,14 @@
+requirementDiagram
+
+  requirement approval {
+    id: 1
+    text: Orders over the limit are approved by a manager.
+    risk: high
+    verifymethod: test
+  }
+
+  element approval_flow {
+    type: workflow
+  }
+
+  approval_flow - satisfies -> approval

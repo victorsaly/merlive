@@ -1,0 +1,764 @@
+{
+  "from": "The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart page sets out. The samples are our own.",
+  "flowchart": [
+    {
+      "file": "flowchart/declare-flowchart.mmd",
+      "covers": "A flowchart, declared with \"flowchart\"",
+      "boxes": 2,
+      "links": 1
+    },
+    {
+      "file": "flowchart/declare-graph.mmd",
+      "covers": "A flowchart, declared with \"graph\"",
+      "boxes": 2,
+      "links": 1
+    },
+    {
+      "file": "flowchart/direction-tb.mmd",
+      "covers": "Direction TB: top to bottom",
+      "boxes": 3,
+      "links": 2
+    },
+    {
+      "file": "flowchart/direction-td.mmd",
+      "covers": "Direction TD: top down",
+      "boxes": 3,
+      "links": 2
+    },
+    {
+      "file": "flowchart/direction-lr.mmd",
+      "covers": "Direction LR: left to right",
+      "boxes": 3,
+      "links": 2
+    },
+    {
+      "file": "flowchart/direction-bt.mmd",
+      "covers": "Direction BT: bottom to top",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn the other way round: top to bottom"
+    },
+    {
+      "file": "flowchart/direction-rl.mmd",
+      "covers": "Direction RL: right to left",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn the other way round: left to right"
+    },
+    {
+      "file": "flowchart/frontmatter.mmd",
+      "covers": "A title and settings in front matter",
+      "boxes": 2,
+      "links": 1,
+      "loses": "Mermaid's own settings are read past: the look is the design's"
+    },
+    {
+      "file": "flowchart/init-directive.mmd",
+      "covers": "Settings in an init directive",
+      "boxes": 2,
+      "links": 1,
+      "loses": "Mermaid's own settings are read past: the look is the design's"
+    },
+    {
+      "file": "flowchart/comments.mmd",
+      "covers": "Comments on lines of their own",
+      "boxes": 2,
+      "links": 1
+    },
+    {
+      "file": "flowchart/accessibility.mmd",
+      "covers": "A title and a description for readers who cannot see it",
+      "boxes": 2,
+      "links": 1,
+      "title": "Order to cash"
+    },
+    {
+      "file": "flowchart/accessibility-block.mmd",
+      "covers": "A description written over several lines",
+      "boxes": 2,
+      "links": 1,
+      "title": "Order to cash"
+    },
+    {
+      "file": "flowchart/semicolons.mmd",
+      "covers": "Statements ended with semicolons, and no spaces",
+      "boxes": 4,
+      "links": 3
+    },
+    {
+      "file": "flowchart/node-id-only.mmd",
+      "covers": "Boxes named by their id alone",
+      "boxes": 3,
+      "links": 2
+    },
+    {
+      "file": "flowchart/node-text.mmd",
+      "covers": "A box with words",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Order received"
+      ]
+    },
+    {
+      "file": "flowchart/node-unicode.mmd",
+      "covers": "Words in other alphabets",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Commande reçue ❤",
+        "在庫確認"
+      ]
+    },
+    {
+      "file": "flowchart/node-quoted.mmd",
+      "covers": "Brackets and signs inside quotes",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Total (net) & tax",
+        "Is it > 100?"
+      ]
+    },
+    {
+      "file": "flowchart/node-entities.mmd",
+      "covers": "Characters written as entity codes",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Marked \"rush\"",
+        "Thanks ♥"
+      ]
+    },
+    {
+      "file": "flowchart/node-line-break.mmd",
+      "covers": "A line break in a label",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Check stock in both warehouses",
+        "Pick and pack"
+      ]
+    },
+    {
+      "file": "flowchart/node-markdown.mmd",
+      "covers": "Markdown strings: bold, italic and a real line break",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Urgent order",
+        "Pick today and pack"
+      ],
+      "loses": "Bold and italic are drawn as plain words"
+    },
+    {
+      "file": "flowchart/node-fontawesome.mmd",
+      "covers": "A Font Awesome icon in a label",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Shipped",
+        "Delivered"
+      ],
+      "loses": "The icon is left out; its words are kept"
+    },
+    {
+      "file": "flowchart/shape-round.mmd",
+      "covers": "Shape: Round edges",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Its corners are the design's, the same as every box",
+      "has": [
+        "Before",
+        "Checked",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-stadium.mmd",
+      "covers": "Shape: Stadium",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "Before",
+        "Start here",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-subroutine.mmd",
+      "covers": "Shape: Subroutine",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a plain box",
+      "has": [
+        "Before",
+        "Price lookup",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-cylinder.mmd",
+      "covers": "Shape: Cylinder, a database",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a box of the kind \"data\", not as a cylinder",
+      "has": [
+        "Before",
+        "Orders",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-circle.mmd",
+      "covers": "Shape: Circle",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a pill",
+      "has": [
+        "Before",
+        "Hub",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-asymmetric.mmd",
+      "covers": "Shape: Asymmetric, a flag",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a plain box",
+      "has": [
+        "Before",
+        "Flagged",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-rhombus.mmd",
+      "covers": "Shape: Rhombus, a decision",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "Before",
+        "In stock?",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-hexagon.mmd",
+      "covers": "Shape: Hexagon",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a decision",
+      "has": [
+        "Before",
+        "Prepare",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-parallelogram.mmd",
+      "covers": "Shape: Parallelogram",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a plain box",
+      "has": [
+        "Before",
+        "Input",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-parallelogram-alt.mmd",
+      "covers": "Shape: Parallelogram, leaning back",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a plain box",
+      "has": [
+        "Before",
+        "Output",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-trapezoid.mmd",
+      "covers": "Shape: Trapezoid",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a plain box",
+      "has": [
+        "Before",
+        "Manual step",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-trapezoid-alt.mmd",
+      "covers": "Shape: Trapezoid, upside down",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a plain box",
+      "has": [
+        "Before",
+        "Priority",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-double-circle.mmd",
+      "covers": "Shape: Double circle",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Drawn as a pill",
+      "has": [
+        "Before",
+        "Stop",
+        "After"
+      ]
+    },
+    {
+      "file": "flowchart/shape-at-syntax.mmd",
+      "covers": "Shapes written as @{ shape: … }, with a label",
+      "boxes": 5,
+      "links": 4,
+      "has": [
+        "Take the order",
+        "In stock?",
+        "Orders",
+        "Back order note",
+        "Done"
+      ]
+    },
+    {
+      "file": "flowchart/shape-at-every.mmd",
+      "covers": "Every one of the 53 newer shapes",
+      "boxes": 53,
+      "links": 6,
+      "loses": "Each is drawn as a box, a pill or a decision; the shape itself is not"
+    },
+    {
+      "file": "flowchart/shape-icon.mmd",
+      "covers": "A box that is an icon",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Buyer"
+      ],
+      "loses": "The icon is left out; its label is kept"
+    },
+    {
+      "file": "flowchart/shape-image.mmd",
+      "covers": "A box that is an image",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Supplier"
+      ],
+      "loses": "The image is left out (a page of Merlive fetches nothing); its label is kept"
+    },
+    {
+      "file": "flowchart/grid-layout.mmd",
+      "covers": "Boxes given a row and a column",
+      "boxes": 3,
+      "links": 2,
+      "loses": "The rows and columns are read past: placement is Merlive's"
+    },
+    {
+      "file": "flowchart/link-arrow.mmd",
+      "covers": "A link with an arrowhead",
+      "boxes": 2,
+      "links": 1
+    },
+    {
+      "file": "flowchart/link-open.mmd",
+      "covers": "A link with no arrowhead",
+      "boxes": 2,
+      "links": 1
+    },
+    {
+      "file": "flowchart/link-text-bars.mmd",
+      "covers": "Words on a link, between bars",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "approved",
+        "same shelf"
+      ]
+    },
+    {
+      "file": "flowchart/link-text-inline.mmd",
+      "covers": "Words on a link, written into it",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "approved",
+        "same shelf",
+        "signed for"
+      ]
+    },
+    {
+      "file": "flowchart/link-dotted.mmd",
+      "covers": "A dotted link, with and without words",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "if fragile",
+        "then"
+      ]
+    },
+    {
+      "file": "flowchart/link-thick.mmd",
+      "covers": "A thick link, with and without words",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "must",
+        "always"
+      ]
+    },
+    {
+      "file": "flowchart/link-invisible.mmd",
+      "covers": "An invisible link, used to nudge placement",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Read as a link that is not drawn; placement is Merlive's"
+    },
+    {
+      "file": "flowchart/link-chain.mmd",
+      "covers": "Links chained in one line",
+      "boxes": 4,
+      "links": 3
+    },
+    {
+      "file": "flowchart/link-chain-and.mmd",
+      "covers": "One line linking to several boxes with &",
+      "boxes": 4,
+      "links": 4
+    },
+    {
+      "file": "flowchart/link-and-both.mmd",
+      "covers": "Several boxes to several boxes with &",
+      "boxes": 4,
+      "links": 4
+    },
+    {
+      "file": "flowchart/link-circle-cross.mmd",
+      "covers": "A link ending in a circle or a cross",
+      "boxes": 3,
+      "links": 2,
+      "loses": "The circle and the cross are drawn as an arrowhead"
+    },
+    {
+      "file": "flowchart/link-both-ways.mmd",
+      "covers": "Arrows at both ends",
+      "boxes": 4,
+      "links": 3,
+      "loses": "Drawn with one arrowhead, at the far end"
+    },
+    {
+      "file": "flowchart/link-length.mmd",
+      "covers": "Links drawn longer, to push a box further on",
+      "boxes": 5,
+      "links": 6,
+      "has": [
+        "Yes",
+        "No",
+        "then"
+      ],
+      "loses": "The extra length is read past: placement is Merlive's"
+    },
+    {
+      "file": "flowchart/link-id.mmd",
+      "covers": "A link given an id",
+      "boxes": 3,
+      "links": 2
+    },
+    {
+      "file": "flowchart/link-animate.mmd",
+      "covers": "A link set to animate",
+      "boxes": 3,
+      "links": 2,
+      "loses": "Mermaid's animation is read past: movement is the design's, and starts when a reader asks"
+    },
+    {
+      "file": "flowchart/link-steps.mmd",
+      "covers": "Links played one step after another",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "miss"
+      ],
+      "loses": "The step numbers are read past; a walkthrough is written with \"%% step\""
+    },
+    {
+      "file": "flowchart/link-curve.mmd",
+      "covers": "A link given a curve of its own",
+      "boxes": 3,
+      "links": 2,
+      "loses": "The curve is read past: lines turn at right angles by rule"
+    },
+    {
+      "file": "flowchart/subgraph-title.mmd",
+      "covers": "A group named by its title",
+      "boxes": 4,
+      "links": 3,
+      "groups": 1
+    },
+    {
+      "file": "flowchart/subgraph-id.mmd",
+      "covers": "A group with an id and a title",
+      "boxes": 4,
+      "links": 3,
+      "groups": 1,
+      "has": [
+        "The warehouse"
+      ]
+    },
+    {
+      "file": "flowchart/subgraph-links.mmd",
+      "covers": "Links to a group and between groups",
+      "boxes": 5,
+      "links": 4,
+      "groups": 2
+    },
+    {
+      "file": "flowchart/subgraph-direction.mmd",
+      "covers": "A group with a direction of its own",
+      "boxes": 5,
+      "links": 4,
+      "groups": 1,
+      "loses": "The group's own direction is read past; it runs the way the rest does"
+    },
+    {
+      "file": "flowchart/subgraph-nested.mmd",
+      "covers": "A group inside a group",
+      "boxes": 4,
+      "links": 3,
+      "groups": 2
+    },
+    {
+      "file": "flowchart/subgraph-collapsed.mmd",
+      "covers": "A group shown collapsed",
+      "boxes": 4,
+      "links": 3,
+      "groups": 1,
+      "loses": "Drawn open: a picture cannot be opened and closed"
+    },
+    {
+      "file": "flowchart/style-node.mmd",
+      "covers": "A box styled on its own",
+      "boxes": 2,
+      "links": 1,
+      "loses": "The style is read past: the look is the design's"
+    },
+    {
+      "file": "flowchart/style-link.mmd",
+      "covers": "Links styled by their number",
+      "boxes": 3,
+      "links": 2,
+      "loses": "The style is read past: the look is the design's"
+    },
+    {
+      "file": "flowchart/class-def.mmd",
+      "covers": "A class made and given to boxes",
+      "boxes": 3,
+      "links": 2,
+      "kinds": [
+        "stopped"
+      ]
+    },
+    {
+      "file": "flowchart/class-inline.mmd",
+      "covers": "A class given with :::",
+      "boxes": 2,
+      "links": 1,
+      "kinds": [
+        "fresh",
+        "stopped"
+      ]
+    },
+    {
+      "file": "flowchart/class-default.mmd",
+      "covers": "A default class for every box",
+      "boxes": 2,
+      "links": 1,
+      "loses": "The default class is read past: the look is the design's"
+    },
+    {
+      "file": "flowchart/click-callback.mmd",
+      "covers": "A box that calls a function when clicked",
+      "boxes": 2,
+      "links": 1,
+      "loses": "The click is left out: a page of Merlive runs no code of yours"
+    },
+    {
+      "file": "flowchart/click-link.mmd",
+      "covers": "A box that opens a link when clicked",
+      "boxes": 2,
+      "links": 1,
+      "loses": "The link is left out"
+    }
+  ],
+  "kinds": [
+    {
+      "file": "kinds/sequence.mmd",
+      "covers": "Sequence diagram",
+      "family": "steps in order"
+    },
+    {
+      "file": "kinds/zenuml.mmd",
+      "covers": "ZenUML sequence diagram",
+      "family": "steps in order"
+    },
+    {
+      "file": "kinds/class.mmd",
+      "covers": "Class diagram",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/state.mmd",
+      "covers": "State diagram",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/er.mmd",
+      "covers": "Entity relationship diagram",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/requirement.mmd",
+      "covers": "Requirement diagram",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/c4.mmd",
+      "covers": "C4 diagram",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/block.mmd",
+      "covers": "Block diagram",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/architecture.mmd",
+      "covers": "Architecture diagram",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/swimlane.mmd",
+      "covers": "Swimlane diagram",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/usecase.mmd",
+      "covers": "Use case diagram",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/agentflow.mmd",
+      "covers": "Agent flow",
+      "family": "boxes and links"
+    },
+    {
+      "file": "kinds/eventmodeling.mmd",
+      "covers": "Event model",
+      "family": "steps in order"
+    },
+    {
+      "file": "kinds/journey.mmd",
+      "covers": "User journey",
+      "family": "steps in order"
+    },
+    {
+      "file": "kinds/timeline.mmd",
+      "covers": "Timeline",
+      "family": "steps in order"
+    },
+    {
+      "file": "kinds/gantt.mmd",
+      "covers": "Gantt chart",
+      "family": "steps in order"
+    },
+    {
+      "file": "kinds/gitgraph.mmd",
+      "covers": "Git graph",
+      "family": "steps in order"
+    },
+    {
+      "file": "kinds/mindmap.mmd",
+      "covers": "Mindmap",
+      "family": "tree"
+    },
+    {
+      "file": "kinds/treeview.mmd",
+      "covers": "Tree view",
+      "family": "tree"
+    },
+    {
+      "file": "kinds/ishikawa.mmd",
+      "covers": "Ishikawa (fishbone) diagram",
+      "family": "tree"
+    },
+    {
+      "file": "kinds/kanban.mmd",
+      "covers": "Kanban board",
+      "family": "tree"
+    },
+    {
+      "file": "kinds/treemap.mmd",
+      "covers": "Treemap",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/pie.mmd",
+      "covers": "Pie chart",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/quadrant.mmd",
+      "covers": "Quadrant chart",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/xychart.mmd",
+      "covers": "XY chart",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/sankey.mmd",
+      "covers": "Sankey diagram",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/radar.mmd",
+      "covers": "Radar chart",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/packet.mmd",
+      "covers": "Packet diagram",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/venn.mmd",
+      "covers": "Venn diagram",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/cynefin.mmd",
+      "covers": "Cynefin framework",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/wardley.mmd",
+      "covers": "Wardley map",
+      "family": "chart"
+    },
+    {
+      "file": "kinds/railroad.mmd",
+      "covers": "Railroad (syntax) diagram",
+      "family": "grammar"
+    }
+  ]
+}

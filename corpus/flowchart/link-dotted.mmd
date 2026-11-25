@@ -1,0 +1,4 @@
+flowchart LR
+  A[Order] -.-> B[Pick]
+  B -. if fragile .-> C[Wrap]
+  C -.->|then| D[Pack]

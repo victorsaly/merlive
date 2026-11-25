@@ -1,0 +1,8 @@
+sequenceDiagram
+  participant B as Buyer
+  participant E as ERP
+  participant S as Supplier
+  B->>E: Raise order
+  E->>S: Send order
+  S-->>E: Confirm
+  E-->>B: Order confirmed

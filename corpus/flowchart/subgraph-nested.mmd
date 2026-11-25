@@ -1,0 +1,9 @@
+flowchart TB
+  subgraph site [Site]
+    A[Receive]
+    subgraph wh [Warehouse]
+      B[Pick] --> C[Pack]
+    end
+    A --> B
+  end
+  C --> D[Ship]

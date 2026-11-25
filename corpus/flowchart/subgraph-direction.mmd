@@ -1,0 +1,7 @@
+flowchart TB
+  A[Order] --> B
+  subgraph wh [Warehouse]
+    direction LR
+    B[Pick] --> C[Pack] --> D[Label]
+  end
+  D --> E[Ship]

@@ -15,7 +15,7 @@ self-contained page per flowchart, in your own design, that readers can step thr
 </p>
 
 > **0.1.0, not released yet.** It draws flowcharts and nothing else. Sequence, state and the other diagram kinds are
-> left as Mermaid and named. [What comes next](docs/ROADMAP.md).
+> left as Mermaid and named. [What it draws of Mermaid today](docs/COVERAGE.md), feature by feature. [What comes next](docs/ROADMAP.md).
 
 ## Install, then ask
 
@@ -95,6 +95,7 @@ goes. The full list, and the Mermaid that is read, is in [reference.md](skills/m
 ```bash
 npm run check      # the tests, with coverage
 npm run examples   # draw the examples again
+npm run coverage   # run every sample in corpus/ and write docs/COVERAGE.md again
 ```
 
 [AGENTS.md](AGENTS.md) says how the code is laid out and written.

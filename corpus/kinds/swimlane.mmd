@@ -1,0 +1,11 @@
+swimlane-beta LR
+  subgraph Buyer
+    Raise[Raise order]
+  end
+  subgraph Manager
+    Approve[Approve]
+  end
+  subgraph Supplier
+    Confirm[Confirm]
+  end
+  Raise --> Approve --> Confirm

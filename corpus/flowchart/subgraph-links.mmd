@@ -1,0 +1,9 @@
+flowchart TB
+  subgraph buy [Buying]
+    A[Quote] --> B[Order]
+  end
+  subgraph pay [Paying]
+    C[Invoice] --> D[Payment]
+  end
+  buy --> pay
+  D --> E[Close]

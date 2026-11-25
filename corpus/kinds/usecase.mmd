@@ -1,0 +1,7 @@
+usecase-beta
+  direction LR
+  actor Buyer("Buyer")
+  systemBoundary "Ordering"
+    Raise("Raise an order")
+  end
+  Buyer --> Raise

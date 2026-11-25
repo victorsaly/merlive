@@ -1,0 +1,7 @@
+C4Context
+  title Ordering, in context
+  Person(buyer, "Buyer", "Raises purchase orders")
+  System(erp, "ERP", "Holds orders and stock")
+  System_Ext(sup, "Supplier portal", "Takes orders")
+  Rel(buyer, erp, "Raises orders in")
+  Rel(erp, sup, "Sends orders to")

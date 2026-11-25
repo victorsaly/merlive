@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 584 100" width="584" height="100" role="img" aria-label="Shape: Trapezoid, upside down">
+<title>Shape: Trapezoid, upside down</title>
+<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+[data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-group text{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}</style>
+<rect width="100%" height="100%" fill="var(--mv-bg)"/>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="584" height="100" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge mv-main" data-edge="A-B" data-style="solid"><path class="mv-line" d="M156,50L221,50"/><polygon class="mv-head" points="228,50 219,45.5 219,54.5"/></g><g class="mv-edge mv-main" data-edge="B-C" data-style="solid"><path class="mv-line" d="M356,50L421,50"/><polygon class="mv-head" points="428,50 419,45.5 419,54.5"/></g></g><g><g class="mv-node" data-node="A" data-kind="step"><rect class="mv-shape" x="28" y="28" width="128" height="44" rx="8"/><text><tspan x="92" y="54.5">Before</tspan></text></g><g class="mv-node" data-node="B" data-kind="step"><rect class="mv-shape" x="228" y="28" width="128" height="44" rx="8"/><text><tspan x="292" y="54.5">\Priority/</tspan></text></g><g class="mv-node" data-node="C" data-kind="step"><rect class="mv-shape" x="428" y="28" width="128" height="44" rx="8"/><text><tspan x="492" y="54.5">After</tspan></text></g></g>
+</svg>

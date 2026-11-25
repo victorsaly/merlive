@@ -1,0 +1,9 @@
+architecture-beta
+  group cloud(cloud)[Azure]
+
+  service api(server)[Orders API] in cloud
+  service db(database)[Orders] in cloud
+  service queue(disk)[Queue] in cloud
+
+  api:R -- L:db
+  api:B -- T:queue

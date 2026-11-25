@@ -1,0 +1,5 @@
+flowchart TD
+  A@{ shape: rect, label: "Take the order" } --> B@{ shape: diam, label: "In stock?" }
+  B --> C@{ shape: cyl, label: "Orders" }
+  B --> D@{ shape: doc, label: "Back order note" }
+  D --> E@{ shape: stadium, label: "Done" }

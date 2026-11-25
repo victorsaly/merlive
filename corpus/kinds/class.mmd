@@ -1,0 +1,12 @@
+classDiagram
+  class Order {
+    +String number
+    +Date placed
+    +total() Money
+  }
+  class OrderLine {
+    +int quantity
+    +Money price
+  }
+  Order "1" *-- "many" OrderLine
+  Order --> Supplier

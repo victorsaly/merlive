@@ -1,0 +1,8 @@
+agentflow-beta TB
+  flow buyer["Order agent"]
+    read["Read the request"]@{ shape: input }
+    check["check_stock"]@{ shape: tool }
+    ok["In stock?"]@{ shape: decision }
+
+    read --> check --> ok
+  end

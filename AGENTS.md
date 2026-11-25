@@ -29,6 +29,9 @@ For coding agents changing this repository. It follows the same habits as
 - `docs/PLACEMENT.md`: the rules, each with pass, fail and what to do. `docs/ROADMAP.md`: what comes next and what
   was borrowed from where.
 - `examples/`: a real document and what Merlive draws from it. Drawn again with `npm run examples`.
+- `corpus/`: one sample of every kind of diagram Mermaid documents and of every feature of its flowcharts, with
+  what each should be read as in `index.json`. `scripts/coverage.mjs` runs Merlive over all of it and writes
+  `docs/COVERAGE.md` and `corpus/drawn/`. Written again with `npm run coverage`; never edited by hand.
 - `test/`: the pure files at 90% of lines or more, the command run for real into a temporary folder, and
   `skill.test.mjs` for the skill's own files and one version everywhere.
 
@@ -38,7 +41,8 @@ For coding agents changing this repository. It follows the same habits as
 npm run check   # the tests, with coverage
 ```
 
-Change how anything is drawn, and run `npm run examples` and look at the pictures. A layout that passes its checks
+Change what is read or how anything is drawn, and run `npm run examples` and `npm run coverage` and look at the
+pictures; the tests fail while `docs/COVERAGE.md` says something the code no longer does. A layout that passes its checks
 can still look wrong; when it does, the fix is a new rule and a check for it, not a special case.
 
 ## How the code is written
