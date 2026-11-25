@@ -1,0 +1,14 @@
+{
+  "name": "merlive",
+  "description": "Merlive: Mermaid flowcharts placed by rule and made live, as an agent skill.",
+  "owner": { "name": "Victor Saly", "url": "https://github.com/victorsaly" },
+  "plugins": [
+    {
+      "name": "merlive",
+      "source": "./",
+      "description": "Mermaid flowcharts, placed by rule and made live: one straight main path, boxes of one size, lines that never cross a box, in your own design, as a single page your readers can step through.",
+      "category": "development",
+      "tags": ["mermaid", "diagrams", "flowchart", "documentation", "interactive"]
+    }
+  ]
+}

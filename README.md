@@ -1,0 +1,92 @@
+<h1 align="center">Merlive</h1>
+<h3 align="center">Mermaid flowcharts, placed by rule and made live.</h3>
+
+<p align="center"><img src="examples/diagrams/order-approval-1.svg" alt="A purchase order approval flow drawn by Merlive: the main path in one straight line, boxes of one size, and a revision loop to one side" width="420" /></p>
+
+<p align="center"><strong>Mermaid is the easy way to write a diagram and an odd way to look at one.</strong> Tell your
+coding agent to <em>merlive this document</em>. It keeps your Mermaid as the source, places every box by rule (the
+main path straight, boxes of one size, lines that go round boxes), checks those rules, and writes one
+self-contained page per flowchart, in your own design, that readers can step through.</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Agent_Skill-Claude_Code_%C2%B7_Codex_%C2%B7_Cursor_%C2%B7_OpenCode-000000?style=flat-square" alt="An Agent Skill, for Claude Code, Codex, Cursor and OpenCode" />
+  <img src="https://img.shields.io/badge/version-0.1.0-000000?style=flat-square" alt="Version 0.1.0" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-000000?style=flat-square" alt="MIT licence" /></a>
+</p>
+
+> **0.1.0, not released yet.** It draws flowcharts and nothing else. Sequence, state and the other diagram kinds are
+> left as Mermaid and named. [What comes next](docs/ROADMAP.md).
+
+## Install, then ask
+
+**What it needs:** Node 22 or later. Nothing else: no packages, no browser, no network.
+
+```bash
+npx skills add victorsaly/merlive -g
+```
+
+Then ask your agent: `Merlive docs/orders.md`.
+
+Or run it yourself:
+
+```bash
+node skills/merlive/scripts/merlive.mjs examples/order-approval.md --check   # what would be drawn
+node skills/merlive/scripts/merlive.mjs examples/order-approval.md           # examples/diagrams/order-approval-1.html
+node skills/merlive/scripts/merlive.mjs examples/order-approval.md --format svg
+```
+
+## What you get
+
+- **A diagram that looks planned.** The main path runs in one straight line and everything else sits to one side.
+  Every box is the same size, on a grid. A decision is a box with cut corners, not a diamond twice the size of its
+  neighbours. Lines turn at right angles, each with a port of its own, and go round boxes.
+- **Rules that are checked.** Seven placement rules and one for contrast run before anything is written. A diagram
+  that breaks one is not written, and the message says which rule, where, and what to change in the Mermaid.
+  [The rules](docs/PLACEMENT.md).
+- **Your Mermaid, unchanged.** It stays the thing people edit and still renders anywhere Mermaid does. Steps and
+  notes are `%%` comments other renderers ignore.
+- **A page readers can use.** Pick a box or a line to see only what it connects to. Walk the steps the author
+  wrote. Nothing moves until the reader presses play, and then one dot follows the path.
+- **Your own design, set once.** Three come with it (quiet, bold, soft); a `merlive.design.json` in the project
+  sets colours, face, corner and how much may move, and every diagram follows it.
+- **One file, nothing fetched.** The page works offline and prints with its notes as an appendix. `--format svg`
+  gives a still picture for wikis.
+
+## In the Mermaid
+
+```
+flowchart TD
+  A([Submit order]) --> B[Validate order]
+  B --> C{Within budget?}
+  C -->|No| E[Revise order]
+  E --> B
+  class E rework
+
+  %% note C: Compares the order total with what is left in the budget.
+  %% step: The revision loop | loop 1 | Over budget, so the requester revises and it is validated again.
+  %% main: A>B>C
+```
+
+`%% note`, `%% step`, `%% main` and `%% side` are all there is. They say what the author means, never where a box
+goes. The full list, and the Mermaid that is read, is in [reference.md](skills/merlive/reference.md).
+
+## Three layers
+
+| Layer | Who decides | What |
+|---|---|---|
+| Rules | Merlive | Where boxes go, their size, how lines run. A design cannot switch them off |
+| Design | You, once | Colours, face, corner, motion |
+| Hints | The author, per diagram | The main path, the side loops go |
+
+## Working on it
+
+```bash
+npm run check      # the tests, with coverage
+npm run examples   # draw the examples again
+```
+
+[AGENTS.md](AGENTS.md) says how the code is laid out and written.
+
+## Licence
+
+MIT. Merlive is not affiliated with Mermaid; it reads a part of its flowchart language.

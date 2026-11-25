@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="Merlive 0.1.0">
+<title>Supplier onboarding</title>
+<style>
+:root{--mv-bg:#f6f7f9;--mv-node:#ffffff;--mv-stroke:#c3cad5;--mv-text:#18202b;--mv-muted:#566070;--mv-edge:#7a8696;--mv-accent:#1f5fd1;--mv-k-step:#c3cad5;--mv-kf-step:#ffffff;--mv-k-decision:#8a5a00;--mv-kf-decision:#f0eade;--mv-k-terminal:#0f7a5a;--mv-kf-terminal:#e0eeea}@media (prefers-color-scheme:dark){:root{--mv-bg:#11141a;--mv-node:#1a1f27;--mv-stroke:#3a4352;--mv-text:#eceef2;--mv-muted:#a3adbb;--mv-edge:#7c8798;--mv-accent:#7fb0ff;--mv-k-step:#3a4352;--mv-kf-step:#1a1f27;--mv-k-decision:#e0a93a;--mv-kf-decision:#343129;--mv-k-terminal:#4fc79c;--mv-kf-terminal:#213536;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+[data-kind="decision"] .mv-shape{fill:var(--mv-kf-decision);stroke:var(--mv-k-decision)}
+[data-kind="terminal"] .mv-shape{fill:var(--mv-kf-terminal);stroke:var(--mv-k-terminal)}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.6}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mv-bg);color:var(--mv-text);font:15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+main{max-width:1080px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:16px}
+h1{font-size:20px;font-weight:650;margin:0;text-wrap:balance}
+h2{font-size:16px;font-weight:650;margin:0}
+p{margin:0}
+.mv-layout{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:880px){.mv-layout{grid-template-columns:minmax(0,1fr) 340px;align-items:start}}
+.mv-stage{margin:0;overflow-x:auto}
+/* The drawing may shrink to fit, but only so far: below that the words stop being readable, so it scrolls. */
+.mv-svg{display:block;width:clamp(947px,100%,1184px);height:auto;margin:0 auto}
+#mv-picked:not([hidden]){display:grid;gap:8px}
+.mv-side{display:grid;gap:12px}
+.mv-card{background:var(--mv-node);border:1px solid var(--mv-stroke);border-radius:8px;padding:14px;display:grid;gap:8px}
+.mv-small,.mv-legend{font-size:12px;color:var(--mv-muted)}
+.mv-chip{font-size:12px;color:var(--mv-accent);border:1px solid var(--mv-accent);border-radius:99px;padding:2px 10px;justify-self:start}
+.mv-row{display:flex;gap:8px;flex-wrap:wrap}
+.mv-row .mv-main{margin-left:auto}
+button{font:inherit;font-size:14px;color:var(--mv-text);background:var(--mv-node);border:1px solid var(--mv-stroke);border-radius:8px;padding:7px 12px;min-height:38px;cursor:pointer}
+button.mv-main{background:var(--mv-accent);border-color:var(--mv-accent);color:var(--mv-bg)}
+button:disabled{opacity:.4;cursor:default}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--mv-accent);outline-offset:2px}
+.mv-legend{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px}
+.mv-legend span{display:inline-flex;align-items:center;gap:6px}
+.mv-legend i{width:14px;height:10px;border:2px solid;border-radius:3px}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
+dt{color:var(--mv-muted)}
+dd{margin:0}
+pre{margin:8px 0 0;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-x:auto;border:1px solid var(--mv-stroke);border-radius:8px;padding:10px}
+summary{cursor:pointer;color:var(--mv-muted);font-size:13px}
+.mv-notes{display:none}
+.mv-node,.mv-edge{cursor:pointer;transition:opacity .2s}
+.mv-node:focus,.mv-edge:focus{outline:none}
+.mv-hit{fill:none;stroke:transparent;stroke-width:22;pointer-events:stroke}
+.mv-dim{opacity:.16}
+.mv-lit .mv-shape{stroke-width:2.4}
+.mv-on .mv-line,.mv-sel .mv-line,.mv-edge:focus-visible .mv-line{stroke:var(--mv-accent);stroke-width:2.6}
+.mv-on .mv-head,.mv-sel .mv-head{fill:var(--mv-accent)}
+.mv-sel .mv-shape,.mv-node:focus-visible .mv-shape{stroke:var(--mv-accent);stroke-width:3}
+.mv-seq{display:none;pointer-events:none}
+.mv-on .mv-seq{display:block}
+.mv-seq circle{fill:var(--mv-accent)}
+.mv-seq text{font-size:10px;font-weight:700;fill:var(--mv-bg);text-anchor:middle}
+#mv-dot circle{fill:var(--mv-accent);stroke:var(--mv-bg);stroke-width:2}
+#mv-dot{pointer-events:none}
+@keyframes mv-flow{to{stroke-dashoffset:-13}}
+body[data-motion="lively"].mv-playing .mv-on .mv-line{stroke-dasharray:7 6;animation:mv-flow .9s linear infinite}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{button,.mv-source{display:none}.mv-notes{display:block}.mv-layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-motion="calm">
+<main>
+<h1>Supplier onboarding</h1>
+<div class="mv-layout">
+<figure class="mv-stage">
+<svg class="mv-svg" viewBox="0 0 1184 242" role="group" aria-label="Supplier onboarding">
+<g><g class="mv-edge" data-edge="req-chk" data-style="solid" tabindex="0" role="button" aria-label="Link from Request supplier to Already known?"><path class="mv-line" d="M156,58L221,58"/><polygon class="mv-head" points="228,58 219,53.5 219,62.5"/><path class="mv-hit" d="M156,58L228,58"/><g class="mv-seq" transform="translate(192,58)"><circle r="8"/><text y="3.5"></text></g></g><g class="mv-edge" data-edge="chk-use" data-style="solid" tabindex="0" role="button" aria-label="Link from Already known? to Use existing, Yes"><path class="mv-line" d="M292,88L292,206Q292,214 300,214L1084,214Q1092,214 1092,206L1092,95"/><polygon class="mv-head" points="1092,88 1087.5,97 1096.5,97"/><text class="mv-label" x="315" y="107">Yes</text><path class="mv-hit" d="M292,88L292,206Q292,214 300,214L1084,214Q1092,214 1092,206L1092,88"/><g class="mv-seq" transform="translate(692,214)"><circle r="8"/><text y="3.5"></text></g></g><g class="mv-edge" data-edge="chk-form" data-style="solid" tabindex="0" role="button" aria-label="Link from Already known? to Collect details, No"><path class="mv-line" d="M356,58L421,58"/><polygon class="mv-head" points="428,58 419,53.5 419,62.5"/><text class="mv-label" x="379.5" y="50">No</text><path class="mv-hit" d="M356,58L428,58"/><g class="mv-seq" transform="translate(392,58)"><circle r="8"/><text y="3.5"></text></g></g><g class="mv-edge" data-edge="form-vet" data-style="solid" tabindex="0" role="button" aria-label="Link from Collect details to Finance check"><path class="mv-line" d="M556,58L621,58"/><polygon class="mv-head" points="628,58 619,53.5 619,62.5"/><path class="mv-hit" d="M556,58L628,58"/><g class="mv-seq" transform="translate(592,58)"><circle r="8"/><text y="3.5"></text></g></g><g class="mv-edge" data-edge="vet-rej" data-style="solid" tabindex="0" role="button" aria-label="Link from Finance check to Rejected, Fails"><path class="mv-line" d="M692,88L692,150Q692,158 700,158L821,158"/><polygon class="mv-head" points="828,158 819,153.5 819,162.5"/><text class="mv-label" x="721.5" y="107">Fails</text><path class="mv-hit" d="M692,88L692,150Q692,158 700,158L828,158"/><g class="mv-seq" transform="translate(725,158)"><circle r="8"/><text y="3.5"></text></g></g><g class="mv-edge" data-edge="vet-add" data-style="solid" tabindex="0" role="button" aria-label="Link from Finance check to Add to ERP, Passes"><path class="mv-line" d="M756,58L821,58"/><polygon class="mv-head" points="828,58 819,53.5 819,62.5"/><text class="mv-label" x="793" y="50">Passes</text><path class="mv-hit" d="M756,58L828,58"/><g class="mv-seq" transform="translate(792,58)"><circle r="8"/><text y="3.5"></text></g></g><g class="mv-edge" data-edge="add-use" data-style="solid" tabindex="0" role="button" aria-label="Link from Add to ERP to Use existing"><path class="mv-line" d="M956,58L1021,58"/><polygon class="mv-head" points="1028,58 1019,53.5 1019,62.5"/><path class="mv-hit" d="M956,58L1028,58"/><g class="mv-seq" transform="translate(992,58)"><circle r="8"/><text y="3.5"></text></g></g></g><g><g class="mv-node" data-node="req" data-kind="step" tabindex="0" role="button" aria-label="Request supplier, Step"><rect class="mv-shape" x="28" y="28" width="128" height="60" rx="8"/><text><tspan x="92" y="54.5">Request</tspan><tspan x="92" y="70.5">supplier</tspan></text></g><g class="mv-node" data-node="chk" data-kind="decision" tabindex="0" role="button" aria-label="Already known?, Decision"><polygon class="mv-shape" points="250,28 334,28 356,58 334,88 250,88 228,58"/><text><tspan x="292" y="54.5">Already</tspan><tspan x="292" y="70.5">known?</tspan></text></g><g class="mv-node" data-node="use" data-kind="terminal" tabindex="0" role="button" aria-label="Use existing, Start or end"><rect class="mv-shape" x="1028" y="28" width="128" height="60" rx="30"/><text><tspan x="1092" y="62.5">Use existing</tspan></text></g><g class="mv-node" data-node="form" data-kind="step" tabindex="0" role="button" aria-label="Collect details, Step"><rect class="mv-shape" x="428" y="28" width="128" height="60" rx="8"/><text><tspan x="492" y="54.5">Collect</tspan><tspan x="492" y="70.5">details</tspan></text></g><g class="mv-node" data-node="vet" data-kind="step" tabindex="0" role="button" aria-label="Finance check, Step"><rect class="mv-shape" x="628" y="28" width="128" height="60" rx="8"/><text><tspan x="692" y="62.5">Finance check</tspan></text></g><g class="mv-node" data-node="rej" data-kind="terminal" tabindex="0" role="button" aria-label="Rejected, Start or end"><rect class="mv-shape" x="828" y="128" width="128" height="60" rx="30"/><text><tspan x="892" y="162.5">Rejected</tspan></text></g><g class="mv-node" data-node="add" data-kind="step" tabindex="0" role="button" aria-label="Add to ERP, Step"><rect class="mv-shape" x="828" y="28" width="128" height="60" rx="8"/><text><tspan x="892" y="62.5">Add to ERP</tspan></text></g></g>
+<g id="mv-dot" style="display:none"><circle r="6"/></g>
+</svg>
+<figcaption class="mv-legend"><span><i style="border-color:var(--mv-k-step);background:var(--mv-kf-step)"></i>Step</span><span><i style="border-color:var(--mv-k-decision);background:var(--mv-kf-decision)"></i>Decision</span><span><i style="border-color:var(--mv-k-terminal);background:var(--mv-kf-terminal)"></i>Start or end</span></figcaption>
+</figure>
+<div class="mv-side">
+
+<section class="mv-card" aria-live="polite">
+<p class="mv-small" id="mv-none">Pick a box or a line to see only what it connects to.</p>
+<div id="mv-picked" hidden>
+<h2 id="mv-title"></h2>
+<p id="mv-note"></p>
+<dl id="mv-facts"></dl>
+<div class="mv-row"><button type="button" id="mv-clear">Show everything</button></div>
+</div>
+</section>
+</div>
+</div>
+<section class="mv-notes"></section>
+<details class="mv-source"><summary>Mermaid source</summary><pre id="mermaid-source">flowchart LR
+  req[Request supplier] --&gt; chk{Already known?}
+  chk --&gt;|Yes| use([Use existing])
+  chk --&gt;|No| form[Collect details]
+  form --&gt; vet[Finance check]
+  vet --&gt;|Fails| rej([Rejected])
+  vet --&gt;|Passes| add[Add to ERP]
+  add --&gt; use</pre></details>
+</main>
+<script>(function runtime(data) {
+  const speed = 110; // px a second: slow enough to follow, quick enough that a long path is not a wait
+  const byId = (/** @type {string} */ id) => /** @type {HTMLElement} */ (document.getElementById(id));
+  const svg = /** @type {SVGSVGElement} */ (/** @type {unknown} */ (document.querySelector('.mv-svg')));
+  const nodes = new Map(data.nodes.map((n) => [n.id, n]));
+  const edges = new Map(data.edges.map((e) => [e.id, e]));
+  /** @type {Map<string, Element>} */
+  const nodeEl = new Map();
+  /** @type {Map<string, Element>} */
+  const edgeEl = new Map();
+  svg.querySelectorAll('[data-node]').forEach((el) => nodeEl.set(el.getAttribute('data-node') ?? '', el));
+  svg.querySelectorAll('[data-edge]').forEach((el) => edgeEl.set(el.getAttribute('data-edge') ?? '', el));
+  const dot = /** @type {SVGGElement} */ (/** @type {unknown} */ (document.getElementById('mv-dot')));
+
+  /** @type {null|{type:'node'|'edge',id:string}} */
+  let picked = null;
+  let step = 0;
+  let playing = false;
+  let travelled = 0;
+  let last = 0;
+
+  // ---- pick a box or a line ----
+  const pick = (/** @type {null|{type:'node'|'edge',id:string}} */ what) => {
+    picked = what && picked && picked.type === what.type && picked.id === what.id ? null : what;
+    const keepNodes = new Set(), keepEdges = new Set();
+    if (picked?.type === 'node') {
+      keepNodes.add(picked.id);
+      for (const e of data.edges) {
+        if (e.from !== picked.id && e.to !== picked.id) continue;
+        keepEdges.add(e.id);
+        keepNodes.add(e.from).add(e.to);
+      }
+    } else if (picked) {
+      const e = edges.get(picked.id);
+      if (e) keepNodes.add(e.from).add(e.to);
+      keepEdges.add(picked.id);
+    }
+    nodeEl.forEach((el, id) => {
+      el.classList.toggle('mv-dim', Boolean(picked) && !keepNodes.has(id));
+      el.classList.toggle('mv-sel', picked?.type === 'node' && picked.id === id);
+    });
+    edgeEl.forEach((el, id) => {
+      el.classList.toggle('mv-dim', Boolean(picked) && !keepEdges.has(id));
+      el.classList.toggle('mv-sel', picked?.type === 'edge' && picked.id === id);
+    });
+    byId('mv-none').hidden = Boolean(picked);
+    byId('mv-picked').hidden = !picked;
+    if (!picked) return;
+    const facts = byId('mv-facts');
+    facts.textContent = '';
+    const fact = (/** @type {string} */ name, /** @type {string} */ value) => {
+      const dt = document.createElement('dt'), dd = document.createElement('dd');
+      dt.textContent = name;
+      dd.textContent = value;
+      facts.append(dt, dd);
+    };
+    const name = (/** @type {string} */ id) => nodes.get(id)?.label ?? id;
+    if (picked.type === 'node') {
+      const n = nodes.get(picked.id);
+      const id = picked.id;
+      byId('mv-title').textContent = n?.label ?? id;
+      byId('mv-note').textContent = n?.note ?? '';
+      const from = data.edges.filter((e) => e.to === id).map((e) => name(e.from));
+      const to = data.edges.filter((e) => e.from === id).map((e) => name(e.to) + (e.label ? ` (${e.label})` : ''));
+      fact('Comes from', from.length ? from.join(', ') : 'Nothing: the flow starts here');
+      fact('Goes to', to.length ? to.join(', ') : 'Nothing: the flow ends here');
+    } else {
+      const e = edges.get(picked.id);
+      byId('mv-title').textContent = e ? `${name(e.from)} to ${name(e.to)}` : picked.id;
+      byId('mv-note').textContent = e?.label ? `Taken when the answer is ${e.label}.` : '';
+      if (e) {
+        fact('From', name(e.from));
+        fact('To', name(e.to));
+      }
+    }
+  };
+  const wire = (/** @type {Element} */ el, /** @type {'node'|'edge'} */ type, /** @type {string} */ id) => {
+    el.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      pick({ type, id });
+    });
+    el.addEventListener('keydown', (ev) => {
+      const key = /** @type {KeyboardEvent} */ (ev).key;
+      if (key !== 'Enter' && key !== ' ') return;
+      ev.preventDefault();
+      pick({ type, id });
+    });
+  };
+  nodeEl.forEach((el, id) => wire(el, 'node', id));
+  edgeEl.forEach((el, id) => wire(el, 'edge', id));
+  svg.addEventListener('click', () => pick(null));
+  byId('mv-clear').addEventListener('click', () => pick(null));
+
+  // ---- walk the steps ----
+  if (!data.steps.length) return;
+  const play = /** @type {HTMLButtonElement} */ (byId('mv-play'));
+  const lineOf = (/** @type {string} */ id) => /** @type {SVGPathElement} */ (/** @type {unknown} */ (edgeEl.get(id)?.querySelector('.mv-line')));
+  const setPlaying = (/** @type {boolean} */ on) => {
+    playing = on;
+    play.textContent = on ? 'Pause' : 'Play this path';
+    document.body.classList.toggle('mv-playing', on);
+    if (on) {
+      last = 0;
+      requestAnimationFrame(tick);
+    }
+  };
+  const put = () => {
+    const seq = data.steps[step].seq;
+    let left = travelled;
+    for (const id of seq) {
+      const line = lineOf(id), length = line.getTotalLength();
+      if (left <= length || id === seq[seq.length - 1]) {
+        const p = line.getPointAtLength(Math.min(left, length));
+        dot.setAttribute('transform', `translate(${p.x},${p.y})`);
+        return;
+      }
+      left -= length;
+    }
+  };
+  const tick = (/** @type {number} */ now) => {
+    if (!playing) return;
+    const s = data.steps[step];
+    const total = s.seq.reduce((sum, id) => sum + lineOf(id).getTotalLength(), 0);
+    // A long gap between frames (a hidden tab) must not throw the dot far ahead.
+    travelled += last ? (Math.min(now - last, 64) / 1000) * speed : 0;
+    last = now;
+    if (travelled >= total) {
+      if (s.loop) travelled %= total;
+      else {
+        travelled = total;
+        put();
+        return setPlaying(false);
+      }
+    }
+    put();
+    requestAnimationFrame(tick);
+  };
+  const show = (/** @type {number} */ to) => {
+    step = Math.max(0, Math.min(data.steps.length - 1, to));
+    const s = data.steps[step];
+    setPlaying(false);
+    travelled = 0;
+    const on = new Set(s.seq), lit = new Set();
+    edgeEl.forEach((el, id) => el.classList.toggle('mv-on', on.has(id)));
+    s.seq.forEach((id, i) => {
+      const e = edges.get(id), badge = edgeEl.get(id)?.querySelector('.mv-seq text');
+      if (badge) badge.textContent = String(i + 1);
+      if (e) lit.add(e.from).add(e.to);
+    });
+    nodeEl.forEach((el, id) => el.classList.toggle('mv-lit', lit.has(id)));
+    byId('mv-count').textContent = `Step ${step + 1} of ${data.steps.length}`;
+    byId('mv-step-title').textContent = s.title;
+    byId('mv-step-text').textContent = s.text;
+    byId('mv-loop').hidden = !s.loop;
+    /** @type {HTMLButtonElement} */ (byId('mv-prev')).disabled = step === 0;
+    /** @type {HTMLButtonElement} */ (byId('mv-next')).disabled = step === data.steps.length - 1;
+    play.hidden = data.motion === 'none' || !s.seq.length;
+    dot.style.display = data.motion === 'none' || !s.seq.length ? 'none' : '';
+    if (s.seq.length) put();
+  };
+  byId('mv-prev').addEventListener('click', () => show(step - 1));
+  byId('mv-next').addEventListener('click', () => show(step + 1));
+  play.addEventListener('click', () => {
+    // Pressed again at the end of a path that does not repeat, it starts over.
+    if (!playing && !data.steps[step].loop) travelled = 0;
+    setPlaying(!playing);
+  });
+  document.addEventListener('keydown', (ev) => {
+    const el = /** @type {Element} */ (ev.target);
+    if (el.closest('button, summary, [data-node], [data-edge]')) return;
+    if (ev.key === 'ArrowRight') show(step + 1);
+    else if (ev.key === 'ArrowLeft') show(step - 1);
+    else if (ev.key === 'Escape') pick(null);
+  });
+  show(0);
+})({"nodes":[{"id":"req","label":"Request supplier","kind":"step","note":""},{"id":"chk","label":"Already known?","kind":"decision","note":""},{"id":"use","label":"Use existing","kind":"terminal","note":""},{"id":"form","label":"Collect details","kind":"step","note":""},{"id":"vet","label":"Finance check","kind":"step","note":""},{"id":"rej","label":"Rejected","kind":"terminal","note":""},{"id":"add","label":"Add to ERP","kind":"step","note":""}],"edges":[{"id":"req-chk","from":"req","to":"chk","label":""},{"id":"chk-use","from":"chk","to":"use","label":"Yes"},{"id":"chk-form","from":"chk","to":"form","label":"No"},{"id":"form-vet","from":"form","to":"vet","label":""},{"id":"vet-rej","from":"vet","to":"rej","label":"Fails"},{"id":"vet-add","from":"vet","to":"add","label":"Passes"},{"id":"add-use","from":"add","to":"use","label":""}],"steps":[],"motion":"calm"});</script>
+</body>
+</html>

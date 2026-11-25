@@ -1,0 +1,10 @@
+{
+  "name": "merlive",
+  "version": "0.1.0",
+  "description": "Mermaid flowcharts, placed by rule and made live: one straight main path, boxes of one size, lines that never cross a box, in your own design, as a single page your readers can step through.",
+  "author": { "name": "Victor Saly", "url": "https://github.com/victorsaly" },
+  "homepage": "https://github.com/victorsaly/merlive",
+  "repository": "https://github.com/victorsaly/merlive",
+  "license": "MIT",
+  "keywords": ["mermaid", "diagrams", "flowchart", "documentation", "interactive", "agent-skills"]
+}

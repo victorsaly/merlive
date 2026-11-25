@@ -1,0 +1,15 @@
+{
+  "name": "merlive",
+  "private": true,
+  "type": "module",
+  "description": "Development scripts for Merlive. The skill itself needs nothing installed but Node.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test 'test/*.test.mjs'",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include='skills/**/parse.mjs' --test-coverage-include='skills/**/layout.mjs' --test-coverage-include='skills/**/score.mjs' --test-coverage-include='skills/**/design.mjs' --test-coverage-lines=90 --test-coverage-branches=80 'test/*.test.mjs'",
+    "examples": "node skills/merlive/scripts/merlive.mjs examples/order-approval.md && node skills/merlive/scripts/merlive.mjs examples/order-approval.md --format svg",
+    "check": "npm run test:coverage"
+  }
+}
