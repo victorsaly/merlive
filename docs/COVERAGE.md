@@ -2,13 +2,14 @@
 
 Written by `npm run coverage`. Do not edit it by hand: change the code or the corpus and run it again.
 
-The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart page and its state diagram page set out. The samples are our own.
+The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram and sequence diagram pages set out. The samples are our own.
 
 ## In short
 
 - **Flowcharts:** of 69 features, 44 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 3 are only partly read, and 0 are refused.
 - **State diagrams:** of 27 features, 14 are drawn as written, 10 are drawn less something, 3 are only partly read, and 0 are refused.
-- **Every kind of diagram:** of 32, 1 drawn (flowcharts and state diagrams, which have their own lists above), and 31 left as Mermaid and named.
+- **Sequence diagrams:** of 42 features, 35 are drawn as written, 5 are drawn less something, 2 are only partly read, and 0 are refused.
+- **Every kind of diagram:** of 32, 2 drawn (flowcharts, state diagrams and sequence diagrams, which have their own lists above), and 30 left as Mermaid and named.
 
 ## Flowcharts, feature by feature
 
@@ -123,6 +124,56 @@ rules. Held to the same measure as the flowcharts above.
 | A title and a description for readers who cannot see it | Drawn |  | [source](../corpus/state/state-accessibility.mmd) | [picture](../corpus/drawn/state-accessibility.svg) |
 | A title and settings in front matter | Drawn, less something | Mermaid's own settings are read past: the look is the design's | [source](../corpus/state/state-frontmatter.mmd) | [picture](../corpus/drawn/state-frontmatter.svg) |
 
+## Sequence diagrams, feature by feature
+
+Held to the same measure: every participant, message, note, frame and word the corpus says a sample has is read,
+and every rule in [SEQUENCE.md](SEQUENCE.md) passes.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| Participants named by the messages they are in | Drawn |  | [source](../corpus/sequence/seq-participants-implicit.mmd) | [picture](../corpus/drawn/seq-participants-implicit.svg) |
+| Participants declared, in an order of their own | Drawn |  | [source](../corpus/sequence/seq-participants-declared.mmd) | [picture](../corpus/drawn/seq-participants-declared.svg) |
+| Actors: people, not systems | Drawn |  | [source](../corpus/sequence/seq-actors.mmd) | [picture](../corpus/drawn/seq-actors.svg) |
+| A participant with a type: boundary, control, entity, database, collections, queue | Drawn, less something | A database is a box of the kind "data". The other five are plain boxes, told apart by their names, not by a symbol | [source](../corpus/sequence/seq-participant-types.mmd) | [picture](../corpus/drawn/seq-participant-types.svg) |
+| A participant with a short id and a name, written with "as" | Drawn |  | [source](../corpus/sequence/seq-alias-as.mmd) | [picture](../corpus/drawn/seq-alias-as.svg) |
+| A name written inside the braces | Drawn |  | [source](../corpus/sequence/seq-alias-inline.mmd) | [picture](../corpus/drawn/seq-alias-inline.svg) |
+| A name inside the braces and another after "as": the one after "as" wins | Drawn |  | [source](../corpus/sequence/seq-alias-precedence.mmd) | [picture](../corpus/drawn/seq-alias-precedence.svg) |
+| A participant made part way down, and one ended | Drawn |  | [source](../corpus/sequence/seq-create-destroy.mmd) | [picture](../corpus/drawn/seq-create-destroy.svg) |
+| Participants grouped in boxes, with and without a colour and a title | Drawn, less something | A group's colour is read past: the look is the design's | [source](../corpus/sequence/seq-box-groups.mmd) | [picture](../corpus/drawn/seq-box-groups.svg) |
+| A message with no arrowhead, solid and dotted | Drawn |  | [source](../corpus/sequence/seq-message-line.mmd) | [picture](../corpus/drawn/seq-message-line.svg) |
+| A message with an arrowhead, solid and dotted | Drawn |  | [source](../corpus/sequence/seq-message-arrow.mmd) | [picture](../corpus/drawn/seq-message-arrow.svg) |
+| A message with an arrowhead at both ends | Drawn |  | [source](../corpus/sequence/seq-message-both-ways.mmd) | [picture](../corpus/drawn/seq-message-both-ways.svg) |
+| A message that ends in a cross | Drawn |  | [source](../corpus/sequence/seq-message-cross.mmd) | [picture](../corpus/drawn/seq-message-cross.svg) |
+| A message that does not wait: an open arrow | Drawn |  | [source](../corpus/sequence/seq-message-async.mmd) | [picture](../corpus/drawn/seq-message-async.svg) |
+| A message from a participant to itself | Drawn |  | [source](../corpus/sequence/seq-message-self.mmd) | [picture](../corpus/drawn/seq-message-self.svg) |
+| Half arrows | Partly read | read 0 of 2 participants; read 0 of 4 messages; line 2: half arrows are not read yet: "Buyer-\|\ERP: Top half"; line 3: half arrows are not read yet: "ERP--\|/Buyer: Bottom half"; line 4: half arrows are not read yet: "Buyer-\\ERP: Top stick"; line 5: half arrows are not read yet: "ERP--//Buyer: Bottom stick" | [source](../corpus/sequence/seq-half-arrows.mmd) |  |
+| A message to or from the middle of a line | Partly read | read 0 of 3 messages; line 4: a message to the middle of a line, written with (), is not read yet: "Buyer->>()ERP: Raise order"; line 5: a message to the middle of a line, written with (), is not read yet: "Buyer()->>ERP: Chase it"; line 6: a message to the middle of a line, written with (), is not read yet: "ERP()->>()Buyer: Done" | [source](../corpus/sequence/seq-central-connection.mmd) | [picture](../corpus/drawn/seq-central-connection.svg) |
+| A participant at work, written with activate and deactivate | Drawn |  | [source](../corpus/sequence/seq-activation-explicit.mmd) | [picture](../corpus/drawn/seq-activation-explicit.svg) |
+| A participant at work, written with + and - | Drawn |  | [source](../corpus/sequence/seq-activation-shortcut.mmd) | [picture](../corpus/drawn/seq-activation-shortcut.svg) |
+| A participant at work twice at once | Drawn |  | [source](../corpus/sequence/seq-activation-stacked.mmd) | [picture](../corpus/drawn/seq-activation-stacked.svg) |
+| A note to the right or the left of a participant | Drawn |  | [source](../corpus/sequence/seq-note-beside.mmd) | [picture](../corpus/drawn/seq-note-beside.svg) |
+| A note over a participant | Drawn |  | [source](../corpus/sequence/seq-note-over.mmd) | [picture](../corpus/drawn/seq-note-over.svg) |
+| A note over two participants | Drawn |  | [source](../corpus/sequence/seq-note-over-two.mmd) | [picture](../corpus/drawn/seq-note-over-two.svg) |
+| A line break in a message, a note and a name | Drawn |  | [source](../corpus/sequence/seq-line-breaks.mmd) | [picture](../corpus/drawn/seq-line-breaks.svg) |
+| A loop | Drawn |  | [source](../corpus/sequence/seq-loop.mmd) | [picture](../corpus/drawn/seq-loop.svg) |
+| One way or another: alt and else | Drawn |  | [source](../corpus/sequence/seq-alt-else.mmd) | [picture](../corpus/drawn/seq-alt-else.svg) |
+| Something that may not happen: opt | Drawn |  | [source](../corpus/sequence/seq-opt.mmd) | [picture](../corpus/drawn/seq-opt.svg) |
+| Things done at once: par and and | Drawn |  | [source](../corpus/sequence/seq-par.mmd) | [picture](../corpus/drawn/seq-par.svg) |
+| A block inside a block | Drawn |  | [source](../corpus/sequence/seq-par-nested.mmd) | [picture](../corpus/drawn/seq-par-nested.svg) |
+| What must happen, and what to do when it cannot: critical and option | Drawn |  | [source](../corpus/sequence/seq-critical.mmd) | [picture](../corpus/drawn/seq-critical.svg) |
+| A critical block with no options | Drawn |  | [source](../corpus/sequence/seq-critical-plain.mmd) | [picture](../corpus/drawn/seq-critical-plain.svg) |
+| Where the sequence stops: break | Drawn |  | [source](../corpus/sequence/seq-break.mmd) | [picture](../corpus/drawn/seq-break.svg) |
+| Rows highlighted with a coloured background, one inside another | Drawn, less something | The highlight's colour is read past: it is drawn in the design's own tint | [source](../corpus/sequence/seq-rect.mmd) | [picture](../corpus/drawn/seq-rect.svg) |
+| Comments on lines of their own | Drawn |  | [source](../corpus/sequence/seq-comments.mmd) | [picture](../corpus/drawn/seq-comments.svg) |
+| Characters written as entity codes | Drawn |  | [source](../corpus/sequence/seq-entity-codes.mmd) | [picture](../corpus/drawn/seq-entity-codes.svg) |
+| Messages numbered | Drawn |  | [source](../corpus/sequence/seq-autonumber.mmd) | [picture](../corpus/drawn/seq-autonumber.svg) |
+| Messages numbered from a start, by a step | Drawn |  | [source](../corpus/sequence/seq-autonumber-from.mmd) | [picture](../corpus/drawn/seq-autonumber-from.svg) |
+| A menu of links on a participant | Drawn, less something | The menus are left out: a page of Merlive opens no links | [source](../corpus/sequence/seq-actor-menus.mmd) | [picture](../corpus/drawn/seq-actor-menus.svg) |
+| A title in the diagram | Drawn |  | [source](../corpus/sequence/seq-title.mmd) | [picture](../corpus/drawn/seq-title.svg) |
+| A title and a description for readers who cannot see it | Drawn |  | [source](../corpus/sequence/seq-accessibility.mmd) | [picture](../corpus/drawn/seq-accessibility.svg) |
+| Statements parted by semicolons | Drawn |  | [source](../corpus/sequence/seq-semicolons.mmd) | [picture](../corpus/drawn/seq-semicolons.svg) |
+| A title and settings in front matter | Drawn, less something | Mermaid's own settings are read past: the look and the numbering are the design's and the diagram's own | [source](../corpus/sequence/seq-frontmatter.mmd) | [picture](../corpus/drawn/seq-frontmatter.svg) |
+
 ## Other kinds of diagram
 
 One that is not drawn is left exactly as it was written, and the command names it. The family says what it would
@@ -133,7 +184,7 @@ drawing of their own.
 
 | Kind | Result | Sample | Picture |
 |---|---|---|---|
-| Sequence diagram | Left as Mermaid | [source](../corpus/kinds/sequence.mmd) |  |
+| Sequence diagram | Drawn | [source](../corpus/kinds/sequence.mmd) | [picture](../corpus/drawn/sequence.svg) |
 | ZenUML sequence diagram | Left as Mermaid | [source](../corpus/kinds/zenuml.mmd) |  |
 | Event model | Left as Mermaid | [source](../corpus/kinds/eventmodeling.mmd) |  |
 | User journey | Left as Mermaid | [source](../corpus/kinds/journey.mmd) |  |

@@ -38,7 +38,7 @@
     },
     "flowchart/frontmatter.mmd": {
       "ok": true,
-      "width": 271,
+      "width": 270,
       "height": 123
     },
     "flowchart/init-directive.mmd": {
@@ -478,6 +478,216 @@
       "ok": true,
       "width": 86,
       "height": 195
+    },
+    "sequence/seq-participants-implicit.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-participants-declared.mmd": {
+      "ok": true,
+      "width": 650,
+      "height": 259
+    },
+    "sequence/seq-actors.mmd": {
+      "ok": true,
+      "width": 650,
+      "height": 259
+    },
+    "sequence/seq-participant-types.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 258
+    },
+    "sequence/seq-alias-as.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-alias-inline.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 264
+    },
+    "sequence/seq-alias-precedence.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 264
+    },
+    "sequence/seq-create-destroy.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 443
+    },
+    "sequence/seq-box-groups.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 297
+    },
+    "sequence/seq-message-line.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-message-arrow.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-message-both-ways.mmd": {
+      "ok": true,
+      "width": 650,
+      "height": 259
+    },
+    "sequence/seq-message-cross.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-message-async.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-message-self.mmd": {
+      "ok": true,
+      "width": 451,
+      "height": 333
+    },
+    "sequence/seq-half-arrows.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 347
+    },
+    "sequence/seq-central-connection.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 303
+    },
+    "sequence/seq-activation-explicit.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-activation-shortcut.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-activation-stacked.mmd": {
+      "ok": true,
+      "width": 458,
+      "height": 347
+    },
+    "sequence/seq-note-beside.mmd": {
+      "ok": true,
+      "width": 650,
+      "height": 309
+    },
+    "sequence/seq-note-over.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 262
+    },
+    "sequence/seq-note-over-two.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 262
+    },
+    "sequence/seq-line-breaks.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 296
+    },
+    "sequence/seq-loop.mmd": {
+      "ok": true,
+      "width": 650,
+      "height": 358
+    },
+    "sequence/seq-alt-else.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 403
+    },
+    "sequence/seq-opt.mmd": {
+      "ok": true,
+      "width": 650,
+      "height": 314
+    },
+    "sequence/seq-par.mmd": {
+      "ok": true,
+      "width": 650,
+      "height": 447
+    },
+    "sequence/seq-par-nested.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 409
+    },
+    "sequence/seq-critical.mmd": {
+      "ok": true,
+      "width": 459,
+      "height": 538
+    },
+    "sequence/seq-critical-plain.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 270
+    },
+    "sequence/seq-break.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 384
+    },
+    "sequence/seq-rect.mmd": {
+      "ok": true,
+      "width": 458,
+      "height": 498
+    },
+    "sequence/seq-comments.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-entity-codes.mmd": {
+      "ok": true,
+      "width": 527,
+      "height": 259
+    },
+    "sequence/seq-autonumber.mmd": {
+      "ok": true,
+      "width": 461,
+      "height": 432
+    },
+    "sequence/seq-autonumber-from.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 303
+    },
+    "sequence/seq-actor-menus.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-title.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 299
+    },
+    "sequence/seq-accessibility.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 259
+    },
+    "sequence/seq-semicolons.mmd": {
+      "ok": true,
+      "width": 650,
+      "height": 303
+    },
+    "sequence/seq-frontmatter.mmd": {
+      "ok": true,
+      "width": 450,
+      "height": 213
     },
     "kinds/sequence.mmd": {
       "ok": true,

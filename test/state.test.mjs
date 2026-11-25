@@ -250,13 +250,13 @@ describe('state: drawn by the rules a flowchart is', () => {
 describe('state: the command', () => {
   it('draws the state diagram in a Markdown file as it draws a flowchart, into a temporary folder', async () => {
     const cwd = mkdtempSync(join(tmpdir(), 'merlive-state-'));
-    writeFileSync(join(cwd, 'order.md'), '# An order\n\n```mermaid\nstateDiagram-v2\n  [*] --> Draft\n  Draft --> Sent : send\n  note right of Draft : Only its author sees it.\n  Sent --> [*]\n```\n\n```mermaid\nsequenceDiagram\n  A->>B: hello\n```\n');
+    writeFileSync(join(cwd, 'order.md'), '# An order\n\n```mermaid\nstateDiagram-v2\n  [*] --> Draft\n  Draft --> Sent : send\n  note right of Draft : Only its author sees it.\n  Sent --> [*]\n```\n\n```mermaid\npie title Orders\n  "UK" : 46\n```\n');
     /** @type {string[]} */
     const said = [];
     const code = await run(['order.md'], { cwd, say: (line) => said.push(line) });
     assert.equal(code, exits.drawn);
     assert.match(said.join('\n'), /drew .*order-1\.html \(4 boxes, 3 links/);
-    assert.match(said.join('\n'), /left as Mermaid: block 2 \(line \d+\) is a sequenceDiagram, and Merlive draws flowcharts and state diagrams for now/);
+    assert.match(said.join('\n'), /left as Mermaid: block 2 \(line \d+\) is a pie, and Merlive draws flowcharts, state diagrams and sequence diagrams for now/);
     const page = readFileSync(join(cwd, 'diagrams/order-1.html'), 'utf8');
     assert.ok(page.includes('Only its author sees it.') && page.includes('>Start<') && page.includes('>send<'));
     assert.ok(!existsSync(join(cwd, 'diagrams/order-2.html')));
