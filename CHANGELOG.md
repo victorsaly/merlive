@@ -70,6 +70,8 @@ The first version. It draws flowcharts and sequence diagrams, and says what it l
 - **An author's own styling is kept as what it means.** `style` and `classDef` give a box a broken outline, a
   heavy one, and a colour; `linkStyle` does the same for a link, by Mermaid's number for it. The colour is named
   for its hue and drawn in the design's own nearest colour, so the colour rules still hold.
+- **A flow too wide for a screen is turned.** Written left to right and wider than 1,100 px, a flow is drawn top
+  to bottom, and the command says so and how wide it would have been. `%% turn: no` keeps it as written.
 - **A link's words never run off the picture.** Words beside a line that goes round the near outside were cut
   off by the edge. Everything now moves over to give them their margin, and P7 checks it.
 - **An icon in a label is drawn.** `fa:fa-truck Shipped` gets a truck beside its words, and `@{ icon: "fa:user" }`

@@ -118,7 +118,23 @@ export function meet(/** @type {Pt[]} */ one, /** @type {Pt[]} */ other) {
  * @returns {Layout}
  */
 export function layout(model) {
-  const dir = model.direction;
+  const first = placed(model, model.direction);
+  // A flow written left to right that comes out wider than a screen cannot be read without scrolling sideways,
+  // and nobody scrolls a diagram sideways. Top to bottom it is the same flow, and scrolls the way a page does.
+  if (first.direction !== 'LR' || first.width <= measure.wide || model.hints.turn === false) return first;
+  const turned = placed(model, 'TD');
+  if (turned.width >= first.width) return first;
+  turned.warnings.unshift(`written left to right, drawn top to bottom: left to right it would be ${first.width}px wide, wider than most screens. "%% turn: no" keeps it as written`);
+  return turned;
+}
+
+/**
+ * The placing itself, in the direction asked for.
+ * @param {Model} model
+ * @param {'TD'|'LR'} dir
+ * @returns {Layout}
+ */
+function placed(model, dir) {
   /** @type {string[]} */
   const warnings = [];
   const box = boxFor(model);
@@ -571,7 +587,7 @@ export function layout(model) {
   const xs = [...all.map((n) => n.x + n.w / 2), ...groups.map((f) => f.x + f.w), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.x), ...(e.label ? [e.label.x + e.label.w / 2] : [])])];
   const ys = [...all.map((n) => n.y + n.h / 2), ...groups.map((f) => f.y + f.h), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.y), ...(e.label ? [e.label.y + e.label.h / 2] : [])])];
   const width = Math.ceil(Math.max(0, ...xs) + measure.pad), height = Math.ceil(Math.max(0, ...ys) + measure.pad);
-  if (dir === 'LR' && width > measure.wide) warnings.push(`left to right, this flow is ${width}px wide and will scroll on most screens; "flowchart TD" would read better`);
+  if (dir === 'LR' && width > measure.wide && model.hints.turn === false) warnings.push(`left to right, this flow is ${width}px wide and will scroll on most screens; "flowchart TD" would read better`);
   return { width, height, direction: dir, box, nodes, edges, groups, spine, warnings };
 }
 

@@ -21,7 +21,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Edge[]} edges
  * @property {Record<string,string>} notes
  * @property {Step[]} steps
- * @property {{main?:string[],side?:'left'|'right'}} hints
+ * @property {{main?:string[],side?:'left'|'right',turn?:boolean}} hints turn: false keeps a wide left-to-right flow as it was written
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
  * @property {{id:string,title:string,members:string[]}[]} groups the author's subgraphs: what each is called and the boxes in it
  * @property {string[]} warnings
@@ -447,6 +447,8 @@ export function parse(src) {
     if (main) return void (model.hints.main = main[1].split('>').map((x) => x.trim()).filter(Boolean));
     const side = /^%%\s*side\s*:\s*(left|right)\s*$/.exec(text);
     if (side) return void (model.hints.side = /** @type {'left'|'right'} */ (side[1]));
+    const turn = /^%%\s*turn\s*:\s*(yes|no)\s*$/.exec(text);
+    if (turn) return void (model.hints.turn = turn[1] === 'yes');
     if (text.startsWith('%%')) return;
 
     if (!header) {

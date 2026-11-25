@@ -57,7 +57,7 @@ export function judge(sample, source) {
   if (sample.ends && JSON.stringify(model.edges.map((e) => [e.tail, e.head])) !== JSON.stringify(sample.ends)) why.push('what is at the ends of its links is not kept');
   if (sample.shapes && JSON.stringify(model.nodes.map((n) => n.shape)) !== JSON.stringify(sample.shapes)) why.push(`its shapes are read as ${model.nodes.map((n) => n.shape).join(', ')}`);
   // That a flow is wide is true of the sample, not a thing Merlive failed to read.
-  why.push(...model.warnings, ...lay.warnings.filter((w) => !w.includes('will scroll on most screens')));
+  why.push(...model.warnings, ...lay.warnings.filter((w) => !w.includes('will scroll on most screens') && !w.startsWith('written left to right, drawn top to bottom')));
   const broken = score(model, lay, design).checks.filter((c) => !c.ok);
   const svg = model.nodes.length ? picture(model, lay, design, { title: sample.covers }) : '';
   if (broken.length) return { sample, result: 'refused', why: [...broken.map((c) => `${c.id} ${c.rule}: ${c.detail}`), ...why], svg };

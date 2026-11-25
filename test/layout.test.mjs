@@ -141,8 +141,8 @@ describe('layout: left to right', () => {
     assert.ok(lay.width > lay.height);
   });
 
-  it('says when a flow is too wide to read across', () => {
-    const long = draw(`flowchart LR\n${'ABCDEFGH'.split('').map((c, i, all) => (all[i + 1] ? `${c} --> ${all[i + 1]}` : '')).join('\n')}`);
+  it('says when a flow kept left to right is too wide to read across', () => {
+    const long = draw(`flowchart LR\n${'ABCDEFGH'.split('').map((c, i, all) => (all[i + 1] ? `${c} --> ${all[i + 1]}` : '')).join('\n')}\n%% turn: no`);
     assert.match(long.lay.warnings[0], /would read better/);
   });
 });
@@ -210,6 +210,29 @@ describe('layout: words on a line that goes round the outside', () => {
         assert.ok(l.y - l.h / 2 >= measure.pad / 2 && l.y + l.h / 2 <= lay.height - measure.pad / 2, `"${l.text}" runs from ${l.y - l.h / 2} to ${l.y + l.h / 2} in a picture ${lay.height} tall`);
       }
     }
+  });
+});
+
+describe('layout: a flow written left to right that is wider than a screen', () => {
+  const long = (/** @type {number} */ n) => `flowchart LR\n${Array.from({ length: n - 1 }, (_, i) => `S${i}[Step ${i}] --> S${i + 1}[Step ${i + 1}]`).join('\n')}`;
+
+  it('is turned top to bottom, and says so with how wide it would have been', () => {
+    const lay = layout(parse(long(12)));
+    assert.equal(lay.direction, 'TD');
+    assert.ok(lay.width < measure.wide);
+    assert.match(lay.warnings[0], /^written left to right, drawn top to bottom: left to right it would be \d{4}px wide, wider than most screens\. "%% turn: no" keeps it as written$/);
+  });
+
+  it('is left as written when it fits', () => {
+    const lay = layout(parse(long(4)));
+    assert.equal(lay.direction, 'LR');
+    assert.deepEqual(lay.warnings, []);
+  });
+
+  it('is left as written when its author says so, and told it will scroll', () => {
+    const lay = layout(parse(`${long(12)}\n%% turn: no`));
+    assert.equal(lay.direction, 'LR');
+    assert.match(lay.warnings[0], /will scroll on most screens/);
   });
 });
 

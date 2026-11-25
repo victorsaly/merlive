@@ -107,6 +107,7 @@ All are Mermaid comments, anywhere in the block.
 | `%% step: Title \| - \| words` | A step with nothing lit, for an opening or closing remark |
 | `%% main: A>B>C>D` | The path that gets the straight line. Without it, the longest path does |
 | `%% side: left` | Branches and loops go to the left of the main path (above it, left to right). Default `right` |
+| `%% turn: no` | A flow written left to right that would be wider than a screen (1,100 px) is drawn top to bottom, and the command says so. This keeps it as written |
 
 A step's path must follow links that exist; one that does not is named in a `note,` line and that part is left out.
 

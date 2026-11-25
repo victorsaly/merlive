@@ -78,9 +78,11 @@ describe('a real diagram: placed', () => {
   });
 
   it('puts what feeds the main path on one side of it, and what leaves it on the other', () => {
-    const spine = lay.nodes.O.y;
-    assert.ok(lay.nodes.FB.y < spine, 'feedback feeds the versions');
-    for (const id of ['IMG', 'RD', 'LG']) assert.ok(lay.nodes[id].y > spine, `${id} leaves the main path`);
+    // Left to right this flow is wider than a screen, so it is drawn top to bottom, and "beside" is left and right.
+    assert.equal(lay.direction, 'TD');
+    const spine = lay.nodes.O.x;
+    assert.ok(lay.nodes.FB.x < spine, 'feedback feeds the versions');
+    for (const id of ['IMG', 'RD', 'LG']) assert.ok(lay.nodes[id].x > spine, `${id} leaves the main path`);
   });
 
   it('brings a box that only feeds another in beside it, not back at the start', () => {
