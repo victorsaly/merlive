@@ -1,0 +1,6 @@
+architecture-beta
+  service api(server)[Orders API] in cloud
+  service db(database)[Orders] in cloud
+  group cloud(cloud)[Azure]
+
+  api:R -- L:db

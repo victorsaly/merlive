@@ -1,0 +1,9 @@
+architecture-beta
+  group cloud(cloud)[Azure]
+
+  service api(server)[Orders API] in cloud
+  service db(database)[Orders] in cloud
+  service shop(internet)[Web shop]
+
+  shop:R -- L:api
+  api:R -- L:db

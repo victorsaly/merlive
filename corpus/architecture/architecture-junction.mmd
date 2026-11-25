@@ -1,0 +1,9 @@
+architecture-beta
+  service api(server)[Orders API]
+  service db(database)[Orders]
+  service files(disk)[Invoices]
+  junction split
+
+  api:R -- L:split
+  split:R -- L:db
+  split:B -- T:files

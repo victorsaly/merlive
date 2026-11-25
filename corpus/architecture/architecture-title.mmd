@@ -1,0 +1,7 @@
+architecture-beta
+  title Where an order is kept
+
+  service api(server)[Orders API]
+  service db(database)[Orders]
+
+  api:R -- L:db

@@ -1,0 +1,11 @@
+architecture-beta
+  group cloud(cloud)[Azure]
+
+  service api(server)[Orders API] in cloud
+  service db(database)[Orders] in cloud
+  service files(disk)[Invoices] in cloud
+  junction split in cloud
+
+  api:R -- L:split
+  split:R --> L:db
+  split:B --> T:files

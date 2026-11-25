@@ -1,0 +1,11 @@
+architecture-beta
+  service shop(internet)[Web shop]
+  service api(server)[Orders API]
+  service db(database)[Orders]
+  service files(disk)[Invoices]
+  service mail(server)[Mail]
+
+  shop:R -- L:api
+  db:L -- R:api
+  api:B -- T:files
+  mail:B -- T:shop

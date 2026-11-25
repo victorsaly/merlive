@@ -1,0 +1,7 @@
+architecture-beta
+  %% what takes the order
+  service api(server)[Orders API] %% the front door
+  service db(database)[Orders]
+
+  %% and where it goes
+  api:R -- L:db

@@ -1,0 +1,11 @@
+architecture-beta
+  service web(internet)[Web shop]
+  service edge(cloud)[Azure]
+  service api(server)[Orders API]
+  service db(database)[Orders]
+  service files(disk)[Invoices]
+
+  web:R -- L:edge
+  edge:R -- L:api
+  api:R -- L:db
+  api:B -- T:files
