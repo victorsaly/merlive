@@ -1,0 +1,7 @@
+C4Context
+  Person(buyer, "Buyer")
+  System(erp, "ERP")
+  System(stock, "Stock control")
+  Rel(buyer, erp, "Raises orders in")
+  Rel(erp, stock, "Checks stock with")
+  UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")

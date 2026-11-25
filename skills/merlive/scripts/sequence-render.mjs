@@ -4,8 +4,8 @@
 // so the two kinds of diagram in one document are one family. Pure.
 
 import { looksOf } from './design.mjs';
-import { rulesFor, variables } from './render.mjs';
-import { across, tabOf } from './sequence.mjs';
+import { rulesFor, titleOf, variables } from './render.mjs';
+import { across, namedUnder, tabOf } from './sequence.mjs';
 import { sequenceRuntime } from './sequence-runtime.mjs';
 
 /** @typedef {import('./sequence.mjs').SequenceModel} SequenceModel */
@@ -17,6 +17,12 @@ const show = {
   head: 9, // an arrowhead's length
   headHalf: 4.5, // and half its width
   cross: 4.5, // how far a cross reaches from its middle
+  half: 6, // how far half an arrowhead, or a stick, stands off its line: a little more than half a whole head, so half is still seen
+  skull: 6, // the radius of a person's head
+  ball: 12, // the radius of the circle a boundary, a control and an entity are each drawn round
+  bar: 11, // how far left of its circle a boundary's bar stands, and half the bar's height
+  tub: 13, // half the width of a database's cylinder
+  rim: 4.5, // from the rim of that cylinder to the top of its curve
   end: 6, // how far a lifeline's last cross reaches from its middle
   corner: 6, // the round of the turns of a message to itself
   fold: 9, // the folded corner of a note
@@ -59,6 +65,12 @@ function endAt(/** @type {import('./sequence.mjs').End} */ end, /** @type {Pt} *
     const c = toward(tip, from, show.cross + 2), m = show.cross;
     return { inset: show.cross + 2, svg: `<path class="mv-cross" d="M${at({ x: c.x - m, y: c.y - m })}L${at({ x: c.x + m, y: c.y + m })}M${at({ x: c.x - m, y: c.y + m })}L${at({ x: c.x + m, y: c.y - m })}"/>` };
   }
+  // Half a head, or one stroke of an open one, on the side its author chose: "top" is the left-hand side of
+  // the way the line goes, which is above a line that goes right. Mermaid turns a head with its line, and so does this.
+  if (end.startsWith('half-') || end.startsWith('stick-')) {
+    const side = end.endsWith('-top') ? 1 : -1, wing = at({ x: back.x + side * dx * show.half, y: back.y + side * dy * show.half });
+    return end.startsWith('half-') ? { inset: show.head - 2, svg: `<polygon class="mv-head" points="${at(back)} ${at(tip)} ${wing}"/>` } : { inset: 0, svg: `<polyline class="mv-open" points="${wing} ${at(tip)}"/>` };
+  }
   return { inset: 0, svg: '' };
 }
 
@@ -69,8 +81,16 @@ const kindName = (/** @type {string} */ kind) => (kind === 'external' ? 'Person'
 
 /** The rules for what only a sequence has, over a flowchart's: lifelines, bars, notes, frames, numbers. */
 function sequenceRules(/** @type {Design} */ design, /** @type {string[]} */ kinds) {
+  // A drawing with its name under it is line work, in the colour of a line, which is held to be seen on the
+  // page; a kind the design gives a colour keeps that colour, which is held to the same.
+  const coloured = kinds.filter((k) => looksOf(design)[0][1].kinds[k]);
   return `${rulesFor(design, kinds)}
 .mv-life{stroke:var(--mv-stroke);stroke-width:1.2;stroke-dasharray:4 4}
+.mv-group-name{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase;text-anchor:middle}
+.mv-node[data-mark] .mv-shape,.mv-mark{stroke:var(--mv-edge);stroke-width:1.6}
+.mv-mark{fill:none;stroke-linecap:round;stroke-linejoin:round}
+${coloured.map((k) => `[data-kind="${k}"][data-mark] .mv-shape,[data-kind="${k}"] .mv-mark{stroke:var(--mv-k-${k})}`).join('\n')}
+.mv-dot{stroke:none}
 .mv-bar{fill:var(--mv-node);stroke:var(--mv-edge);stroke-width:1.2}
 .mv-open{fill:none;stroke:var(--mv-edge);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .mv-words{font-size:12px;font-weight:600;fill:var(--mv-text);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
@@ -107,7 +127,7 @@ export function sequenceInside(/** @type {SequenceModel} */ model, /** @type {Se
     saidBy.push(said);
   }
 
-  const groups = lay.groups.map((g) => `<g class="mv-group"><rect x="${n(g.x)}" y="${n(g.y)}" width="${n(g.w)}" height="${n(g.h)}" rx="${Math.min(design.radius, 12)}"/>${g.title ? `<text x="${n(g.x + across.groupPad)}" y="${n(g.y + 15)}">${esc(g.title)}</text>` : ''}</g>`);
+  const groups = lay.groups.map((g) => `<g class="mv-group"><rect x="${n(g.x)}" y="${n(g.y)}" width="${n(g.w)}" height="${n(g.h)}" rx="${Math.min(design.radius, 12)}"/>${g.name ? `<text class="mv-group-name">${g.name.lines.map((text, k) => `<tspan x="${n(g.name?.x ?? 0)}" y="${n((g.name?.y ?? 0) - ((g.name?.lines.length ?? 1) - 1) * across.groupLine / 2 + 4 + k * across.groupLine)}">${esc(text)}</tspan>`).join('')}</text>` : ''}</g>`);
 
   // A frame is drawn in two layers: its outline under the lifelines, and its name over them, so that a lifeline
   // that passes behind the name does not strike it through.
@@ -136,14 +156,17 @@ export function sequenceInside(/** @type {SequenceModel} */ model, /** @type {Se
     const s = lay.messages[m.id], pts = s.points;
     // A message that ends its receiver stops at the cross on that lifeline: a cross of its own beside it would say it twice.
     const ends = model.participants.find((p) => p.id === m.to)?.destroyed === model.items.indexOf(m) && m.head === 'cross';
-    const head = endAt(ends ? 'none' : m.head, pts[pts.length - 1], pts[pts.length - 2]), tail = endAt(m.tail, pts[0], pts[1]);
-    const line = [toward(pts[0], pts[1], tail.inset), ...pts.slice(1, -1), toward(pts[pts.length - 1], pts[pts.length - 2], head.inset)];
+    // An end at the middle of a lifeline is a dot there. What is drawn at that end stops at the dot's edge.
+    const last = pts[pts.length - 1], headTip = m.headDot ? toward(last, pts[pts.length - 2], across.dot) : last, tailTip = m.tailDot ? toward(pts[0], pts[1], across.dot) : pts[0];
+    const head = endAt(ends ? 'none' : m.head, headTip, pts[pts.length - 2]), tail = endAt(m.tail, tailTip, pts[1]);
+    const line = [toward(tailTip, pts[1], tail.inset), ...pts.slice(1, -1), toward(headTip, pts[pts.length - 2], head.inset)];
+    const dots = [m.tailDot ? pts[0] : null, m.headDot ? last : null].map((d) => (d ? `<circle class="mv-head mv-dot" cx="${n(d.x)}" cy="${n(d.y)}" r="${across.dot}"/>` : '')).join('');
     const w = s.words;
     const first = w ? w.y - ((w.lines.length - 1) * across.wordLine) / 2 + show.wordBase : 0;
     const words = w ? `<text class="mv-words">${w.lines.map((text, k) => `<tspan x="${n(w.x)}" y="${n(first + k * across.wordLine)}">${esc(text)}</tspan>`).join('')}</text>` : '';
     const number = s.number ? `<g class="mv-num" transform="translate(${at(s.number)})"><circle r="${across.number}"/><text y="3.5">${m.number}</text></g>` : '';
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`Message ${i + 1}, ${label.get(m.from)} to ${label.get(m.to)}${m.label ? `: ${m.label}` : ''}`)}"` : '';
-    return `<g class="mv-edge" data-edge="${esc(m.id)}" data-style="${m.style}"${role}><path class="mv-line" d="${pathOf(line)}"/>${tail.svg}${head.svg}${words}${number}${live ? `<path class="mv-hit" d="${pathOf(pts)}"/>` : ''}</g>`;
+    return `<g class="mv-edge" data-edge="${esc(m.id)}" data-style="${m.style}"${role}><path class="mv-line" d="${pathOf(line)}"/>${tail.svg}${head.svg}${dots}${words}${number}${live ? `<path class="mv-hit" d="${pathOf(pts)}"/>` : ''}</g>`;
   });
 
   const notes = /** @type {import('./sequence.mjs').Note[]} */ (model.items.filter((i) => i.type === 'note')).map((note) => {
@@ -153,12 +176,50 @@ export function sequenceInside(/** @type {SequenceModel} */ model, /** @type {Se
       + `<text>${b.lines.map((text, k) => `<tspan x="${n(b.x)}" y="${n(first + k * across.noteLine)}">${esc(text)}</tspan>`).join('')}</text></g>`;
   });
 
+  /**
+   * A participant, in a footprint by its middle: a box round its name, or a drawing of what it is. A person, a
+   * boundary, a control, an entity and a database are small drawings at the top of the footprint, centred on the
+   * lifeline, with the name under them; a collection and a queue fill the footprint and hold the name.
+   */
   const box = (/** @type {import('./sequence.mjs').Participant} */ p, /** @type {number} */ y, /** @type {boolean} */ foot) => {
-    const s = lay.participants[p.id];
-    const first = y - ((s.lines.length - 1) * across.headLine) / 2 + show.nameBase;
+    const s = lay.participants[p.id], l = s.x - s.w / 2, t = y - s.h / 2, r = s.x + s.w / 2, u = y + s.h / 2, x = s.x;
+    const under = namedUnder(p), tall = s.lines.length * across.headLine;
+    const shape = (/** @type {string} */ d) => `<path class="mv-shape" d="${d}"/>`, mark = (/** @type {string} */ d) => `<path class="mv-mark" d="${d}"/>`;
+    const ring = (/** @type {number} */ cy, /** @type {number} */ radius) => `<circle class="mv-shape" cx="${n(x)}" cy="${n(cy)}" r="${radius}"/>`;
+    const b = show.ball, k = show.skull;
+    /** @type {Record<import('./sequence.mjs').Mark, () => string>} */
+    const drawn = {
+      box: () => `<rect class="mv-shape" x="${n(l)}" y="${n(t)}" width="${s.w}" height="${s.h}" rx="${Math.min(design.radius, s.h / 2)}"/>`,
+      // A head, a body, two arms and two legs: the figure every notation uses for someone outside the system.
+      person: () => `${ring(t + k + 1, k)}${mark(`M${n(x)},${n(t + 2 * k + 1)}V${n(t + 21)}M${n(x - 9)},${n(t + 16)}H${n(x + 9)}M${n(x - 8)},${n(t + across.mark)}L${n(x)},${n(t + 21)}L${n(x + 8)},${n(t + across.mark)}`)}`,
+      // A circle with a bar to its left: where the system meets what is outside it.
+      boundary: () => `${ring(t + b + 1, b)}${mark(`M${n(x - b)},${n(t + b + 1)}H${n(x - b - show.bar)}M${n(x - b - show.bar)},${n(t + b + 1 - show.bar)}V${n(t + b + 1 + show.bar)}`)}`,
+      // A circle with an arrowhead on its rim: what decides and directs.
+      control: () => `${ring(t + across.mark - b - 1, b)}${mark(`M${n(x + 5)},${n(t + 1)}L${n(x - 1)},${n(t + across.mark - 2 * b - 1)}L${n(x + 5)},${n(t + across.mark - 2 * b + 4)}`)}`,
+      // A circle standing on a line: a thing the system keeps.
+      entity: () => `${ring(t + b + 1, b)}${mark(`M${n(x - b)},${n(t + 2 * b + 3)}H${n(x + b)}`)}`,
+      database: () => {
+        const w2 = show.tub, c = show.rim, top = t + 1, base = t + across.mark - 1;
+        return `${shape(`M${n(x - w2)},${n(top + c)}A${w2},${c} 0 0 1 ${n(x + w2)},${n(top + c)}V${n(base - c)}A${w2},${c} 0 0 1 ${n(x - w2)},${n(base - c)}Z`)}${mark(`M${n(x - w2)},${n(top + c)}A${w2},${c} 0 0 0 ${n(x + w2)},${n(top + c)}`)}`;
+      },
+      // Two sheets, one behind the other: many of the same thing.
+      collections: () => {
+        const o = across.stack, rx = Math.min(design.radius, 4);
+        return `<rect class="mv-shape" x="${n(l + o)}" y="${n(t)}" width="${n(s.w - o)}" height="${n(s.h - o)}" rx="${rx}"/><rect class="mv-shape" x="${n(l)}" y="${n(t + o)}" width="${n(s.w - o)}" height="${n(s.h - o)}" rx="${rx}"/>`;
+      },
+      // A cylinder on its side: things wait in it, in order.
+      queue: () => {
+        const c = across.cap, ry = n(s.h / 2);
+        return `${shape(`M${n(l + c)},${n(t)}H${n(r - c)}A${c},${ry} 0 0 1 ${n(r - c)},${n(u)}H${n(l + c)}A${c},${ry} 0 0 1 ${n(l + c)},${n(t)}Z`)}<path class="mv-shape mv-detail" d="M${n(r - c)},${n(t)}A${c},${ry} 0 0 0 ${n(r - c)},${n(u)}"/>`;
+      },
+    };
+    // The name: under a drawing, from just below it; in a collection, on the front sheet; in a queue, left of its round end.
+    const nameX = p.shape === 'collections' ? x - across.stack / 2 : p.shape === 'queue' ? x - across.cap / 2 : x;
+    const middle = under ? t + across.mark + across.markGap + tall / 2 : p.shape === 'collections' ? y + across.stack / 2 : y;
+    const first = middle - ((s.lines.length - 1) * across.headLine) / 2 + show.nameBase;
     const role = live && !foot ? ` tabindex="0" role="button" aria-label="${esc(`${p.label}, ${roleName(p.role).toLowerCase()}`)}"` : '';
-    return `<g class="mv-node" data-node="${esc(p.id)}" data-kind="${esc(p.kind)}"${role}><rect class="mv-shape${p.shape === 'pill' ? ' mv-pill' : ''}" x="${n(s.x - s.w / 2)}" y="${n(y - s.h / 2)}" width="${s.w}" height="${s.h}" rx="${p.shape === 'pill' ? s.h / 2 : Math.min(design.radius, s.h / 2)}"/>`
-      + `<text>${s.lines.map((text, k) => `<tspan x="${n(s.x)}" y="${n(first + k * across.headLine)}">${esc(text)}</tspan>`).join('')}</text></g>`;
+    return `<g class="mv-node" data-node="${esc(p.id)}" data-kind="${esc(p.kind)}"${under ? ` data-mark="${p.shape}"` : ''}${role}>${drawn[p.shape]()}`
+      + `<text>${s.lines.map((text, i) => `<tspan x="${n(nameX)}" y="${n(first + i * across.headLine)}">${esc(text)}</tspan>`).join('')}</text></g>`;
   };
   const heads = model.participants.map((p) => box(p, lay.participants[p.id].y, false));
   const feet = model.participants.filter((p) => lay.participants[p.id].foot !== null).map((p) => box(p, /** @type {number} */ (lay.participants[p.id].foot), true));
@@ -178,11 +239,12 @@ export function sequenceInside(/** @type {SequenceModel} */ model, /** @type {Se
  * @param {{title:string}} about
  */
 export function sequencePicture(model, lay, design, about) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" width="${lay.width}" height="${lay.height}" role="img" aria-label="${esc(about.title)}">
+  const title = titleOf(model.heading, lay.width);
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height + title.band}" width="${lay.width}" height="${lay.height + title.band}" role="img" aria-label="${esc(about.title)}">
 <title>${esc(about.title)}</title>${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
 <style>${styleOf(design, kindsOf(model), '.mv-svg')}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
-${sequenceInside(model, lay, design, false)}
+${title.band ? `${title.svg}\n<g transform="translate(0,${title.band})">\n${sequenceInside(model, lay, design, false)}\n</g>` : sequenceInside(model, lay, design, false)}
 </svg>
 `;
 }

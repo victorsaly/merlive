@@ -1,0 +1,8 @@
+C4Context
+  Person(buyer, "Buyer")
+  Boundary(firm, "The firm") {
+    System(erp, "ERP")
+    System(stock, "Stock control")
+  }
+  Rel(buyer, erp, "Raises orders in")
+  Rel(erp, stock, "Checks stock with")

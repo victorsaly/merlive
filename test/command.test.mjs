@@ -83,9 +83,9 @@ describe('the command', () => {
 
   it('draws a sequence diagram as a still picture, says what would be drawn, and refuses one that breaks a rule', async () => {
     const cwd = temp();
-    writeFileSync(join(cwd, 'calls.mmd'), 'sequenceDiagram\n  Buyer->>ERP: Raise order\n  ERP-|\\Buyer: half\n');
+    writeFileSync(join(cwd, 'calls.mmd'), 'sequenceDiagram\n  Buyer->>ERP: Raise order\n  wibble wobble\n');
     const checked = await go(['calls.mmd', '--check'], cwd);
-    assert.match(checked.text, /note, block 1: line 3: half arrows are not read yet/);
+    assert.match(checked.text, /note, block 1: line 3: not read: "wibble wobble"/);
     assert.match(checked.text, /would draw calls-1\.html \(2 participants, 1 messages, merlive design\)/);
     assert.equal((await go(['calls.mmd', '--format', 'svg'], cwd)).code, exits.drawn);
     assert.match(readFileSync(join(cwd, 'diagrams/calls-1.svg'), 'utf8'), /^<svg xmlns/);
@@ -98,7 +98,7 @@ describe('the command', () => {
   it('leaves and names a kind of diagram it does not draw', async () => {
     const cwd = temp();
     writeFileSync(join(cwd, 'mixed.md'), '```mermaid\nflowchart TD\nA --> B\n```\n\n```mermaid\npie title Orders\n  "UK" : 46\n```\n');
-    assert.match((await go(['mixed.md', '--check'], cwd)).text, /left as Mermaid: block 2 \(line 6\) is a pie, and Merlive draws flowcharts, state diagrams and sequence diagrams for now/);
+    assert.match((await go(['mixed.md', '--check'], cwd)).text, /left as Mermaid: block 2 \(line 6\) is a pie, and Merlive draws flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams for now/);
   });
 
   it('writes a page that fetches nothing and carries its source', async () => {
@@ -215,7 +215,7 @@ describe('the command: what is missing ends with 2, nothing to draw with 3', () 
     const { code, text } = await go(['plain.md'], cwd);
     assert.equal(code, exits.nothingToDraw);
     assert.match(text, /block 2 \(line 8\) has no boxes/);
-    assert.match(text, /Nothing to draw: plain\.md has no Mermaid flowchart or sequence diagram\./);
+    assert.match(text, /Nothing to draw: plain\.md has no Mermaid diagram of a kind Merlive draws\./);
     assert.match((await go([example, '--only', '9'])).text, /at block 9/);
   });
 });

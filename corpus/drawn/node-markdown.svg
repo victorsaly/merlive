@@ -8,11 +8,21 @@
 .mv-node .mv-detail{fill:none}
 [data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
 [data-outline~="heavy"] .mv-shape{stroke-width:2.6}
+.mv-node .mv-rows{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
+.mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
+.mv-band{fill:var(--mv-text);opacity:0.06;stroke:none}
+.mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
+.mv-node .mv-told{font-size:11.5px;font-weight:400}
+.mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
+.mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
 .mv-icon{fill:none;stroke:var(--mv-text);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
 .mv-stripe{stroke:none}
+.mv-node .mv-strong{font-weight:700}
+.mv-node .mv-em{font-style:italic}
+.mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
 [data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
 [data-style="thick"] .mv-line{stroke-width:2.8}
@@ -22,5 +32,5 @@
 .mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
 .mv-name{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase;text-anchor:middle;paint-order:stroke;stroke:var(--mv-group);stroke-width:4px;stroke-linejoin:round}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
-<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="384" height="116" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge mv-main" data-edge="A-B" data-style="solid"><path class="mv-line" d="M156,58L221,58"/><polygon class="mv-head" points="228,58 219,53.5 219,62.5"/></g></g><g></g><g><g class="mv-node" data-node="A" data-kind="step"><rect class="mv-shape" x="28" y="28" width="128" height="60" rx="8"/><text><tspan x="92" y="62.5">Urgent order</tspan></text></g><g class="mv-node" data-node="B" data-kind="step"><rect class="mv-shape" x="228" y="28" width="128" height="60" rx="8"/><text><tspan x="292" y="54.5">Pick today</tspan><tspan x="292" y="70.5">and pack</tspan></text></g></g>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="384" height="116" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge mv-main" data-edge="A-B" data-style="solid"><path class="mv-line" d="M156,58L221,58"/><polygon class="mv-head" points="228,58 219,53.5 219,62.5"/></g></g><g></g><g><g class="mv-node" data-node="A" data-kind="step"><rect class="mv-shape" x="28" y="28" width="128" height="60" rx="8"/><text><tspan x="92" y="62.5"><tspan class="mv-strong">Urgent</tspan> order</tspan></text></g><g class="mv-node" data-node="B" data-kind="step"><rect class="mv-shape" x="228" y="28" width="128" height="60" rx="8"/><text><tspan x="292" y="54.5">Pick <tspan class="mv-em">today</tspan></tspan><tspan x="292" y="70.5">and pack</tspan></text></g></g>
 </svg>

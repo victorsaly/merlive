@@ -1,0 +1,12 @@
+architecture-beta
+  group store(cloud)[Stores]
+
+  service orders(database)[Orders] in store
+  service prices(database)[Prices] in store
+  service stock(database)[Stock] in store
+  service api(server)[Orders API] in store
+
+  orders:R --> L:api
+  prices:R --> L:api
+  stock:R --> L:api
+  align column orders prices stock

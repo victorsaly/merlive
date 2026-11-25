@@ -1,0 +1,19 @@
+---
+title: Orders and what they hold
+---
+classDiagram
+  note for Invoice "Sent when the order is delivered<br>Paid within thirty days"
+  Document <|-- Order
+  Document <|-- Invoice
+  Document : +String number
+  Document : +Date raised
+  Document: +print()
+  class Order{
+    +String buyer
+    +approve()
+    +total() Money
+  }
+  class Invoice{
+    -Money amountDue
+    -pay()
+  }

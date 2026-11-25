@@ -8,10 +8,11 @@ import { existsSync, readFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromeAt, comparePage, compared, firstLineOf, pngSizeOf, show, sizeOf } from '../scripts/compare.mjs';
+import { samplesOf } from '../scripts/coverage.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const index = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8'));
-const samples = [...index.flowchart, ...index.state, ...index.sequence, ...index.kinds].map((s) => s.file);
+const samples = samplesOf(index).map((s) => s.file);
 const again = 'Run "npm run coverage" and commit what it writes.';
 
 /** A row as coverage gives it, and what Mermaid made of the same sample. */

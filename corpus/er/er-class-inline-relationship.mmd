@@ -1,0 +1,5 @@
+erDiagram
+    SUPPLIER:::trusted ||--o{ ORDER : receives
+    ORDER ||--o| INVOICE:::late : "is billed by"
+    classDef late stroke:#c62828
+    classDef trusted stroke:#2e7d32

@@ -1,0 +1,6 @@
+architecture-beta
+  service queue(disk)[Retry queue]
+  service api(server)[Orders API]
+
+  api:R -- L:queue
+  queue:T --> R:queue

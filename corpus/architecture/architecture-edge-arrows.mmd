@@ -1,0 +1,9 @@
+architecture-beta
+  service shop(internet)[Web shop]
+  service api(server)[Orders API]
+  service db(database)[Orders]
+  service erp(server)[ERP]
+
+  shop:R --> L:api
+  api:R <-- L:db
+  api:B <--> T:erp

@@ -2,19 +2,27 @@
 // with scripts off); the page around it adds picking and steps. Pure: a model, a layout and a design in, a
 // string out.
 
-import { contrast, kindFill, looksOf, mix } from './design.mjs';
+import { contrast, kindFill, looksOf, mix, rowShade } from './design.mjs';
 import { runtime } from './runtime.mjs';
-import { outlineOf, wordsAt } from './shapes.mjs';
+import { form, outlineOf, wordsAt } from './shapes.mjs';
 import { iconMeasure, icons } from './icons.mjs';
-import { measure } from './layout.mjs';
+import { columnsAt, compartmentsOf, measure, textOf, wrap } from './layout.mjs';
 
 /** @typedef {import('./layout.mjs').Pt} Pt */
 
-const draw = {
+export const draw = {
+  rim: 0.75, // px a table's shading stays in from the edge of its box: half the line the box is drawn with
+  titleGlyph: 8.4, // px per character of a picture's title, at 15px and heavy
+  titleLine: 20, // px between two lines of a title
+  titlePad: 18, // px above a title, and again between it and the picture
   corner: 8, // the round of a line's turn
   head: 9, // an arrowhead's length
   headHalf: 4.5, // and half its width
   mark: 3.5, // the radius of a circle at a line's end, and how far a cross reaches from its middle
+  tri: 11, // the length of the hollow triangle that says "is a"
+  diamond: 14, // the length of the diamond that says "is made of" or "has"
+  foot: 9, // how far back from its box a crow's foot starts to spread
+  ring: 3.5, // the radius of the ring that says "none"
   baseline: 4.5, // from the middle of a 13px line of words down to its baseline
   dots: 16, // px between the dots of the ground: an eighth of the narrowest box
   dot: 0.12, // how much of the text colour a dot is, over the page: there, and no more
@@ -75,11 +83,21 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 .mv-node .mv-detail{fill:none}
 [data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
 [data-outline~="heavy"] .mv-shape{stroke-width:2.6}
+.mv-node .mv-rows{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
+.mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
+.mv-band{fill:var(--mv-text);opacity:${rowShade};stroke:none}
+.mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
+.mv-node .mv-told{font-size:11.5px;font-weight:400}
+.mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
+.mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
 .mv-icon{fill:none;stroke:var(--mv-text);stroke-width:${iconMeasure.stroke};stroke-linecap:round;stroke-linejoin:round}
 .mv-node text{font-size:13px;font-weight:${design.weight};fill:var(--mv-text);text-anchor:middle}
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
 .mv-stripe{stroke:none}
+.mv-node .mv-strong{font-weight:${Math.min(900, Math.max(700, design.weight + 200))}}
+.mv-node .mv-em{font-style:italic}
+.mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
 ${kinds.map((k) => `[data-kind="${k}"] .mv-stripe{fill:var(--mv-k-${k})}`).join('\n')}
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
 [data-style="thick"] .mv-line{stroke-width:2.8}
@@ -113,13 +131,35 @@ function markAt(mark, tip, from) {
   const m = draw.mark, c = toward(tip, from, m + 1);
   if (mark === 'circle') return { inset: 2 * m, svg: `<circle class="mv-head" cx="${n(c.x)}" cy="${n(c.y)}" r="${m}"/>` };
   if (mark === 'cross') return { inset: m + 1, svg: `<path class="mv-cross" d="M${at({ x: c.x - m, y: c.y - m })}L${at({ x: c.x + m, y: c.y + m })}M${at({ x: c.x - m, y: c.y + m })}L${at({ x: c.x + m, y: c.y - m })}"/>` };
+  // Along the line and across it, from the tip: every other mark is set out with these two.
+  const ux = (from.x - tip.x) / (dist(tip, from) || 1), uy = (from.y - tip.y) / (dist(tip, from) || 1);
+  const off = (/** @type {number} */ back, /** @type {number} */ side) => at({ x: tip.x + ux * back - uy * side, y: tip.y + uy * back + ux * side });
+  const polygon = (/** @type {string} */ cls, /** @type {[number,number][]} */ pts) => `<polygon class="${cls}" points="${pts.map(([back, side]) => off(back, side)).join(' ')}"/>`;
+  const strokes = (/** @type {[number,number][][]} */ lines) => `<path class="mv-cross" d="${lines.map((l) => `M${l.map(([back, side]) => off(back, side)).join('L')}`).join('')}"/>`;
+  const ring = (/** @type {number} */ back) => `<circle class="mv-hollow" cx="${n(tip.x + ux * back)}" cy="${n(tip.y + uy * back)}" r="${draw.ring}"/>`;
+  const t = draw.tri, d = draw.diamond, w = draw.headHalf + 1, f = draw.foot;
+  // A class diagram's ends: the hollow triangle of "is a", the filled diamond of "is made of", the open one of "has".
+  if (mark === 'triangle') return { inset: t, svg: polygon('mv-hollow', [[0, 0], [t, w], [t, -w]]) };
+  if (mark === 'diamond' || mark === 'diamond-open') return { inset: d, svg: polygon(mark === 'diamond' ? 'mv-head' : 'mv-hollow', [[0, 0], [d / 2, w - 1], [d, 0], [d / 2, -(w - 1)]]) };
+  // An entity diagram's ends say how many: a bar is one, a ring is none, a foot is many. The line runs on to the
+  // box beneath them, since they say nothing of which way.
+  const bar = (/** @type {number} */ back) => /** @type {[number,number][]} */ ([[back, w], [back, -w]]);
+  const foot = /** @type {[number,number][][]} */ ([[[f, 0], [0, w]], [[f, 0], [0, -w]]]);
+  if (mark === 'one') return { inset: 0, svg: strokes([bar(f - 4), bar(f)]) };
+  if (mark === 'zero-or-one') return { inset: 0, svg: strokes([bar(f - 4)]) + ring(f + draw.ring + 1) };
+  if (mark === 'one-or-many') return { inset: 0, svg: strokes([...foot, bar(f + 3)]) };
+  if (mark === 'zero-or-many') return { inset: 0, svg: strokes(foot) + ring(f + draw.ring + 1) };
   return { inset: 0, svg: '' };
 }
 
 /** The drawing alone: the SVG's insides, the same for a page, a picture and the setup page. */
 export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {import('./layout.mjs').Layout} */ lay, /** @type {import('./design.mjs').Design} */ design, /** @type {boolean} */ live, tag = '') {
   // The main path, link by link: it is drawn heavier, so a reader's eye takes it first.
-  const main = new Set(lay.spine.slice(1).map((id, i) => `${lay.spine[i]}>${id}`));
+  // A class diagram, an entity diagram, a requirement diagram, an architecture diagram and a C4 diagram are of
+  // things, not of a flow: no path through one is the way a reader goes, so none is drawn heavier. A C4 dynamic
+  // diagram is the one that is read in order.
+  const things = /^(classDiagram|erDiagram|requirementDiagram|architecture|C4(?!Dynamic))/.test(model.kindOfDiagram);
+  const main = new Set(things ? [] : lay.spine.slice(1).map((id, i) => `${lay.spine[i]}>${id}`));
   const label = new Map(model.nodes.map((m) => [m.id, m.label]));
   const links = model.edges.map((e) => {
     const r = lay.edges[e.id], pts = r.points;
@@ -128,23 +168,82 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     const line = [toward(pts[0], pts[1], tail.inset), ...pts.slice(1, -1), toward(pts[pts.length - 1], pts[pts.length - 2], head.inset)];
     const l = r.label;
     const words = l ? `<text class="mv-label">${l.lines.map((line, i) => `<tspan class="mv-label-line" x="${n(l.x)}" y="${n(l.y - ((l.lines.length - 1) * 14) / 2 + 4 + i * 14)}">${esc(line)}</tspan>`).join('')}</text>` : '';
+    const ends = [r.near, r.far].map((l) => (l ? `<text class="mv-label mv-end" x="${n(l.x)}" y="${n(l.y + 4)}">${esc(l.text)}</text>` : '')).join('');
     const mid = middleOf(pts);
     const extras = live ? `<path class="mv-hit" d="${pathOf(pts)}"/><g class="mv-seq" transform="translate(${at(mid)})"><circle r="8"/><text y="3.5"></text></g>` : '';
     const said = e.tail === 'arrow' && e.head === 'arrow' ? `Link both ways between ${label.get(e.from)} and ${label.get(e.to)}` : `Link from ${label.get(e.from)} to ${label.get(e.to)}`;
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${said}${e.label ? `, ${e.label}` : ''}`)}"` : '';
-    return `<g class="mv-edge${main.has(`${e.from}>${e.to}`) ? ' mv-main' : ''}" data-edge="${esc(e.id)}" data-style="${e.style}"${e.kind ? ` data-kind="${esc(e.kind)}"` : ''}${role}><path class="mv-line" d="${pathOf(line)}"/>${tail.svg}${head.svg}${words}${extras}</g>`;
+    return `<g class="mv-edge${main.has(`${e.from}>${e.to}`) ? ' mv-main' : ''}" data-edge="${esc(e.id)}" data-style="${e.style}"${e.kind ? ` data-kind="${esc(e.kind)}"` : ''}${role}><path class="mv-line" d="${pathOf(line)}"/>${tail.svg}${head.svg}${words}${ends}${extras}</g>`;
   });
   const boxes = model.nodes.map((m) => {
     const b = lay.nodes[m.id], l = b.x - b.w / 2, t = b.y - b.h / 2, r = b.x + b.w / 2, u = b.y + b.h / 2;
     const { main, more } = outlineOf(m.shape, l, t, b.w, b.h, design.radius), at = wordsAt(m.shape, b.h);
     const shape = main + more.join('');
+    // A box that lists rows keeps its name in a block at the top, the size a plain box is, with any short line
+    // above it; under that, each compartment begins with a rule and lists its rows from the left.
+    const listed = compartmentsOf(m), over = m.over ? measure.overLine : 0;
+    const told = textOf(m, b.w);
+    // What is set from the top of a cylinder starts under its rim, not on it.
+    const rim = m.shape === 'cylinder' && (listed.length || over || told.length) ? form.cap : 0;
+    const nameY = listed.length || over || told.length ? t + rim + over + lay.box.h / 2 : b.y;
+    const above = m.over ? `<text class="mv-over" x="${n(b.x)}" y="${n(t + rim + measure.overLine + 4)}">${esc(m.over)}</text>` : '';
+    let down = t + rim + over + lay.box.h;
+    // What the box says about itself: under its name, in a quieter face, each line in the middle of the box.
+    const sentence = told.length ? `<text class="mv-told">${told.map((line, i) => `<tspan class="mv-told-line" x="${n(b.x)}" y="${n(down + i * measure.textLine + 6)}">${esc(line)}</tspan>`).join('')}</text>` : '';
+    if (told.length) down += told.length * measure.textLine + measure.textPad;
+    // An entity is a table: a rule under its name, a row for each attribute with a rule between rows and
+    // between columns, and every second row shaded, so a reader can follow one across.
+    const table = () => {
+      const at = columnsAt(m, b.w), all = m.table ?? [], top = down, e = draw.rim;
+      const curve = Math.max(0, Math.min(design.radius, b.h / 2) - e);
+      const parts = [`<path class="mv-shape mv-detail" d="M${n(l)},${n(top)}H${n(r)}"/>`];
+      all.forEach((cells, i) => {
+        const y = top + i * measure.cellLine, last = i === all.length - 1;
+        // The last row ends where the box does, and takes the round of its corners.
+        if (i % 2) parts.push(last
+          ? `<path class="mv-band" d="M${n(l + e)},${n(y)}H${n(r - e)}V${n(u - e - curve)}a${n(curve)},${n(curve)} 0 0 1 ${n(-curve)},${n(curve)}H${n(l + e + curve)}a${n(curve)},${n(curve)} 0 0 1 ${n(-curve)},${n(-curve)}Z"/>`
+          : `<rect class="mv-band" x="${n(l + e)}" y="${n(y)}" width="${n(b.w - 2 * e)}" height="${measure.cellLine}"/>`);
+      });
+      all.slice(1).forEach((_, i) => parts.push(`<path class="mv-grid" d="M${n(l)},${n(top + (i + 1) * measure.cellLine)}H${n(r)}"/>`));
+      at.slice(1, -1).forEach((x) => parts.push(`<path class="mv-grid" d="M${n(l + x)},${n(top)}V${n(u)}"/>`));
+      all.forEach((cells, i) => cells.forEach((cell, c) => {
+        if (cell && c < at.length - 1) parts.push(`<text class="mv-cell" x="${n(l + at[c] + measure.cellPad)}" y="${n(top + i * measure.cellLine + measure.cellLine / 2 + 4)}">${esc(cell)}</text>`);
+      }));
+      return parts.join('');
+    };
+    const rows = m.table ? table() : listed.map((lines) => {
+      const rule = `<path class="mv-shape mv-detail" d="M${n(l)},${n(down)}H${n(r)}"/>`;
+      const spans = lines.map((line, i) => `<tspan class="mv-row" x="${n(l + measure.rowIn)}" y="${n(down + measure.rowPad + measure.rowLine * i + 12)}">${esc(line)}</tspan>`).join('');
+      down += 2 * measure.rowPad + measure.rowLine * lines.length;
+      // Spaces are kept as written, so an author's columns (a key, a type, a name) stay in line.
+      return `${rule}<text class="mv-rows" xml:space="preserve">${spans}</text>`;
+    }).join('');
     // An icon sits left of the words, on the middle of their block; the words move over by half its room, so
     // icon and words together stay in the middle of the box.
-    const drawing = m.icon ? icons[m.icon] : '', over = drawing ? measure.icon / 2 : 0;
+    const drawing = m.icon ? icons[m.icon] : '', aside = drawing ? measure.icon / 2 : 0;
     const widest = Math.max(...b.lines.map((line) => line.length)) * measure.glyph;
-    const icon = drawing ? `<path class="mv-icon" transform="translate(${n(b.x + at.dx + over - widest / 2 - measure.icon)},${n(b.y + at.dy - iconMeasure.grid / 2)})" d="${drawing}"/>` : '';
-    const first = b.y + at.dy - ((b.lines.length - 1) * 16) / 2 + draw.baseline;
-    const words = b.lines.map((line, i) => `<tspan x="${n(b.x + at.dx + over)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
+    const icon = drawing ? `<path class="mv-icon" transform="translate(${n(b.x + at.dx + aside - widest / 2 - measure.icon)},${n(nameY + at.dy - iconMeasure.grid / 2)})" d="${drawing}"/>` : '';
+    const first = nameY + at.dy - ((b.lines.length - 1) * 16) / 2 + draw.baseline;
+    // What a Markdown string made bold or italic stays so on whichever line its words came to. The lines are
+    // the label's own words in order, so each letter's look is found by counting letters, spaces aside.
+    const looks = (m.emphasis ?? []).flatMap((run) => [...run.words.replace(/\s/g, '')].map(() => [run.strong ? 'mv-strong' : '', run.em ? 'mv-em' : ''].filter(Boolean).join(' ')));
+    let letter = 0;
+    const stressed = (/** @type {string} */ line) => {
+      const letters = [...line];
+      /** @type {(string|null)[]} */
+      const look = letters.map((c) => (/\s/.test(c) ? null : looks[letter++] ?? ''));
+      // A space is bold or slanted only between two words that are: never on its own, nor at the edge of a run.
+      const spaced = look.map((l, i) => l ?? (look[i - 1] === look[i + 1] ? look[i - 1] ?? '' : ''));
+      /** @type {[string, string][]} */
+      const runs = [];
+      letters.forEach((c, i) => {
+        const last = runs[runs.length - 1];
+        if (last && last[0] === spaced[i]) last[1] += c;
+        else runs.push([spaced[i], c]);
+      });
+      return runs.map(([l, text]) => (l ? `<tspan class="${l}">${esc(text)}</tspan>` : esc(text))).join('');
+    };
+    const words = b.lines.map((line, i) => `<tspan x="${n(b.x + at.dx + aside)}" y="${n(first + i * 16)}">${looks.length ? stressed(line) : esc(line)}</tspan>`).join('');
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${m.label}, ${kindName(m.kind)}`)}"` : '';
     // A box of a kind that means something carries a stripe of its colour down its near edge. Any other shape
     // already says what it is by its outline, and a plain step has nothing to say.
@@ -154,13 +253,13 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     // What its author's own style said of its outline: broken, heavy, or both.
     const said = [m.dashed ? 'dashed' : '', m.heavy ? 'heavy' : ''].filter(Boolean).join(' ');
     const outline = said ? ` data-outline="${said}"` : '';
-    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${outline}${role}>${shape}${stripe}${icon}<text>${words}</text></g>`;
+    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${outline}${role}>${shape}${stripe}${icon}${above}<text>${words}</text>${sentence}${rows}</g>`;
   });
   // A group's frame, behind everything, with what the group is called at its top left.
   const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/></g>`);
   // A group's name is drawn over the lines, with the frame's own colour round its letters: where a line has to
   // pass, it passes behind the name.
-  const names = lay.groups.map((f) => `<text class="mv-name" x="${n(f.name.x)}" y="${n(f.name.y + 4)}">${esc(f.title)}</text>`);
+  const names = lay.groups.filter((f) => f.title).map((f) => `<text class="mv-name" x="${n(f.name.x)}" y="${n(f.name.y + 4)}">${esc(f.title)}</text>`);
   // The ground: the grid the boxes are placed on, shown as dots faint enough to sit behind everything.
   // A live page spreads them over its whole stage instead, so they do not stop at the drawing's edge.
   const ground = design.ground === 'dots' && !live
@@ -174,6 +273,20 @@ export const kindsIn = (/** @type {import('./parse.mjs').Model} */ model) => [..
 export const lineKindsIn = (/** @type {import('./parse.mjs').Model} */ model) => [...new Set(model.edges.flatMap((e) => (e.kind ? [e.kind] : [])))];
 
 /**
+ * The title its author gave a picture, above it. A page has a heading of its own; a still picture has only
+ * itself, and a title left off it is lost. Wrapped so that no line is wider than the picture.
+ * @param {string} heading
+ * @param {number} width of the picture
+ * @returns {{band:number,svg:string}} the room it takes above the picture, and its words
+ */
+export function titleOf(heading, width) {
+  if (!heading) return { band: 0, svg: '' };
+  const lines = wrap(heading, Math.max(8, Math.floor((width - 2 * draw.titlePad) / draw.titleGlyph)));
+  const spans = lines.map((line, i) => `<tspan class="mv-title-line" x="${n(width / 2)}" y="${n(draw.titlePad + 15 + i * draw.titleLine)}">${esc(line)}</tspan>`).join('');
+  return { band: draw.titlePad + lines.length * draw.titleLine, svg: `<text class="mv-title">${spans}</text>` };
+}
+
+/**
  * A still picture: one SVG file, for wikis and anywhere a page cannot go.
  * @param {import('./parse.mjs').Model} model
  * @param {import('./layout.mjs').Layout} lay
@@ -181,11 +294,12 @@ export const lineKindsIn = (/** @type {import('./parse.mjs').Model} */ model) =>
  * @param {{title:string}} about
  */
 export function picture(model, lay, design, about) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" width="${lay.width}" height="${lay.height}" role="img" aria-label="${esc(about.title)}">
+  const title = titleOf(model.heading, lay.width);
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height + title.band}" width="${lay.width}" height="${lay.height + title.band}" role="img" aria-label="${esc(about.title)}">
 <title>${esc(about.title)}</title>${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
 <style>${styleOf(design, kindsIn(model), '.mv-svg', lineKindsIn(model))}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
-${inside(model, lay, design, false)}
+${title.band ? `${title.svg}\n<g transform="translate(0,${title.band})">\n${inside(model, lay, design, false)}\n</g>` : inside(model, lay, design, false)}
 </svg>
 `;
 }
@@ -269,6 +383,7 @@ summary{cursor:pointer;color:var(--mv-muted);font-size:13px}
 .mv-on .mv-head,.mv-sel .mv-head{fill:var(--mv-accent)}
 .mv-edge.mv-on .mv-line,.mv-edge.mv-sel .mv-line,.mv-edge.mv-on .mv-cross,.mv-edge.mv-sel .mv-cross{stroke:var(--mv-accent)}
 .mv-edge.mv-on .mv-head,.mv-edge.mv-sel .mv-head{fill:var(--mv-accent)}
+.mv-edge.mv-on .mv-hollow,.mv-edge.mv-sel .mv-hollow{stroke:var(--mv-accent)}
 .mv-sel .mv-shape,.mv-node:focus-visible .mv-shape{stroke:var(--mv-accent);stroke-width:3}
 .mv-seq{display:none;pointer-events:none}
 .mv-on .mv-seq{display:block}

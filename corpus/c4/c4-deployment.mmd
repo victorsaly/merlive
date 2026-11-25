@@ -1,0 +1,10 @@
+C4Deployment
+  Deployment_Node(azure, "Azure", "West Europe") {
+    Deployment_Node(app, "App Service", "Linux") {
+      Container(api, "Order API", "C#", "Checks and saves orders")
+    }
+    Deployment_Node(sql, "Azure SQL", "General purpose") {
+      ContainerDb(db, "Orders", "SQL Server", "Every order and its lines")
+    }
+  }
+  Rel(api, db, "Reads and writes", "TDS")

@@ -1,5 +1,68 @@
 # Changelog
 
+## 0.3.0 (unreleased)
+
+More kinds of diagram that are boxes and links: requirement, C4, architecture and block diagrams.
+
+- **Requirement diagrams are drawn.** The six kinds of requirement and elements, each saying what it is over its
+  name, its text as a sentence under it, its id, risk and verify method as rows, and all seven relationships,
+  written either way round.
+- **C4 diagrams are drawn.** People, systems, containers and components with what they are, their technology
+  and what they do; databases and queues in their own shapes; what is outside the firm in the design's colour
+  for it; boundaries and deployment nodes as groups, nested; relations with their technology.
+- **Architecture diagrams are drawn.** Services with their icons, groups inside groups, edges with the
+  arrowheads written. The sides an edge leaves by say which way the diagram runs.
+- **Block diagrams that are a flow are drawn.** One whose meaning is in its author's grid (blocks joined to
+  nothing, spans, block arrows) is left as Mermaid, and the command says why and what would change that.
+- **A box can say a sentence about itself**, wrapped under its name, the box as tall as it needs.
+- **Words on a link have the room they need**: a row above a group's name where a link runs into the group,
+  and room above or below the turn where a link with two lines of words turns between two ranks.
+- **The line over a name fits its box**, and a pill taller than a plain box keeps flat sides for its words.
+- **The contrast of a shaded row is checked only where a row is drawn shaded.**
+
+## 0.2.0 (2026-11-25)
+
+Class diagrams and entity diagrams, and much that Mermaid drew and Merlive did not: people and feet in a
+sequence diagram, titles, notes, bold, bottom to top, regions side by side.
+
+- **A sequence diagram's participants are drawn as what they are.** An `actor` is a figure; a boundary, a
+  control, an entity, a database, a collection and a queue each have a drawing of their own. Each is drawn again
+  at the foot of its lifeline, unless `mirrorActors: false`.
+- **Half arrows and messages to the middle of a line are read and drawn.** No message is left out of a picture
+  any more.
+- **A group's title can be read.** In a sequence diagram it takes the design's quiet colour in light and dark,
+  sits inside its frame and wraps to it. In a still picture it was black on any page.
+- **Bold and italic are drawn.** What a Markdown string stresses (`**Urgent** order`, `Pick *today*`) stays bold
+  or italic in its box, on whichever line its words are wrapped to. It was drawn as plain words.
+- **A composite state's regions are drawn.** What `--` parts are frames side by side inside the composite
+  state, each with a start of its own, and a link into the composite state goes into every one. They were drawn
+  as one, with a note.
+- **Bottom to top and right to left are drawn as written.** `flowchart BT`, `flowchart RL` and a state diagram's
+  `direction BT` or `RL` were drawn top to bottom and left to right, with a note. They are now the same flow
+  begun at the far end, every arrow pointing the way its author drew it.
+- **A title is drawn on a still picture.** The `title` in a diagram's front matter (and a sequence diagram's own
+  `title`) sits above the picture, wrapped to its width. A page already had it as its heading; a still picture
+  had it only in what a screen reader is told. `accTitle` stays unseen, as it was written to be.
+- **A class diagram's notes are drawn.** `note for Order "…"` is a sheet with a folded corner beside its class,
+  joined by a dotted line; `note "…"` is one joined to nothing. A note keeps its author's lines and is as tall
+  as its words.
+- **Class diagrams are drawn.** Classes with what they hold and what they do, annotations («interface»), every
+  relation Mermaid has (is a, is made of, has, uses, depends on, in either direction) with the words and the
+  counts at its ends, namespaces as groups, and notes on a class. A parent sits above its children whichever
+  way the relation was written.
+- **Entity diagrams are drawn.** Entities as tables (a row for each attribute, a column each for its type, its
+  name and its keys, ruled into cells, every second row shaded), and relationships that say how many at each
+  end, in the crow's foot marks or in words, solid or dotted. The words on a shaded row are held to the same
+  contrast as words on any box. An attribute's comment goes in the note on
+  its entity, so a sentence does not make every box as wide as itself.
+- **A box can list rows under its name.** A class's attributes and methods, an entity's columns: each row on a
+  line of its own, in a face where columns stay in line, under a rule. Boxes keep one width and are as tall as
+  what they list; a rank is as tall as its tallest box. A short line above a name says what it is («interface»).
+- **A link can end in more than an arrowhead**: the hollow triangle of "is a", the filled diamond of "is made
+  of", the open one of "has", and how many an entity's line means: one, none or one, one or more, any. The few
+  words at each end of a link ("1", "0..*") sit beside it, clear of the boxes and of its own words.
+- **No path is drawn heavier in a diagram of things.** A class diagram has no way through it.
+
 ## 0.1.0 (2026-11-25)
 
 The first version. It draws flowcharts, state diagrams and sequence diagrams, and says what it leaves.

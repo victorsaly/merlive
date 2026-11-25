@@ -1,0 +1,7 @@
+block
+  columns 3
+  shop["Shop"] erp["ERP"] ledger["Ledger"]
+  shop --> erp
+  erp --> ledger
+  classDef back fill:#6e6ce6,stroke:#333,stroke-width:4px;
+  class erp,ledger back

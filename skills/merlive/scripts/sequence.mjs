@@ -6,11 +6,13 @@
 
 import { wordsOf } from './parse.mjs';
 import { wrap } from './layout.mjs';
-import { colourChecks, looksOf } from './design.mjs';
+import { colourChecks, colourLimits, contrast, looksOf, mix } from './design.mjs';
+import { draw } from './render.mjs';
 
-/** @typedef {'none'|'arrow'|'open'|'cross'} End what is drawn at an end of a message */
-/** @typedef {{id:string,label:string,breaks?:string[],role:string,kind:string,shape:'box'|'pill',created?:number,destroyed?:number}} Participant created, destroyed: the item that makes it or ends it */
-/** @typedef {{type:'message',id:string,from:string,to:string,label:string,lines:string[],style:'solid'|'dotted',head:End,tail:End,number:number,line:number}} Message */
+/** @typedef {'none'|'arrow'|'open'|'cross'|'half-top'|'half-bottom'|'stick-top'|'stick-bottom'} End what is drawn at an end of a message; top is the left-hand side of the way the line goes, which is above a line that goes right */
+/** @typedef {'box'|'person'|'boundary'|'control'|'entity'|'database'|'collections'|'queue'} Mark how a participant is drawn */
+/** @typedef {{id:string,label:string,breaks?:string[],role:string,kind:string,shape:Mark,created?:number,destroyed?:number}} Participant created, destroyed: the item that makes it or ends it */
+/** @typedef {{type:'message',id:string,from:string,to:string,label:string,lines:string[],style:'solid'|'dotted',head:End,tail:End,headDot?:boolean,tailDot?:boolean,number:number,line:number}} Message headDot, tailDot: the end meets the middle of the lifeline, in a dot */
 /** @typedef {{type:'note',id:string,place:'left'|'right'|'over',over:string[],label:string,lines:string[],line:number}} Note */
 /** @typedef {{type:'open'|'else'|'close',block:number,section:number}} Edge the top of a block, the start of one of its later sections, its foot */
 /** @typedef {Message|Note|Edge} Item */
@@ -21,12 +23,14 @@ import { colourChecks, looksOf } from './design.mjs';
  * @property {'sequence'} type
  * @property {string} kindOfDiagram
  * @property {string} title
+ * @property {string} heading the title its author meant to be seen on the picture, not one written only for a reader who cannot see it
  * @property {string} describes
  * @property {Participant[]} participants in the order they stand, left to right
  * @property {Item[]} items everything that takes a row, in the order it was written
  * @property {Block[]} blocks loop, alt, opt, par, critical, break and rect, each with the names of its later sections
  * @property {{title:string,members:string[]}[]} groups the author's boxes round participants
  * @property {Activation[]} activations
+ * @property {boolean} mirror whether every participant is drawn again at the foot of its lifeline: yes, unless its author turned mirrorActors off
  * @property {string[]} warnings
  */
 
@@ -38,6 +42,12 @@ export const across = {
   headLine: 16, // px between two lines of a name
   headPad: 24, // above and below a name, together
   mostLines: 4, // of a name, and only when its author wrote that many; a plain name is wrapped to two
+  mark: 30, // the height of the drawing of a person, a boundary, a control, an entity or a database, which has its name under it
+  markGap: 4, // between such a drawing and the name under it
+  markFoot: 4, // between that name and the lifeline that starts under it
+  markHalf: 26, // how far from its middle a line stops that is drawn to such a drawing: clear of a boundary's bar, the widest of them
+  stack: 5, // how far the second sheet of a collection shows behind the first, up and to the right
+  cap: 8, // half the width of the round end of a queue, a cylinder on its side
   gap: 32, // the least room between two participants' boxes
   mostStep: 320, // the most from one lifeline to the next: past this a diagram of four no longer fits a laptop
   wordGlyph: 6.9, // px per character of a message's words at 12px
@@ -64,26 +74,52 @@ export const across = {
   nameOff: 16, // from the first lifeline a frame is about to where the frame's name starts: past any bars on it
   tabClear: 8, // the least from the tab that names a frame's kind to the nearest lifeline the frame is about
   groupPad: 10, // from a group's participants to its frame
-  groupTitle: 20, // the row a group's title takes, above its participants
+  groupTitle: 20, // the row a group's title takes, above its participants, when it is one line
+  groupLine: 14, // px between two lines of a group's title
+  groupGlyph: 7.9, // px per character of a group's title: 11px capitals, heavy and spaced
   number: 8, // the radius of the disc a message's number sits in
   cross: 6, // how far below its last message a participant that is destroyed ends
-  mirrorPast: 480, // px of lifeline past which the participants are drawn again at the foot, so a reader scrolled down still knows whose line is whose
+  dot: 4, // the radius of the dot where a message meets the middle of a lifeline
   pad: 28, // around the whole drawing
 };
 
-// Every arrow Mermaid has for a message, longest first so "-->>" is not read as "-->" and then ">".
-const ARROWS = /** @type {[string,'solid'|'dotted',End,End][]} */ ([
-  ['<<-->>', 'dotted', 'arrow', 'arrow'],
-  ['<<->>', 'solid', 'arrow', 'arrow'],
-  ['-->>', 'dotted', 'arrow', 'none'],
-  ['->>', 'solid', 'arrow', 'none'],
-  ['--x', 'dotted', 'cross', 'none'],
-  ['-x', 'solid', 'cross', 'none'],
-  ['--)', 'dotted', 'open', 'none'],
-  ['-)', 'solid', 'open', 'none'],
-  ['-->', 'dotted', 'none', 'none'],
-  ['->', 'solid', 'none', 'none'],
+// Every arrow Mermaid has for a message, longest first so "-->>" is not read as "-->" and then ">". The last
+// says the line is drawn back to the one named first: Mermaid's "reverse" half arrows, whose head is at the
+// near end. What is above such a line when read from left to right is on the right-hand side of the way it goes.
+const ARROWS = /** @type {[string,'solid'|'dotted',End,End,boolean][]} */ ([
+  ['<<-->>', 'dotted', 'arrow', 'arrow', false],
+  ['<<->>', 'solid', 'arrow', 'arrow', false],
+  ['-->>', 'dotted', 'arrow', 'none', false],
+  ['--|\\', 'dotted', 'half-top', 'none', false],
+  ['--|/', 'dotted', 'half-bottom', 'none', false],
+  ['--\\\\', 'dotted', 'stick-top', 'none', false],
+  ['--//', 'dotted', 'stick-bottom', 'none', false],
+  ['/|--', 'dotted', 'half-bottom', 'none', true],
+  ['\\|--', 'dotted', 'half-top', 'none', true],
+  ['//--', 'dotted', 'stick-bottom', 'none', true],
+  ['\\\\--', 'dotted', 'stick-top', 'none', true],
+  ['->>', 'solid', 'arrow', 'none', false],
+  ['--x', 'dotted', 'cross', 'none', false],
+  ['--)', 'dotted', 'open', 'none', false],
+  ['-->', 'dotted', 'none', 'none', false],
+  ['-|\\', 'solid', 'half-top', 'none', false],
+  ['-|/', 'solid', 'half-bottom', 'none', false],
+  ['-\\\\', 'solid', 'stick-top', 'none', false],
+  ['-//', 'solid', 'stick-bottom', 'none', false],
+  ['/|-', 'solid', 'half-bottom', 'none', true],
+  ['\\|-', 'solid', 'half-top', 'none', true],
+  ['//-', 'solid', 'stick-bottom', 'none', true],
+  ['\\\\-', 'solid', 'stick-top', 'none', true],
+  ['-x', 'solid', 'cross', 'none', false],
+  ['-)', 'solid', 'open', 'none', false],
+  ['->', 'solid', 'none', 'none', false],
 ]);
+
+// How each kind of participant is drawn. Mermaid has a symbol for each; so does Merlive, drawn its own way.
+/** @type {Record<string, Mark>} */
+const MARKS = { actor: 'person', boundary: 'boundary', control: 'control', entity: 'entity', database: 'database', collections: 'collections', queue: 'queue' };
+/** Whether a participant's name sits under its drawing, not inside it. */
+export const namedUnder = (/** @type {{shape:Mark}} */ p) => p.shape === 'person' || p.shape === 'boundary' || p.shape === 'control' || p.shape === 'entity' || p.shape === 'database';
 
 // The colours CSS has names for. A group may open with one ("box Aqua Buying"), and it is the group's colour, not
 // the first word of its title. The colour itself is read past: the look is the design's.
@@ -114,7 +150,7 @@ export function isSequence(/** @type {string} */ src) {
  */
 export function parseSequence(src) {
   /** @type {SequenceModel} */
-  const model = { type: 'sequence', kindOfDiagram: 'sequenceDiagram', title: '', describes: '', participants: [], items: [], blocks: [], groups: [], activations: [], warnings: [] };
+  const model = { type: 'sequence', kindOfDiagram: 'sequenceDiagram', title: '', heading: '', describes: '', participants: [], items: [], blocks: [], groups: [], activations: [], mirror: true, warnings: [] };
   /** @type {Map<string, Participant>} */
   const byId = new Map();
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
@@ -155,9 +191,9 @@ export function parseSequence(src) {
     if (lines.length > 1) p.breaks = lines;
     else delete p.breaks;
     p.role = type ?? keyword;
-    // A person from outside is a pill, as a start or end is in a flowchart, and of the kind that is outside; a
-    // database holds data. The other symbols Mermaid has are boxes, told apart by their names.
-    p.shape = p.role === 'actor' ? 'pill' : 'box';
+    // A person is a figure, of the kind that is outside; a database is a cylinder, of the kind that holds data.
+    // Each of the other symbols Mermaid has is a drawing of its own; a type Merlive has never met is a plain box.
+    p.shape = MARKS[p.role] ?? 'box';
     p.kind = p.role === 'actor' ? 'external' : p.role === 'database' ? 'data' : 'step';
     return p;
   };
@@ -180,29 +216,31 @@ export function parseSequence(src) {
   const message = (/** @type {string} */ s, /** @type {number} */ line) => {
     const colon = s.indexOf(':');
     const head = colon < 0 ? s : s.slice(0, colon);
-    if (head.includes('()')) return warn(line, `a message to the middle of a line, written with (), is not read yet: "${s}"`), true;
-    if (/-\|[\\/]|[\\/]\|-|-\\\\|-\/\/|\\\\-|\/\/-/.test(head)) return warn(line, `half arrows are not read yet: "${s}"`), true;
     // A name may hold a dash and an x ("Fed-ex"), so every place an arrow could be is tried, and the one with a
     // participant already known on each side of it wins.
-    /** @type {{from:string,to:string,sign:string,arrow:typeof ARROWS[number],known:number}[]} */
+    // "()" beside a name is the middle of that participant's line: the message meets it there, in a dot.
+    /** @type {{from:string,to:string,sign:string,arrow:typeof ARROWS[number],known:number,tailDot:boolean,headDot:boolean}[]} */
     const tries = [];
     for (let i = 1; i < head.length; i++) {
       const arrow = ARROWS.find(([a]) => head.startsWith(a, i));
       if (!arrow) continue;
-      const rest = /^\s*([+-]?)\s*(.+?)\s*$/.exec(head.slice(i + arrow[0].length));
-      const from = head.slice(0, i).trim();
-      if (from && rest) tries.push({ from, to: rest[2], sign: rest[1], arrow, known: Number(byId.has(from)) + Number(byId.has(rest[2])) });
+      const rest = /^\s*(\(\))?\s*([+-]?)\s*(\(\))?\s*(.+?)\s*$/.exec(head.slice(i + arrow[0].length));
+      const near = /^(.*?)\s*(\(\))?$/.exec(head.slice(0, i).trim()), from = near?.[1] ?? '';
+      if (from && rest) tries.push({ from, to: rest[4], sign: rest[2], arrow, known: Number(byId.has(from)) + Number(byId.has(rest[4])), tailDot: Boolean(near?.[2]), headDot: Boolean(rest[1] || rest[3]) });
     }
     const found = tries.sort((a, b) => b.known - a.known)[0];
     if (!found) return false;
     const at = model.items.length, lines = wordsOf(colon < 0 ? '' : s.slice(colon + 1));
-    const [, style, endHead, endTail] = found.arrow;
-    const from = who(found.from).id, to = who(found.to).id;
-    model.items.push({ type: 'message', id: `m${++messages}`, from, to, label: lines.join(' '), lines, style, head: endHead, tail: endTail, number: counting ? next : 0, line });
+    const [, style, endHead, endTail, back] = found.arrow;
+    // The one named first stands first, whichever way the line is drawn.
+    const first = who(found.from).id, second = who(found.to).id;
+    const [from, to] = back ? [second, first] : [first, second];
+    const dots = { ...((back ? found.tailDot : found.headDot) ? { headDot: true } : {}), ...((back ? found.headDot : found.tailDot) ? { tailDot: true } : {}) };
+    model.items.push({ type: 'message', id: `m${++messages}`, from, to, label: lines.join(' '), lines, style, head: endHead, tail: endTail, ...dots, number: counting ? next : 0, line });
     if (counting) next += by;
     lastMessage = at;
-    if (found.sign === '+') begin(to, at);
-    if (found.sign === '-') finish(from, at, line);
+    if (found.sign === '+') begin(second, at);
+    if (found.sign === '-') finish(first, at, line);
     if (making) {
       if (making.id === to && from !== to) /** @type {Participant} */ (byId.get(to)).created = at;
       else warn(making.line, `nothing makes ${making.id}: the message after "create" must go to it`);
@@ -218,7 +256,7 @@ export function parseSequence(src) {
 
   const statement = (/** @type {string} */ s, /** @type {number} */ line) => {
     let m;
-    if ((m = /^title\s*:?\s+(.+)$/i.exec(s))) return void (model.title = wordsOf(m[1]).join(' '));
+    if ((m = /^title\s*:?\s+(.+)$/i.exec(s))) return void (model.title = model.heading = wordsOf(m[1]).join(' '));
     if ((m = /^autonumber(?:\s+(off|\d+)(?:\s+(\d+))?)?$/.exec(s))) {
       counting = m[1] !== 'off';
       if (m[1] && m[1] !== 'off') next = Number(m[1]);
@@ -290,10 +328,13 @@ export function parseSequence(src) {
     }
     if (front === 'in') {
       const title = /^title\s*:\s*(.*?)\s*$/.exec(raw);
-      if (title) model.title = title[1].replace(/^(["'])(.*)\1$/, '$2');
+      if (title) model.title = model.heading = title[1].replace(/^(["'])(.*)\1$/, '$2');
+      // Mermaid draws every participant again at the foot unless its author says not to.
+      if (/^mirrorActors\s*:\s*false\b/.test(text)) model.mirror = false;
       if (text === '---') front = 'after';
       return;
     }
+    if (/^%%\{.*\bmirrorActors["']?\s*:\s*false\b/.test(text)) model.mirror = false;
     if (describing) {
       if (text === '}') {
         model.describes = describing.join(' ');
@@ -345,16 +386,20 @@ export function parseSequence(src) {
  * @property {Record<string, Words>} notes
  * @property {Frame[]} frames
  * @property {Bar[]} bars
- * @property {{title:string,x:number,y:number,w:number,h:number}[]} groups
+ * @property {{title:string,x:number,y:number,w:number,h:number,name:Words|null}[]} groups each from its top left corner, with where its title sits if it has one
  * @property {string[]} warnings
  */
 
 /** How wide the tab is that names a frame's kind, in capitals. */
 export const tabOf = (/** @type {string} */ kind) => kind.length * across.tagGlyph + 16;
 
-const roomAt = (/** @type {number} */ w) => Math.floor((w - across.padBox) / across.glyph);
+/** How many characters a line of a participant's name may run to, in a footprint of some width: a second sheet and a round end each take some of it. */
+export const roomAt = (/** @type {number} */ w, /** @type {Mark} */ shape = 'box') => Math.floor((w - across.padBox - (shape === 'collections' ? across.stack : shape === 'queue' ? 2 * across.cap : 0)) / across.glyph);
 /** A participant's name in a box of some width: the author's own lines where they broke it, else as it falls. */
-export const nameLines = (/** @type {Participant} */ p, /** @type {number} */ w) => (p.breaks ? p.breaks.flatMap((b) => wrap(b, roomAt(w))) : wrap(p.label, roomAt(w)));
+export const nameLines = (/** @type {Participant} */ p, /** @type {number} */ w) => (p.breaks ? p.breaks.flatMap((b) => wrap(b, roomAt(w, p.shape))) : wrap(p.label, roomAt(w, p.shape)));
+/** A group's title in a frame with some room inside it, wrapped; and how many characters that room is. */
+const titleRoom = (/** @type {number} */ px) => Math.max(1, Math.floor(px / across.groupGlyph));
+const longestWord = (/** @type {string} */ words) => Math.max(0, ...words.split(/\s+/).map((x) => x.length));
 const widest = (/** @type {string[]} */ lines, /** @type {number} */ glyph) => Math.ceil(Math.max(0, ...lines.map((l) => l.length)) * glyph);
 
 /**
@@ -368,15 +413,24 @@ export function layoutSequence(model) {
   const col = new Map(people.map((p, i) => [p.id, i]));
   const at = (/** @type {string} */ id) => col.get(id) ?? 0;
 
-  // 1. One box size for every participant: the narrowest in which every name takes two lines or fewer (as many
-  //    as its author wrote, if they broke it), and no word is cut.
+  // 1. One size for every participant: the narrowest in which every name takes two lines or fewer (as many
+  //    as its author wrote, if they broke it), no word is cut, and the longest word of a group's title fits
+  //    across the participants it is over. It is as tall as the tallest needs: a box round its name, or a
+  //    drawing with its name under it.
   const fits = (/** @type {Participant} */ p, /** @type {number} */ w) => {
     const lines = nameLines(p, w);
-    return lines.length <= (p.breaks ? across.mostLines : 2) && lines.every((l) => l.length <= roomAt(w));
+    return lines.length <= (p.breaks ? across.mostLines : 2) && lines.every((l) => l.length <= roomAt(w, p.shape));
   };
-  const w = across.widths.find((width) => people.every((p) => fits(p, width))) ?? across.widths[across.widths.length - 1];
+  /** The room a group's title has, at the least: its participants, a box and a gap each, less the last gap. */
+  const titleFits = (/** @type {SequenceModel['groups'][number]} */ g, /** @type {number} */ w) => longestWord(g.title) <= titleRoom(g.members.length * w + (g.members.length - 1) * across.gap);
+  const w = across.widths.find((width) => people.every((p) => fits(p, width)) && model.groups.every((g) => titleFits(g, width))) ?? across.widths.find((width) => people.every((p) => fits(p, width))) ?? across.widths[across.widths.length - 1];
   const names = new Map(people.map((p) => [p.id, nameLines(p, w)]));
-  const h = across.headPad + across.headLine * Math.min(across.mostLines, Math.max(1, ...[...names.values()].map((l) => l.length)));
+  const most = Math.min(across.mostLines, Math.max(1, ...[...names.values()].map((l) => l.length)));
+  const h = Math.max(across.headPad + across.headLine * most, people.some(namedUnder) ? across.mark + across.markGap + across.headLine * most + across.markFoot : 0);
+  // Where a line meets a participant made part way down: the middle of a box, or the middle of a drawing, which
+  // is nearer the top of its footprint; and at the side of the box, or just clear of the drawing.
+  const up = (/** @type {Participant} */ p) => (namedUnder(p) ? across.mark / 2 : h / 2);
+  const reach = (/** @type {Participant} */ p) => (namedUnder(p) ? across.markHalf : w / 2);
 
   // 2. One step from each lifeline to the next: wide enough for the widest words that sit in a gap.
   const wordsOfMessage = (/** @type {Message} */ m) => m.lines.flatMap((l) => wrap(l, across.wordWrap));
@@ -467,13 +521,14 @@ export function layoutSequence(model) {
       lineOf.set(index, y + across.selfDown);
     } else {
       const right = at(item.to) > at(item.from), dir = right ? 1 : -1;
-      const made = people[at(item.to)].created === index;
-      // The words sit above the line. A participant made here has its box on the line, so the row is as tall as half of it.
-      const y = top + Math.max(tall ? tall + across.wordOff : 0, item.number ? across.number : 0, made ? h / 2 : 0);
-      const from = right ? rightOf(item.from, index) : leftOf(item.from, index);
+      const receiver = people[at(item.to)], made = receiver.created === index;
+      // The words sit above the line. A participant made here has its box on the line, so the row is as tall as what of it is above the line.
+      const y = top + Math.max(tall ? tall + across.wordOff : 0, item.number ? across.number : 0, made ? up(receiver) : 0);
+      // An end written with () meets the middle of the lifeline, whatever bars are on it.
+      const from = item.tailDot ? x(item.from) : right ? rightOf(item.from, index) : leftOf(item.from, index);
       // It ends at the side of a box made here, short of the cross of a participant ended here, else at the lifeline or its bar.
-      const ended = people[at(item.to)].destroyed === index;
-      const to = made ? x(item.to) - dir * (w / 2) : ended ? x(item.to) - dir * (across.cross + 2) : right ? leftOf(item.to, index) : rightOf(item.to, index);
+      const ended = receiver.destroyed === index;
+      const to = made ? x(item.to) - dir * reach(receiver) : ended ? x(item.to) - dir * (across.cross + 2) : item.headDot ? x(item.to) : right ? leftOf(item.to, index) : rightOf(item.to, index);
       // Beside the sender, in the gap to the next lifeline: never across a lifeline, however far the message goes.
       const gapEnd = made && Math.abs(at(item.to) - at(item.from)) === 1 ? to : x(item.from) + dir * step;
       messages[item.id] = {
@@ -481,8 +536,8 @@ export function layoutSequence(model) {
         words: lines.length ? { x: (x(item.from) + gapEnd) / 2, y: y - across.wordOff - tall / 2, w: px, h: tall, lines } : null,
         number: item.number ? { x: from + dir * (across.number + 2), y } : null,
       };
-      if (made) headAt.set(item.to, y);
-      cursor = made ? y + h / 2 : y + 2;
+      if (made) headAt.set(item.to, y + h / 2 - up(receiver));
+      cursor = made ? y + h - up(receiver) : y + 2;
       lineOf.set(index, y);
     }
     for (const id of new Set([item.from, item.to])) {
@@ -494,7 +549,8 @@ export function layoutSequence(model) {
     rows.push({ id: item.id, kind: 'message', y: top, h: cursor - top });
   });
   const foot = cursor + (model.items.length ? across.top : 0);
-  const feet = foot - h > across.mirrorPast;
+  // Every participant is drawn again at the foot of its lifeline, as Mermaid draws it, unless its author said not to.
+  const feet = model.mirror && people.length > 0;
 
   /** @type {Record<string, Stood>} */
   const participants = {};
@@ -558,20 +614,29 @@ export function layoutSequence(model) {
   }
   const frames = /** @type {Frame[]} */ (framed.filter(Boolean));
 
-  // 6. Groups: a frame round the participants an author boxed together, from above their boxes to the foot.
-  const titled = model.groups.some((g) => g.title);
-  const above = model.groups.length ? across.groupPad + (titled ? across.groupTitle : 0) : 0;
-  const bottom = foot + (feet ? h : 0);
-  /** @type {SequenceLayout['groups']} */
-  const groups = [];
+  // 6. Groups: a frame round the participants an author boxed together, from above their boxes to the foot. Its
+  //    title sits inside it, above its participants, wrapped to the frame; the row of titles is as tall as the
+  //    longest of them needs, so every group starts at the same height.
+  /** @type {{title:string,cols:number[],lines:string[]}[]} */
+  const boxed = [];
   for (const g of model.groups) {
     const cols = g.members.map(at).sort((a, b) => a - b);
     if (cols[cols.length - 1] - cols[0] !== cols.length - 1) {
       warnings.push(`the group "${g.title}" is not drawn: its participants do not stand side by side`);
       continue;
     }
-    groups.push({ title: g.title, x: cols[0] * step - w / 2 - across.groupPad, y: -above, w: (cols.length - 1) * step + w + 2 * across.groupPad, h: bottom + above + across.groupPad });
+    boxed.push({ title: g.title, cols, lines: g.title ? wrap(g.title, titleRoom((cols.length - 1) * step + w)) : [] });
   }
+  const titleLines = Math.max(0, ...boxed.map((g) => g.lines.length));
+  const above = boxed.length ? across.groupPad + (titleLines ? across.groupTitle + (titleLines - 1) * across.groupLine : 0) : 0;
+  const bottom = foot + (feet ? h : 0);
+  /** @type {SequenceLayout['groups']} */
+  const groups = boxed.map((g) => {
+    const gx = g.cols[0] * step - w / 2 - across.groupPad, gw = (g.cols.length - 1) * step + w + 2 * across.groupPad, tall = g.lines.length * across.groupLine;
+    // The last line of a title sits just above the participants; a shorter title leaves the room above it.
+    const name = g.lines.length ? { x: gx + gw / 2, y: -(across.groupTitle - across.groupLine) - tall / 2, w: widest(g.lines, across.groupGlyph), h: tall, lines: g.lines } : null;
+    return { title: g.title, x: gx, y: -above, w: gw, h: bottom + above + across.groupPad, name };
+  });
 
   // 7. Room all round: everything moves so that the leftmost and topmost thing is one margin in.
   const lefts = [-w / 2, ...Object.values(notes).map((n) => n.x - n.w / 2), ...frames.map((f) => f.x), ...groups.map((g) => g.x), ...Object.values(messages).flatMap((m) => (m.words ? [m.words.x - m.words.w / 2] : []))];
@@ -596,7 +661,10 @@ export function layoutSequence(model) {
   }
   Object.values(notes).forEach(move);
   bars.forEach(move);
-  groups.forEach(move);
+  for (const g of groups) {
+    move(g);
+    if (g.name) move(g.name);
+  }
   for (const f of frames) {
     move(f);
     f.nameAt += dx;
@@ -643,6 +711,14 @@ export function scoreSequence(model, lay, design) {
     if (stood.w !== lay.head.w || stood.h !== lay.head.h) stray.push(`${p.label} is not the size of the others`);
     if (first && p.created === undefined && Math.abs(stood.y - first.y) > 0.5 && people[0].created === undefined) stray.push(`${p.label} does not stand in the row`);
   });
+  // A participant drawn again at the foot stands under itself, below everything that was said.
+  const lastRow = lay.rows.length ? lay.rows[lay.rows.length - 1].y + lay.rows[lay.rows.length - 1].h : 0;
+  for (const p of people) {
+    const stood = lay.participants[p.id];
+    if (stood.foot === null) continue;
+    if (stood.foot - stood.h / 2 < lastRow + across.top - 0.5) stray.push(`${p.label} is drawn again at the foot over the last row`);
+    if (stood.foot + stood.h / 2 > lay.height) stray.push(`${p.label} runs off the foot of the drawing`);
+  }
   if (people.length > 1 && lay.step < lay.head.w + across.gap) stray.push(`participants stand ${lay.step}px apart, and need ${lay.head.w + across.gap}`);
   add('S1', 'Participants stand in one row, one size, one step apart', stray, `${people.length} participants, ${lay.step}px apart`);
 
@@ -744,17 +820,30 @@ export function scoreSequence(model, lay, design) {
   for (const p of people) {
     const lines = lay.participants[p.id].lines;
     if (lines.length > (p.breaks ? across.mostLines : 2)) tight.push(`"${p.label}" needs ${lines.length} lines; shorten it, or give it a shorter name with "as"`);
-    else if (lines.some((l) => l.length > roomAt(lay.head.w))) tight.push(`"${p.label}" has a word too long for a participant's box; give it a shorter name with "as"`);
+    else if (lines.some((l) => l.length > roomAt(lay.head.w, p.shape))) tight.push(`"${p.label}" has a word too long for a participant's box; give it a shorter name with "as"`);
   }
   for (const m of sent) {
     const words = lay.messages[m.id].words;
     if (words && m.from !== m.to && words.w > lay.step - 2 * across.clear) tight.push(`the message "${m.label}" has a word too long for the gap it sits in; break it with <br/> or shorten it`);
+  }
+  // A group's title is a name too: it stays inside its frame and the drawing, above the participants it is over.
+  const headTop = Math.min(...people.map((p) => lay.participants[p.id].y - lay.participants[p.id].h / 2));
+  for (const g of lay.groups) {
+    if (!g.name) continue;
+    const box = boxOf(g.name);
+    if (g.name.w > g.w - 2 * across.groupPad + 0.5) tight.push(`the title "${g.title}" has a word too long for its group; shorten the word, or the title`);
+    else if (box.l < g.x || box.r > g.x + g.w || box.t < g.y || box.b > headTop || box.l < 0 || box.r > lay.width) tight.push(`the title "${g.title}" is not inside its group`);
   }
   for (const n of noted) if (lay.notes[n.id].lines.length > across.mostNoteLines) tight.push(`the note "${n.label}" needs ${lay.notes[n.id].lines.length} lines; shorten it`);
   add('S7', 'Names, words and notes fit where they sit', tight, 'all fit');
 
   // D1, D2: the same sums as a flowchart's, for the kinds of participant this diagram has.
   const [d1, d2] = colourChecks(design, [...new Set(people.map((p) => p.kind))]);
+  // A group's title is quiet text on the group's own fill, which is a little off the page's.
+  if (lay.groups.some((g) => g.name)) for (const [mode, p] of looksOf(design)) {
+    const c = contrast(p.muted, mix(p.text, p.bg, draw.frame));
+    if (c < colourLimits.text) d1.broken.push(`${mode}: the title of a group is ${c.toFixed(1)} to 1, and needs ${colourLimits.text}`);
+  }
   const looks = looksOf(design).map(([mode]) => mode).join(' and ');
   add('D1', 'Words and lines can be read against what is behind them', d1.broken, `${design.name} passes in ${looks}`);
   add('D2', 'Kinds of box can be told apart', d2.broken, 'apart in ordinary and red-green colour-blind sight');

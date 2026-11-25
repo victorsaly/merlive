@@ -1,0 +1,9 @@
+classDiagram
+  class Invoice{
+    +String number
+    -Money total
+    #Date due
+    ~Ledger ledger
+    +pay()
+    -post()
+  }

@@ -336,9 +336,9 @@ describe('parse: what it does not read, it says', () => {
     assert.equal(m.nodes.length, 0);
   });
 
-  it('draws BT and RL the other way round, and says so', () => {
-    assert.equal(parse('graph RL\nA --> B').direction, 'LR');
-    assert.match(parse('graph BT\nA --> B').warnings[0], /BT is drawn as TD/);
+  it('reads BT and RL as a flow from the far end, with nothing to say about it', () => {
+    assert.deepEqual([parse('graph RL\nA --> B').direction, parse('graph RL\nA --> B').reversed], ['LR', true]);
+    assert.deepEqual([parse('graph BT\nA --> B').direction, parse('graph BT\nA --> B').reversed, parse('graph BT\nA --> B').warnings], ['TD', true, []]);
     assert.equal(parse('flowchart LR\nA --> B').direction, 'LR');
   });
 });
@@ -400,5 +400,36 @@ describe('blocksOf', () => {
 
   it('takes a .mmd file whole', () => {
     assert.deepEqual(blocksOf('flowchart TD\nA --> B', 'mmd'), [{ source: 'flowchart TD\nA --> B', title: '', line: 1 }]);
+  });
+});
+
+describe('parse: what a Markdown string stresses', () => {
+  const box = (/** @type {string} */ words) => parse(`flowchart LR\n  A["\`${words}\`"] --> B`).nodes[0];
+
+  it('keeps bold and italic as runs of the label, which together are the label', () => {
+    assert.deepEqual(box('**Urgent** order').emphasis, [{ words: 'Urgent', strong: true }, { words: ' order' }]);
+    assert.deepEqual(box('Pick *today* and pack').emphasis, [{ words: 'Pick ' }, { words: 'today', em: true }, { words: ' and pack' }]);
+    assert.deepEqual(box('__Urgent__ and _late_').emphasis, [{ words: 'Urgent', strong: true }, { words: ' and ' }, { words: 'late', em: true }]);
+    assert.deepEqual(box('***Both*** at once').emphasis, [{ words: 'Both', strong: true, em: true }, { words: ' at once' }]);
+    for (const words of ['**Urgent** order', 'Pick *today*\n  and **pack** it', 'a **b c** d *e*']) {
+      const n = box(words);
+      assert.equal((n.emphasis ?? []).map((r) => r.words).join(''), n.label, words);
+    }
+  });
+
+  it('keeps them across a line the author broke', () => {
+    const n = box('Pick **today\n  and** pack');
+    assert.deepEqual(n.breaks, ['Pick today', 'and pack']);
+    assert.deepEqual(n.emphasis, [{ words: 'Pick ' }, { words: 'today and', strong: true }, { words: ' pack' }]);
+  });
+
+  it('gives a label that stresses nothing no runs, Markdown or not', () => {
+    assert.equal(box('Plain words').emphasis, undefined);
+    assert.equal(parse('flowchart LR\n  A[2 * 3 * 4] --> B').nodes[0].emphasis, undefined);
+    assert.equal(parse('flowchart LR\n  A["**not Markdown**"] --> B').nodes[0].label, '**not Markdown**');
+  });
+
+  it('forgets what a box stressed when it is given new words', () => {
+    assert.equal(parse('flowchart LR\n  A["`**Urgent**`"] --> B\n  A[Plain]').nodes[0].emphasis, undefined);
   });
 });

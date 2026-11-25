@@ -1,0 +1,5 @@
+architecture-beta
+  service api(server)
+  service db(database)[Orders]
+
+  api:R -- L:db

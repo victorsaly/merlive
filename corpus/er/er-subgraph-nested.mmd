@@ -1,0 +1,10 @@
+erDiagram
+    subgraph Buying
+        SUPPLIER ||--o{ ORDER : receives
+        subgraph Lines
+            ORDER_LINE {
+                int quantity
+            }
+        end
+        ORDER ||--|{ ORDER_LINE : contains
+    end

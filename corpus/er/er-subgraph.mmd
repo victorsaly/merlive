@@ -1,0 +1,5 @@
+erDiagram
+    subgraph Buying
+        SUPPLIER ||--o{ ORDER : receives
+    end
+    ORDER ||--o| INVOICE : "is billed by"

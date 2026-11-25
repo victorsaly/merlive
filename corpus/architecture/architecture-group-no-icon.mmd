@@ -1,0 +1,7 @@
+architecture-beta
+  group office[Head office]
+
+  service erp(server)[ERP] in office
+  service ledger(database)[Ledger] in office
+
+  erp:R -- L:ledger

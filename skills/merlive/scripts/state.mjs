@@ -45,8 +45,11 @@ const LINES = {
  */
 export function stateReader({ model, node, say, connect, frame, unframe, join, warn, wordsOf }) {
   /** The composite states open at this line, the innermost last, each with the states used inside it. */
-  /** @type {{id:string,line:number,members:string[]}[]} */
+  /** @type {{id:string,line:number,members:string[],region:number,framed:boolean}[]} */
   const open = [];
+  /** The composite states that "--" parted, each with its regions: a link into one goes into them all. */
+  /** @type {Map<string, string[]>} */
+  const parted = new Map();
   /** Composite states closed inside another: links to them are joined before links to the one they are in. */
   /** @type {{id:string,members:string[]}[]} */
   const inner = [];
@@ -66,7 +69,8 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
   // Mermaid draws where a diagram starts and ends as dots. Here they are the pills every start and end is,
   // with the word a dot leaves a reader to work out. One of each, and a composite state has its own.
   const dot = (/** @type {boolean} */ ends) => {
-    const scope = open[open.length - 1]?.id;
+    // A region after the first has a start and an end of its own, as the composite state itself has.
+    const inside = open[open.length - 1], scope = inside && (inside.region > 1 ? `${inside.id}_${inside.region}` : inside.id);
     const n = state(`${scope ? `${scope}_` : ''}${ends ? 'end' : 'start'}`);
     Object.assign(n, { label: ends ? 'End' : 'Start', shape: 'pill' });
     return n;
@@ -100,13 +104,35 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
       // A composite state's own direction is read past, as a group's is: it runs the way the rest does.
       if (open.length) return true;
       model.direction = way[1] === 'LR' || way[1] === 'RL' ? 'LR' : 'TD';
-      if (way[1] === 'BT' || way[1] === 'RL') warn(line, `${way[1]} is drawn as ${model.direction}`);
+      if (way[1] === 'BT' || way[1] === 'RL') model.reversed = true;
+      else delete model.reversed;
       return true;
     }
-    if (text === '--') return warn(line, 'concurrency ("--") is not read: the regions it parts are drawn as one'), true;
+    if (text === '--') {
+      // What "--" parts are regions that run side by side. Each is a group with no name inside the composite
+      // state. The first is only known to be one now, so it is made of what the composite state holds so far.
+      const inside = open[open.length - 1];
+      if (!inside) return warn(line, 'not read: "--" parts the regions of a composite state, and none is open here'), true;
+      const regions = parted.get(inside.id) ?? [];
+      parted.set(inside.id, regions);
+      if (inside.framed) unframe();
+      else if (inside.members.length) {
+        const first = `${inside.id}/1`, at = model.groups.findIndex((g) => g.id === inside.id);
+        for (const g of model.groups) if (g.parent === inside.id) g.parent = first;
+        model.groups.splice(at + 1, 0, { id: first, title: '', members: [...inside.members], parent: inside.id });
+        regions.push(first);
+      }
+      inside.region = Math.max(inside.region, 1) + 1;
+      const next = `${inside.id}/${inside.region}`;
+      frame(next, '', line);
+      regions.push(next);
+      inside.framed = true;
+      return true;
+    }
     if (text === '}') {
       const closed = open.pop();
       if (!closed) return warn(line, 'not read: a "}" with no composite state open'), true;
+      if (closed.framed) unframe();
       if (open.length) inner.push(closed);
       unframe();
       return true;
@@ -126,7 +152,7 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
         // A composite state is a group. It is named by its own words, which may come on a later line.
         if (words) describe(id, words);
         frame(id, id, line);
-        open.push({ id, line, members: [] });
+        open.push({ id, line, members: [], region: 0, framed: false });
         return true;
       }
       const n = state(id);
@@ -153,6 +179,16 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
   const done = () => {
     if (noting) warn(noting.line, `the note on ${noting.id} is never ended; end it with a line of "end note"`);
     for (const left of open) warn(left.line, `the composite state ${left.id} is never closed; end it with a line of }`);
+    // Going into a composite state starts every region of it. The link is joined to where the first begins, as
+    // a link to any group is; here it is drawn again to where each other region begins.
+    for (const [id, regions] of parted) {
+      const into = model.edges.filter((e) => e.to === id && e.from !== id);
+      for (const region of regions.slice(1)) {
+        const members = model.groups.find((g) => g.id === region)?.members ?? [];
+        const begins = members.find((m) => !model.edges.some((e) => e.to === m && e.from !== m && members.includes(e.from)));
+        if (begins) for (const e of into) connect(node(e.from), node(begins), { label: e.label, style: e.style, head: e.head, tail: e.tail }, 0);
+      }
+    }
     // The innermost first, so that by the time a link to an outer one is joined, what is inside it is boxes.
     /** @type {string[]} */
     const joined = [];

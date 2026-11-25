@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 223 504" width="223" height="504" role="img" aria-label="Relationships to and from groups">
+<title>Relationships to and from groups</title>
+<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+.mv-node .mv-detail{fill:none}
+[data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
+[data-outline~="heavy"] .mv-shape{stroke-width:2.6}
+.mv-node .mv-rows{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
+.mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
+.mv-band{fill:var(--mv-text);opacity:0.06;stroke:none}
+.mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
+.mv-node .mv-told{font-size:11.5px;font-weight:400}
+.mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
+.mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
+.mv-icon{fill:none;stroke:var(--mv-text);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+.mv-node .mv-strong{font-weight:700}
+.mv-node .mv-em{font-style:italic}
+.mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
+[data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-name{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase;text-anchor:middle;paint-order:stroke;stroke:var(--mv-group);stroke-width:4px;stroke-linejoin:round}</style>
+<rect width="100%" height="100%" fill="var(--mv-bg)"/>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="223" height="504" fill="url(#mv-dots)"/><g><g class="mv-group"><rect x="16" y="14" width="152" height="174" rx="8"/></g><g class="mv-group"><rect x="16" y="222" width="152" height="174" rx="8"/></g></g><g><g class="mv-edge" data-edge="SUPPLIER-ORDER" data-style="solid"><path class="mv-line" d="M92,84L92,132"/><path class="mv-cross" d="M86.5,89L97.5,89M86.5,93L97.5,93"/><path class="mv-cross" d="M92,123L97.5,132M92,123L86.5,132"/><circle class="mv-hollow" cx="92" cy="118.5" r="3.5"/><text class="mv-label"><tspan class="mv-label-line" x="130.5" y="109">receives</tspan></text></g><g class="mv-edge" data-edge="INVOICE-PAYMENT" data-style="solid"><path class="mv-line" d="M92,292L92,340"/><path class="mv-cross" d="M86.5,297L97.5,297M86.5,301L97.5,301"/><path class="mv-cross" d="M92,331L97.5,340M92,331L86.5,340"/><circle class="mv-hollow" cx="92" cy="326.5" r="3.5"/><text class="mv-label"><tspan class="mv-label-line" x="147" y="317">is settled by</tspan></text></g><g class="mv-edge" data-edge="ORDER-INVOICE" data-style="solid"><path class="mv-line" d="M92,176L92,248"/><path class="mv-cross" d="M86.5,181L97.5,181M86.5,185L97.5,185"/><path class="mv-cross" d="M97.5,243L86.5,243M97.5,239L86.5,239"/><text class="mv-label"><tspan class="mv-label-line" x="130.5" y="201">leads to</tspan></text></g><g class="mv-edge" data-edge="PAYMENT-RECEIPT" data-style="solid"><path class="mv-line" d="M92,384L92,432"/><path class="mv-cross" d="M86.5,389L97.5,389M86.5,393L97.5,393"/><path class="mv-cross" d="M92,423L97.5,432M92,423L86.5,432"/><circle class="mv-hollow" cx="92" cy="418.5" r="3.5"/><text class="mv-label"><tspan class="mv-label-line" x="120.5" y="409">gives</tspan></text></g></g><g><text class="mv-name" x="49.5" y="30">Buying</text><text class="mv-name" x="49.5" y="238">Paying</text></g><g><g class="mv-node" data-node="SUPPLIER" data-kind="step"><rect class="mv-shape" x="28" y="40" width="128" height="44" rx="8"/><text><tspan x="92" y="66.5">SUPPLIER</tspan></text></g><g class="mv-node" data-node="ORDER" data-kind="step"><rect class="mv-shape" x="28" y="132" width="128" height="44" rx="8"/><text><tspan x="92" y="158.5">ORDER</tspan></text></g><g class="mv-node" data-node="INVOICE" data-kind="step"><rect class="mv-shape" x="28" y="248" width="128" height="44" rx="8"/><text><tspan x="92" y="274.5">INVOICE</tspan></text></g><g class="mv-node" data-node="PAYMENT" data-kind="step"><rect class="mv-shape" x="28" y="340" width="128" height="44" rx="8"/><text><tspan x="92" y="366.5">PAYMENT</tspan></text></g><g class="mv-node" data-node="RECEIPT" data-kind="step"><rect class="mv-shape" x="28" y="432" width="128" height="44" rx="8"/><text><tspan x="92" y="458.5">RECEIPT</tspan></text></g></g>
+</svg>

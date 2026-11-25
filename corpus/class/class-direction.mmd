@@ -1,0 +1,10 @@
+classDiagram
+  direction RL
+  class Buyer {
+    -badge : Badge
+  }
+  class Badge{
+    -id : int
+    -name : string
+  }
+  Buyer "1" --o "1" Badge : carries

@@ -1,6 +1,6 @@
 {
   "name": "merlive",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Mermaid diagrams, placed by rule and made live: one straight main path, boxes of one size, lines that never cross a box, in your own design, as a single page your readers can step through.",
   "author": { "name": "Victor Saly", "url": "https://github.com/victorsaly" },
   "homepage": "https://github.com/victorsaly/merlive",

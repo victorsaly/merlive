@@ -1,5 +1,5 @@
 {
-  "from": "The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram and sequence diagram pages set out. The samples are our own.",
+  "from": "The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram, class diagram, entity diagram and sequence diagram pages set out. The samples are our own.",
   "flowchart": [
     {
       "file": "flowchart/declare-flowchart.mmd",
@@ -36,14 +36,16 @@
       "covers": "Direction BT: bottom to top",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn the other way round: top to bottom"
+      "direction": "TD",
+      "reversed": true
     },
     {
       "file": "flowchart/direction-rl.mmd",
       "covers": "Direction RL: right to left",
       "boxes": 3,
       "links": 2,
-      "loses": "Drawn the other way round: left to right"
+      "direction": "LR",
+      "reversed": true
     },
     {
       "file": "flowchart/frontmatter.mmd",
@@ -149,8 +151,7 @@
       "has": [
         "Urgent order",
         "Pick today and pack"
-      ],
-      "loses": "Bold and italic are drawn as plain words"
+      ]
     },
     {
       "file": "flowchart/node-fontawesome.mmd",
@@ -923,9 +924,9 @@
     {
       "file": "state/state-concurrency.mmd",
       "covers": "Concurrency: regions of a composite state parted by --",
-      "boxes": 6,
-      "links": 5,
-      "groups": 1
+      "boxes": 7,
+      "links": 6,
+      "groups": 3
     },
     {
       "file": "state/state-direction.mmd",
@@ -982,6 +983,1549 @@
       "links": 1,
       "title": "An order",
       "loses": "Mermaid's own settings are read past: the look is the design's"
+    }
+  ],
+  "class": [
+    {
+      "file": "class/class-declare.mmd",
+      "covers": "A class, declared with \"class\"",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": []
+    },
+    {
+      "file": "class/class-declare-relation.mmd",
+      "covers": "Two classes made by tying one to the other",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "class/class-declare-v2.mmd",
+      "covers": "A class diagram, declared with \"classDiagram-v2\"",
+      "boxes": 2,
+      "links": 1,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "class/class-title.mmd",
+      "covers": "A title in front matter",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        2
+      ],
+      "title": "Ordering"
+    },
+    {
+      "file": "class/class-label.mmd",
+      "covers": "A class with a label",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "A purchase order",
+        "Order line, with *! signs"
+      ]
+    },
+    {
+      "file": "class/class-backticks.mmd",
+      "covers": "A class named between backticks",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Purchase order!",
+        "Order line"
+      ]
+    },
+    {
+      "file": "class/class-members-colon.mmd",
+      "covers": "Members given one at a time, after a colon",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        4
+      ],
+      "has": [
+        "+String number",
+        "+Date placed",
+        "+total()",
+        "+cancel()"
+      ]
+    },
+    {
+      "file": "class/class-members-block.mmd",
+      "covers": "Members given together, between brackets",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        4
+      ],
+      "has": [
+        "+String number",
+        "+cancel()"
+      ]
+    },
+    {
+      "file": "class/class-return-type.mmd",
+      "covers": "What a method gives back",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        3
+      ],
+      "has": [
+        "+total() Money",
+        "+cancel() bool"
+      ]
+    },
+    {
+      "file": "class/class-generics.mmd",
+      "covers": "Generic types, in a class, a member and what a method gives back",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        6
+      ],
+      "has": [
+        "Basket<Item>",
+        "List<Item> items",
+        "add(List<Item> more)",
+        "lines() List<Item>",
+        "byShelf() List<List<Item>>",
+        "-List<string> notes"
+      ]
+    },
+    {
+      "file": "class/class-visibility.mmd",
+      "covers": "Who may see a member: public, private, protected, package",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        6
+      ],
+      "has": [
+        "+String number",
+        "-Money total",
+        "#Date due",
+        "~Ledger ledger"
+      ]
+    },
+    {
+      "file": "class/class-classifiers.mmd",
+      "covers": "Members marked abstract or static",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        5
+      ],
+      "has": [
+        "+String prefix {static}",
+        "+total() Money {abstract}",
+        "+count() {static}",
+        "+next() int {static}",
+        "+check() {abstract}"
+      ],
+      "loses": "Abstract and static are said in words at the end of the row, where Mermaid slants or underlines it"
+    },
+    {
+      "file": "class/class-relations.mmd",
+      "covers": "The eight relations",
+      "boxes": 12,
+      "links": 8,
+      "ends": [
+        [
+          "triangle",
+          "none"
+        ],
+        [
+          "diamond",
+          "none"
+        ],
+        [
+          "diamond-open",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "triangle",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ]
+    },
+    {
+      "file": "class/class-relations-reversed.mmd",
+      "covers": "The eight relations written the other way round, each with words",
+      "boxes": 12,
+      "links": 8,
+      "has": [
+        "Inheritance",
+        "Composition",
+        "Aggregation",
+        "Association",
+        "Link(Solid)",
+        "Dependency",
+        "Realization",
+        "Link(Dashed)"
+      ],
+      "ends": [
+        [
+          "triangle",
+          "none"
+        ],
+        [
+          "none",
+          "diamond"
+        ],
+        [
+          "none",
+          "diamond-open"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "triangle",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "loses": "\"Is a\" is drawn from the parent down to the child, whichever way it was written"
+    },
+    {
+      "file": "class/class-relation-labels.mmd",
+      "covers": "Words on a relation",
+      "boxes": 5,
+      "links": 3,
+      "has": [
+        "is a",
+        "holds",
+        "stocks"
+      ]
+    },
+    {
+      "file": "class/class-two-way.mmd",
+      "covers": "A relation that says something at both ends",
+      "boxes": 6,
+      "links": 3,
+      "ends": [
+        [
+          "triangle",
+          "triangle"
+        ],
+        [
+          "arrow",
+          "arrow"
+        ],
+        [
+          "diamond",
+          "diamond-open"
+        ]
+      ]
+    },
+    {
+      "file": "class/class-lollipop.mmd",
+      "covers": "A lollipop interface",
+      "boxes": 4,
+      "links": 2,
+      "rows": [
+        2,
+        0,
+        0,
+        0
+      ],
+      "has": [
+        "Payable",
+        "Printable",
+        "«interface»"
+      ],
+      "ends": [
+        [
+          "circle",
+          "none"
+        ],
+        [
+          "none",
+          "circle"
+        ]
+      ],
+      "loses": "A lollipop is drawn as a box of its own, named for the interface and marked «interface», with the circle on its line"
+    },
+    {
+      "file": "class/class-cardinality.mmd",
+      "covers": "How many, at either end of a relation",
+      "boxes": 5,
+      "links": 3,
+      "has": [
+        "1",
+        "*",
+        "1..*",
+        "many",
+        "Stocks"
+      ]
+    },
+    {
+      "file": "class/class-namespace.mmd",
+      "covers": "A namespace",
+      "boxes": 2,
+      "links": 1,
+      "groups": 1,
+      "rows": [
+        0,
+        2
+      ],
+      "has": [
+        "Buying"
+      ]
+    },
+    {
+      "file": "class/class-namespace-label.mmd",
+      "covers": "A namespace with a label",
+      "boxes": 1,
+      "links": 0,
+      "groups": 1,
+      "rows": [
+        2
+      ],
+      "has": [
+        "Signing in"
+      ]
+    },
+    {
+      "file": "class/class-namespace-nested.mmd",
+      "covers": "A namespace written inside another",
+      "boxes": 3,
+      "links": 2,
+      "groups": 3,
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying",
+        "records"
+      ]
+    },
+    {
+      "file": "class/class-namespace-dotted.mmd",
+      "covers": "Namespaces inside one another, spelt with dots",
+      "boxes": 3,
+      "links": 2,
+      "groups": 4,
+      "has": [
+        "Shop",
+        "Ordering",
+        "Buying",
+        "Paying"
+      ]
+    },
+    {
+      "file": "class/class-annotation-inline.mmd",
+      "covers": "An annotation, on the line that declares the class",
+      "boxes": 1,
+      "links": 0,
+      "has": [
+        "«interface»"
+      ]
+    },
+    {
+      "file": "class/class-annotation-line.mmd",
+      "covers": "An annotation, on a line of its own",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        2
+      ],
+      "has": [
+        "«interface»",
+        "amountDue",
+        "pay()"
+      ]
+    },
+    {
+      "file": "class/class-annotation-nested.mmd",
+      "covers": "An annotation, inside the class",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        2,
+        3
+      ],
+      "has": [
+        "«interface»",
+        "«enumeration»",
+        "DRAFT",
+        "PAID"
+      ]
+    },
+    {
+      "file": "class/class-comments.mmd",
+      "covers": "A comment on a line of its own",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ]
+    },
+    {
+      "file": "class/class-direction.mmd",
+      "covers": "A direction for the whole diagram",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        2
+      ],
+      "has": [
+        "carries",
+        "-badge : Badge"
+      ],
+      "ends": [
+        [
+          "none",
+          "diamond-open"
+        ]
+      ],
+      "loses": "Drawn top to bottom: boxes of different heights are only placed that way yet",
+      "says": "a class diagram is drawn top to bottom for now"
+    },
+    {
+      "file": "class/class-interaction.mmd",
+      "covers": "A class that opens a link or calls a function when clicked",
+      "boxes": 4,
+      "links": 0,
+      "loses": "The clicks are left out: a page of Merlive opens no links and runs no code of yours"
+    },
+    {
+      "file": "class/class-note-for.mmd",
+      "covers": "A note for a class",
+      "boxes": 2,
+      "links": 1,
+      "notes": 0,
+      "has": [
+        "Raised by a buyer Approved by a manager"
+      ],
+      "shapes": [
+        "box",
+        "note"
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ]
+      ]
+    },
+    {
+      "file": "class/class-note-general.mmd",
+      "covers": "A note for no class in particular",
+      "boxes": 3,
+      "links": 1,
+      "notes": 0,
+      "has": [
+        "From order to invoice"
+      ]
+    },
+    {
+      "file": "class/class-style.mmd",
+      "covers": "A class styled on its own",
+      "boxes": 2,
+      "links": 0,
+      "kinds": [
+        "grey",
+        "red"
+      ],
+      "loses": "Each outline is heavy or broken as written, in the design's own nearest colour; the fill is the design's"
+    },
+    {
+      "file": "class/class-classdef.mmd",
+      "covers": "A style class made with classDef and given with cssClass",
+      "boxes": 3,
+      "links": 0,
+      "kinds": [
+        "late",
+        "held"
+      ]
+    },
+    {
+      "file": "class/class-css-inline.mmd",
+      "covers": "A style class given with :::",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        0,
+        2
+      ],
+      "kinds": [
+        "late"
+      ]
+    },
+    {
+      "file": "class/class-default-class.mmd",
+      "covers": "A default style class for every class",
+      "boxes": 2,
+      "links": 0,
+      "kinds": [
+        "quiet"
+      ],
+      "loses": "The default class is read past: the look is the design's"
+    },
+    {
+      "file": "class/class-css-class.mmd",
+      "covers": "A style class kept in the page's own stylesheet",
+      "boxes": 1,
+      "links": 0,
+      "kinds": [
+        "styleClass"
+      ],
+      "loses": "A page's own stylesheet cannot be read from here: the class is of that kind, in the design's plain look"
+    },
+    {
+      "file": "class/class-whole.mmd",
+      "covers": "A whole diagram: classes, what they list, what they inherit, and a note",
+      "boxes": 4,
+      "links": 3,
+      "notes": 0,
+      "title": "Orders and what they hold",
+      "has": [
+        "Sent when the order is delivered Paid within thirty days",
+        "+print()",
+        "-Money amountDue"
+      ]
+    }
+  ],
+  "er": [
+    {
+      "file": "er/er-declare.mmd",
+      "covers": "An entity diagram: entities, and the relationships between them",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "one-or-many"
+        ],
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "has": [
+        "SUPPLIER",
+        "ORDER",
+        "ORDER_LINE",
+        "PRODUCT",
+        "receives",
+        "contains",
+        "is on"
+      ]
+    },
+    {
+      "file": "er/er-entity-alone.mmd",
+      "covers": "An entity with no relationships",
+      "boxes": 3,
+      "links": 1,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "has": [
+        "INVOICE"
+      ]
+    },
+    {
+      "file": "er/er-attributes.mmd",
+      "covers": "Attributes: a type and a name each",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        3,
+        2
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "has": [
+        "string name",
+        "string accountNumber",
+        "string country",
+        "int number",
+        "date placed"
+      ]
+    },
+    {
+      "file": "er/er-entity-twice.mmd",
+      "covers": "An entity declared twice, its attributes joined",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        2,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "has": [
+        "int number",
+        "date placed"
+      ]
+    },
+    {
+      "file": "er/er-entity-empty.mmd",
+      "covers": "An entity declared with no attributes between its braces",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-name-hyphen.mmd",
+      "covers": "A name with a hyphen in it",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "one-or-many"
+        ],
+        [
+          "zero-or-many",
+          "one"
+        ]
+      ],
+      "has": [
+        "ORDER-LINE",
+        "DELIVERY-ADDRESS"
+      ]
+    },
+    {
+      "file": "er/er-name-quoted.mmd",
+      "covers": "A name with spaces, in quotes",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        1
+      ],
+      "ends": [
+        [
+          "one",
+          "one-or-many"
+        ]
+      ],
+      "has": [
+        "Purchase order",
+        "Order line",
+        "int quantity"
+      ]
+    },
+    {
+      "file": "er/er-name-unicode.mmd",
+      "covers": "Names, words and attributes in other alphabets",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        1
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "has": [
+        "Händler ❤",
+        "注文",
+        "erhält",
+        "string straße"
+      ]
+    },
+    {
+      "file": "er/er-name-markdown.mmd",
+      "covers": "A name written as Markdown",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "one-or-many"
+        ]
+      ],
+      "has": [
+        "A firm order",
+        "An order line"
+      ],
+      "loses": "Bold and italic are drawn as plain words"
+    },
+    {
+      "file": "er/er-alias.mmd",
+      "covers": "An alias shown in place of the name",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-one"
+        ]
+      ],
+      "has": [
+        "Supplier",
+        "Supplier account",
+        "has"
+      ]
+    },
+    {
+      "file": "er/er-cardinality-zero-or-one.mmd",
+      "covers": "Zero or one, at either end",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "zero-or-one",
+          "zero-or-one"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-cardinality-exactly-one.mmd",
+      "covers": "Exactly one, at either end",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "one"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-cardinality-zero-or-more.mmd",
+      "covers": "Zero or more, at either end",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "zero-or-many",
+          "zero-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-cardinality-one-or-more.mmd",
+      "covers": "One or more, at either end",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one-or-many",
+          "one-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-cardinality-mirrored.mmd",
+      "covers": "A mark written the other way round for its end",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "zero-or-many",
+          "one"
+        ],
+        [
+          "one-or-many",
+          "zero-or-one"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-cardinality-words.mmd",
+      "covers": "How many, written in words",
+      "boxes": 5,
+      "links": 4,
+      "rows": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "one-or-many"
+        ],
+        [
+          "zero-or-one",
+          "zero-or-one"
+        ],
+        [
+          "one-or-many",
+          "zero-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-cardinality-short.mmd",
+      "covers": "How many, in the short forms: 1, 1+, 0+, many(0), many(1)",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "one-or-many"
+        ],
+        [
+          "one-or-many",
+          "zero-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-identifying.mmd",
+      "covers": "A relationship that identifies: a solid line",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "one-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-non-identifying.mmd",
+      "covers": "A relationship that does not identify: a dotted line",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "zero-or-many",
+          "zero-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-identifying-words.mmd",
+      "covers": "Identifying or not, written in words",
+      "boxes": 4,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "one-or-many"
+        ],
+        [
+          "zero-or-many",
+          "zero-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-label-quoted.mmd",
+      "covers": "A relationship's words, in quotes",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "has": [
+        "appears on"
+      ]
+    },
+    {
+      "file": "er/er-label-empty.mmd",
+      "covers": "A relationship with empty words",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-no-spaces.mmd",
+      "covers": "A relationship written with no spaces",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "has": [
+        "receives"
+      ]
+    },
+    {
+      "file": "er/er-self.mmd",
+      "covers": "A relationship from an entity to itself",
+      "boxes": 2,
+      "links": 2,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "zero-or-many",
+          "zero-or-one"
+        ]
+      ],
+      "has": [
+        "buys from"
+      ]
+    },
+    {
+      "file": "er/er-attribute-keys.mmd",
+      "covers": "Keys: primary, foreign and unique",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        4
+      ],
+      "ends": [],
+      "has": [
+        "int number PK",
+        "string supplierAccount FK",
+        "string reference UK",
+        "date placed"
+      ]
+    },
+    {
+      "file": "er/er-attribute-keys-several.mmd",
+      "covers": "Several keys on one attribute",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        3
+      ],
+      "ends": [],
+      "has": [
+        "int orderNumber PK, FK",
+        "string productCode PK, FK"
+      ]
+    },
+    {
+      "file": "er/er-attribute-star.mmd",
+      "covers": "A star before a name, for a primary key",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        2
+      ],
+      "ends": [],
+      "has": [
+        "string code PK",
+        "string name"
+      ]
+    },
+    {
+      "file": "er/er-attribute-comment.mmd",
+      "covers": "A comment on an attribute",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        3
+      ],
+      "ends": [],
+      "has": [
+        "string number PK",
+        "string(40) reference",
+        "decimal total"
+      ],
+      "notes": 1,
+      "loses": "A comment is not in its row: it is in the note on its entity, which a reader sees on picking the box"
+    },
+    {
+      "file": "er/er-attribute-types.mmd",
+      "covers": "Types with a length, a list, and two numbers",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        4
+      ],
+      "ends": [],
+      "has": [
+        "string(20) code",
+        "string[] barcodes",
+        "decimal(10,2) price",
+        "varchar_max notes"
+      ]
+    },
+    {
+      "file": "er/er-attribute-optional.mmd",
+      "covers": "A type that may be missing",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        3
+      ],
+      "ends": [],
+      "has": [
+        "date issued",
+        "date? paid",
+        "string? disputeReason"
+      ]
+    },
+    {
+      "file": "er/er-direction-tb.mmd",
+      "covers": "Direction: top to bottom",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "one-or-many"
+        ]
+      ]
+    },
+    {
+      "file": "er/er-direction-lr.mmd",
+      "covers": "Direction: left to right",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "one-or-many"
+        ]
+      ],
+      "says": "an entity diagram is drawn top to bottom for now: \"direction LR\" is read past",
+      "loses": "Drawn top to bottom: boxes of different heights are only placed that way yet"
+    },
+    {
+      "file": "er/er-subgraph.mmd",
+      "covers": "A group, named by one word",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "zero-or-one"
+        ]
+      ],
+      "groups": 1,
+      "has": [
+        "Buying"
+      ]
+    },
+    {
+      "file": "er/er-subgraph-quoted.mmd",
+      "covers": "A group named by words in quotes",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "groups": 1,
+      "has": [
+        "Paying up"
+      ]
+    },
+    {
+      "file": "er/er-subgraph-id.mmd",
+      "covers": "A group with an id and a title",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "groups": 1,
+      "has": [
+        "Paying up"
+      ]
+    },
+    {
+      "file": "er/er-subgraph-nested.mmd",
+      "covers": "A group inside a group",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        1
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "one-or-many"
+        ]
+      ],
+      "groups": 2,
+      "has": [
+        "Buying",
+        "Lines"
+      ]
+    },
+    {
+      "file": "er/er-subgraph-links.mmd",
+      "covers": "Relationships to and from groups",
+      "boxes": 5,
+      "links": 4,
+      "rows": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "one"
+        ],
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "groups": 2,
+      "has": [
+        "leads to",
+        "gives"
+      ],
+      "loses": "A relationship with a group is drawn to where the group starts, or from where it ends"
+    },
+    {
+      "file": "er/er-subgraph-direction.mmd",
+      "covers": "A group with a direction of its own",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "zero-or-one"
+        ]
+      ],
+      "groups": 1,
+      "loses": "The group's own direction is read past; it runs the way the rest does"
+    },
+    {
+      "file": "er/er-style.mmd",
+      "covers": "An entity styled on its own",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "kinds": [
+        "red"
+      ],
+      "loses": "Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's"
+    },
+    {
+      "file": "er/er-style-several.mmd",
+      "covers": "Several entities styled in one line",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "one-or-many"
+        ]
+      ],
+      "kinds": [
+        "blue"
+      ],
+      "loses": "Their outlines are heavy and blue as written, in the design's own blue"
+    },
+    {
+      "file": "er/er-class-def.mmd",
+      "covers": "A class made and given to entities",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "zero-or-one"
+        ]
+      ],
+      "kinds": [
+        "late"
+      ]
+    },
+    {
+      "file": "er/er-class-several.mmd",
+      "covers": "Several classes given at once",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "kinds": [
+        "late"
+      ],
+      "loses": "A box is of one kind: of several classes, the first is the one it is"
+    },
+    {
+      "file": "er/er-class-inline.mmd",
+      "covers": "A class given with :::",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "kinds": [
+        "late",
+        "trusted"
+      ]
+    },
+    {
+      "file": "er/er-class-inline-relationship.mmd",
+      "covers": "A class given with ::: in a relationship",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ],
+        [
+          "one",
+          "zero-or-one"
+        ]
+      ],
+      "kinds": [
+        "late",
+        "trusted"
+      ]
+    },
+    {
+      "file": "er/er-class-default.mmd",
+      "covers": "A default class for every entity",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "loses": "The default class is read past: the look is the design's"
+    },
+    {
+      "file": "er/er-frontmatter.mmd",
+      "covers": "A title and settings in front matter",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "title": "Orders and who fills them",
+      "loses": "Mermaid's own settings are read past: the look and the placement are Merlive's"
+    },
+    {
+      "file": "er/er-accessibility.mmd",
+      "covers": "A title and a description for readers who cannot see it",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "title": "Orders and who fills them"
+    },
+    {
+      "file": "er/er-comments.mmd",
+      "covers": "Comments, on lines of their own, between statements and between attributes",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        1
+      ],
+      "ends": [
+        [
+          "one",
+          "zero-or-many"
+        ]
+      ],
+      "has": [
+        "receives",
+        "int number"
+      ]
     }
   ],
   "kinds": [
@@ -1146,6 +2690,2583 @@
       "family": "grammar"
     }
   ],
+  "requirement": [
+    {
+      "file": "requirement/requirement-declare.mmd",
+      "covers": "A requirement diagram: a requirement, an element, and how one bears on the other",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "approval",
+        "approval_flow",
+        "«requirement»",
+        "«element»",
+        "id: 1",
+        "type: workflow",
+        "satisfies",
+        "Orders over the limit are approved by a manager."
+      ]
+    },
+    {
+      "file": "requirement/requirement-types.mmd",
+      "covers": "The six kinds of requirement",
+      "boxes": 6,
+      "links": 0,
+      "rows": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "ends": [],
+      "has": [
+        "«requirement»",
+        "«functional requirement»",
+        "«interface requirement»",
+        "«performance requirement»",
+        "«physical requirement»",
+        "«design constraint»"
+      ]
+    },
+    {
+      "file": "requirement/requirement-fields.mmd",
+      "covers": "What is said of a requirement: its id, its text, its risk and how it is verified",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        3
+      ],
+      "ends": [],
+      "has": [
+        "id: 1",
+        "risk: high",
+        "verify: test",
+        "Orders over the limit are approved by a manager."
+      ]
+    },
+    {
+      "file": "requirement/requirement-fields-order.mmd",
+      "covers": "What is said of a requirement, written in another order",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        3
+      ],
+      "ends": [],
+      "has": [
+        "id: 1",
+        "risk: high",
+        "verify: test"
+      ]
+    },
+    {
+      "file": "requirement/requirement-fields-some.mmd",
+      "covers": "Requirements of which only some things are said",
+      "boxes": 3,
+      "links": 0,
+      "rows": [
+        1,
+        0,
+        2
+      ],
+      "ends": [],
+      "has": [
+        "id: 1",
+        "The limit is set per buyer.",
+        "risk: low",
+        "verify: analysis"
+      ]
+    },
+    {
+      "file": "requirement/requirement-risk.mmd",
+      "covers": "The three risks: low, medium and high",
+      "boxes": 3,
+      "links": 0,
+      "rows": [
+        2,
+        2,
+        2
+      ],
+      "ends": [],
+      "has": [
+        "risk: high",
+        "risk: medium",
+        "risk: low"
+      ]
+    },
+    {
+      "file": "requirement/requirement-verify.mmd",
+      "covers": "The four ways to verify: analysis, demonstration, inspection and test",
+      "boxes": 4,
+      "links": 0,
+      "rows": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "ends": [],
+      "has": [
+        "verify: test",
+        "verify: inspection",
+        "verify: analysis",
+        "verify: demonstration"
+      ]
+    },
+    {
+      "file": "requirement/requirement-case.mmd",
+      "covers": "Mermaid's own words written with capitals",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        3,
+        2
+      ],
+      "ends": [],
+      "has": [
+        "«requirement»",
+        "«element»",
+        "id: 1",
+        "risk: high",
+        "verify: test",
+        "type: workflow",
+        "doc: docs/approval.md"
+      ]
+    },
+    {
+      "file": "requirement/requirement-empty.mmd",
+      "covers": "A requirement and an element of which nothing is said",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "approval",
+        "approval_flow"
+      ]
+    },
+    {
+      "file": "requirement/requirement-id-dotted.mmd",
+      "covers": "An id with dots, and one of letters",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [],
+      "has": [
+        "id: 1.2.1",
+        "id: REQ_7"
+      ]
+    },
+    {
+      "file": "requirement/requirement-id-quoted.mmd",
+      "covers": "An id in quotes",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": [],
+      "has": [
+        "id: REQ-1.2 b"
+      ]
+    },
+    {
+      "file": "requirement/requirement-text-quoted.mmd",
+      "covers": "A text in quotes, with a colon and a comma in it",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": [],
+      "has": [
+        "Orders over the limit: approved by a manager, on the same day."
+      ]
+    },
+    {
+      "file": "requirement/requirement-text-markdown.mmd",
+      "covers": "A text written as Markdown",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": [],
+      "has": [
+        "Orders over the limit are approved by a manager."
+      ],
+      "loses": "Bold and italic in a requirement's text are drawn as plain words"
+    },
+    {
+      "file": "requirement/requirement-element.mmd",
+      "covers": "An element: its type and the document it points to",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        2
+      ],
+      "ends": [],
+      "has": [
+        "«element»",
+        "type: workflow",
+        "doc: docs/approval.md"
+      ]
+    },
+    {
+      "file": "requirement/requirement-element-quoted.mmd",
+      "covers": "An element's type and document in quotes",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        2
+      ],
+      "ends": [],
+      "has": [
+        "type: word processor",
+        "doc: docs/approval flow.md"
+      ]
+    },
+    {
+      "file": "requirement/requirement-element-type-only.mmd",
+      "covers": "Elements with a type or a document, not both",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [],
+      "has": [
+        "type: workflow",
+        "doc: tests/approval"
+      ]
+    },
+    {
+      "file": "requirement/requirement-relationships.mmd",
+      "covers": "The seven relationships",
+      "boxes": 8,
+      "links": 7,
+      "rows": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "circle",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "contains",
+        "derives",
+        "copies",
+        "refines",
+        "traces",
+        "satisfies",
+        "verifies"
+      ]
+    },
+    {
+      "file": "requirement/requirement-relationships-reversed.mmd",
+      "covers": "Relationships written from their other end",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "circle",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "contains",
+        "derives",
+        "satisfies"
+      ]
+    },
+    {
+      "file": "requirement/requirement-contains.mmd",
+      "covers": "A requirement that contains others",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        1,
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "circle",
+          "none"
+        ],
+        [
+          "circle",
+          "none"
+        ]
+      ],
+      "has": [
+        "contains"
+      ],
+      "loses": "The crossed ring Mermaid draws at the requirement that contains is drawn as a filled circle"
+    },
+    {
+      "file": "requirement/requirement-relationship-tight.mmd",
+      "covers": "Relationships written with no spaces",
+      "boxes": 2,
+      "links": 2,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "circle",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "contains",
+        "traces"
+      ]
+    },
+    {
+      "file": "requirement/requirement-relationship-case.mmd",
+      "covers": "A relationship's word written with a capital",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "satisfies"
+      ]
+    },
+    {
+      "file": "requirement/requirement-relationship-self.mmd",
+      "covers": "A relationship from a requirement to itself",
+      "boxes": 1,
+      "links": 1,
+      "rows": [
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "refines"
+      ]
+    },
+    {
+      "file": "requirement/requirement-relationship-before.mmd",
+      "covers": "A relationship written before what it joins is declared",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "«requirement»",
+        "«element»",
+        "satisfies"
+      ]
+    },
+    {
+      "file": "requirement/requirement-name-quoted.mmd",
+      "covers": "Names in quotes, of several words",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "Order approval",
+        "Approval flow"
+      ]
+    },
+    {
+      "file": "requirement/requirement-name-words.mmd",
+      "covers": "Names of several words, without quotes",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "order approval",
+        "the flow"
+      ]
+    },
+    {
+      "file": "requirement/requirement-name-unicode.mmd",
+      "covers": "A name and a text in another alphabet",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": [],
+      "has": [
+        "Händler ❤",
+        "Zahlung für die Bestellung"
+      ]
+    },
+    {
+      "file": "requirement/requirement-name-dot.mmd",
+      "covers": "Names with a dot, and one that starts with a digit",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "order.approval",
+        "2nd_approval"
+      ]
+    },
+    {
+      "file": "requirement/requirement-name-markdown.mmd",
+      "covers": "A name written as Markdown",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": [],
+      "has": [
+        "Order approval"
+      ]
+    },
+    {
+      "file": "requirement/requirement-twice.mmd",
+      "covers": "A requirement declared twice",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": [],
+      "has": [
+        "id: 1"
+      ],
+      "says": "approval is declared twice: the first is kept, as Mermaid keeps it"
+    },
+    {
+      "file": "requirement/requirement-direction-tb.mmd",
+      "covers": "Direction: top to bottom",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "requirement/requirement-direction-lr.mmd",
+      "covers": "Direction: left to right",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "says": "a requirement diagram is drawn top to bottom for now: \"direction LR\" is read past",
+      "loses": "Drawn top to bottom: boxes of different heights are only placed that way yet"
+    },
+    {
+      "file": "requirement/requirement-direction-bt.mmd",
+      "covers": "Direction: bottom to top",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "circle",
+          "none"
+        ]
+      ],
+      "says": "a requirement diagram is drawn top to bottom for now: \"direction BT\" is read past",
+      "loses": "Drawn top to bottom: boxes of different heights are only placed that way yet"
+    },
+    {
+      "file": "requirement/requirement-classdef.mmd",
+      "covers": "A class made with classDef and given to several with class",
+      "boxes": 3,
+      "links": 0,
+      "rows": [
+        1,
+        1,
+        1
+      ],
+      "ends": [],
+      "kinds": [
+        "urgent"
+      ]
+    },
+    {
+      "file": "requirement/requirement-class-inline.mmd",
+      "covers": "A class given with ::: where a thing is declared",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "kinds": [
+        "urgent",
+        "built"
+      ]
+    },
+    {
+      "file": "requirement/requirement-class-shorthand.mmd",
+      "covers": "A class given with ::: to a name alone",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [],
+      "kinds": [
+        "urgent",
+        "built"
+      ]
+    },
+    {
+      "file": "requirement/requirement-class-several.mmd",
+      "covers": "Several classes given at once",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [],
+      "kinds": [
+        "urgent"
+      ],
+      "loses": "A box is of one kind: of several classes, the first is the one it is"
+    },
+    {
+      "file": "requirement/requirement-class-default.mmd",
+      "covers": "A default class for every requirement",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [],
+      "kinds": [
+        "urgent"
+      ],
+      "loses": "The default class is read past: the look is the design's"
+    },
+    {
+      "file": "requirement/requirement-style.mmd",
+      "covers": "A requirement styled on its own",
+      "boxes": 2,
+      "links": 0,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [],
+      "kinds": [
+        "red"
+      ],
+      "loses": "Its outline is heavy and red as written, in the design's own red; its fill is the design's"
+    },
+    {
+      "file": "requirement/requirement-style-several.mmd",
+      "covers": "Several styled in one line, one named in quotes",
+      "boxes": 3,
+      "links": 0,
+      "rows": [
+        1,
+        1,
+        1
+      ],
+      "ends": [],
+      "kinds": [
+        "red"
+      ],
+      "loses": "Their outlines are broken and red as written, in the design's own red"
+    },
+    {
+      "file": "requirement/requirement-frontmatter.mmd",
+      "covers": "A title in front matter",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "title": "What an order needs"
+    },
+    {
+      "file": "requirement/requirement-accessibility.mmd",
+      "covers": "A title and a description for readers who cannot see it",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": [],
+      "title": "What an order needs"
+    },
+    {
+      "file": "requirement/requirement-accessibility-block.mmd",
+      "covers": "A description over several lines",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": []
+    },
+    {
+      "file": "requirement/requirement-comments.mmd",
+      "covers": "Comments: on lines of their own, and after the { that opens a requirement",
+      "boxes": 2,
+      "links": 1,
+      "rows": [
+        1,
+        1
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "id: 1"
+      ]
+    },
+    {
+      "file": "requirement/requirement-directive.mmd",
+      "covers": "A directive for Mermaid's own settings",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": [],
+      "loses": "Mermaid's own settings are read past: the look is the design's"
+    },
+    {
+      "file": "requirement/requirement-blank-lines.mmd",
+      "covers": "Blank lines between and inside declarations",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        1
+      ],
+      "ends": [],
+      "has": [
+        "id: 1",
+        "Orders over the limit are approved by a manager."
+      ]
+    },
+    {
+      "file": "requirement/requirement-whole.mmd",
+      "covers": "A whole diagram: requirements of three kinds, two elements, and how they bear on each other",
+      "boxes": 5,
+      "links": 4,
+      "rows": [
+        3,
+        3,
+        3,
+        2,
+        2
+      ],
+      "ends": [
+        [
+          "circle",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "«requirement»",
+        "«functional requirement»",
+        "«performance requirement»",
+        "«element»",
+        "risk: medium",
+        "verify: inspection",
+        "doc: tests/approval",
+        "An approval is asked for within a minute.",
+        "contains",
+        "derives",
+        "satisfies",
+        "verifies"
+      ]
+    }
+  ],
+  "c4": [
+    {
+      "file": "c4/c4-context.mmd",
+      "covers": "A system in its context: a person, a system and one that is someone else's",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "Buyer",
+        "«person»",
+        "«system»",
+        "«external system»",
+        "Raises orders in"
+      ],
+      "kinds": [
+        "external"
+      ],
+      "title": "Ordering, in context",
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-people.mmd",
+      "covers": "People: one of the firm and one outside it",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "«person»",
+        "«external person»"
+      ],
+      "kinds": [
+        "external"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-systems.mmd",
+      "covers": "Systems: a system, one that is a database and one that is a queue",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "«system»",
+        "«system database»",
+        "«system queue»"
+      ],
+      "kinds": [
+        "data"
+      ],
+      "shapes": [
+        "box",
+        "cylinder",
+        "pill"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+    },
+    {
+      "file": "c4/c4-systems-external.mmd",
+      "covers": "Systems that are someone else's, a database and a queue among them",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "«external system»",
+        "«external system database»",
+        "«external system queue»"
+      ],
+      "kinds": [
+        "external"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "cylinder",
+        "pill"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+    },
+    {
+      "file": "c4/c4-containers.mmd",
+      "covers": "Containers, with what each is made in and what it does",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "«container: React»",
+        "«container: C#, ASP.NET»",
+        "«container database: SQL Server»",
+        "«container queue: Azure Service Bus»"
+      ],
+      "kinds": [
+        "data"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "cylinder",
+        "pill"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+    },
+    {
+      "file": "c4/c4-containers-external.mmd",
+      "covers": "Containers that are someone else's",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "«external container: SMTP»",
+        "«external container database: Dynamics»",
+        "«external container queue: HTTPS»"
+      ],
+      "kinds": [
+        "external"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "cylinder",
+        "pill"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+    },
+    {
+      "file": "c4/c4-components.mmd",
+      "covers": "Components, with what each is made in and what it does",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "«component: C# class»",
+        "«component database: Redis»",
+        "«component queue: Table»"
+      ],
+      "kinds": [
+        "data"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "cylinder",
+        "pill"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+    },
+    {
+      "file": "c4/c4-components-external.mmd",
+      "covers": "Components that are someone else's",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "«external component: NuGet package»",
+        "«external component database: SQLite»",
+        "«external component queue: Kafka»"
+      ],
+      "kinds": [
+        "external"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "cylinder",
+        "pill"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+    },
+    {
+      "file": "c4/c4-boundary.mmd",
+      "covers": "A boundary round some of the elements",
+      "boxes": 3,
+      "links": 2,
+      "groups": 1,
+      "has": [
+        "The firm"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-boundary-type.mmd",
+      "covers": "A boundary that says what kind of boundary it is",
+      "boxes": 2,
+      "links": 1,
+      "groups": 1,
+      "has": [
+        "Buying [department]"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-boundary-enterprise.mmd",
+      "covers": "An enterprise's boundary with a system's boundary inside it",
+      "boxes": 3,
+      "links": 2,
+      "groups": 2,
+      "has": [
+        "The firm",
+        "Core systems"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "Mermaid writes [ENTERPRISE] and [SYSTEM] under the names of these boundaries; a type that was not written is not added"
+    },
+    {
+      "file": "c4/c4-boundary-container.mmd",
+      "covers": "A container's boundary",
+      "boxes": 3,
+      "links": 2,
+      "groups": 1,
+      "has": [
+        "Web shop"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "Mermaid writes [CONTAINER] under the name of this boundary; a type that was not written is not added"
+    },
+    {
+      "file": "c4/c4-boundary-nested.mmd",
+      "covers": "Boundaries three deep",
+      "boxes": 3,
+      "links": 2,
+      "groups": 3,
+      "has": [
+        "The firm",
+        "ERP",
+        "Ordering"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "Mermaid writes [ENTERPRISE], [SYSTEM] and [CONTAINER] under the names of these boundaries; a type that was not written is not added"
+    },
+    {
+      "file": "c4/c4-boundary-brace-below.mmd",
+      "covers": "A boundary whose { is on the line below it",
+      "boxes": 2,
+      "links": 1,
+      "groups": 1,
+      "has": [
+        "The firm"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-deployment.mmd",
+      "covers": "A deployment: nodes inside a node, and what runs on each",
+      "boxes": 2,
+      "links": 1,
+      "groups": 3,
+      "has": [
+        "Azure [West Europe]",
+        "App Service [Linux]",
+        "Azure SQL [General purpose]",
+        "Reads and writes [TDS]"
+      ],
+      "shapes": [
+        "box",
+        "cylinder"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-deployment-nodes.mmd",
+      "covers": "Nodes written as Node, Node_L and Node_R",
+      "boxes": 2,
+      "links": 1,
+      "groups": 3,
+      "has": [
+        "Data centre [Leeds]",
+        "Web server [nginx]",
+        "App server [IIS]"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-deployment-described.mmd",
+      "covers": "A node that is described as well as named",
+      "boxes": 2,
+      "links": 1,
+      "groups": 2,
+      "has": [
+        "Buyer's phone [iOS or Android]",
+        "Cloud [Azure]"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "says": "is described as \"Whatever the buyer carries\", which is not drawn",
+      "loses": "What a node is described as is not drawn: a group has a name and nothing more"
+    },
+    {
+      "file": "c4/c4-rel.mmd",
+      "covers": "A relation",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Raises orders in"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-rel-technology.mmd",
+      "covers": "A relation that says how it is made, and one that is described",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "Calls [JSON over HTTPS]",
+        "Reads and writes [TDS]"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-rel-both-ways.mmd",
+      "covers": "A relation that runs both ways",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Reconciles with"
+      ],
+      "ends": [
+        [
+          "arrow",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-rel-back.mmd",
+      "covers": "A relation that runs back, from the second to the first",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "Is warned of shortages by"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-rel-directions.mmd",
+      "covers": "Relations that say which way Mermaid should draw them",
+      "boxes": 5,
+      "links": 8,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "Up, down, left and right are read past: where a box goes is Merlive's to say"
+    },
+    {
+      "file": "c4/c4-dynamic.mmd",
+      "covers": "A dynamic diagram: what happens, in order",
+      "boxes": 4,
+      "links": 4,
+      "has": [
+        "1: Fills in the order",
+        "2: Sends it [HTTPS]",
+        "3: Saves it",
+        "4: Answers with its number"
+      ],
+      "title": "Raising an order",
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-dynamic-index.mmd",
+      "covers": "Relations given an index",
+      "boxes": 3,
+      "links": 3,
+      "has": [
+        "1: Sends the order",
+        "2: Saves it",
+        "3: Answers with its number"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-named-arguments.mmd",
+      "covers": "Arguments given by name",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "«container: C#»",
+        "«container database: SQL Server»",
+        "Raises orders through [HTTPS]",
+        "Saves to"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-tags-links-sprites.mmd",
+      "covers": "Tags, links and sprites",
+      "boxes": 2,
+      "links": 1,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "A link is not followed: a page runs nothing of an author's. Tags and sprites are read past, as Mermaid reads past them"
+    },
+    {
+      "file": "c4/c4-empty-arguments.mmd",
+      "covers": "Arguments left empty",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "«container»",
+        "«container database: SQL Server»",
+        "Calls"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-update-element-style.mmd",
+      "covers": "An element given colours of its own",
+      "boxes": 3,
+      "links": 2,
+      "kinds": [
+        "red"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "Its fill is the colour written, as the nearest colour of the design; the colours of its words and its edge are the design's"
+    },
+    {
+      "file": "c4/c4-update-element-style-named.mmd",
+      "covers": "An element given colours by name",
+      "boxes": 2,
+      "links": 1,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "says": "a colour by name (\"grey\")",
+      "loses": "A colour given by name is not read: only one written as #rrggbb is"
+    },
+    {
+      "file": "c4/c4-update-rel-style.mmd",
+      "covers": "A relation given colours of its own, and its words moved",
+      "boxes": 2,
+      "links": 1,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "says": "UpdateRelStyle colours a link",
+      "loses": "A link's colour is the design's; where its words sit is Merlive's to place"
+    },
+    {
+      "file": "c4/c4-update-rel-offset.mmd",
+      "covers": "A relation whose words are moved",
+      "boxes": 2,
+      "links": 1,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-update-layout-config.mmd",
+      "covers": "How many elements and boundaries Mermaid should put in a row",
+      "boxes": 3,
+      "links": 2,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-title.mmd",
+      "covers": "A title",
+      "boxes": 2,
+      "links": 1,
+      "title": "Containers of the ordering system",
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-frontmatter.mmd",
+      "covers": "Front matter with a title",
+      "boxes": 2,
+      "links": 1,
+      "title": "Ordering, from the front matter",
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-accessibility.mmd",
+      "covers": "accTitle and accDescr",
+      "boxes": 2,
+      "links": 1,
+      "title": "Who orders, and in what",
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-comments.mmd",
+      "covers": "Comments on lines of their own",
+      "boxes": 2,
+      "links": 1,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-quotes.mmd",
+      "covers": "Commas, brackets and %% inside quotes",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Buyer (purchasing)",
+        "ERP [live]",
+        "Raises orders in (daily, mostly)"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-line-breaks.mmd",
+      "covers": "A line break in a label and in a description",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Buyer in purchasing"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-across-lines.mmd",
+      "covers": "Words in quotes that run on down the lines",
+      "boxes": 2,
+      "links": 1,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-declared-twice.mmd",
+      "covers": "An element declared twice",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "ERP, the new one"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "c4/c4-whole.mmd",
+      "covers": "A whole diagram: people, a boundary of containers, a database, a queue and a system outside",
+      "boxes": 7,
+      "links": 6,
+      "groups": 1,
+      "has": [
+        "Ordering",
+        "«container: C#, ASP.NET»",
+        "Raises orders in [HTTPS]",
+        "Trades orders and answers with"
+      ],
+      "kinds": [
+        "external",
+        "data"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "box",
+        "box",
+        "cylinder",
+        "pill",
+        "box"
+      ],
+      "title": "Ordering: who uses it and what it is made of",
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "arrow",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "A queue is drawn as a pill: there is no cylinder on its side yet"
+    }
+  ],
+  "architecture": [
+    {
+      "file": "architecture/architecture-service.mmd",
+      "covers": "Services, each with an icon and a title, and an edge between them",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Orders API",
+        "Orders"
+      ],
+      "kinds": [
+        "data"
+      ],
+      "shapes": [
+        "box",
+        "box"
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR"
+    },
+    {
+      "file": "architecture/architecture-icons-built-in.mmd",
+      "covers": "The icons Mermaid is born with: cloud, database, disk, internet, server",
+      "boxes": 5,
+      "links": 4,
+      "has": [
+        "Web shop",
+        "Azure",
+        "Orders API",
+        "Orders",
+        "Invoices"
+      ],
+      "kinds": [
+        "data"
+      ],
+      "loses": "A disk is drawn with the database's drawing: Merlive has no drawing of a disk of its own yet"
+    },
+    {
+      "file": "architecture/architecture-icon-pack.mmd",
+      "covers": "An icon from a pack by its name (logos:aws-lambda)",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Price check",
+        "Prices"
+      ],
+      "says": "the icon \"logos:aws-lambda\" is not one Merlive has a drawing for",
+      "loses": "An icon from a pack is somebody's mark, which Merlive neither fetches nor draws: the words are kept, and it is said"
+    },
+    {
+      "file": "architecture/architecture-service-no-icon.mmd",
+      "covers": "A service with no icon",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Orders API",
+        "Orders"
+      ]
+    },
+    {
+      "file": "architecture/architecture-service-no-title.mmd",
+      "covers": "A service with no title",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "api",
+        "Orders"
+      ],
+      "loses": "A box says something: a service with no title takes its id for its words, where Mermaid draws the icon alone"
+    },
+    {
+      "file": "architecture/architecture-title-quoted.mmd",
+      "covers": "A title in quotes, with what a bare title may not hold",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Orders API, version 2"
+      ]
+    },
+    {
+      "file": "architecture/architecture-id-hyphen.mmd",
+      "covers": "Ids with a hyphen and an underscore",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Orders API",
+        "Orders"
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ]
+      ]
+    },
+    {
+      "file": "architecture/architecture-group.mmd",
+      "covers": "A group, the services in it, and one outside it",
+      "boxes": 3,
+      "links": 2,
+      "groups": 1,
+      "has": [
+        "Azure",
+        "Web shop"
+      ],
+      "loses": "A group's icon is not drawn: a frame is named by its title"
+    },
+    {
+      "file": "architecture/architecture-group-nested.mmd",
+      "covers": "A group inside a group",
+      "boxes": 3,
+      "links": 2,
+      "groups": 2,
+      "has": [
+        "Azure",
+        "Private network",
+        "Gateway"
+      ],
+      "loses": "A group's icon is not drawn: a frame is named by its title"
+    },
+    {
+      "file": "architecture/architecture-group-later.mmd",
+      "covers": "A group declared after the services said to be in it",
+      "boxes": 2,
+      "links": 1,
+      "groups": 1,
+      "has": [
+        "Azure"
+      ],
+      "loses": "A group's icon is not drawn: a frame is named by its title"
+    },
+    {
+      "file": "architecture/architecture-group-no-icon.mmd",
+      "covers": "A group with no icon",
+      "boxes": 2,
+      "links": 1,
+      "groups": 1,
+      "has": [
+        "Head office",
+        "ERP",
+        "Ledger"
+      ]
+    },
+    {
+      "file": "architecture/architecture-edge-sides.mmd",
+      "covers": "Edges that leave by every side: right to left, left to right, bottom to top",
+      "boxes": 5,
+      "links": 4,
+      "has": [
+        "Mail",
+        "Invoices"
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "TD"
+    },
+    {
+      "file": "architecture/architecture-edge-right-angle.mmd",
+      "covers": "An edge that leaves by the top and meets a side",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "Orders API",
+        "Orders",
+        "Invoices"
+      ],
+      "direction": "TD"
+    },
+    {
+      "file": "architecture/architecture-edge-arrows.mmd",
+      "covers": "Arrowheads: into the second, into the first, into both",
+      "boxes": 4,
+      "links": 3,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "arrow",
+          "none"
+        ],
+        [
+          "arrow",
+          "arrow"
+        ]
+      ],
+      "direction": "LR"
+    },
+    {
+      "file": "architecture/architecture-edge-label.mmd",
+      "covers": "Words on an edge",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "saves to"
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ]
+      ]
+    },
+    {
+      "file": "architecture/architecture-edge-label-arrows.mmd",
+      "covers": "Words on an edge with arrowheads",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "places an order",
+        "reads and writes"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "arrow",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "architecture/architecture-edge-no-spaces.mmd",
+      "covers": "Edges written with no spaces",
+      "boxes": 3,
+      "links": 2,
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "architecture/architecture-edge-group.mmd",
+      "covers": "An edge out of a group and into a group ({group})",
+      "boxes": 3,
+      "links": 2,
+      "groups": 2,
+      "has": [
+        "Shop",
+        "Books"
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "says": "a link out of a group (\"db{group}\") is drawn from the service it names",
+      "loses": "A link out of a group is drawn from the service its author named, not from the frame: a line ends at a box. A group's icon is not drawn: a frame is named by its title"
+    },
+    {
+      "file": "architecture/architecture-edge-self.mmd",
+      "covers": "An edge from a service to itself",
+      "boxes": 2,
+      "links": 2,
+      "has": [
+        "Retry queue"
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "arrow",
+          "none"
+        ]
+      ]
+    },
+    {
+      "file": "architecture/architecture-junction.mmd",
+      "covers": "A junction: where edges meet and part",
+      "boxes": 4,
+      "links": 3,
+      "has": [
+        "Orders API",
+        "Orders",
+        "Invoices"
+      ],
+      "kinds": [
+        "junction"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "box",
+        "pill"
+      ],
+      "loses": "A junction is drawn as a round box with no words, the size of every other box, not as the point where lines meet"
+    },
+    {
+      "file": "architecture/architecture-junction-group.mmd",
+      "covers": "A junction in a group",
+      "boxes": 4,
+      "links": 3,
+      "groups": 1,
+      "kinds": [
+        "junction"
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "A junction is drawn as a round box with no words, the size of every other box, not as the point where lines meet. A group's icon is not drawn: a frame is named by its title"
+    },
+    {
+      "file": "architecture/architecture-align.mmd",
+      "covers": "Services lined up in a column (align)",
+      "boxes": 4,
+      "links": 3,
+      "groups": 1,
+      "has": [
+        "Stores",
+        "Stock"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "loses": "Lining services up in a row or a column is read past: where a box goes is by rule. A group's icon is not drawn: a frame is named by its title"
+    },
+    {
+      "file": "architecture/architecture-title.mmd",
+      "covers": "A title written in the diagram",
+      "boxes": 2,
+      "links": 1,
+      "title": "Where an order is kept"
+    },
+    {
+      "file": "architecture/architecture-frontmatter.mmd",
+      "covers": "Front matter: a title, and Mermaid's own settings",
+      "boxes": 2,
+      "links": 1,
+      "title": "Where an order is kept"
+    },
+    {
+      "file": "architecture/architecture-accessibility.mmd",
+      "covers": "accTitle and accDescr, on a line and over several",
+      "boxes": 2,
+      "links": 1,
+      "title": "Where an order is kept"
+    },
+    {
+      "file": "architecture/architecture-comments.mmd",
+      "covers": "Comments, on a line of their own and after a line",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Orders API",
+        "Orders"
+      ]
+    },
+    {
+      "file": "architecture/architecture-direction-down.mmd",
+      "covers": "A diagram whose edges run top to bottom",
+      "boxes": 3,
+      "links": 2,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "direction": "TD"
+    },
+    {
+      "file": "architecture/architecture-whole.mmd",
+      "covers": "A whole diagram: groups in groups, services, a junction, edges with arrowheads and words",
+      "boxes": 7,
+      "links": 6,
+      "groups": 3,
+      "has": [
+        "Public",
+        "Azure",
+        "Data",
+        "posts and reads",
+        "Web shop"
+      ],
+      "kinds": [
+        "data",
+        "junction"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "arrow",
+          "arrow"
+        ]
+      ],
+      "direction": "LR",
+      "says": "a link out of a group (\"shop{group}\") is drawn from the service it names",
+      "loses": "A junction is drawn as a round box with no words, the size of every other box, not as the point where lines meet. A link out of a group is drawn from the service its author named. A group's icon is not drawn: a frame is named by its title"
+    }
+  ],
+  "block": [
+    {
+      "file": "block/block-flow.mmd",
+      "covers": "A block diagram that is a flow: blocks in a row, each joined to the next",
+      "boxes": 3,
+      "links": 2,
+      "direction": "LR",
+      "has": [
+        "Web shop",
+        "ERP",
+        "Warehouse"
+      ],
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "file": "block/block-beta.mmd",
+      "covers": "The older name of the kind: block-beta",
+      "boxes": 3,
+      "links": 2,
+      "direction": "LR"
+    },
+    {
+      "file": "block/block-flow-down.mmd",
+      "covers": "columns 1: blocks one under the other, joined",
+      "boxes": 3,
+      "links": 2,
+      "direction": "TD",
+      "has": [
+        "Order",
+        "Pick",
+        "Pack"
+      ]
+    },
+    {
+      "file": "block/block-flow-no-columns.mmd",
+      "covers": "No columns given: one row",
+      "boxes": 3,
+      "links": 2,
+      "direction": "LR"
+    },
+    {
+      "file": "block/block-columns-auto.mmd",
+      "covers": "columns auto: one row, each column as wide as it needs",
+      "boxes": 3,
+      "links": 2,
+      "direction": "LR"
+    },
+    {
+      "file": "block/block-columns-wrap.mmd",
+      "covers": "Blocks that wrap to a second row, joined in the order written",
+      "boxes": 4,
+      "links": 3,
+      "direction": "TD"
+    },
+    {
+      "file": "block/block-ids-only.mmd",
+      "covers": "Blocks with no words: each is called by its id",
+      "boxes": 3,
+      "links": 2,
+      "has": [
+        "quote",
+        "order",
+        "invoice"
+      ]
+    },
+    {
+      "file": "block/block-line-break.mmd",
+      "covers": "Words broken with <br/>, and an entity code",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Web shop and portal",
+        "ERP & stock"
+      ]
+    },
+    {
+      "file": "block/block-link-plain.mmd",
+      "covers": "A link with no arrowhead",
+      "boxes": 2,
+      "links": 1,
+      "ends": [
+        [
+          "none",
+          "none"
+        ]
+      ]
+    },
+    {
+      "file": "block/block-link-words.mmd",
+      "covers": "Words written into a link",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "sends orders"
+      ]
+    },
+    {
+      "file": "block/block-link-kinds.mmd",
+      "covers": "Links thick and dotted, ending in a circle, a cross, an arrow at both ends, and dotted with words",
+      "boxes": 7,
+      "links": 6,
+      "ends": [
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ],
+        [
+          "none",
+          "circle"
+        ],
+        [
+          "none",
+          "cross"
+        ],
+        [
+          "arrow",
+          "arrow"
+        ],
+        [
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "later"
+      ]
+    },
+    {
+      "file": "block/block-link-inline-labels.mmd",
+      "covers": "Blocks given their shape and words in the link that joins them",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Start",
+        "Stop"
+      ]
+    },
+    {
+      "file": "block/block-link-new-block.mmd",
+      "covers": "A link to a block not written anywhere else, which makes it",
+      "boxes": 2,
+      "links": 1,
+      "has": [
+        "Shop",
+        "erp"
+      ]
+    },
+    {
+      "file": "block/block-link-space.mmd",
+      "covers": "A space between two blocks, to make room for the link that joins them (how Mermaid says to draw a link)",
+      "boxes": 2,
+      "links": 1,
+      "direction": "LR"
+    },
+    {
+      "file": "block/block-space-down.mmd",
+      "covers": "A space between two blocks one under the other, for the link that joins them",
+      "boxes": 2,
+      "links": 1,
+      "direction": "TD"
+    },
+    {
+      "file": "block/block-space-wide.mmd",
+      "covers": "space:3 between two joined blocks: more room for the same link",
+      "boxes": 3,
+      "links": 2,
+      "direction": "LR"
+    },
+    {
+      "file": "block/block-shapes.mmd",
+      "covers": "Every shape of a block, joined in a chain",
+      "boxes": 14,
+      "links": 13,
+      "shapes": [
+        "box",
+        "box",
+        "pill",
+        "subroutine",
+        "cylinder",
+        "pill",
+        "flag",
+        "diamond",
+        "hexagon",
+        "lean-right",
+        "lean-left",
+        "trapezoid",
+        "trapezoid-alt",
+        "double-circle"
+      ],
+      "kinds": [
+        "data"
+      ],
+      "loses": "A block with round corners is a box, and a circle is a pill, as in a flowchart"
+    },
+    {
+      "file": "block/block-nested.mmd",
+      "covers": "A block that holds others: a group",
+      "boxes": 3,
+      "links": 2,
+      "groups": 1
+    },
+    {
+      "file": "block/block-nested-label.mmd",
+      "covers": "A block that holds others, with a name and columns of its own",
+      "boxes": 3,
+      "links": 2,
+      "groups": 1,
+      "has": [
+        "Back office"
+      ],
+      "loses": "Merlive draws the name its author gave the block; Mermaid 11 draws none"
+    },
+    {
+      "file": "block/block-nested-anonymous.mmd",
+      "covers": "A block that holds others and has no id",
+      "boxes": 3,
+      "links": 2,
+      "groups": 1
+    },
+    {
+      "file": "block/block-nested-deep.mmd",
+      "covers": "Blocks that hold others, inside one that holds them",
+      "boxes": 3,
+      "links": 2,
+      "groups": 3
+    },
+    {
+      "file": "block/block-nested-link.mmd",
+      "covers": "Links to and from a block that holds others: joined to what is inside it",
+      "boxes": 4,
+      "links": 3,
+      "groups": 1,
+      "has": [
+        "Shop",
+        "Bank"
+      ]
+    },
+    {
+      "file": "block/block-style.mmd",
+      "covers": "A block styled on its own: a heavy outline, a broken one",
+      "boxes": 2,
+      "links": 1,
+      "loses": "The colour is drawn in the design's nearest colour"
+    },
+    {
+      "file": "block/block-classdef.mmd",
+      "covers": "A class, and the blocks that are of it",
+      "boxes": 3,
+      "links": 2,
+      "kinds": [
+        "back"
+      ],
+      "loses": "The colour is drawn in the design's nearest colour"
+    },
+    {
+      "file": "block/block-comments.mmd",
+      "covers": "Comments on lines of their own",
+      "boxes": 2,
+      "links": 1
+    },
+    {
+      "file": "block/block-frontmatter.mmd",
+      "covers": "Front matter with a title",
+      "boxes": 3,
+      "links": 2,
+      "title": "From shop to ledger"
+    },
+    {
+      "file": "block/block-grid.mmd",
+      "covers": "A grid of blocks with no links: what it says is where each block is",
+      "boxes": 6,
+      "links": 0,
+      "left": "\"Shop\", \"Portal\", \"Phone\" and 3 more are joined to nothing by a link"
+    },
+    {
+      "file": "block/block-shapes-grid.mmd",
+      "covers": "Every shape of a block, laid out in a grid with no links",
+      "boxes": 14,
+      "links": 0,
+      "left": "are joined to nothing by a link"
+    },
+    {
+      "file": "block/block-alone.mmd",
+      "covers": "One block on its own",
+      "boxes": 1,
+      "links": 0,
+      "left": "\"ERP\" is joined to nothing by a link"
+    },
+    {
+      "file": "block/block-span.mmd",
+      "covers": "Blocks that span columns: a wide block over two narrower ones",
+      "boxes": 3,
+      "links": 2,
+      "left": "\"Web shop\" spans 3 columns (line 3); \"ERP\" spans 2 columns (line 4)"
+    },
+    {
+      "file": "block/block-space.mmd",
+      "covers": "A block that spans the grid under two others, a space between them and an empty row",
+      "boxes": 3,
+      "links": 2,
+      "left": "\"Warehouse\" spans 3 columns (line 5)"
+    },
+    {
+      "file": "block/block-space-offset.mmd",
+      "covers": "Spaces that put a block under the one it belongs to",
+      "boxes": 4,
+      "links": 3,
+      "left": "the space on line 4 places a block, and does not make room for a link"
+    },
+    {
+      "file": "block/block-arrows.mmd",
+      "covers": "Block arrows between cells: arrows drawn as blocks, placed by the grid",
+      "boxes": 5,
+      "links": 0,
+      "left": "\"orders\" is a block arrow (line 3)"
+    },
+    {
+      "file": "block/block-arrow-directions.mmd",
+      "covers": "A block arrow pointing every way it can",
+      "boxes": 7,
+      "links": 0,
+      "left": "\"Right\" is a block arrow (line 3)"
+    },
+    {
+      "file": "block/block-nested-columns.mmd",
+      "covers": "Blocks that hold grids of their own, and span columns of the grid they are in",
+      "boxes": 9,
+      "links": 0,
+      "groups": 2,
+      "left": "\"Everything\" spans 3 columns (line 3)"
+    },
+    {
+      "file": "block/block-mixed.mmd",
+      "covers": "A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide)",
+      "boxes": 6,
+      "links": 2,
+      "groups": 1,
+      "left": "\"feeds\" is a block arrow (line 4)"
+    }
+  ],
   "sequence": [
     {
       "file": "sequence/seq-participants-implicit.mmd",
@@ -1191,8 +5312,7 @@
         "database",
         "collections",
         "queue"
-      ],
-      "loses": "A database is a box of the kind \"data\". The other five are plain boxes, told apart by their names, not by a symbol"
+      ]
     },
     {
       "file": "sequence/seq-alias-as.mmd",
@@ -1357,13 +5477,63 @@
       "file": "sequence/seq-half-arrows.mmd",
       "covers": "Half arrows",
       "participants": 2,
-      "messages": 4
+      "messages": 4,
+      "ends": [
+        [
+          "solid",
+          "none",
+          "half-top"
+        ],
+        [
+          "dotted",
+          "none",
+          "half-bottom"
+        ],
+        [
+          "solid",
+          "none",
+          "stick-top"
+        ],
+        [
+          "dotted",
+          "none",
+          "stick-bottom"
+        ]
+      ],
+      "has": [
+        "Top half",
+        "Bottom half",
+        "Top stick",
+        "Bottom stick"
+      ]
     },
     {
       "file": "sequence/seq-central-connection.mmd",
       "covers": "A message to or from the middle of a line",
       "participants": 2,
-      "messages": 3
+      "messages": 3,
+      "ends": [
+        [
+          "solid",
+          "none",
+          "arrow"
+        ],
+        [
+          "solid",
+          "none",
+          "arrow"
+        ],
+        [
+          "solid",
+          "none",
+          "arrow"
+        ]
+      ],
+      "has": [
+        "Raise order",
+        "Chase it",
+        "Done"
+      ]
     },
     {
       "file": "sequence/seq-activation-explicit.mmd",

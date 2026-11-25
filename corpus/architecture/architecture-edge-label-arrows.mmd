@@ -1,0 +1,7 @@
+architecture-beta
+  service shop(internet)[Web shop]
+  service api(server)[Orders API]
+  service db(database)[Orders]
+
+  shop:R -[places an order]-> L:api
+  api:R <-[reads and writes]-> L:db

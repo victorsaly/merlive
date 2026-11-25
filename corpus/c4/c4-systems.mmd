@@ -1,0 +1,6 @@
+C4Context
+  System(erp, "ERP", "Holds orders and stock")
+  SystemDb(ledger, "Ledger", "Every posting, kept for good")
+  SystemQueue(jobs, "Job queue", "Work waiting to be done")
+  Rel(erp, ledger, "Posts to")
+  Rel(erp, jobs, "Queues work on")

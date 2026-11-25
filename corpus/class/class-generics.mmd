@@ -1,0 +1,9 @@
+classDiagram
+  class Basket~Item~{
+    int id
+    List~Item~ items
+    add(List~Item~ more)
+    lines() List~Item~
+    byShelf() List~List~Item~~
+  }
+  Basket : -List~string~ notes

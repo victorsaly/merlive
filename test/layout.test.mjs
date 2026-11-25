@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { hitsBox, layout, measure, meet, wrap } from '../skills/merlive/scripts/layout.mjs';
+import { builtIn } from '../skills/merlive/scripts/design.mjs';
+import { score } from '../skills/merlive/scripts/score.mjs';
 
 const draw = (/** @type {string} */ src) => {
   const model = parse(src);
@@ -329,3 +331,95 @@ describe('layout: a group inside a group', () => {
   });
 });
 
+
+describe('layout: a flow written from the far end', () => {
+  const chain = (/** @type {string} */ way) => parse(`flowchart ${way}\n  Quote --> Order --> Invoice`);
+
+  it('reads BT and RL as the same flow, started from the bottom or from the right, and says nothing', () => {
+    assert.deepEqual([chain('BT').direction, chain('BT').reversed, chain('BT').warnings], ['TD', true, []]);
+    assert.deepEqual([chain('RL').direction, chain('RL').reversed, chain('RL').warnings], ['LR', true, []]);
+    assert.ok(!chain('TD').reversed && !chain('LR').reversed);
+    const state = parse('stateDiagram-v2\n  direction BT\n  [*] --> Open\n  Open --> [*]');
+    assert.deepEqual([state.direction, state.reversed, state.warnings], ['TD', true, []]);
+  });
+
+  it('draws bottom to top: the first box lowest, and every arrow pointing up into the box it goes to', () => {
+    const m = chain('BT'), lay = layout(m);
+    assert.ok(lay.nodes.Quote.y > lay.nodes.Order.y && lay.nodes.Order.y > lay.nodes.Invoice.y);
+    for (const e of m.edges) {
+      const pts = lay.edges[e.id].points, to = lay.nodes[e.to], end = pts[pts.length - 1];
+      assert.ok(end.y < pts[0].y, 'the line goes up');
+      assert.ok(Math.abs(end.y - (to.y + to.h / 2)) < 1, 'and ends on the bottom of its box');
+    }
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+  });
+
+  it('draws right to left: the first box furthest right, and every arrow pointing left', () => {
+    const m = chain('RL'), lay = layout(m);
+    assert.ok(lay.nodes.Quote.x > lay.nodes.Order.x && lay.nodes.Order.x > lay.nodes.Invoice.x);
+    for (const e of m.edges) {
+      const pts = lay.edges[e.id].points, to = lay.nodes[e.to], end = pts[pts.length - 1];
+      assert.ok(end.x < pts[0].x && Math.abs(end.x - (to.x + to.w / 2)) < 1);
+    }
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+  });
+
+  it('is the same picture as the flow written the usual way, turned over: as wide, as tall, nothing lost', () => {
+    const src = (/** @type {string} */ way) => `flowchart ${way}\n  A[Raise] --> B{Approved?}\n  B -->|yes| C[Order]\n  B -->|no| D[Rework]\n  D --> A\n  C --> E[(Ledger)]\n  subgraph one[Buying]\n    A\n    B\n  end\n  subgraph two[Books]\n    C\n    E\n  end`;
+    for (const [usual, far] of [['TD', 'BT'], ['LR', 'RL']]) {
+      const a = layout(parse(src(usual))), m = parse(src(far)), b = layout(m);
+      assert.deepEqual(b.warnings, a.warnings, far);
+      assert.equal(b.groups.length, a.groups.length, `${far}: every frame is drawn`);
+      assert.ok(Math.abs(b.width - a.width) <= 40 && Math.abs(b.height - a.height) <= 40, `${far}: ${b.width}×${b.height} for ${a.width}×${a.height}`);
+      assert.deepEqual(score(m, b, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), [], far);
+      // A frame's name is still along its top, whichever way the flow runs.
+      for (const f of b.groups) assert.ok(f.name.y < f.y + f.h / 2, `${far}: ${f.title}`);
+    }
+  });
+
+  it('keeps frames stacked along a bottom-to-top flow apart, each with room for its name', () => {
+    const m = parse('flowchart BT\n  subgraph one[First]\n    A --> B\n  end\n  subgraph two[Second]\n    C --> D\n  end\n  B --> C'), lay = layout(m);
+    assert.equal(lay.groups.length, 2);
+    assert.deepEqual(lay.warnings, []);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+  });
+
+  it('turns a right-to-left flow too wide for a screen top to bottom, and says so', () => {
+    const m = parse(`flowchart RL\n  ${Array.from({ length: 9 }, (_, i) => `S${i}[Step number ${i}] --> S${i + 1}[Step number ${i + 1}]`).join('\n  ')}`), lay = layout(m);
+    assert.equal(lay.direction, 'TD');
+    assert.ok(lay.nodes.S0.y < lay.nodes.S9.y, 'read from the top, as a page is');
+    assert.match(lay.warnings[0], /^written right to left, drawn top to bottom/);
+  });
+});
+
+describe('layout: words on a link that runs into a group', () => {
+  it('have a row of their own above the name of the group, however long the name', () => {
+    const m = parse('flowchart TD\n  App[Order service] -->|Reads and writes over TDS| Db[(Orders)]\n  subgraph cloud["Azure SQL, general purpose tier"]\n    subgraph inner["West Europe, zone one"]\n      Db\n    end\n  end'), lay = layout(m);
+    assert.equal(lay.groups.length, 2);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+    const words = lay.edges['App-Db'].label;
+    assert.ok(words && words.y + words.h / 2 <= lay.groups[0].y, 'the words end above the outer frame');
+  });
+
+  it('leave the room between ranks as it was where no words run into a group', () => {
+    const plain = (/** @type {string} */ label) => layout(parse(`flowchart TD\n  A --> B\n  B ${label} C\n  subgraph g[Group]\n    A\n    B\n    C\n  end`));
+    assert.equal(plain('-->|inside|').height, plain('-->').height);
+  });
+});
+
+describe('layout: what the newer kinds asked of a box', () => {
+  it('makes the box wide enough for the line over its name', () => {
+    const m = parse('flowchart TD\n  A[Orders] --> B[Bus]');
+    /** @type {any} */ (m.nodes[0]).over = '«container database: SQL Server»';
+    const lay = layout(m);
+    assert.ok(m.nodes[0].over.length * measure.overGlyph + 2 * measure.overIn <= lay.box.w, `${lay.box.w}px`);
+    /** @type {any} */ (m.nodes[0]).over = `«${'x'.repeat(80)}»`;
+    const p6 = score(m, layout(m), builtIn).checks.find((c) => c.id === 'P6');
+    assert.match(p6?.detail ?? '', /"Orders" has a line over its name too long for any box/);
+  });
+
+  it('gives words of two lines on a link that turns between two ranks room above or below the turn', () => {
+    const m = parse('flowchart TD\n  Rep[Sales rep] -->|Answers orders in| Portal[Supplier portal]\n  Api[Order API] <-->|Trades orders and answers with| Portal\n  Shop[Web shop] --> Api'), lay = layout(m);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+  });
+});

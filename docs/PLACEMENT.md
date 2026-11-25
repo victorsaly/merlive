@@ -36,7 +36,15 @@ A diagram uses one box width (128, 160, 192 or 224 px: the narrowest that fits e
 height. A shape is what its author drew (a rhombus, a hexagon, a cylinder, a subroutine, a side that leans, a
 double circle, a flag), in the same footprint as every other box: a rhombus is as wide and as tall as the boxes
 round it, not a diamond twice their size. Each line runs on to the outline of the shape it meets. No two boxes
-come closer than 16 px.
+come closer than 16 px. Three boxes are taller than the rest: one that lists rows under its name, one that says a sentence about
+itself, and a note, each by what it holds. The short line over a name is never wrapped: the box is as wide as
+it needs. An entity's rows are a table: every column is as wide as its widest cell, what the box has to
+spare goes to the names, and the whole table has to fit the widest box there is (384 px).
+
+A class and an entity list rows under their name, so their boxes cannot all be one height. They keep one width
+(up to 384 px, wide enough for the longest row, which is never broken), and each is as tall as what it lists. A
+rank is as tall as its tallest box, its boxes sit on its middle line, and the room to the next rank is the same
+whatever the heights. Such a diagram is drawn top to bottom.
 
 - **Pass:** eight boxes, all 128 by 60.
 - **Fail:** a diamond 180 px wide beside a 90 px rectangle.
@@ -80,16 +88,23 @@ the other would lie on each other in the room between them, the line entering st
 
 A plain label is wrapped to two lines. Where the author broke a label with `<br/>`, their lines are kept as
 written, up to four, in a box wide enough for each (there are six widths, 128 to 288 px). No word is wider than
-the box.
+the box. A note is the one box whose words may run on, since saying more than a name is what it is for: it
+keeps the lines its author broke it into when a width allows, wraps when none does, and is as tall as its lines.
 
 - **What to do when it fails:** shorten the label and put the detail in a `%% note`.
 
 ## P7. A link's words sit clear of boxes and of each other
 
+Where a link runs into a group from outside, the room between the two ranks is taller by the words, so they have
+a row of their own above the group's name. Where a link with two lines of words or more turns between two ranks,
+the room is tall enough for the words above or below the turn.
+
 A link's words ("Yes", "No") are tried beside each run of its line, near where it leaves first: the first place
 that sits on no box and no other words wins, and of those, one no line passes through. Long words are wrapped,
 and wrapped again to fit a short run between two boxes. Words beside a line that goes round the outside stay
-inside the picture: everything moves over to give them the margin the boxes have.
+inside the picture: everything moves over to give them the margin the boxes have. The few words at an end of a
+link ("1", "0..*") sit beside the line just out from its box, the two ends on one side and the link's own words
+on the other, and are held to the same.
 
 - **Fail:** the words of a line round the left side are cut off by the edge of the picture.
 

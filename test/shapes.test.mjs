@@ -4,7 +4,7 @@
 
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { cut, inset, outlineOf, roomIn, shapes, wordsAt } from '../skills/merlive/scripts/shapes.mjs';
+import { cut, form, inset, outlineOf, roomIn, shapes, wordsAt } from '../skills/merlive/scripts/shapes.mjs';
 
 const w = 160, h = 60;
 
@@ -81,5 +81,33 @@ describe('shapes: where a line meets the outline', () => {
       const far = inset(shape, side, off, w, h);
       assert.ok(far >= 0 && far <= (side === 'top' || side === 'bottom' ? h : w) / 2, `${shape} ${side} ${off}: ${far}`);
     }
+  });
+});
+
+describe('shapes: a note', () => {
+  it('is a sheet with its top right corner folded, and the fold drawn', () => {
+    const { main, more } = outlineOf('note', 0, 0, w, h, 8);
+    assert.equal((main.match(/\d+(\.\d+)?,\d+(\.\d+)?/g) ?? []).length, 5, 'four corners, one of them cut');
+    assert.equal(more.length, 1);
+  });
+
+  it('is met on its outline where the corner is folded, and at the edge of its box everywhere else', () => {
+    assert.equal(inset('note', 'top', 0, w, h), 0);
+    assert.equal(inset('note', 'top', -w / 2, w, h), 0);
+    assert.ok(inset('note', 'top', w / 2 - 2, w, h) > 0, 'a line down onto the fold goes on to it');
+    assert.ok(inset('note', 'right', -h / 2 + 2, w, h) > 0, 'and so does one in from the right, at the top');
+    assert.equal(inset('note', 'right', h / 2, w, h), 0);
+    assert.equal(inset('note', 'bottom', w / 2, w, h), 0);
+    assert.equal(inset('note', 'left', -h / 2, w, h), 0);
+  });
+});
+
+describe('shapes: a pill taller than a plain box', () => {
+  it('keeps flat sides for its words: its ends are rounded no more than a plain pill of two lines is', () => {
+    const { main } = outlineOf('pill', 0, 0, 200, 140, 8);
+    assert.match(main, new RegExp(`rx="${form.pillMost}"`));
+    assert.equal(inset('pill', 'left', 0, 200, 140), 0, 'the middle of a tall side is flat');
+    assert.ok(inset('pill', 'left', 68, 200, 140) > 0, 'and the corner is still round');
+    assert.equal(outlineOf('pill', 0, 0, 160, 44, 8).main.includes('rx="22"'), true, 'a plain pill is as it was');
   });
 });

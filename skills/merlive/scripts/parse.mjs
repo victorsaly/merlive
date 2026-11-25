@@ -3,19 +3,31 @@
 
 import { iconFor } from './icons.mjs';
 import { stateReader } from './state.mjs';
+import { erReader } from './er.mjs';
+import { c4Reader } from './c4.mjs';
+import { classReader } from './class.mjs';
+import { architectureReader } from './architecture.mjs';
+import { requirementReader } from './requirement.mjs';
+import { blockReader } from './block.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
-/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string}} Node dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
-/** @typedef {'none'|'arrow'|'circle'|'cross'} Mark what is drawn at an end of a link */
-/** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',head:Mark,tail:Mark,kind?:string}} Edge head: at the box it leads to; tail: at the box it comes from; kind: the colour its author gave it, by name */
+/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string,rows?:string[][],table?:string[][],over?:string,text?:string,emphasis?:{words:string,strong?:boolean,em?:boolean}[]}} Node text: a sentence or two about the box, drawn under its name in a quieter face and wrapped, the box as tall as it needs (a requirement's text, what a C4 system does); emphasis: the label again as runs, when a Markdown string made some of it bold or italic; table: an entity's rows again, cell by cell (type, name, keys), to be drawn as a table; rows: what a class or an entity lists under its name, a compartment at a time, each line as it is shown; over: a short line above its name ("«interface»"); dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
+/**
+ * @typedef {'none'|'arrow'|'circle'|'cross'|'triangle'|'diamond'|'diamond-open'|'one'|'zero-or-one'|'one-or-many'|'zero-or-many'} Mark
+ * what is drawn at an end of a link. A class diagram adds the hollow triangle of "is a", the filled diamond of
+ * "is made of" and the open one of "has"; an entity diagram adds how many: one, none or one, one or more, any.
+ */
+/** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',head:Mark,tail:Mark,kind?:string,near?:string,far?:string}} Edge head: at the box it leads to; tail: at the box it comes from; near, far: the few words written at each of those ends ("1", "0..*"); kind: the colour its author gave it, by name */
 /** @typedef {{title:string,text:string,path:string,seq:string[],loop:boolean}} Step */
 /**
  * @typedef {object} Model
  * @property {'flowchart'|'unsupported'} type
  * @property {string} kindOfDiagram the first word of the source: which kind it is, and the message when it is one Merlive does not draw
  * @property {'TD'|'LR'} direction
- * @property {string} title what the author called the picture (accTitle), for a reader who cannot see it
+ * @property {boolean} [reversed] the flow was written from the far end: bottom to top (BT), or right to left (RL)
+ * @property {string} title what the author called the picture, in its front matter or (accTitle) for a reader who cannot see it
+ * @property {string} heading the title its author meant to be seen on the picture: the front matter's, never accTitle's
  * @property {string} describes what the author says it shows (accDescr)
  * @property {Node[]} nodes
  * @property {Edge[]} edges
@@ -25,6 +37,8 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
  * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
  * @property {string[]} warnings
+ * @property {string} [left] why a diagram of a kind Merlive reads is left as Mermaid all the same, in a sentence that says what to do; its type is then 'unsupported' (a block diagram placed by its author's grid)
+ * @property {import('./block.mjs').Grid} [grid] a block diagram as its author placed it, cell by cell
  */
 
 // Longest opener first, so "([" is not read as "(" and then "[". A shape that leans may close either way: it
@@ -67,17 +81,20 @@ const MARKS = { '<': 'arrow', '>': 'arrow', o: 'circle', x: 'cross' };
 // these are the ones a diagram's words use. A code not here is left as it was typed.
 const NAMED = { quot: '"', amp: '&', lt: '<', gt: '>', apos: "'", nbsp: ' ', hearts: '♥', copy: '©', reg: '®', trade: '™', hellip: '…', mdash: '—', ndash: '–', larr: '←', rarr: '→', uarr: '↑', darr: '↓', harr: '↔', deg: '°', times: '×', divide: '÷', plusmn: '±', euro: '€', pound: '£', yen: '¥', cent: '¢', check: '✓', cross: '✗', bull: '•', middot: '·', laquo: '«', raquo: '»', lsquo: '‘', rsquo: '’', ldquo: '“', rdquo: '”', micro: 'µ', para: '¶', sect: '§', infin: '∞', ne: '≠', le: '≤', ge: '≥' };
 
-/**
- * The words of a label as a reader should see them, in the author's own lines. Quotes come off; a Markdown
- * string keeps its words and its line breaks and loses its stars; an icon's name comes out of the words (a box
- * draws it beside them, see iconsIn); an entity code becomes its character.
- * @param {string} text
- * @returns {string[]}
- */
-export function wordsOf(text) {
-  let words = text.trim().replace(/^"([^]*)"$/, '$1').trim();
+// Where a Markdown string's bold and italic begin and end, kept in the words while they are read as four
+// characters nobody types (from Unicode's private use area), so that everything done to the words is done once.
+const STRESS = { strongOn: '\uE000', strongOff: '\uE001', emOn: '\uE002', emOff: '\uE003' };
+const stressless = (/** @type {string} */ words) => words.replace(/[\uE000-\uE003]/g, '');
+
+/** The lines of a label as wordsOf gives them, with where bold and italic begin and end still marked. */
+function stressed(/** @type {string} */ text) {
+  let words = stressless(text).trim().replace(/^"([^]*)"$/, '$1').trim();
   const markdown = /^`[^]*`$/.test(words);
-  if (markdown) words = words.slice(1, -1).replace(/(\*\*|__)(?=\S)([^]*?\S)\1/g, '$2').replace(/(^|[^\w*])([*_])(?=\S)([^*_]*?\S)\2(?!\w)/g, '$1$3');
+  if (markdown) {
+    words = words.slice(1, -1)
+      .replace(/(\*\*|__)(?=\S)([^]*?\S)\1/g, `${STRESS.strongOn}$2${STRESS.strongOff}`)
+      .replace(/(^|[^\w*])([*_])(?=\S)([^*_]*?\S)\2(?!\w)/g, `$1${STRESS.emOn}$3${STRESS.emOff}`);
+  }
   return words
     .split(markdown ? /<br\s*\/?>|\n/i : /<br\s*\/?>/i)
     .map((line) => line
@@ -90,7 +107,39 @@ export function wordsOf(text) {
       })
       .replace(/\s+/g, ' ')
       .trim())
-    .filter(Boolean);
+    .filter((line) => stressless(line));
+}
+
+/**
+ * The words of a label as a reader should see them, in the author's own lines. Quotes come off; a Markdown
+ * string keeps its words and its line breaks and loses its stars (emphasisOf says what they stressed); an
+ * icon's name comes out of the words (a box draws it beside them, see iconsIn); an entity code becomes its
+ * character.
+ * @param {string} text
+ * @returns {string[]}
+ */
+export const wordsOf = (text) => stressed(text).map(stressless);
+
+/**
+ * What a Markdown string made bold or italic: the label as runs of words, which put end to end are the label.
+ * Nothing, when it stressed nothing.
+ * @param {string} text
+ * @returns {{words:string,strong?:boolean,em?:boolean}[]|undefined}
+ */
+export function emphasisOf(text) {
+  /** @type {{words:string,strong?:boolean,em?:boolean}[]} */
+  const runs = [];
+  let strong = false, em = false;
+  for (const c of stressed(text).join(' ')) {
+    if (c === STRESS.strongOn || c === STRESS.strongOff) strong = c === STRESS.strongOn;
+    else if (c === STRESS.emOn || c === STRESS.emOff) em = c === STRESS.emOn;
+    else {
+      const last = runs[runs.length - 1];
+      if (last && Boolean(last.strong) === strong && Boolean(last.em) === em) last.words += c;
+      else runs.push({ words: c, ...(strong ? { strong } : {}), ...(em ? { em } : {}) });
+    }
+  }
+  return runs.some((r) => r.strong || r.em) ? runs : undefined;
 }
 
 // The newer shapes ("A@{ shape: diam }") that Merlive has a drawing for, by every name Mermaid gives them.
@@ -156,6 +205,18 @@ function leftOpen(/** @type {string} */ text) {
   return (text.split('`').length - 1) % 2 ? 'a Markdown string' : '';
 }
 
+// A diagram that is boxes and links under another name has a reader of its own, which reads its lines into the
+// model a flowchart gives: how the block starts, and the reader for it. A new kind is one more line here.
+const READERS = /** @type {const} */ ([
+  [/^stateDiagram(-v2)?;?$/, stateReader],
+  [/^classDiagram(-v2)?;?$/, classReader],
+  [/^erDiagram;?$/, erReader],
+  [/^architecture(-beta)?;?$/, architectureReader],
+  [/^requirementDiagram;?$/, requirementReader],
+  [/^C4(Context|Container|Component|Dynamic|Deployment)$/, c4Reader],
+  [/^block(-beta)?;?$/, blockReader],
+]);
+
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own
 // direction is not followed yet.
 const PASSED = /^(click|direction)\b/;
@@ -203,7 +264,7 @@ export function parse(src) {
   // A sequence diagram has a reader, rules and a drawing of its own: sequence.mjs.
   if (isSequence(src)) return /** @type {any} */ (parseSequence(src));
   /** @type {Model} */
-  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, groups: [], warnings: [] };
+  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', heading: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, groups: [], warnings: [] };
   /** @type {Map<string, Node>} */
   const byId = new Map();
   const seenEdge = new Map();
@@ -228,9 +289,9 @@ export function parse(src) {
   const ofBoxes = [];
   /** @type {[number[], ReturnType<typeof lookOf>][]} */
   const ofLinks = [];
-  // A state diagram's lines are read by state.mjs, into this same model.
-  /** @type {ReturnType<typeof stateReader>|null} */
-  let state = null;
+  // The reader of a diagram that is not written as a flowchart is (see READERS), reading into this same model.
+  /** @type {{read:(text:string, line:number) => boolean, done:() => void}|null} */
+  let reader = null;
 
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
 
@@ -267,6 +328,9 @@ export function parse(src) {
     n.label = lines.join(' ') || n.id;
     if (lines.length > 1) n.breaks = lines;
     else delete n.breaks;
+    const runs = emphasisOf(words);
+    if (runs) n.emphasis = runs;
+    else delete n.emphasis;
   };
 
   /** Gives a box its shape. A cylinder is a store of data, and so is of the kind that holds data, like one only named as a store. */
@@ -340,7 +404,8 @@ export function parse(src) {
 
   /** Opens a group. One opened inside another is drawn as part of the outer one, and said once. */
   const frame = (/** @type {string} */ id, /** @type {string} */ title, /** @type {number} */ line) => {
-    model.groups.push({ id, title, members: [], ...(open.length ? { parent: open[open.length - 1] } : {}) });
+    // A group named a second time is the same group, opened again: what is declared in it now joins what was.
+    if (!model.groups.some((g) => g.id === id)) model.groups.push({ id, title, members: [], ...(open.length ? { parent: open[open.length - 1] } : {}) });
     open.push(id);
   };
 
@@ -445,17 +510,18 @@ export function parse(src) {
       header = true;
       const h = /^(flowchart|graph)\b\s*(TD|TB|BT|LR|RL)?/.exec(text);
       model.kindOfDiagram = text.split(/\s+/)[0];
-      if (/^stateDiagram(-v2)?;?$/.test(text)) return void (state = stateReader({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf }));
+      const read = READERS.find(([starts]) => starts.test(text))?.[1];
+      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]) }));
       if (!h) {
         model.type = 'unsupported';
         return;
       }
       if (h[2] === 'LR' || h[2] === 'RL') model.direction = 'LR';
-      if (h[2] === 'BT' || h[2] === 'RL') warn(line, `${h[2]} is drawn as ${model.direction}`);
+      if (h[2] === 'BT' || h[2] === 'RL') model.reversed = true;
       return;
     }
     if (model.type === 'unsupported') return;
-    if (state?.read(text, line)) return;
+    if (reader?.read(text, line)) return;
 
     const group = /^subgraph\s+(.+)$/.exec(text);
     if (group) {
@@ -504,7 +570,7 @@ export function parse(src) {
     if (front === 'in') {
       // Only a title at the left edge is the picture's: one further in belongs to something else.
       const title = /^title\s*:\s*(.*?)\s*$/.exec(raw);
-      if (title) model.title = title[1].replace(/^(["'])(.*)\1$/, '$2');
+      if (title) model.title = model.heading = title[1].replace(/^(["'])(.*)\1$/, '$2');
       if (text === '---') front = 'after';
       return;
     }
@@ -522,7 +588,7 @@ export function parse(src) {
 
   // A link to a group ("g1 --> g2") is a link from the end of one to the start of the next: the last box of the
   // first that leads to no other box in it, and the first box of the second that none of its own leads to.
-  state?.done();
+  reader?.done();
   // The innermost first, so that by the time a link to an outer group is joined, what is inside it is boxes.
   for (const g of [...model.groups].reverse()) join(g);
   function join(/** @type {{id:string,title:string,members:string[]}} */ g) {

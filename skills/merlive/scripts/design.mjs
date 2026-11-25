@@ -102,6 +102,12 @@ export function apart(/** @type {string} */ a, /** @type {string} */ b, /** @typ
 /** How strong a colour is, apart from how light: 0 for a grey, 100 and more for the purest. */
 export const strength = (/** @type {string} */ hex) => Math.hypot(...lab(hex, sights.ordinary).slice(1));
 
+// How much of the text colour shades every second row of a table: enough to follow a row across, in light and
+// in dark, and little enough that its words read as they do on any box.
+export const rowShade = 0.06;
+/** The fill of a shaded row, over the fill of its box. */
+export const shadedFill = (/** @type {Palette} */ p, /** @type {string} */ fill) => mix(p.text, fill, rowShade);
+
 /** The fill of a box of some kind: its colour, thinned into the box's own fill. */
 export const kindFill = (/** @type {Palette} */ p, /** @type {string} */ kind) => (p.kinds[kind] ? mix(p.kinds[kind], p.node, 0.13) : p.node);
 
@@ -142,9 +148,10 @@ export const looksOf = (/** @type {Design} */ d) =>
  * page as colours are changed, so both say the same.
  * @param {Design} design
  * @param {string[]} kinds
+ * @param {string[]} [shaded] the kinds of box that have a shaded row: a table of two rows or more
  * @returns {{id:'D1'|'D2',broken:string[]}[]}
  */
-export function colourChecks(design, kinds) {
+export function colourChecks(design, kinds, shaded = []) {
   /** @type {string[]} */
   const faint = [];
   /** @type {string[]} */
@@ -155,6 +162,7 @@ export function colourChecks(design, kinds) {
       if (c < least) faint.push(`${mode}: ${what} is ${c.toFixed(1)} to 1, and needs ${least}`);
     };
     for (const k of kinds) need(`text on a ${k} box`, p.text, kindFill(p, k), colourLimits.text);
+    for (const k of shaded) need(`text on a shaded row of a ${k} box`, p.text, shadedFill(p, kindFill(p, k)), colourLimits.text);
     need('quiet text on the page', p.muted, p.bg, colourLimits.text);
     need('a line on the page', p.edge, p.bg, colourLimits.line);
     need('the accent on the page', p.accent, p.bg, colourLimits.line);

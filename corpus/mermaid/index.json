@@ -484,6 +484,1180 @@
       "width": 86,
       "height": 195
     },
+    "class/class-declare.mmd": {
+      "ok": true,
+      "width": 222,
+      "height": 100
+    },
+    "class/class-declare-relation.mmd": {
+      "ok": true,
+      "width": 105,
+      "height": 234
+    },
+    "class/class-declare-v2.mmd": {
+      "ok": true,
+      "width": 105,
+      "height": 234
+    },
+    "class/class-title.mmd": {
+      "ok": true,
+      "width": 172,
+      "height": 206
+    },
+    "class/class-label.mmd": {
+      "ok": true,
+      "width": 219,
+      "height": 234
+    },
+    "class/class-backticks.mmd": {
+      "ok": true,
+      "width": 163,
+      "height": 234
+    },
+    "class/class-members-colon.mmd": {
+      "ok": true,
+      "width": 172,
+      "height": 208
+    },
+    "class/class-members-block.mmd": {
+      "ok": true,
+      "width": 172,
+      "height": 208
+    },
+    "class/class-return-type.mmd": {
+      "ok": true,
+      "width": 174,
+      "height": 184
+    },
+    "class/class-generics.mmd": {
+      "ok": true,
+      "width": 288,
+      "height": 256
+    },
+    "class/class-visibility.mmd": {
+      "ok": true,
+      "width": 178,
+      "height": 256
+    },
+    "class/class-classifiers.mmd": {
+      "ok": true,
+      "width": 174,
+      "height": 232
+    },
+    "class/class-relations.mmd": {
+      "ok": true,
+      "width": 658,
+      "height": 502
+    },
+    "class/class-relations-reversed.mmd": {
+      "ok": true,
+      "width": 782,
+      "height": 416
+    },
+    "class/class-relation-labels.mmd": {
+      "ok": true,
+      "width": 278,
+      "height": 416
+    },
+    "class/class-two-way.mmd": {
+      "ok": true,
+      "width": 364,
+      "height": 234
+    },
+    "class/class-lollipop.mmd": {
+      "ok": true,
+      "width": 266,
+      "height": 294
+    },
+    "class/class-cardinality.mmd": {
+      "ok": true,
+      "width": 276,
+      "height": 392
+    },
+    "class/class-namespace.mmd": {
+      "ok": true,
+      "width": 383,
+      "height": 230
+    },
+    "class/class-namespace-label.mmd": {
+      "ok": true,
+      "width": 197,
+      "height": 236
+    },
+    "class/class-namespace-nested.mmd": {
+      "ok": true,
+      "width": 496,
+      "height": 468
+    },
+    "class/class-namespace-dotted.mmd": {
+      "ok": true,
+      "width": 489,
+      "height": 662
+    },
+    "class/class-annotation-inline.mmd": {
+      "ok": true,
+      "width": 120,
+      "height": 124
+    },
+    "class/class-annotation-line.mmd": {
+      "ok": true,
+      "width": 163,
+      "height": 184
+    },
+    "class/class-annotation-nested.mmd": {
+      "ok": true,
+      "width": 344,
+      "height": 208
+    },
+    "class/class-comments.mmd": {
+      "ok": true,
+      "width": 113,
+      "height": 142
+    },
+    "class/class-direction.mmd": {
+      "ok": true,
+      "width": 417,
+      "height": 160
+    },
+    "class/class-interaction.mmd": {
+      "ok": true,
+      "width": 486,
+      "height": 100
+    },
+    "class/class-note-for.mmd": {
+      "ok": true,
+      "width": 342,
+      "height": 228
+    },
+    "class/class-note-general.mmd": {
+      "ok": true,
+      "width": 303,
+      "height": 234
+    },
+    "class/class-style.mmd": {
+      "ok": true,
+      "width": 213,
+      "height": 100
+    },
+    "class/class-classdef.mmd": {
+      "ok": false,
+      "error": "Error: Lexical error on line 7. Unrecognized text."
+    },
+    "class/class-css-inline.mmd": {
+      "ok": true,
+      "width": 274,
+      "height": 160
+    },
+    "class/class-default-class.mmd": {
+      "ok": true,
+      "width": 213,
+      "height": 100
+    },
+    "class/class-css-class.mmd": {
+      "ok": true,
+      "width": 84,
+      "height": 100
+    },
+    "class/class-whole.mmd": {
+      "ok": true,
+      "width": 483,
+      "height": 448
+    },
+    "er/er-declare.mmd": {
+      "ok": true,
+      "width": 385,
+      "height": 470
+    },
+    "er/er-entity-alone.mmd": {
+      "ok": true,
+      "width": 381,
+      "height": 285
+    },
+    "er/er-attributes.mmd": {
+      "ok": true,
+      "width": 219,
+      "height": 417
+    },
+    "er/er-entity-twice.mmd": {
+      "ok": true,
+      "width": 152,
+      "height": 330
+    },
+    "er/er-entity-empty.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 285
+    },
+    "er/er-name-hyphen.mmd": {
+      "ok": true,
+      "width": 217,
+      "height": 470
+    },
+    "er/er-name-quoted.mmd": {
+      "ok": true,
+      "width": 166,
+      "height": 287
+    },
+    "er/er-name-unicode.mmd": {
+      "ok": true,
+      "width": 151,
+      "height": 287
+    },
+    "er/er-name-markdown.mmd": {
+      "ok": true,
+      "width": 147,
+      "height": 285
+    },
+    "er/er-alias.mmd": {
+      "ok": true,
+      "width": 186,
+      "height": 288
+    },
+    "er/er-cardinality-zero-or-one.mmd": {
+      "ok": true,
+      "width": 122,
+      "height": 285
+    },
+    "er/er-cardinality-exactly-one.mmd": {
+      "ok": true,
+      "width": 122,
+      "height": 285
+    },
+    "er/er-cardinality-zero-or-more.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 285
+    },
+    "er/er-cardinality-one-or-more.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 285
+    },
+    "er/er-cardinality-mirrored.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 470
+    },
+    "er/er-cardinality-words.mmd": {
+      "ok": true,
+      "width": 405,
+      "height": 655
+    },
+    "er/er-cardinality-short.mmd": {
+      "ok": true,
+      "width": 159,
+      "height": 655
+    },
+    "er/er-identifying.mmd": {
+      "ok": true,
+      "width": 159,
+      "height": 285
+    },
+    "er/er-non-identifying.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 285
+    },
+    "er/er-identifying-words.mmd": {
+      "ok": true,
+      "width": 418,
+      "height": 285
+    },
+    "er/er-label-quoted.mmd": {
+      "ok": true,
+      "width": 159,
+      "height": 285
+    },
+    "er/er-label-empty.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 264
+    },
+    "er/er-no-spaces.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 285
+    },
+    "er/er-self.mmd": {
+      "ok": true,
+      "width": 337,
+      "height": 387
+    },
+    "er/er-attribute-keys.mmd": {
+      "ok": true,
+      "width": 267,
+      "height": 230
+    },
+    "er/er-attribute-keys-several.mmd": {
+      "ok": true,
+      "width": 271,
+      "height": 187
+    },
+    "er/er-attribute-star.mmd": {
+      "ok": true,
+      "width": 147,
+      "height": 145
+    },
+    "er/er-attribute-comment.mmd": {
+      "ok": true,
+      "width": 494,
+      "height": 187
+    },
+    "er/er-attribute-types.mmd": {
+      "ok": true,
+      "width": 229,
+      "height": 230
+    },
+    "er/er-attribute-optional.mmd": {
+      "ok": true,
+      "width": 221,
+      "height": 187
+    },
+    "er/er-direction-tb.mmd": {
+      "ok": true,
+      "width": 159,
+      "height": 470
+    },
+    "er/er-direction-lr.mmd": {
+      "ok": true,
+      "width": 642,
+      "height": 100
+    },
+    "er/er-subgraph.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 428
+    },
+    "er/er-subgraph-quoted.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 260
+    },
+    "er/er-subgraph-id.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 260
+    },
+    "er/er-subgraph-nested.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 336
+    },
+    "er/er-subgraph-links.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 332
+    },
+    "er/er-subgraph-direction.mmd": {
+      "ok": true,
+      "width": 619,
+      "height": 772
+    },
+    "er/er-style.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 285
+    },
+    "er/er-style-several.mmd": {
+      "ok": true,
+      "width": 155,
+      "height": 470
+    },
+    "er/er-class-def.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 470
+    },
+    "er/er-class-several.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 285
+    },
+    "er/er-class-inline.mmd": {
+      "ok": true,
+      "width": 138,
+      "height": 287
+    },
+    "er/er-class-inline-relationship.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 470
+    },
+    "er/er-class-default.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 285
+    },
+    "er/er-frontmatter.mmd": {
+      "ok": true,
+      "width": 198,
+      "height": 331
+    },
+    "er/er-accessibility.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 285
+    },
+    "er/er-comments.mmd": {
+      "ok": true,
+      "width": 138,
+      "height": 287
+    },
+    "requirement/requirement-declare.mmd": {
+      "ok": true,
+      "width": 423,
+      "height": 338
+    },
+    "requirement/requirement-types.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 67
+    },
+    "requirement/requirement-fields.mmd": {
+      "ok": true,
+      "width": 423,
+      "height": 200
+    },
+    "requirement/requirement-fields-order.mmd": {
+      "ok": true,
+      "width": 423,
+      "height": 200
+    },
+    "requirement/requirement-fields-some.mmd": {
+      "ok": true,
+      "width": 667,
+      "height": 152
+    },
+    "requirement/requirement-risk.mmd": {
+      "ok": true,
+      "width": 563,
+      "height": 152
+    },
+    "requirement/requirement-verify.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 137
+    },
+    "requirement/requirement-case.mmd": {
+      "ok": true,
+      "width": 686,
+      "height": 200
+    },
+    "requirement/requirement-empty.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 226
+    },
+    "requirement/requirement-id-dotted.mmd": {
+      "ok": true,
+      "width": 364,
+      "height": 128
+    },
+    "requirement/requirement-id-quoted.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 128
+    },
+    "requirement/requirement-text-quoted.mmd": {
+      "ok": true,
+      "width": 526,
+      "height": 152
+    },
+    "requirement/requirement-text-markdown.mmd": {
+      "ok": true,
+      "width": 429,
+      "height": 152
+    },
+    "requirement/requirement-element.mmd": {
+      "ok": true,
+      "width": 229,
+      "height": 152
+    },
+    "requirement/requirement-element-quoted.mmd": {
+      "ok": true,
+      "width": 261,
+      "height": 152
+    },
+    "requirement/requirement-element-type-only.mmd": {
+      "ok": true,
+      "width": 380,
+      "height": 128
+    },
+    "requirement/requirement-relationships.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 418
+    },
+    "requirement/requirement-relationships-reversed.mmd": {
+      "ok": true,
+      "width": 343,
+      "height": 500
+    },
+    "requirement/requirement-contains.mmd": {
+      "ok": true,
+      "width": 364,
+      "height": 314
+    },
+    "requirement/requirement-relationship-tight.mmd": {
+      "ok": true,
+      "width": 214,
+      "height": 314
+    },
+    "requirement/requirement-relationship-case.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 314
+    },
+    "requirement/requirement-relationship-self.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 253
+    },
+    "requirement/requirement-relationship-before.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 314
+    },
+    "requirement/requirement-name-quoted.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 314
+    },
+    "requirement/requirement-name-words.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 314
+    },
+    "requirement/requirement-name-unicode.mmd": {
+      "ok": true,
+      "width": 261,
+      "height": 152
+    },
+    "requirement/requirement-name-dot.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 314
+    },
+    "requirement/requirement-name-markdown.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 128
+    },
+    "requirement/requirement-twice.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 128
+    },
+    "requirement/requirement-direction-tb.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 314
+    },
+    "requirement/requirement-direction-lr.mmd": {
+      "ok": true,
+      "width": 438,
+      "height": 128
+    },
+    "requirement/requirement-direction-bt.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 314
+    },
+    "requirement/requirement-classdef.mmd": {
+      "ok": true,
+      "width": 542,
+      "height": 128
+    },
+    "requirement/requirement-class-inline.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 314
+    },
+    "requirement/requirement-class-shorthand.mmd": {
+      "ok": true,
+      "width": 341,
+      "height": 128
+    },
+    "requirement/requirement-class-several.mmd": {
+      "ok": true,
+      "width": 364,
+      "height": 128
+    },
+    "requirement/requirement-class-default.mmd": {
+      "ok": true,
+      "width": 364,
+      "height": 128
+    },
+    "requirement/requirement-style.mmd": {
+      "ok": true,
+      "width": 364,
+      "height": 128
+    },
+    "requirement/requirement-style-several.mmd": {
+      "ok": true,
+      "width": 542,
+      "height": 128
+    },
+    "requirement/requirement-frontmatter.mmd": {
+      "ok": true,
+      "width": 423,
+      "height": 384
+    },
+    "requirement/requirement-accessibility.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 128
+    },
+    "requirement/requirement-accessibility-block.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 128
+    },
+    "requirement/requirement-comments.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 314
+    },
+    "requirement/requirement-directive.mmd": {
+      "ok": true,
+      "width": 165,
+      "height": 128
+    },
+    "requirement/requirement-blank-lines.mmd": {
+      "ok": true,
+      "width": 423,
+      "height": 152
+    },
+    "requirement/requirement-whole.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 709
+    },
+    "c4/c4-context.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 641
+    },
+    "c4/c4-people.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 402
+    },
+    "c4/c4-systems.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 539
+    },
+    "c4/c4-systems-external.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 539
+    },
+    "c4/c4-containers.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 575
+    },
+    "c4/c4-containers-external.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 575
+    },
+    "c4/c4-components.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 556
+    },
+    "c4/c4-components-external.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 575
+    },
+    "c4/c4-boundary.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 603
+    },
+    "c4/c4-boundary-type.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 426
+    },
+    "c4/c4-boundary-enterprise.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 631
+    },
+    "c4/c4-boundary-container.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 619
+    },
+    "c4/c4-boundary-nested.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 1070
+    },
+    "c4/c4-boundary-brace-below.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 386
+    },
+    "c4/c4-deployment.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 453
+    },
+    "c4/c4-deployment-nodes.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 429
+    },
+    "c4/c4-deployment-described.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 438
+    },
+    "c4/c4-rel.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 370
+    },
+    "c4/c4-rel-technology.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 511
+    },
+    "c4/c4-rel-both-ways.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 325
+    },
+    "c4/c4-rel-back.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 521
+    },
+    "c4/c4-rel-directions.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 626
+    },
+    "c4/c4-dynamic.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 595
+    },
+    "c4/c4-dynamic-index.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 511
+    },
+    "c4/c4-named-arguments.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 571
+    },
+    "c4/c4-tags-links-sprites.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 447
+    },
+    "c4/c4-empty-arguments.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 525
+    },
+    "c4/c4-update-element-style.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 521
+    },
+    "c4/c4-update-element-style-named.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 370
+    },
+    "c4/c4-update-rel-style.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 370
+    },
+    "c4/c4-update-rel-offset.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 370
+    },
+    "c4/c4-update-layout-config.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 521
+    },
+    "c4/c4-title.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 399
+    },
+    "c4/c4-frontmatter.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 370
+    },
+    "c4/c4-accessibility.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 426
+    },
+    "c4/c4-comments.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 370
+    },
+    "c4/c4-quotes.mmd": {
+      "ok": true,
+      "width": 611,
+      "height": 620
+    },
+    "c4/c4-line-breaks.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 436
+    },
+    "c4/c4-across-lines.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 371
+    },
+    "c4/c4-declared-twice.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 370
+    },
+    "c4/c4-whole.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 1026
+    },
+    "architecture/architecture-service.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 185
+    },
+    "architecture/architecture-icons-built-in.mmd": {
+      "ok": true,
+      "width": 763,
+      "height": 386
+    },
+    "architecture/architecture-icon-pack.mmd": {
+      "ok": true,
+      "width": 363,
+      "height": 185
+    },
+    "architecture/architecture-service-no-icon.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 185
+    },
+    "architecture/architecture-service-no-title.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 185
+    },
+    "architecture/architecture-title-quoted.mmd": {
+      "ok": true,
+      "width": 363,
+      "height": 202
+    },
+    "architecture/architecture-id-hyphen.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 185
+    },
+    "architecture/architecture-group.mmd": {
+      "ok": true,
+      "width": 629,
+      "height": 262
+    },
+    "architecture/architecture-group-nested.mmd": {
+      "ok": true,
+      "width": 713,
+      "height": 345
+    },
+    "architecture/architecture-group-later.mmd": {
+      "ok": true,
+      "width": 448,
+      "height": 262
+    },
+    "architecture/architecture-group-no-icon.mmd": {
+      "ok": true,
+      "width": 446,
+      "height": 262
+    },
+    "architecture/architecture-edge-sides.mmd": {
+      "ok": true,
+      "width": 563,
+      "height": 587
+    },
+    "architecture/architecture-edge-right-angle.mmd": {
+      "ok": true,
+      "width": 328,
+      "height": 385
+    },
+    "architecture/architecture-edge-arrows.mmd": {
+      "ok": true,
+      "width": 562,
+      "height": 386
+    },
+    "architecture/architecture-edge-label.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 185
+    },
+    "architecture/architecture-edge-label-arrows.mmd": {
+      "ok": true,
+      "width": 562,
+      "height": 185
+    },
+    "architecture/architecture-edge-no-spaces.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 386
+    },
+    "architecture/architecture-edge-group.mmd": {
+      "ok": true,
+      "width": 714,
+      "height": 262
+    },
+    "architecture/architecture-edge-self.mmd": {
+      "ok": true,
+      "width": 373,
+      "height": 213
+    },
+    "architecture/architecture-junction.mmd": {
+      "ok": true,
+      "width": 562,
+      "height": 386
+    },
+    "architecture/architecture-junction-group.mmd": {
+      "ok": true,
+      "width": 649,
+      "height": 464
+    },
+    "architecture/architecture-align.mmd": {
+      "ok": true,
+      "width": 434,
+      "height": 517
+    },
+    "architecture/architecture-title.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 185
+    },
+    "architecture/architecture-frontmatter.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 185
+    },
+    "architecture/architecture-accessibility.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 185
+    },
+    "architecture/architecture-comments.mmd": {
+      "ok": true,
+      "width": 361,
+      "height": 185
+    },
+    "architecture/architecture-direction-down.mmd": {
+      "ok": true,
+      "width": 160,
+      "height": 586
+    },
+    "architecture/architecture-whole.mmd": {
+      "ok": true,
+      "width": 784,
+      "height": 399
+    },
+    "block/block-flow.mmd": {
+      "ok": true,
+      "width": 294,
+      "height": 42
+    },
+    "block/block-beta.mmd": {
+      "ok": true,
+      "width": 294,
+      "height": 42
+    },
+    "block/block-flow-down.mmd": {
+      "ok": true,
+      "width": 59,
+      "height": 122
+    },
+    "block/block-flow-no-columns.mmd": {
+      "ok": true,
+      "width": 203,
+      "height": 42
+    },
+    "block/block-columns-auto.mmd": {
+      "ok": true,
+      "width": 203,
+      "height": 42
+    },
+    "block/block-columns-wrap.mmd": {
+      "ok": true,
+      "width": 136,
+      "height": 82
+    },
+    "block/block-ids-only.mmd": {
+      "ok": true,
+      "width": 200,
+      "height": 42
+    },
+    "block/block-line-break.mmd": {
+      "ok": true,
+      "width": 214,
+      "height": 66
+    },
+    "block/block-link-plain.mmd": {
+      "ok": true,
+      "width": 134,
+      "height": 42
+    },
+    "block/block-link-words.mmd": {
+      "ok": true,
+      "width": 109,
+      "height": 42
+    },
+    "block/block-link-kinds.mmd": {
+      "ok": true,
+      "width": 69,
+      "height": 282
+    },
+    "block/block-link-inline-labels.mmd": {
+      "ok": true,
+      "width": 152,
+      "height": 42
+    },
+    "block/block-link-new-block.mmd": {
+      "ok": true,
+      "width": 109,
+      "height": 42
+    },
+    "block/block-link-space.mmd": {
+      "ok": true,
+      "width": 163,
+      "height": 42
+    },
+    "block/block-space-down.mmd": {
+      "ok": true,
+      "width": 59,
+      "height": 122
+    },
+    "block/block-space-wide.mmd": {
+      "ok": true,
+      "width": 397,
+      "height": 42
+    },
+    "block/block-shapes.mmd": {
+      "ok": true,
+      "width": 440,
+      "height": 440
+    },
+    "block/block-nested.mmd": {
+      "ok": true,
+      "width": 298,
+      "height": 58
+    },
+    "block/block-nested-label.mmd": {
+      "ok": true,
+      "width": 150,
+      "height": 114
+    },
+    "block/block-nested-anonymous.mmd": {
+      "ok": true,
+      "width": 298,
+      "height": 58
+    },
+    "block/block-nested-deep.mmd": {
+      "ok": true,
+      "width": 182,
+      "height": 146
+    },
+    "block/block-nested-link.mmd": {
+      "ok": true,
+      "width": 150,
+      "height": 170
+    },
+    "block/block-style.mmd": {
+      "ok": true,
+      "width": 102,
+      "height": 42
+    },
+    "block/block-classdef.mmd": {
+      "ok": true,
+      "width": 200,
+      "height": 42
+    },
+    "block/block-comments.mmd": {
+      "ok": true,
+      "width": 109,
+      "height": 42
+    },
+    "block/block-frontmatter.mmd": {
+      "ok": true,
+      "width": 200,
+      "height": 42
+    },
+    "block/block-grid.mmd": {
+      "ok": true,
+      "width": 200,
+      "height": 82
+    },
+    "block/block-shapes-grid.mmd": {
+      "ok": true,
+      "width": 440,
+      "height": 440
+    },
+    "block/block-alone.mmd": {
+      "ok": true,
+      "width": 51,
+      "height": 42
+    },
+    "block/block-span.mmd": {
+      "ok": true,
+      "width": 171,
+      "height": 82
+    },
+    "block/block-space.mmd": {
+      "ok": true,
+      "width": 266,
+      "height": 122
+    },
+    "block/block-space-offset.mmd": {
+      "ok": true,
+      "width": 203,
+      "height": 82
+    },
+    "block/block-arrows.mmd": {
+      "ok": true,
+      "width": 294,
+      "height": 146
+    },
+    "block/block-arrow-directions.mmd": {
+      "ok": true,
+      "width": 717,
+      "height": 98
+    },
+    "block/block-nested-columns.mmd": {
+      "ok": true,
+      "width": 199,
+      "height": 250
+    },
+    "block/block-mixed.mmd": {
+      "ok": true,
+      "width": 587,
+      "height": 282
+    },
     "sequence/seq-participants-implicit.mmd": {
       "ok": true,
       "width": 450,
@@ -731,8 +1905,8 @@
     },
     "kinds/block.mmd": {
       "ok": true,
-      "width": 266,
-      "height": 122
+      "width": 294,
+      "height": 42
     },
     "kinds/architecture.mmd": {
       "ok": true,

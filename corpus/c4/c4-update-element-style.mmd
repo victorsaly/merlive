@@ -1,0 +1,7 @@
+C4Context
+  Person(buyer, "Buyer")
+  System(erp, "ERP")
+  System(old, "Old stock system")
+  Rel(buyer, erp, "Raises orders in")
+  Rel(erp, old, "Still reads")
+  UpdateElementStyle(old, $fontColor="#ffffff", $bgColor="#b3261e", $borderColor="#7a1f12")

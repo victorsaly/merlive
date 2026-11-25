@@ -1,0 +1,8 @@
+erDiagram
+    ORDER:::late {
+        int number
+    }
+    SUPPLIER:::trusted
+    SUPPLIER ||--o{ ORDER : receives
+    classDef late stroke:#c62828
+    classDef trusted stroke:#2e7d32

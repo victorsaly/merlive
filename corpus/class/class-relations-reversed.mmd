@@ -1,0 +1,9 @@
+classDiagram
+  Order --|> Document : Inheritance
+  OrderLine --* Order : Composition
+  Product --o Warehouse : Aggregation
+  Invoice --> Order : Association
+  Supplier -- Contact : Link(Solid)
+  Order ..> PriceList : Dependency
+  Invoice ..|> Payable : Realization
+  Buyer .. Note : Link(Dashed)

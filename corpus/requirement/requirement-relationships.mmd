@@ -1,0 +1,32 @@
+requirementDiagram
+  requirement approval {
+    id: 1
+  }
+  requirement limit {
+    id: 1.1
+  }
+  requirement speed {
+    id: 1.2
+  }
+  requirement paper {
+    id: 1.3
+  }
+  requirement one_screen {
+    id: 1.4
+  }
+  requirement audit {
+    id: 1.5
+  }
+  element approval_flow {
+    type: workflow
+  }
+  element test_suite {
+    type: tests
+  }
+  approval - contains -> limit
+  speed - derives -> approval
+  paper - copies -> approval
+  one_screen - refines -> approval
+  audit - traces -> approval
+  approval_flow - satisfies -> approval
+  test_suite - verifies -> limit
