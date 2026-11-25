@@ -103,6 +103,24 @@ export const strength = (/** @type {string} */ hex) => Math.hypot(...lab(hex, si
 /** The fill of a box of some kind: its colour, thinned into the box's own fill. */
 export const kindFill = (/** @type {Palette} */ p, /** @type {string} */ kind) => (p.kinds[kind] ? mix(p.kinds[kind], p.node, 0.13) : p.node);
 
+/**
+ * A design that also knows the classes a diagram's author made up. A class the design has no colour for takes
+ * the design's own colour nearest to the one its author chose (a red they called "red" becomes the design's
+ * risk), so what they meant is kept and the palette stays the project's.
+ * @param {Design} design
+ * @param {{nodes:{kind:string}[],classes:Record<string,string>}} model
+ * @returns {Design}
+ */
+export function designWith(design, model) {
+  const strangers = [...new Set(model.nodes.map((n) => n.kind))].filter((k) => !design.light.kinds[k] && HEX.test(model.classes[k] ?? ''));
+  if (!strangers.length) return design;
+  const more = (/** @type {Palette} */ p) => {
+    const nearest = (/** @type {string} */ c) => Object.values(p.kinds).reduce((a, b) => (apart(b, c) < apart(a, c) ? b : a));
+    return { ...p, kinds: { ...p.kinds, ...Object.fromEntries(strangers.map((k) => [k, nearest(model.classes[k])])) } };
+  };
+  return { ...design, light: more(design.light), ...(design.dark ? { dark: more(design.dark) } : {}) };
+}
+
 // What any palette is held to. Each is set out in docs/PLACEMENT.md.
 export const colourLimits = {
   text: 4.5, // WCAG AA for words

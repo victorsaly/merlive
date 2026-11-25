@@ -17,9 +17,15 @@ The first version. It draws flowcharts and nothing else, and says so.
   it used to cut across a row of boxes. What feeds the main path comes in from one side and what leaves it goes
   out the other, and a box moves to a better lane when that removes a crossing. A box nothing leads to sits one
   step before what it feeds.
-- **A label's own lines are kept.** Where the author wrote `<br/>`, the first line is the box's name, in bold, and
-  the rest are quieter. `accTitle` and `accDescr` are read and written into the picture for readers who cannot
+- **A label's own lines are kept**, up to four, where the author wrote `<br/>`, in a box wide enough for each. `accTitle` and `accDescr` are read and written into the picture for readers who cannot
   see it. A line that cannot be read leaves no box behind, and a `;` inside quotes no longer cuts a label.
+- **Then on seventeen more**, every flowchart in the docs of business-analyst-agent-demo and correlateAI. All
+  seventeen now draw, with no crossings. What they needed: words written into a link (`-- "words" -->`,
+  `-. words .->`, `== words ==>`) and arrows drawn longer; a store of data (`[("…")]`) as a box of the data kind;
+  groups (`subgraph`) drawn as frames with their titles, and a link between two groups; a class's colour read for
+  what it means, so a class the design does not know takes the design's own nearest colour; a link's words set
+  down where they sit on no box and no other words, wrapped to fit; and a line round the outside going round
+  whichever side crosses less.
 - **Mermaid kept in code is found**: a flowchart in a string in an `.astro` page or a script is drawn like one
   in Markdown.
 - **Steps and notes live in the Mermaid source**, as `%%` comments other renderers ignore: `%% step:` for a
@@ -42,5 +48,5 @@ The first version. It draws flowcharts and nothing else, and says so.
   red-green colour blindness. The message names the two colours. Merlive's own kinds were chosen by that measure:
   in dark they are six of the Okabe-Ito colours.
 - **A picked box says its kind in words**, so colour is never the only thing that carries it.
-- **What is not a flowchart is left as Mermaid and named**: sequence diagrams and the rest come later. Subgraph
-  boxes, `&` between nodes and links from a box to itself are not drawn yet, and each is said when met.
+- **What is not a flowchart is left as Mermaid and named**: sequence diagrams, timelines and the rest come later.
+  `&` between nodes and links from a box to itself are not drawn yet, and each is said when met.

@@ -5,15 +5,17 @@
 /** @typedef {import('./parse.mjs').Model} Model */
 /** @typedef {{x:number,y:number}} Pt */
 /** @typedef {'top'|'bottom'|'left'|'right'} Side */
-/** @typedef {{id:string,x:number,y:number,w:number,h:number,rank:number,lane:number,spine:boolean,lines:string[],titled:boolean}} Placed */
-/** @typedef {{id:string,points:Pt[],back:boolean,label:null|{x:number,y:number,w:number,h:number,text:string}}} Routed */
-/** @typedef {{width:number,height:number,direction:'TD'|'LR',box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,spine:string[],warnings:string[]}} Layout */
+/** @typedef {{id:string,x:number,y:number,w:number,h:number,rank:number,lane:number,spine:boolean,lines:string[]}} Placed */
+/** @typedef {{x:number,y:number,w:number,h:number,text:string,lines:string[]}} Words a link's words: the middle of where they sit, their size, and the lines they are wrapped to */
+/** @typedef {{id:string,points:Pt[],back:boolean,label:null|Words}} Routed */
+/** @typedef {{id:string,title:string,x:number,y:number,w:number,h:number}} Frame a group's frame, from its top left corner */
+/** @typedef {{width:number,height:number,direction:'TD'|'LR',box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[]}} Layout */
 
 // What is measured, named once. Boxes are sized without a browser, from the average glyph of a 13px UI face.
 export const measure = {
   glyph: 7.1, // px per character at 13px
   labelGlyph: 6.6, // px per character of a link's label at 11px
-  widths: [128, 160, 192, 224], // the only box widths there are; a diagram uses one of them throughout
+  widths: [128, 160, 192, 224, 256, 288], // the only box widths there are; a diagram uses one of them throughout
   padBox: 28, // left and right inside a box
   padDecision: 52, // a decision's cut corners leave less room for words
   lineHeight: 16,
@@ -24,7 +26,12 @@ export const measure = {
   channelStep: 16, // between two such loops
   trackStep: 12, // between two lines that share the room between two ranks
   trackEdge: 12, // the least from such a line to the boxes either side of that room
-  mostLines: 3, // of words in a box
+  mostLines: 4, // of words in a box, and only when its author wrote that many; a plain label is wrapped to two
+  labelWrap: 24, // characters a line of a link's words runs to before it wraps
+  labelLine: 14, // px between two lines of a link's words
+  labelOff: 5, // px between a link's words and its line
+  framePad: 12, // from a group's boxes to its frame
+  frameTitle: 14, // more at the top, for what the group is called
   portStep: 20, // between two lines on one side of a box
   portShare: 0.31, // how far from the middle of a side a line may leave, as a share of the side
   clear: 4, // how close a line may come to a box it does not belong to
@@ -219,7 +226,7 @@ export function layout(model) {
     for (const n of model.nodes) {
       const l = (lane.get(n.id) ?? 0) - firstLane, r = rank.get(n.id) ?? 0;
       nodes[n.id] = {
-        id: n.id, w: bw, h: bh, rank: r, lane: l, spine: onSpine.has(n.id), lines: linesOf(n, box.w), titled: (n.breaks?.length ?? 0) > 1,
+        id: n.id, w: bw, h: bh, rank: r, lane: l, spine: onSpine.has(n.id), lines: linesOf(n, box.w),
         x: measure.pad + l * (bw + laneGap) + bw / 2,
         y: measure.pad + r * (bh + rankGap) + bh / 2,
       };
@@ -229,7 +236,7 @@ export function layout(model) {
     // 6. Routes. Each link takes one of a few shapes, tried in an order that keeps the spine's top and bottom for
     //    the spine: straight; across then along (HV); along then across (VH); along, across in the room between
     //    two ranks, along again (VHV), which is how a branch fans out; and round the outside.
-    /** @typedef {{e:import('./parse.mjs').Edge,s:Placed,t:Placed,shape:'straight'|'HV'|'VH'|'VHV'|'outer',sSide:Side,tSide:Side,cx:number,gap:number,ty:number,points:Pt[]}} Route */
+    /** @typedef {{e:import('./parse.mjs').Edge,s:Placed,t:Placed,shape:'straight'|'HV'|'VH'|'VHV'|'outer',sSide:Side,tSide:Side,cx:number,out:1|-1,gap:number,ty:number,points:Pt[]}} Route */
     const mid = (/** @type {Placed} */ n, /** @type {Side} */ side, off = 0) =>
       side === 'top' ? { x: n.x + off, y: n.y - n.h / 2 } : side === 'bottom' ? { x: n.x + off, y: n.y + n.h / 2 } : side === 'left' ? { x: n.x - n.w / 2, y: n.y + off } : { x: n.x + n.w / 2, y: n.y + off };
     const others = (/** @type {Placed} */ s, /** @type {Placed} */ t) => all.filter((n) => n !== s && n !== t);
@@ -242,10 +249,11 @@ export function layout(model) {
           : r.shape === 'VH' ? [a, { x: a.x, y: b.y }, b]
             : r.shape === 'VHV' ? [a, { x: a.x, y: r.ty }, { x: b.x, y: r.ty }, b]
               : [a, { x: r.cx, y: a.y }, { x: r.cx, y: b.y }, b];
-    /** Where the outside is for a link between two ranks: past every box in between, on the side things leave by. */
-    const outside = (/** @type {Placed} */ s, /** @type {Placed} */ t) => {
+    /** Where the outside is for a link between two ranks: past every box in between, on one side or the other. */
+    const outside = (/** @type {Placed} */ s, /** @type {Placed} */ t, /** @type {1|-1} */ out) => {
       const lo = Math.min(s.rank, t.rank), hi = Math.max(s.rank, t.rank);
-      return Math.max(...all.filter((n) => n.rank >= lo && n.rank <= hi).map((n) => n.x + n.w / 2)) + measure.channel;
+      const between = all.filter((n) => n.rank >= lo && n.rank <= hi);
+      return out > 0 ? Math.max(...between.map((n) => n.x + n.w / 2)) + measure.channel : Math.min(...between.map((n) => n.x - n.w / 2)) - measure.channel;
     };
 
     /** @type {Route[]} */
@@ -253,7 +261,7 @@ export function layout(model) {
       const s = nodes[e.from], t = nodes[e.to];
       const down = t.rank > s.rank, right = t.lane > s.lane;
       /** @type {Route} */
-      const r = { e, s, t, shape: 'outer', sSide: 'right', tSide: 'right', cx: outside(s, t), gap: 0, ty: 0, points: [] };
+      const r = { e, s, t, shape: 'outer', sSide: 'right', tSide: 'right', cx: outside(s, t, 1), out: 1, gap: 0, ty: 0, points: [] };
       const hv = { shape: 'HV', sSide: right ? 'right' : 'left', tSide: down ? 'top' : 'bottom' };
       const vh = { shape: 'VH', sSide: down ? 'bottom' : 'top', tSide: right ? 'left' : 'right' };
       // Across in the room next to where it starts, or next to where it ends.
@@ -280,14 +288,18 @@ export function layout(model) {
       return r;
     });
 
-    // Loops that go round the outside: the shortest innermost, each in a channel of its own.
-    /** @type {{lo:number,hi:number}[]} */
-    const used = [];
-    for (const r of routes.filter((x) => x.shape === 'outer').sort((a, b) => Math.abs(a.s.rank - a.t.rank) - Math.abs(b.s.rank - b.t.rank))) {
-      const lo = Math.min(r.s.rank, r.t.rank), hi = Math.max(r.s.rank, r.t.rank);
-      r.cx = outside(r.s, r.t) + measure.channelStep * used.filter((u) => u.lo <= hi && u.hi >= lo).length;
-      used.push({ lo, hi });
-    }
+    // Lines that go round the outside: the shortest innermost, each in a channel of its own, on its own side.
+    const setChannels = () => {
+      /** @type {{lo:number,hi:number,out:number}[]} */
+      const used = [];
+      for (const r of routes.filter((x) => x.shape === 'outer').sort((a, b) => Math.abs(a.s.rank - a.t.rank) - Math.abs(b.s.rank - b.t.rank))) {
+        const lo = Math.min(r.s.rank, r.t.rank), hi = Math.max(r.s.rank, r.t.rank);
+        r.sSide = r.tSide = r.out > 0 ? 'right' : 'left';
+        r.cx = outside(r.s, r.t, r.out) + r.out * measure.channelStep * used.filter((u) => u.out === r.out && u.lo <= hi && u.hi >= lo).length;
+        used.push({ lo, hi, out: r.out });
+      }
+    };
+    setChannels();
 
     // Lines that cross in the same room between two ranks each get a track there, so none lies on another.
     /** @type {Map<number, Route[][]>} */
@@ -318,19 +330,25 @@ export function layout(model) {
       const o = en.end === 's' ? en.r.t : en.r.s;
       return side === 'top' || side === 'bottom' ? o.x : o.y;
     };
-    for (const r of routes) {
-      const s = /** @type {End} */ ({ r, end: 's', off: 0 }), t = /** @type {End} */ ({ r, end: 't', off: 0 });
-      endsOf.set(r, { s, t });
-      if (r.shape === 'straight') continue;
-      for (const [en, n, side] of /** @type {[End,Placed,Side][]} */ ([[s, r.s, r.sSide], [t, r.t, r.tSide]])) {
-        const here = side === 'top' || side === 'bottom' ? n.x : n.y;
-        const centred = routes.some((q) => q.shape === 'straight' && ((q.s === n && q.sSide === side) || (q.t === n && q.tSide === side)));
-        // With a straight line in the middle, the rest split to the side their other end is on.
-        const half = centred ? (far(en, side) < here ? 'low' : 'high') : 'all';
-        const key = `${n.id}|${side}|${half}`;
-        groups.set(key, [...(groups.get(key) ?? []), en]);
+    /** Which lines share which side of which box, each side's lines in the order of where they come from. */
+    const regroup = () => {
+      groups.clear();
+      endsOf.clear();
+      for (const r of routes) {
+        const s = /** @type {End} */ ({ r, end: 's', off: 0 }), t = /** @type {End} */ ({ r, end: 't', off: 0 });
+        endsOf.set(r, { s, t });
+        if (r.shape === 'straight') continue;
+        for (const [en, n, side] of /** @type {[End,Placed,Side][]} */ ([[s, r.s, r.sSide], [t, r.t, r.tSide]])) {
+          const here = side === 'top' || side === 'bottom' ? n.x : n.y;
+          const centred = routes.some((q) => q.shape === 'straight' && ((q.s === n && q.sSide === side) || (q.t === n && q.tSide === side)));
+          // With a straight line in the middle, the rest split to the side their other end is on.
+          const half = centred ? (far(en, side) < here ? 'low' : 'high') : 'all';
+          const key = `${n.id}|${side}|${half}`;
+          groups.set(key, [...(groups.get(key) ?? []), en]);
+        }
       }
-    }
+      for (const [key, list] of groups) list.sort((a, b) => far(a, /** @type {Side} */ (key.split('|')[1])) - far(b, /** @type {Side} */ (key.split('|')[1])));
+    };
     const setOffsets = () => {
       for (const [key, list] of groups) {
         const [id, side, half] = key.split('|');
@@ -347,6 +365,7 @@ export function layout(model) {
       }
     };
     const build = () => {
+      setChannels();
       setOffsets();
       setTracks();
       for (const r of routes) {
@@ -373,8 +392,22 @@ export function layout(model) {
       go([], list);
       return out;
     };
-    for (const [key, list] of groups) list.sort((a, b) => far(a, /** @type {Side} */ (key.split('|')[1])) - far(b, /** @type {Side} */ (key.split('|')[1])));
+    regroup();
     build();
+    // A line round the outside goes round the other side when that costs less, so two of them need not cross.
+    for (const r of routes.filter((x) => x.shape === 'outer')) {
+      const before = cost();
+      r.out = /** @type {1|-1} */ (-r.out);
+      build();
+      regroup();
+      build();
+      if (cost() >= before) {
+        r.out = /** @type {1|-1} */ (-r.out);
+        build();
+        regroup();
+        build();
+      }
+    }
     if (!thorough) return { nodes, all, routes, cost: cost() };
     // Trying every order is only affordable for a few lines on a side, or a few tracks in a room; four makes
     // twenty-four orders. What can be reordered: the lines on one side of a box, and the tracks of one room.
@@ -434,24 +467,49 @@ export function layout(model) {
   const { nodes, all, routes } = settle(true);
 
   // 7. Turn it to the side it was asked for, then on its side for a left-to-right flow.
-  const farRight = Math.max(...all.map((n) => n.x + n.w / 2), ...routes.flatMap((r) => r.points.map((p) => p.x)), 0);
-  const flip = (/** @type {Pt} */ p) => (model.hints.side === 'left' ? { x: farRight + measure.pad - p.x, y: p.y } : p);
+  // A line round the far side may have gone past the edge; everything moves over to give it its margin.
+  const over = Math.max(0, measure.pad - Math.min(...routes.flatMap((r) => r.points.map((p) => p.x)), measure.pad));
+  const farRight = Math.max(...all.map((n) => n.x + n.w / 2), ...routes.flatMap((r) => r.points.map((p) => p.x)), 0) + over;
+  const flip = (/** @type {Pt} */ p) => (model.hints.side === 'left' ? { x: farRight + measure.pad - (p.x + over), y: p.y } : { x: p.x + over, y: p.y });
   const turn = (/** @type {Pt} */ p) => (dir === 'LR' ? { x: p.y, y: p.x } : p);
   const place = (/** @type {Pt} */ p) => turn(flip(p));
   for (const n of all) Object.assign(n, place(n), { w: box.w, h: box.h });
 
   /** @type {Record<string, Routed>} */
   const edges = {};
-  for (const r of routes) {
-    const points = tidy(r.points.map(place));
-    edges[r.e.id] = { id: r.e.id, points, back: back.has(r.e.id), label: r.e.label ? labelAt(points, r.e.label) : null };
+  for (const r of routes) edges[r.e.id] = { id: r.e.id, points: tidy(r.points.map(place)), back: back.has(r.e.id), label: null };
+  // Each link's words, one link at a time, each where it sits on no box, no other words and, if it can, no line.
+  /** @type {Words[]} */
+  const worded = [];
+  for (const e of model.edges) {
+    if (!e.label) continue;
+    const here = wordsFor(edges[e.id].points, e.label, all, worded, Object.values(edges).map((x) => x.points));
+    worded.push(here);
+    edges[e.id].label = here;
   }
 
-  const xs = [...all.flatMap((n) => [n.x + n.w / 2]), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.x), ...(e.label ? [e.label.x + e.label.w / 2] : [])])];
-  const ys = [...all.flatMap((n) => [n.y + n.h / 2]), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.y), ...(e.label ? [e.label.y + e.label.h / 2] : [])])];
+  // A group's frame goes round its boxes, with room at the top for what it is called. One that would take in a
+  // box that is not its own, or run into another frame, would say something untrue, so it is left out and said.
+  /** @type {Frame[]} */
+  const groups = [];
+  const label = (/** @type {string} */ id) => model.nodes.find((n) => n.id === id)?.label ?? id;
+  const meets = (/** @type {Frame} */ f, /** @type {{x:number,y:number,w:number,h:number}} */ r) => r.x + r.w / 2 > f.x && r.x - r.w / 2 < f.x + f.w && r.y + r.h / 2 > f.y && r.y - r.h / 2 < f.y + f.h;
+  for (const g of model.groups) {
+    const own = g.members.map((id) => nodes[id]).filter(Boolean);
+    const l = Math.min(...own.map((n) => n.x - n.w / 2)) - measure.framePad, t = Math.min(...own.map((n) => n.y - n.h / 2)) - measure.framePad - measure.frameTitle;
+    const frame = { id: g.id, title: g.title, x: l, y: t, w: Math.max(...own.map((n) => n.x + n.w / 2)) + measure.framePad - l, h: Math.max(...own.map((n) => n.y + n.h / 2)) + measure.framePad - t };
+    const stranger = all.find((n) => !g.members.includes(n.id) && meets(frame, n));
+    const other = groups.find((f) => meets(frame, { x: f.x + f.w / 2, y: f.y + f.h / 2, w: f.w, h: f.h }));
+    if (stranger) warnings.push(`the frame of "${g.title}" is left out: "${label(stranger.id)}" is not in it and would fall inside`);
+    else if (other) warnings.push(`the frame of "${g.title}" is left out: it would run into the frame of "${other.title}"`);
+    else groups.push(frame);
+  }
+
+  const xs = [...all.map((n) => n.x + n.w / 2), ...groups.map((f) => f.x + f.w), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.x), ...(e.label ? [e.label.x + e.label.w / 2] : [])])];
+  const ys = [...all.map((n) => n.y + n.h / 2), ...groups.map((f) => f.y + f.h), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.y), ...(e.label ? [e.label.y + e.label.h / 2] : [])])];
   const width = Math.ceil(Math.max(0, ...xs) + measure.pad), height = Math.ceil(Math.max(0, ...ys) + measure.pad);
   if (dir === 'LR' && width > measure.wide) warnings.push(`left to right, this flow is ${width}px wide and will scroll on most screens; "flowchart TD" would read better`);
-  return { width, height, direction: dir, box, nodes, edges, spine, warnings };
+  return { width, height, direction: dir, box, nodes, edges, groups, spine, warnings };
 }
 
 /** Drops points that repeat or sit on a straight run between their neighbours. */
@@ -461,14 +519,42 @@ function tidy(/** @type {Pt[]} */ pts) {
 }
 
 /**
- * A link's words sit beside the first run of its line long enough to carry them, close to where it leaves,
- * where a reader looks for the answer.
+ * Where a link's words go. They are tried beside each run of its line, near where it leaves first, above a run
+ * that goes across and to the right of one that goes along; the first place that sits on no box and no other
+ * words wins, and of those, one no line passes through.
+ * @param {Pt[]} pts the link's own line
+ * @param {string} text
+ * @param {{x:number,y:number,w:number,h:number}[]} boxes
+ * @param {Words[]} placed the words already set down
+ * @param {Pt[][]} lines every link's line
+ * @returns {Words}
  */
-function labelAt(/** @type {Pt[]} */ pts, /** @type {string} */ text) {
-  const w = Math.round(text.length * measure.labelGlyph + 10), h = 18;
-  const runs = segmentsOf(pts);
-  const carries = (/** @type {[Pt,Pt]} */ [a, b]) => (a.y === b.y ? Math.abs(b.x - a.x) >= w + 24 : Math.abs(b.y - a.y) >= 34);
-  const [a, b] = runs.find(carries) ?? runs[0];
-  if (a.y === b.y) return { x: a.x + Math.sign(b.x - a.x) * (12 + w / 2), y: a.y - 12, w, h, text };
-  return { x: a.x + 8 + w / 2, y: a.y + Math.sign(b.y - a.y) * 17, w, h, text };
+function wordsFor(pts, text, boxes, placed, lines) {
+  const sized = (/** @type {string[]} */ wrapped) => ({ lines: wrapped, w: Math.round(Math.max(...wrapped.map((l) => l.length)) * measure.labelGlyph + 10), h: 4 + measure.labelLine * wrapped.length });
+  const usual = sized(wrap(text, measure.labelWrap));
+  /** @type {{x:number,y:number,w:number,h:number,lines:string[]}[]} */
+  const places = [];
+  for (const [a, b] of segmentsOf(pts)) {
+    const flat = a.y === b.y, length = flat ? Math.abs(b.x - a.x) : Math.abs(b.y - a.y), way = Math.sign(flat ? b.x - a.x : b.y - a.y);
+    if (length < 16) continue;
+    // Words wider than a short run across are wrapped again to fit it, so they do not hang over the boxes at
+    // either end.
+    const fit = flat && usual.w > length - 8 ? sized(wrap(text, Math.max(4, Math.floor((length - 18) / measure.labelGlyph)))) : usual;
+    const need = flat ? fit.w : fit.h;
+    // Near where the run starts, at its middle, near where it ends; a run too short for that, at its middle only.
+    const along = length >= need + 24 ? [12 + need / 2, length / 2, length - 12 - need / 2] : [length / 2];
+    for (const d of along) {
+      for (const side of [-1, 1]) {
+        places.push(flat ? { ...fit, x: a.x + way * d, y: a.y + side * (fit.h / 2 + measure.labelOff) } : { ...fit, x: a.x - side * (fit.w / 2 + measure.labelOff + 2), y: a.y + way * d });
+      }
+    }
+  }
+  if (!places.length) places.push({ ...usual, x: pts[0].x + usual.w / 2 + measure.labelOff, y: pts[0].y + usual.h / 2 + measure.labelOff });
+  const on = (/** @type {{x:number,y:number,w:number,h:number}} */ p, /** @type {{x:number,y:number,w:number,h:number}} */ r, grow = 2) => Math.abs(p.x - r.x) < (p.w + r.w) / 2 + grow && Math.abs(p.y - r.y) < (p.h + r.h) / 2 + grow;
+  const cost = (/** @type {typeof places[0]} */ p, /** @type {number} */ i) =>
+    100 * boxes.filter((r) => on(p, r)).length + 100 * placed.filter((r) => on(p, r)).length
+    + 10 * lines.reduce((sum, line) => sum + segmentsOf(line).filter((seg) => hitsBox(seg, p, 0)).length, 0) + i;
+  const best = places.map((p, i) => ({ p, c: cost(p, i) })).sort((a, b) => a.c - b.c)[0].p;
+  return { x: best.x, y: best.y, w: best.w, h: best.h, text, lines: best.lines };
 }
+

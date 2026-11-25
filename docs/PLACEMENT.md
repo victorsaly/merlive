@@ -59,23 +59,30 @@ each side of a box is chosen to keep crossings down.
 
 ## P5. No two lines share a path
 
-Each line has a port of its own on the side of a box it leaves or enters, and loops that go round the outside
-each have a channel of their own. A straight line keeps the middle of its side.
+Each line has a port of its own on the side of a box it leaves or enters, and lines that go round the outside
+each have a channel of their own, on whichever side crosses less. A straight line keeps the middle of its side.
 
 - **Fail:** two links into the same box arrive on top of each other, so a reader cannot tell them apart.
 
 ## P6. Words fit their box
 
-A label takes at most three lines, and no word is wider than the box. Where the author broke a label with
-`<br/>`, their lines are kept as written: the first is the box's name, in bold, and the rest say more, more
-quietly.
+A plain label is wrapped to two lines. Where the author broke a label with `<br/>`, their lines are kept as
+written, up to four, in a box wide enough for each (there are six widths, 128 to 288 px). No word is wider than
+the box.
 
 - **What to do when it fails:** shorten the label and put the detail in a `%% note`.
 
 ## P7. A link's words sit clear of boxes and of each other
 
-A link's label ("Yes", "No") sits beside the first run of its line, close to where it leaves, with a clear
-background behind it.
+A link's words ("Yes", "No") are tried beside each run of its line, near where it leaves first: the first place
+that sits on no box and no other words wins, and of those, one no line passes through. Long words are wrapped,
+and wrapped again to fit a short run between two boxes.
+
+## Groups
+
+A group the author made (`subgraph`) gets a frame round its boxes, with what it is called at the top left. A
+link to a group is a link from the end of one to the start of the next. A frame that would take in a box that is
+not in the group, or run into another frame, would say something untrue: it is left out, and the script says so.
 
 ## D1. Words and lines can be read against what is behind them
 
@@ -108,6 +115,7 @@ lines whatever the design says.
 
 ## What is not here yet
 
-- Subgraph boxes: the nodes are placed, the group's outline is not drawn.
+- A group inside a group: it is drawn as part of the outer one.
+- A long chain is one long column or row. A group's own direction (a row inside a column) is not followed.
 - Tracks in the room between two lanes: two loops up the same side of a box can still lie on each other.
 - A box with more than four lines on one side: the order of its ports is not tried exhaustively.

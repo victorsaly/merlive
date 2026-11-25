@@ -27,7 +27,7 @@ hand, and the colours are yours, read from your site, but checked, for contrast 
    colours and choices with nothing asked; the two colour rules.
 2. **0.2, setup that reads more.** Colours kept in a Tailwind config or a component's own styles; a dark look made
    from a light one when a site has none and the reader wants one; the setup page saving its settings itself.
-3. **0.3, bigger flowcharts.** Subgraph outlines, branches on both sides of the spine, pan, zoom and a search
+3. **0.3, bigger flowcharts.** A group's own direction (rows inside a column), groups inside groups, pan, zoom and a search
    box for diagrams past about twenty boxes.
 4. **0.4, state diagrams.** The same placement, with loops as first-class paths.
 5. **0.5, sequence diagrams.** Stepped through one message at a time, and played over a flowchart in the same

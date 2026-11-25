@@ -62,13 +62,13 @@ export function rulesFor(/** @type {import('./design.mjs').Design} */ design, /*
 .mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
 ${kinds.map((k) => `[data-kind="${k}"] .mv-shape{fill:var(--mv-kf-${k});stroke:var(--mv-k-${k})}`).join('\n')}
 .mv-node text{font-size:13px;font-weight:${design.weight};fill:var(--mv-text);text-anchor:middle}
-.mv-first{font-weight:700}
-.mv-rest{fill:var(--mv-muted)}
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.6}
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
 [data-style="thick"] .mv-line{stroke-width:2.8}
 .mv-head{fill:var(--mv-edge)}
-.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}`;
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:none;stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-group text{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}`;
 }
 
 /** The colours of the looks a design is drawn in: one, or light with dark for readers whose system asks for it. */
@@ -88,7 +88,8 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     const line = e.arrow ? [...pts.slice(0, -1), toward(end, before, draw.head - 2)] : pts;
     const back = toward(end, before, draw.head), dx = (end.y - before.y) / (dist(before, end) || 1), dy = -(end.x - before.x) / (dist(before, end) || 1);
     const head = e.arrow ? `<polygon class="mv-head" points="${at(end)} ${at({ x: back.x + dx * draw.headHalf, y: back.y + dy * draw.headHalf })} ${at({ x: back.x - dx * draw.headHalf, y: back.y - dy * draw.headHalf })}"/>` : '';
-    const words = r.label ? `<text class="mv-label" x="${n(r.label.x)}" y="${n(r.label.y + 4)}">${esc(r.label.text)}</text>` : '';
+    const l = r.label;
+    const words = l ? `<text class="mv-label">${l.lines.map((line, i) => `<tspan class="mv-label-line" x="${n(l.x)}" y="${n(l.y - ((l.lines.length - 1) * 14) / 2 + 4 + i * 14)}">${esc(line)}</tspan>`).join('')}</text>` : '';
     const mid = middleOf(pts);
     const extras = live ? `<path class="mv-hit" d="${pathOf(pts)}"/><g class="mv-seq" transform="translate(${at(mid)})"><circle r="8"/><text y="3.5"></text></g>` : '';
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`Link from ${label.get(e.from)} to ${label.get(e.to)}${e.label ? `, ${e.label}` : ''}`)}"` : '';
@@ -101,13 +102,13 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
       ? `<polygon class="mv-shape" points="${n(l + c)},${n(t)} ${n(r - c)},${n(t)} ${n(r)},${n(b.y)} ${n(r - c)},${n(u)} ${n(l + c)},${n(u)} ${n(l)},${n(b.y)}"/>`
       : `<rect class="mv-shape${m.shape === 'pill' ? ' mv-pill' : ''}" x="${n(l)}" y="${n(t)}" width="${b.w}" height="${b.h}" rx="${m.shape === 'pill' ? b.h / 2 : Math.min(design.radius, b.h / 2)}"/>`;
     const first = b.y - ((b.lines.length - 1) * 16) / 2 + draw.baseline;
-    // Where the author broke the label, its first line is the box's name and the rest say more, more quietly.
-    const part = (/** @type {number} */ i) => (b.titled ? ` class="${i ? 'mv-rest' : 'mv-first'}"` : '');
-    const words = b.lines.map((line, i) => `<tspan${part(i)} x="${n(b.x)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
+    const words = b.lines.map((line, i) => `<tspan x="${n(b.x)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${m.label}, ${kindName(m.kind)}`)}"` : '';
     return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${role}>${shape}<text>${words}</text></g>`;
   });
-  return `<g>${links.join('')}</g><g>${boxes.join('')}</g>`;
+  // A group's frame, behind everything, with what the group is called at its top left.
+  const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/><text x="${n(f.x + 10)}" y="${n(f.y + 16)}">${esc(f.title)}</text></g>`);
+  return `<g>${frames.join('')}</g><g>${links.join('')}</g><g>${boxes.join('')}</g>`;
 }
 
 export const kindsIn = (/** @type {import('./parse.mjs').Model} */ model) => [...new Set(model.nodes.map((m) => m.kind))];

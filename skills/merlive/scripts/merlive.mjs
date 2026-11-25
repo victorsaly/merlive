@@ -9,7 +9,7 @@ import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { blocksOf, parse } from './parse.mjs';
 import { layout } from './layout.mjs';
-import { designFrom } from './design.mjs';
+import { designFrom, designWith } from './design.mjs';
 import { score } from './score.mjs';
 import { page, picture } from './render.mjs';
 import { designOf, readingOf, stylesheetsOf } from './site.mjs';
@@ -258,7 +258,9 @@ export async function run(argv, io = {}) {
     if (!model.nodes.length) return say(`left as Mermaid: block ${number} (line ${block.line}) has no boxes`);
 
     const lay = layout(model);
-    const result = score(model, lay, design);
+    // The project's design, and the nearest of its colours for any class this diagram's author made up.
+    const drawnIn = designWith(design, model);
+    const result = score(model, lay, drawnIn);
     const crossings = result.checks.find((c) => c.id === 'P4')?.detail ?? '';
     const facts = `${model.nodes.length} boxes, ${model.edges.length} links, ${crossings}, ${design.name} design`;
     for (const w of [...model.warnings, ...lay.warnings]) say(`  note, block ${number}: ${w}`);
@@ -277,7 +279,7 @@ export async function run(argv, io = {}) {
         continue;
       }
       mkdirSync(outDir, { recursive: true });
-      writeFileSync(join(outDir, name), format === 'svg' ? picture(model, lay, design, about) : page(model, lay, design, about));
+      writeFileSync(join(outDir, name), format === 'svg' ? picture(model, lay, drawnIn, about) : page(model, lay, drawnIn, about));
       say(`drew ${join(outDir, name)} (${facts})`);
     }
     drawn++;

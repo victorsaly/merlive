@@ -13,20 +13,24 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A([Text])`, `A((Text))` | A start or end (a pill) |
 | `A{Text}`, `A{{Text}}` | A decision (a box with cut corners, the same size as the others) |
 | `A["Text with (brackets)"]` | A quoted label |
-| `A["name<br/>more about it"]` | A label in the author's own lines: the first is the box's name, in bold; the rest are quieter |
+| `A["one line<br/>and another"]` | A label in the author's own lines, up to four |
+| `A[("Orders")]` | A store of data: a box of the `data` kind |
 | `accTitle: …`, `accDescr: …` | What the picture is called and what it shows, kept for readers who cannot see it |
 | `A --> B`, `A --- B` | A link, with or without an arrowhead |
 | `A -.-> B`, `A ==> B` | A dotted link, a thick link |
-| `A -->\|Yes\| B`, `A -- Yes --> B` | A link with words |
+| `A -->\|Yes\| B`, `A -- Yes --> B`, `A -- "two<br/>lines" --> B` | A link with words |
+| `A -. maybe .-> B`, `A == must ==> B`, `A ---> B` | Words in a dotted or thick link; an arrow drawn longer |
+| `subgraph id["Title"]` … `end`, `g1 --> g2` | A group, drawn as a frame with its title; a link between groups joins the end of one to the start of the next |
 | `A --> B --> C` | A chain |
 | `class A,B rework`, `A:::rework` | The kind of a box: its colour comes from the design's `kinds` |
-| `classDef`, `style`, `linkStyle`, `click`, `direction` | Read past: the look comes from the design |
+| `classDef red stroke:#c62828` | The class's colour is read for what it means: a kind the design has no colour for takes the design's own nearest colour (this red becomes `risk`) |
+| `style`, `linkStyle`, `click`, `direction` | Read past: the look comes from the design |
 
 Where the Mermaid is kept decides how it is found: fenced `mermaid` blocks in Markdown (`.md`, `.mdx`); the whole
 of a `.mmd` file; and, in any other file (an `.astro` page, a script), a string between backticks that starts as
 a flowchart does. A string put together with `${…}` when the page runs cannot be read.
 
-Not read yet, each named in a `note,` line when met: `subgraph` outlines (the boxes inside are still placed),
+Not read yet, each named in a `note,` line when met: a group inside a group (drawn as part of the outer one),
 `A & B --> C`, a link from a box to itself.
 
 ## Merlive's own lines

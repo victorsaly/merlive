@@ -16,6 +16,8 @@
  * @property {Record<string,string>} notes
  * @property {Step[]} steps
  * @property {{main?:string[],side?:'left'|'right'}} hints
+ * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
+ * @property {{id:string,title:string,members:string[]}[]} groups the author's subgraphs: what each is called and the boxes in it
  * @property {string[]} warnings
  */
 
@@ -23,6 +25,7 @@
 const OPENERS = /** @type {const} */ ([
   ['([', '])', 'pill'],
   ['((', '))', 'pill'],
+  ['[(', ')]', 'store'],
   ['[[', ']]', 'box'],
   ['{{', '}}', 'decision'],
   ['[', ']', 'box'],
@@ -30,19 +33,20 @@ const OPENERS = /** @type {const} */ ([
   ['{', '}', 'decision'],
 ]);
 
-const ARROWS = /** @type {const} */ ([
-  ['-.->', 'dotted', true],
-  ['-.-', 'dotted', false],
-  ['==>', 'thick', true],
-  ['===', 'thick', false],
-  ['-->', 'solid', true],
-  ['---', 'solid', false],
+// A link: an arrow or a plain line, solid, dotted or thick, drawn at any length, with its words after it between
+// bars or written into it ("-- words -->", "-. words .->", "== words ==>").
+const LINKS = /** @type {const} */ ([
+  [/^\s*--\s+(?:"([^"]*)"|([^"|]+?))\s*(-{2,}>|-{3,})/, 'solid'],
+  [/^\s*-\.\s+(?:"([^"]*)"|([^"|]+?))\s*(\.+->|\.+-)/, 'dotted'],
+  [/^\s*==\s+(?:"([^"]*)"|([^"|]+?))\s*(={2,}>|={3,})/, 'thick'],
+  [/^\s*(?:()())(-{2,}>|-{3,})\s*(?:\|([^|]*)\|)?/, 'solid'],
+  [/^\s*(?:()())(-\.+->|-\.+-)\s*(?:\|([^|]*)\|)?/, 'dotted'],
+  [/^\s*(?:()())(={2,}>|={3,})\s*(?:\|([^|]*)\|)?/, 'thick'],
 ]);
 
 // Mermaid styling lines. Merlive's look comes from the design file, so these are read past without a warning.
-const STYLING = /^(classDef|style|linkStyle|click|direction)\b/;
+const STYLING = /^(style|linkStyle|click|direction)\b/;
 
-const escapeRe = (/** @type {string} */ s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
  * @param {string} src one Mermaid block
@@ -50,12 +54,19 @@ const escapeRe = (/** @type {string} */ s) => s.replace(/[.*+?^${}()|[\]\\]/g, '
  */
 export function parse(src) {
   /** @type {Model} */
-  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, warnings: [] };
+  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, groups: [], warnings: [] };
   /** @type {Map<string, Node>} */
   const byId = new Map();
   const seenEdge = new Map();
   let header = false;
-  let warnedSubgraph = false;
+  // The groups that are open at this line, outermost first. A group inside a group is drawn as part of the
+  // outer one, so every box belongs to the outermost.
+  /** @type {string[]} */
+  const open = [];
+  /** @type {Map<string,string>} */
+  const groupOf = new Map();
+  const shaped = new Set();
+  let warnedNested = false;
 
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
 
@@ -65,6 +76,11 @@ export function parse(src) {
       n = { id, label: id, shape: 'box', kind: '' };
       byId.set(id, n);
       model.nodes.push(n);
+    }
+    // A box is in the group where it is used, wherever it was first named.
+    if (open.length && !groupOf.has(id)) {
+      groupOf.set(id, open[0]);
+      model.groups.find((g) => g.id === open[0])?.members.push(id);
     }
     return n;
   };
@@ -87,7 +103,10 @@ export function parse(src) {
       n.label = lines.join(' ');
       if (lines.length > 1) n.breaks = lines;
       else delete n.breaks;
-      n.shape = shape;
+      // A store of data (Mermaid's cylinder) is a box like any other, of the kind that holds data.
+      n.shape = shape === 'store' ? 'box' : shape;
+      if (shape === 'store' && !n.kind) n.kind = 'data';
+      shaped.add(n.id);
       p = end + close.length;
       break;
     }
@@ -101,12 +120,11 @@ export function parse(src) {
 
   /** Reads `-->`, `-->|Yes|`, `-- Yes -->` and the dotted and thick forms at pos. */
   const readLink = (/** @type {string} */ s, /** @type {number} */ pos) => {
-    const rest = s.slice(pos);
-    const worded = /^\s*--\s*([^\s|>-][^|>]*?)\s*(-->|---)/.exec(rest);
-    if (worded) return { style: /** @type {const} */ ('solid'), arrow: worded[2] === '-->', label: worded[1].trim(), pos: pos + worded[0].length };
-    for (const [arrow, style, head] of ARROWS) {
-      const m = new RegExp(`^\\s*${escapeRe(arrow)}\\s*(?:\\|([^|]*)\\|)?`).exec(rest);
-      if (m) return { style, arrow: head, label: (m[1] ?? '').trim().replace(/^"|"$/g, ''), pos: pos + m[0].length };
+    for (const [like, style] of LINKS) {
+      const m = like.exec(s.slice(pos));
+      if (!m) continue;
+      const words = (m[1] || m[2] || m[4] || '').trim().replace(/^"|"$/g, '').replace(/<br\s*\/?>/gi, ' ').replace(/\s+/g, ' ').trim();
+      return { style, arrow: m[3].endsWith('>'), label: words, pos: pos + m[0].length };
     }
     return null;
   };
@@ -115,7 +133,13 @@ export function parse(src) {
     const had = { nodes: model.nodes.length, edges: model.edges.length };
     // A line that could not be read leaves nothing behind: no box from its first word, no half of a chain.
     const notRead = (/** @type {string} */ what = `not read: "${s}"`) => {
-      for (const n of model.nodes.splice(had.nodes)) byId.delete(n.id);
+      for (const n of model.nodes.splice(had.nodes)) {
+        byId.delete(n.id);
+        shaped.delete(n.id);
+        const g = model.groups.find((x) => x.id === groupOf.get(n.id));
+        if (g) g.members = g.members.filter((id) => id !== n.id);
+        groupOf.delete(n.id);
+      }
       for (const e of model.edges.splice(had.edges)) seenEdge.set(`${e.from}-${e.to}`, (seenEdge.get(`${e.from}-${e.to}`) ?? 1) - 1);
       warn(line, what);
     };
@@ -200,9 +224,25 @@ export function parse(src) {
     }
     if (model.type === 'unsupported') return;
 
-    if (/^subgraph\b/.test(text) || text === 'end') {
-      if (!warnedSubgraph) warn(line, 'subgraph boxes are not drawn yet; their nodes are placed as if ungrouped');
-      warnedSubgraph = true;
+    const group = /^subgraph\s+(.+)$/.exec(text);
+    if (group) {
+      // "subgraph id[Title]", or a title alone, which is then its name too.
+      const named = /^([A-Za-z_][\w-]*)\s*\[\s*"?(.*?)"?\s*\]$/.exec(group[1]);
+      const id = named ? named[1] : group[1].replace(/^"|"$/g, '').trim();
+      if (open.length && !warnedNested) {
+        warn(line, 'a group inside a group is drawn as part of the outer one');
+        warnedNested = true;
+      }
+      if (!open.length) model.groups.push({ id, title: named ? named[2] : id, members: [] });
+      open.push(open[0] ?? id);
+      return;
+    }
+    if (text === 'end') return void open.pop();
+    const classDef = /^classDef\s+([\w,]+)\s+(.*)$/.exec(text);
+    if (classDef) {
+      // The colour of its edge says most about what the author meant; else its fill; else its words.
+      const colour = ['stroke', 'fill', 'color'].map((k) => new RegExp(`(?:^|,)\\s*${k}\\s*:\\s*#([0-9a-f]{6}|[0-9a-f]{3})\\b`, 'i').exec(classDef[2])?.[1]).find(Boolean);
+      if (colour) for (const name of classDef[1].split(',')) model.classes[name] = `#${(colour.length === 3 ? [...colour].map((c) => c + c).join('') : colour).toLowerCase()}`;
       return;
     }
     if (STYLING.test(text)) return;
@@ -213,6 +253,31 @@ export function parse(src) {
     }
     for (const part of statementsIn(text)) statement(part, line);
   });
+
+  // A link to a group ("g1 --> g2") is a link from the end of one to the start of the next: the last box of the
+  // first that leads to no other box in it, and the first box of the second that none of its own leads to.
+  for (const g of model.groups) {
+    if (!byId.has(g.id) || shaped.has(g.id) || g.members.includes(g.id)) continue;
+    const within = model.edges.filter((e) => g.members.includes(e.from) && g.members.includes(e.to));
+    const exit = [...g.members].reverse().find((id) => !within.some((e) => e.from === id));
+    const entry = g.members.find((id) => !within.some((e) => e.to === id));
+    for (const e of model.edges) {
+      if (e.from === g.id && exit) e.from = exit;
+      if (e.to === g.id && entry) e.to = entry;
+    }
+    if (!g.members.length) model.warnings.push(`the group "${g.title}" has no boxes, so links to it are left out`);
+    model.edges = model.edges.filter((e) => e.from !== g.id && e.to !== g.id && e.from !== e.to);
+    model.nodes = model.nodes.filter((n) => n.id !== g.id);
+    byId.delete(g.id);
+    for (const other of model.groups) other.members = other.members.filter((id) => id !== g.id);
+    const counts = new Map();
+    for (const e of model.edges) {
+      const base = `${e.from}-${e.to}`, count = (counts.get(base) ?? 0) + 1;
+      counts.set(base, count);
+      e.id = count === 1 ? base : `${base}#${count}`;
+    }
+  }
+  model.groups = model.groups.filter((g) => g.members.length);
 
   for (const n of model.nodes) if (!n.kind) n.kind = n.shape === 'decision' ? 'decision' : n.shape === 'pill' ? 'terminal' : 'step';
   for (const id of Object.keys(model.notes)) if (!byId.has(id)) model.warnings.push(`note for ${id}: no such node`);

@@ -47,14 +47,19 @@ describe('parse: links', () => {
 });
 
 describe('parse: what it does not read, it says', () => {
-  it('names &, a link to itself, a subgraph and a line it cannot read, each with its line', () => {
-    const m = flow('A & B --> C\nD --> D\nsubgraph one\nE --> F\nend\nG ~~> H');
-    assert.equal(m.warnings.length, 4);
+  it('names &, a link to itself and a line it cannot read, each with its line', () => {
+    const m = flow('A & B --> C\nD --> D\nE --> F\nG ~~> H');
+    assert.equal(m.warnings.length, 3);
     assert.match(m.warnings[0], /^line 2: "&"/);
     assert.match(m.warnings[1], /^line 3: a link from D to itself/);
-    assert.match(m.warnings[2], /^line 4: subgraph/);
-    assert.match(m.warnings[3], /^line 7: not read/);
-    assert.ok(m.edges.some((e) => e.id === 'E-F'), 'the boxes inside a subgraph are still read');
+    assert.match(m.warnings[2], /^line 5: not read/);
+    assert.deepEqual(m.nodes.map((n) => n.id), ['D', 'E', 'F'], 'what could be read is kept, and nothing of what could not');
+  });
+
+  it('says a group with no boxes has none, and leaves the links to it out', () => {
+    const m = flow('subgraph empty\nend\nA --> empty');
+    assert.match(m.warnings[0], /the group "empty" has no boxes/);
+    assert.deepEqual(m.edges, []);
   });
 
   it('reads past styling without a word', () => {

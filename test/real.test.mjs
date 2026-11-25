@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { blocksOf, parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout } from '../skills/merlive/scripts/layout.mjs';
-import { builtIn } from '../skills/merlive/scripts/design.mjs';
+import { builtIn, designWith } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { page, picture } from '../skills/merlive/scripts/render.mjs';
 import { readingOf } from '../skills/merlive/scripts/site.mjs';
@@ -89,7 +89,6 @@ describe('a real diagram: placed', () => {
 
   it("gives every box the lines its author wrote, unwrapped, in one size of box", () => {
     assert.deepEqual(lay.nodes.RD.lines, ['road.md', 'who ran, in what order,', 'told what']);
-    assert.equal(lay.nodes.RD.titled, true);
     assert.equal(new Set(Object.values(lay.nodes).map((n) => `${n.w}x${n.h}`)).size, 1);
   });
 });
@@ -123,10 +122,10 @@ describe('a real diagram: drawn', () => {
   const m = parse(trail);
   const lay = layout(m);
 
-  it("sets a box's first line apart from the lines under it when its author broke it", () => {
+  it("draws a box's lines as its author broke them, none louder than another", () => {
     const svg = picture(m, lay, builtIn, { title: m.title });
-    assert.match(svg, /<tspan class="mv-first"[^>]*>origin\/<\/tspan><tspan class="mv-rest"[^>]*>your words, never edited<\/tspan>/);
-    assert.doesNotMatch(picture(parse('flowchart TD\nA[Plain] --> B'), layout(parse('flowchart TD\nA[Plain] --> B')), builtIn, { title: '' }), /class="mv-first"/);
+    assert.match(svg, /<tspan x="[\d.]+" y="[\d.]+">origin\/<\/tspan><tspan x="[\d.]+" y="[\d.]+">your words, never edited<\/tspan>/);
+    assert.doesNotMatch(svg, /mv-first|mv-rest/);
   });
 
   it('says what it is called and what it shows to a reader who cannot see it', () => {
@@ -163,5 +162,187 @@ describe('readingOf: what a real site taught it', () => {
     const tokens = ":root{--paper:#fff;--ink:#000;--font-read:'Atkinson Hyperlegible', system-ui, sans-serif;--font:var(--font-read)}";
     const base = 'body{background:var(--paper);color:var(--ink);font-family:var(--font)}';
     assert.equal(readingOf([base, tokens]).font, "'Atkinson Hyperlegible', system-ui, sans-serif");
+  });
+});
+
+// More diagrams somebody really wrote: the docs of victorsaly/business-analyst-agent-demo, as they stand.
+const answers = `flowchart LR
+  accTitle: How the agent answers a question
+  Q(["A manager's question"]) --> AI["The AI plans<br/>and picks a tool"]
+  AI -- "calls" --> T["The tools<br/>get_schema · run_sql · run_python<br/>make_chart · detect_anomalies<br/>+ explain_change (stretch)"]
+  T -- "reads only" --> DB[("AdventureWorks<br/>read-only")]
+  T -- "result, or error + hint" --> AI
+  AI --> A["Answer + chart"]
+  T -- "tool log" --> S["The exact queries,<br/>under the answer"]
+  classDef red stroke:#c62828,stroke-width:2px,color:#b71c1c
+  class DB,S red`;
+
+const where = `flowchart TB
+  accTitle: What lives where
+  NB["Course notebook<br/>where it was built"] -. "same tools and rulebook" .-> PK
+  subgraph app["Demo app, on your laptop"]
+    direction LR
+    BR["Screens in<br/>your browser"] --> SV["Local server"] --> PK["analyst package<br/>tools · agent · cases"]
+  end
+  PK --> DB[("AdventureWorks<br/>read-only")]
+  PK --> LLM["Groq or OpenAI<br/>(Live AI only)"]
+  PK --> REC[("recordings")]
+  REC --> WEB["Website on GitHub Pages<br/>(scripts/build_site.py)"]
+  WEB -- "Ask chat only" --> CW["Cloudflare Worker"] --> OAI["OpenAI<br/>(the online Ask chat)"]
+  classDef red stroke:#c62828,stroke-width:2px,color:#b71c1c
+  class DB,REC red`;
+
+const modes = `flowchart LR
+  accTitle: Who sees what on the day
+  T["Presenting team"] --> M{"Mode"}
+  M -- "AI and wifi working" --> L["Live AI<br/>Groq, then OpenAI"]
+  M -- "AI or wifi fails" --> R["Replay of a<br/>recorded live run"]
+  M -- "testing only" --> D["Dry run<br/>labelled in red"]
+  L --> J["Judges, on the projector<br/>(6 min demo, 2 min Q&A)"]
+  R --> J
+  R --> V["Narrated video"] --> J
+  classDef red stroke:#c62828,stroke-width:2px,color:#b71c1c
+  class D red`;
+
+const service = `flowchart LR
+  accTitle: Which AI service answers
+  A["A question"] --> P{"LLM_PROVIDER<br/>set to openai?"}
+  P -- yes --> O["OpenAI"]
+  P -- no --> G["Groq"]
+  G -- "daily limit<br/>or credit gone" --> O
+  G --> ANS["Answer, with the model<br/>named in the footer"]
+  O --> ANS
+  G -- "no key at all" --> N["Live AI stops;<br/>Replay and Dry run still work"]
+  classDef red stroke:#c62828,stroke-width:2px,color:#b71c1c
+  class N red`;
+
+const steps = `flowchart TB
+  accTitle: The 13 steps in order
+  subgraph g1["Get ready"]
+    direction LR
+    S0["0 · Get set up"] --> S1["1 · Stop old cells<br/>wasting the allowance"] --> S2["2 · Load<br/>AdventureWorks"]
+  end
+  subgraph g2["Build the agent"]
+    direction LR
+    S3["3 · Five tools"] --> S4["4 · Volume / price / mix<br/>(stretch)"] --> S5["5 · Tool menu cards"] --> S6["6 · Rulebook"]
+  end
+  subgraph g3["Show it works"]
+    S7["7 · Switch over,<br/>show its working"] --> S8["8 · New scorecard"]
+  end
+  g1 --> g2 --> g3
+  classDef red stroke:#c62828,stroke-width:2px,color:#b71c1c
+  class S6 red`;
+
+const passes = (/** @type {string} */ src, design = builtIn) => {
+  const m = parse(src);
+  const lay = layout(m);
+  return { m, lay, broken: score(m, lay, designWith(design, m)).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`) };
+};
+
+describe('more real diagrams: read', () => {
+  it('reads the words on a link written between its dashes, in quotes or not, with a line break or not', () => {
+    const m = parse(service);
+    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(m.edges.map((e) => [e.id, e.label]), [
+      ['A-P', ''], ['P-O', 'yes'], ['P-G', 'no'], ['G-O', 'daily limit or credit gone'], ['G-ANS', ''], ['O-ANS', ''], ['G-N', 'no key at all'],
+    ]);
+  });
+
+  it('reads a dotted link with words, a thick one, and arrows drawn longer', () => {
+    const m = parse('flowchart TD\nA -. "saved for later" .-> B\nB == "must" ==> C\nC ---> D\nD -..-> E\nE -. maybe .-> F');
+    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(m.edges.map((e) => [e.style, e.label]), [['dotted', 'saved for later'], ['thick', 'must'], ['solid', ''], ['dotted', ''], ['dotted', 'maybe']]);
+  });
+
+  it('reads a store of data, the cylinder, as a box of the data kind', () => {
+    const m = parse('flowchart TD\nA --> DB[("AdventureWorks<br/>read-only")]');
+    assert.deepEqual([m.nodes[1].label, m.nodes[1].shape, m.nodes[1].kind], ['AdventureWorks read-only', 'box', 'data']);
+  });
+
+  it("keeps the colour an author gave a class, to find what it means", () => {
+    assert.deepEqual(parse(answers).classes, { red: '#c62828' });
+    assert.deepEqual(parse('flowchart TD\nA --> B\nclassDef warm fill:#f96\nclassDef plain stroke-width:2px').classes, { warm: '#ff9966' });
+  });
+
+  it('reads groups: what each is called, the boxes in it, and a link between two groups as a link from the end of one to the start of the next', () => {
+    const m = parse(steps);
+    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(m.groups, [
+      { id: 'g1', title: 'Get ready', members: ['S0', 'S1', 'S2'] },
+      { id: 'g2', title: 'Build the agent', members: ['S3', 'S4', 'S5', 'S6'] },
+      { id: 'g3', title: 'Show it works', members: ['S7', 'S8'] },
+    ]);
+    assert.equal(m.nodes.length, 9, 'a group is not a box');
+    assert.ok(m.edges.some((e) => e.id === 'S2-S3') && m.edges.some((e) => e.id === 'S6-S7'));
+  });
+
+  it('puts a box named before its group opens in the group that then uses it', () => {
+    const m = parse(where);
+    assert.deepEqual(m.groups, [{ id: 'app', title: 'Demo app, on your laptop', members: ['BR', 'SV', 'PK'] }]);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it('reads a group named by its title alone, and says so when one is inside another', () => {
+    assert.deepEqual(parse('flowchart TD\nsubgraph Back office\nA --> B\nend').groups, [{ id: 'Back office', title: 'Back office', members: ['A', 'B'] }]);
+    const nested = parse('flowchart TD\nsubgraph one\nA --> B\nsubgraph two\nC --> D\nend\nend');
+    assert.deepEqual(nested.groups.map((g) => g.members), [['A', 'B', 'C', 'D']]);
+    assert.match(nested.warnings[0], /a group inside a group is drawn as part of the outer one/);
+  });
+});
+
+describe('more real diagrams: placed', () => {
+  it('passes every rule for each of them', () => {
+    for (const [name, src] of Object.entries({ answers, where, modes, service, steps })) assert.deepEqual(passes(src).broken, [], name);
+  });
+
+  it('gives a box up to four lines when its author wrote four, in a box wide enough for each', () => {
+    const { lay } = passes(answers);
+    assert.deepEqual(lay.nodes.T.lines, ['The tools', 'get_schema · run_sql · run_python', 'make_chart · detect_anomalies', '+ explain_change (stretch)']);
+  });
+
+  it("puts a link's words where they sit on no box and on no other words, wrapped when they are long", () => {
+    const { lay } = passes(modes);
+    const labels = Object.values(lay.edges).flatMap((e) => (e.label ? [e.label] : []));
+    assert.equal(labels.length, 3);
+    assert.deepEqual(lay.edges['M-L'].label?.lines, ['AI and wifi working']);
+    assert.deepEqual(passes('flowchart TD\nA -->|a label that goes on for rather a while| B').lay.edges['A-B'].label?.lines.length, 2);
+  });
+
+  it('draws a frame round a group that holds its own boxes and no others, with its title', () => {
+    const { lay } = passes(steps);
+    assert.deepEqual(lay.groups.map((g) => g.title), ['Get ready', 'Build the agent', 'Show it works']);
+    for (const g of lay.groups) {
+      const inside = (/** @type {{x:number,y:number,w:number,h:number}} */ n) => n.x - n.w / 2 >= g.x && n.x + n.w / 2 <= g.x + g.w && n.y - n.h / 2 >= g.y && n.y + n.h / 2 <= g.y + g.h;
+      const members = new Set(parse(steps).groups.find((x) => x.id === g.id)?.members);
+      for (const n of Object.values(lay.nodes)) assert.equal(inside(n), members.has(n.id), `${n.id} and ${g.id}`);
+    }
+    assert.deepEqual(lay.warnings, []);
+  });
+
+  it('leaves a frame out, and says so, when a box that is not in the group would fall inside it', () => {
+    const { lay } = passes('flowchart TD\nsubgraph g[Group]\nA --> C\nend\nA --> B\nB --> C');
+    assert.deepEqual(lay.groups, []);
+    assert.match(lay.warnings[0], /the frame of "Group" is left out: "B" is not in it and would fall inside/);
+  });
+});
+
+describe('more real diagrams: drawn', () => {
+  it("gives a class the design does not know the design's nearest colour to the one its author chose", () => {
+    const m = parse(answers);
+    const d = designWith(builtIn, m);
+    assert.equal(d.light.kinds.red, builtIn.light.kinds.risk);
+    assert.equal(d.dark?.kinds.red, builtIn.dark?.kinds.risk);
+    assert.equal(designWith(builtIn, parse('flowchart TD\nA --> B')), builtIn);
+    assert.match(picture(m, layout(m), d, { title: m.title }), /--mv-k-red:#7a1f12/);
+  });
+
+  it("draws a group's frame behind its boxes, with its title, and a link's words in the lines they were wrapped to", () => {
+    const m = parse(steps);
+    const svg = picture(m, layout(m), builtIn, { title: m.title });
+    assert.equal(svg.match(/class="mv-group"/g)?.length, 3);
+    assert.ok(svg.indexOf('class="mv-group"') < svg.indexOf('class="mv-node"'));
+    assert.ok(svg.includes('>Build the agent</text>'));
+    const long = parse('flowchart TD\nA -->|a label that goes on for rather a while| B');
+    assert.equal(picture(long, layout(long), builtIn, { title: '' }).match(/<tspan class="mv-label-line"/g)?.length, 2);
   });
 });

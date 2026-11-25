@@ -126,10 +126,10 @@ describe('the command', () => {
     assert.ok(existsSync(join(cwd, 'diagrams/long-1.html')));
   });
 
-  it('passes on what the Mermaid held that it read past', async () => {
+  it('passes on what the Mermaid held that it could not read', async () => {
     const cwd = temp();
-    writeFileSync(join(cwd, 'sub.mmd'), 'flowchart TD\nsubgraph one\nA --> B\nend\n');
-    assert.match((await go(['sub.mmd', '--check'], cwd)).text, /note, block 1: line 2: subgraph boxes are not drawn yet/);
+    writeFileSync(join(cwd, 'amp.mmd'), 'flowchart TD\nA --> B\nA & B --> C\n');
+    assert.match((await go(['amp.mmd', '--check'], cwd)).text, /note, block 1: line 3: "&" between nodes is not read yet/);
   });
 });
 
