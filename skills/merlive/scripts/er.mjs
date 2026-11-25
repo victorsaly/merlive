@@ -139,14 +139,23 @@ export function erReader({ model, node, say, connect, outline, warn, wordsOf }) 
     return n;
   };
 
-  /** One attribute as its row: its type, its name, its keys, its comment, in the order Mermaid has them. */
+  /** What was said of each entity's attributes in their comments, to go in its note once the block is read. */
+  /** @type {Map<string, string[]>} */
+  const commented = new Map();
+  /**
+   * One attribute as its row: its type, its name and its keys, in the order Mermaid has them. Its comment is a
+   * sentence, and a sentence in a row makes every box of the diagram as wide as the longest: it goes in the note
+   * on its entity, which a reader sees on picking the box and a still picture prints beneath.
+   */
   const attribute = (/** @type {string} */ text, /** @type {number} */ line) => {
     const read = READ.attribute.exec(text);
     if (!read) return void warn(line, `not read: "${text}" is not an attribute: write its type, then its name`);
     const [, type, name, keys = '', comment] = read;
     // A star before a name is another way of saying it is the primary key.
     const all = [...(name.startsWith('*') && !/\bPK\b/.test(keys) ? ['PK'] : []), ...keys.split(',').map((k) => k.trim()).filter(Boolean)];
-    return [type, name.replace(/^\*/, ''), all.join(', '), comment === undefined ? '' : `"${wordsOf(comment).join(' ')}"`].filter(Boolean).join(' ');
+    const called = name.replace(/^\*/, '');
+    if (comment !== undefined && wordsOf(comment).length) (commented.get(listing?.n.id ?? '') ?? commented.set(listing?.n.id ?? '', []).get(listing?.n.id ?? '') ?? []).push(`${called}: ${wordsOf(comment).join(' ')}`);
+    return [type, called, all.join(', ')].filter(Boolean).join(' ');
   };
 
   const read = (/** @type {string} */ raw, /** @type {number} */ line) => {
@@ -204,6 +213,8 @@ export function erReader({ model, node, say, connect, outline, warn, wordsOf }) 
 
   const done = () => {
     if (listing) warn(listing.line, `the attributes of ${listing.name} are never closed; end them with a line of }`);
+    // After whatever note its author wrote for the entity, wherever in the block that note was.
+    for (const [id, said] of commented) model.notes[id] = [model.notes[id], said.join('; ')].filter(Boolean).join(' ');
     for (const [names, kind] of classed) {
       for (const n of names.map((name) => made.get(idOf.get(name) ?? name)).filter((x) => x !== undefined)) n.kind = kind;
     }

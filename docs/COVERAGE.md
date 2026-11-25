@@ -2,14 +2,15 @@
 
 Written by `npm run coverage`. Do not edit it by hand: change the code or the corpus and run it again.
 
-The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram and sequence diagram pages set out. The samples are our own.
+The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram, entity diagram and sequence diagram pages set out. The samples are our own.
 
 ## In short
 
 - **Flowcharts:** of 70 features, 46 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 2 are only partly read, and 0 are refused.
 - **State diagrams:** of 27 features, 16 are drawn as written, 10 are drawn less something, 1 are only partly read, and 0 are refused.
+- **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Sequence diagrams:** of 42 features, 35 are drawn as written, 5 are drawn less something, 2 are only partly read, and 0 are refused.
-- **Every kind of diagram:** of 32, 2 drawn (flowcharts, state diagrams and sequence diagrams, which have their own lists above), and 30 left as Mermaid and named.
+- **Every kind of diagram:** of 32, 3 drawn (those with their own lists above), and 29 left as Mermaid and named.
 
 ## Flowcharts, feature by feature
 
@@ -125,6 +126,62 @@ rules. Held to the same measure as the flowcharts above.
 | A title and a description for readers who cannot see it | Drawn |  | [source](../corpus/state/state-accessibility.mmd) | [picture](../corpus/drawn/state-accessibility.svg) |
 | A title and settings in front matter | Drawn, less something | Mermaid's own settings are read past: the look is the design's | [source](../corpus/state/state-frontmatter.mmd) | [picture](../corpus/drawn/state-frontmatter.svg) |
 
+## Entity diagrams, feature by feature
+
+An entity is a box that lists its attributes under its name, and a relationship ends in how many. Held to the
+same measure, and to the rows each box lists and what each link ends in.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| An entity diagram: entities, and the relationships between them | Drawn |  | [source](../corpus/er/er-declare.mmd) | [picture](../corpus/drawn/er-declare.svg) |
+| An entity with no relationships | Drawn |  | [source](../corpus/er/er-entity-alone.mmd) | [picture](../corpus/drawn/er-entity-alone.svg) |
+| Attributes: a type and a name each | Drawn |  | [source](../corpus/er/er-attributes.mmd) | [picture](../corpus/drawn/er-attributes.svg) |
+| An entity declared twice, its attributes joined | Drawn |  | [source](../corpus/er/er-entity-twice.mmd) | [picture](../corpus/drawn/er-entity-twice.svg) |
+| An entity declared with no attributes between its braces | Drawn |  | [source](../corpus/er/er-entity-empty.mmd) | [picture](../corpus/drawn/er-entity-empty.svg) |
+| A name with a hyphen in it | Drawn |  | [source](../corpus/er/er-name-hyphen.mmd) | [picture](../corpus/drawn/er-name-hyphen.svg) |
+| A name with spaces, in quotes | Drawn |  | [source](../corpus/er/er-name-quoted.mmd) | [picture](../corpus/drawn/er-name-quoted.svg) |
+| Names, words and attributes in other alphabets | Drawn |  | [source](../corpus/er/er-name-unicode.mmd) | [picture](../corpus/drawn/er-name-unicode.svg) |
+| A name written as Markdown | Drawn, less something | Bold and italic are drawn as plain words | [source](../corpus/er/er-name-markdown.mmd) | [picture](../corpus/drawn/er-name-markdown.svg) |
+| An alias shown in place of the name | Drawn |  | [source](../corpus/er/er-alias.mmd) | [picture](../corpus/drawn/er-alias.svg) |
+| Zero or one, at either end | Drawn |  | [source](../corpus/er/er-cardinality-zero-or-one.mmd) | [picture](../corpus/drawn/er-cardinality-zero-or-one.svg) |
+| Exactly one, at either end | Drawn |  | [source](../corpus/er/er-cardinality-exactly-one.mmd) | [picture](../corpus/drawn/er-cardinality-exactly-one.svg) |
+| Zero or more, at either end | Drawn |  | [source](../corpus/er/er-cardinality-zero-or-more.mmd) | [picture](../corpus/drawn/er-cardinality-zero-or-more.svg) |
+| One or more, at either end | Drawn |  | [source](../corpus/er/er-cardinality-one-or-more.mmd) | [picture](../corpus/drawn/er-cardinality-one-or-more.svg) |
+| A mark written the other way round for its end | Drawn |  | [source](../corpus/er/er-cardinality-mirrored.mmd) | [picture](../corpus/drawn/er-cardinality-mirrored.svg) |
+| How many, written in words | Drawn |  | [source](../corpus/er/er-cardinality-words.mmd) | [picture](../corpus/drawn/er-cardinality-words.svg) |
+| How many, in the short forms: 1, 1+, 0+, many(0), many(1) | Drawn |  | [source](../corpus/er/er-cardinality-short.mmd) | [picture](../corpus/drawn/er-cardinality-short.svg) |
+| A relationship that identifies: a solid line | Drawn |  | [source](../corpus/er/er-identifying.mmd) | [picture](../corpus/drawn/er-identifying.svg) |
+| A relationship that does not identify: a dotted line | Drawn |  | [source](../corpus/er/er-non-identifying.mmd) | [picture](../corpus/drawn/er-non-identifying.svg) |
+| Identifying or not, written in words | Drawn |  | [source](../corpus/er/er-identifying-words.mmd) | [picture](../corpus/drawn/er-identifying-words.svg) |
+| A relationship's words, in quotes | Drawn |  | [source](../corpus/er/er-label-quoted.mmd) | [picture](../corpus/drawn/er-label-quoted.svg) |
+| A relationship with empty words | Drawn |  | [source](../corpus/er/er-label-empty.mmd) | [picture](../corpus/drawn/er-label-empty.svg) |
+| A relationship written with no spaces | Drawn |  | [source](../corpus/er/er-no-spaces.mmd) | [picture](../corpus/drawn/er-no-spaces.svg) |
+| A relationship from an entity to itself | Drawn |  | [source](../corpus/er/er-self.mmd) | [picture](../corpus/drawn/er-self.svg) |
+| Keys: primary, foreign and unique | Drawn |  | [source](../corpus/er/er-attribute-keys.mmd) | [picture](../corpus/drawn/er-attribute-keys.svg) |
+| Several keys on one attribute | Drawn |  | [source](../corpus/er/er-attribute-keys-several.mmd) | [picture](../corpus/drawn/er-attribute-keys-several.svg) |
+| A star before a name, for a primary key | Drawn |  | [source](../corpus/er/er-attribute-star.mmd) | [picture](../corpus/drawn/er-attribute-star.svg) |
+| A comment on an attribute | Drawn, less something | A comment is not in its row: it is in the note on its entity, which a reader sees on picking the box | [source](../corpus/er/er-attribute-comment.mmd) | [picture](../corpus/drawn/er-attribute-comment.svg) |
+| Types with a length, a list, and two numbers | Drawn |  | [source](../corpus/er/er-attribute-types.mmd) | [picture](../corpus/drawn/er-attribute-types.svg) |
+| A type that may be missing | Drawn |  | [source](../corpus/er/er-attribute-optional.mmd) | [picture](../corpus/drawn/er-attribute-optional.svg) |
+| Direction: top to bottom | Drawn |  | [source](../corpus/er/er-direction-tb.mmd) | [picture](../corpus/drawn/er-direction-tb.svg) |
+| Direction: left to right | Drawn, less something | Drawn top to bottom: boxes of different heights are only placed that way yet | [source](../corpus/er/er-direction-lr.mmd) | [picture](../corpus/drawn/er-direction-lr.svg) |
+| A group, named by one word | Drawn |  | [source](../corpus/er/er-subgraph.mmd) | [picture](../corpus/drawn/er-subgraph.svg) |
+| A group named by words in quotes | Drawn |  | [source](../corpus/er/er-subgraph-quoted.mmd) | [picture](../corpus/drawn/er-subgraph-quoted.svg) |
+| A group with an id and a title | Drawn |  | [source](../corpus/er/er-subgraph-id.mmd) | [picture](../corpus/drawn/er-subgraph-id.svg) |
+| A group inside a group | Drawn |  | [source](../corpus/er/er-subgraph-nested.mmd) | [picture](../corpus/drawn/er-subgraph-nested.svg) |
+| Relationships to and from groups | Drawn, less something | A relationship with a group is drawn to where the group starts, or from where it ends | [source](../corpus/er/er-subgraph-links.mmd) | [picture](../corpus/drawn/er-subgraph-links.svg) |
+| A group with a direction of its own | Drawn, less something | The group's own direction is read past; it runs the way the rest does | [source](../corpus/er/er-subgraph-direction.mmd) | [picture](../corpus/drawn/er-subgraph-direction.svg) |
+| An entity styled on its own | Drawn, less something | Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's | [source](../corpus/er/er-style.mmd) | [picture](../corpus/drawn/er-style.svg) |
+| Several entities styled in one line | Drawn, less something | Their outlines are heavy and blue as written, in the design's own blue | [source](../corpus/er/er-style-several.mmd) | [picture](../corpus/drawn/er-style-several.svg) |
+| A class made and given to entities | Drawn |  | [source](../corpus/er/er-class-def.mmd) | [picture](../corpus/drawn/er-class-def.svg) |
+| Several classes given at once | Drawn, less something | A box is of one kind: of several classes, the first is the one it is | [source](../corpus/er/er-class-several.mmd) | [picture](../corpus/drawn/er-class-several.svg) |
+| A class given with ::: | Drawn |  | [source](../corpus/er/er-class-inline.mmd) | [picture](../corpus/drawn/er-class-inline.svg) |
+| A class given with ::: in a relationship | Drawn |  | [source](../corpus/er/er-class-inline-relationship.mmd) | [picture](../corpus/drawn/er-class-inline-relationship.svg) |
+| A default class for every entity | Drawn, less something | The default class is read past: the look is the design's | [source](../corpus/er/er-class-default.mmd) | [picture](../corpus/drawn/er-class-default.svg) |
+| A title and settings in front matter | Drawn, less something | Mermaid's own settings are read past: the look and the placement are Merlive's | [source](../corpus/er/er-frontmatter.mmd) | [picture](../corpus/drawn/er-frontmatter.svg) |
+| A title and a description for readers who cannot see it | Drawn |  | [source](../corpus/er/er-accessibility.mmd) | [picture](../corpus/drawn/er-accessibility.svg) |
+| Comments, on lines of their own, between statements and between attributes | Drawn |  | [source](../corpus/er/er-comments.mmd) | [picture](../corpus/drawn/er-comments.svg) |
+
 ## Sequence diagrams, feature by feature
 
 Held to the same measure: every participant, message, note, frame and word the corpus says a sample has is read,
@@ -199,7 +256,7 @@ drawing of their own.
 |---|---|---|---|
 | Class diagram | Left as Mermaid | [source](../corpus/kinds/class.mmd) |  |
 | State diagram | Drawn | [source](../corpus/kinds/state.mmd) | [picture](../corpus/drawn/state.svg) |
-| Entity relationship diagram | Left as Mermaid | [source](../corpus/kinds/er.mmd) |  |
+| Entity relationship diagram | Drawn | [source](../corpus/kinds/er.mmd) | [picture](../corpus/drawn/er.svg) |
 | Requirement diagram | Left as Mermaid | [source](../corpus/kinds/requirement.mmd) |  |
 | C4 diagram | Left as Mermaid | [source](../corpus/kinds/c4.mmd) |  |
 | Block diagram | Left as Mermaid | [source](../corpus/kinds/block.mmd) |  |

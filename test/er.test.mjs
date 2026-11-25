@@ -1,6 +1,6 @@
 // Why: an entity diagram is boxes and links too: entities with the attributes they list, and relationships
 // that say how many at each end. These hold the reading, through parse(), and hold the corpus's own list
-// (corpus/er.json) to what is read today. How a box with rows and a crow's foot are drawn is tested where
+// (the `er` list of corpus/index.json) to what is read today. How a box with rows and a crow's foot are drawn is tested where
 // they are drawn.
 
 import assert from 'node:assert/strict';
@@ -81,9 +81,17 @@ describe('er: attributes', () => {
     assert.deepEqual(m.warnings, []);
   });
 
-  it('keeps a key, several keys, and a comment, as they were written', () => {
+  it('keeps a key and several keys in the row, and puts a comment in the note on its entity', () => {
     const m = er('ORDER_LINE {\n  int orderNumber PK, FK\n  string productCode PK,FK\n  string barcode UK "printed on the label"\n  int quantity "never less than 1"\n}');
-    assert.deepEqual(rows(m).ORDER_LINE, [['int orderNumber PK, FK', 'string productCode PK, FK', 'string barcode UK "printed on the label"', 'int quantity "never less than 1"']]);
+    assert.deepEqual(rows(m).ORDER_LINE, [['int orderNumber PK, FK', 'string productCode PK, FK', 'string barcode UK', 'int quantity']]);
+    assert.equal(m.notes.ORDER_LINE, 'barcode: printed on the label; quantity: never less than 1');
+  });
+
+  it("adds an attribute's comment to the note its author wrote, wherever that note is", () => {
+    const before = er('%% note ORDER: One for each basket.\nORDER {\n  int number "counts up from 1"\n}');
+    const after = er('ORDER {\n  int number "counts up from 1"\n}\n%% note ORDER: One for each basket.');
+    assert.equal(before.notes.ORDER, 'One for each basket. number: counts up from 1');
+    assert.equal(after.notes.ORDER, before.notes.ORDER);
   });
 
   it('reads a star before a name as a primary key', () => {
@@ -97,7 +105,9 @@ describe('er: attributes', () => {
   });
 
   it('reads attributes in other alphabets, and entity codes in a comment', () => {
-    assert.deepEqual(rows(er('SUPPLIER {\n  string näme "the firm#39;s own"\n}')).SUPPLIER, [['string näme "the firm\'s own"']]);
+    const m = er('SUPPLIER {\n  string näme "the firm#39;s own"\n}');
+    assert.deepEqual(rows(m).SUPPLIER, [['string näme']]);
+    assert.equal(m.notes.SUPPLIER, "näme: the firm's own");
   });
 
   it('joins the attributes of an entity declared twice, and gives one declared empty no rows', () => {
@@ -258,7 +268,7 @@ describe('er: what a flowchart has too', () => {
 
 describe('er: the corpus', () => {
   /** @type {{file:string,covers:string,boxes:number,links:number,groups?:number,has?:string[],rows:number[],ends:string[][],kinds?:string[],title?:string,loses?:string,says?:string}[]} */
-  const list = JSON.parse(readFileSync(join(root, 'corpus/er.json'), 'utf8'));
+  const list = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8')).er;
 
   it('lists every sample that is there, and every sample listed is there', () => {
     assert.deepEqual(list.map((s) => s.file).sort(), readdirSync(join(root, 'corpus/er')).filter((f) => f.endsWith('.mmd')).map((f) => `er/${f}`).sort());

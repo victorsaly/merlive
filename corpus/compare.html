@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 171 samples, Merlive draws 136 whole and 5 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>171</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>99</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>37</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>5</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>30</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 219 samples, Merlive draws 185 whole and 5 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>219</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>138</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>47</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>5</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>29</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -1095,6 +1095,522 @@ stateDiagram-v2
 </pre></details>
 </article>
 </section>
+
+<section><h2>Entity diagrams, feature by feature</h2>
+<article class="card" data-result="drawn">
+<h3>An entity diagram: entities, and the relationships between them</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-declare.png" width="385" height="470" style="--w:385" alt="An entity diagram: entities, and the relationships between them, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-declare.svg" width="382" height="284" style="--w:382" alt="An entity diagram: entities, and the relationships between them, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    ORDER ||--|{ ORDER_LINE : contains
+    PRODUCT ||--o{ ORDER_LINE : &quot;is on&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An entity with no relationships</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-entity-alone.png" width="381" height="285" style="--w:381" alt="An entity with no relationships, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-entity-alone.svg" width="382" height="192" style="--w:382" alt="An entity with no relationships, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    INVOICE
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Attributes: a type and a name each</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-attributes.png" width="219" height="417" style="--w:219" alt="Attributes: a type and a name each, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-attributes.svg" width="248" height="296" style="--w:248" alt="Attributes: a type and a name each, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    SUPPLIER {
+        string name
+        string accountNumber
+        string country
+    }
+    ORDER {
+        int number
+        date placed
+    }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An entity declared twice, its attributes joined</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-entity-twice.png" width="152" height="330" style="--w:152" alt="An entity declared twice, its attributes joined, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-entity-twice.svg" width="190" height="236" style="--w:190" alt="An entity declared twice, its attributes joined, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    ORDER {
+        int number
+    }
+    SUPPLIER ||--o{ ORDER : receives
+    ORDER {
+        date placed
+    }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An entity declared with no attributes between its braces</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-entity-empty.png" width="136" height="285" style="--w:136" alt="An entity declared with no attributes between its braces, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-entity-empty.svg" width="190" height="192" style="--w:190" alt="An entity declared with no attributes between its braces, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER {
+    }
+    ORDER {}
+    SUPPLIER ||--o{ ORDER : receives
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A name with a hyphen in it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-name-hyphen.png" width="217" height="470" style="--w:217" alt="A name with a hyphen in it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-name-hyphen.svg" width="216" height="284" style="--w:216" alt="A name with a hyphen in it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    ORDER ||--|{ ORDER-LINE : contains
+    ORDER-LINE }o--|| DELIVERY-ADDRESS : &quot;goes to&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A name with spaces, in quotes</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-name-quoted.png" width="166" height="287" style="--w:166" alt="A name with spaces, in quotes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-name-quoted.svg" width="190" height="220" style="--w:190" alt="A name with spaces, in quotes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    &quot;Purchase order&quot; ||--|{ &quot;Order line&quot; : contains
+    &quot;Order line&quot; {
+        int quantity
+    }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Names, words and attributes in other alphabets</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-name-unicode.png" width="151" height="287" style="--w:151" alt="Names, words and attributes in other alphabets, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-name-unicode.svg" width="184" height="220" style="--w:184" alt="Names, words and attributes in other alphabets, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    &quot;Händler ❤&quot; ||--o{ &quot;注文&quot; : &quot;erhält&quot;
+    &quot;注文&quot; {
+        string straße
+    }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A name written as Markdown</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Bold and italic are drawn as plain words</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-name-markdown.png" width="147" height="285" style="--w:147" alt="A name written as Markdown, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-name-markdown.svg" width="190" height="192" style="--w:190" alt="A name written as Markdown, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    &quot;A **firm** order&quot; ||--|{ &quot;An _order_ line&quot; : contains
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An alias shown in place of the name</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-alias.png" width="186" height="288" style="--w:186" alt="An alias shown in place of the name, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-alias.svg" width="184" height="280" style="--w:184" alt="An alias shown in place of the name, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    s[Supplier] {
+        string name
+    }
+    a[&quot;Supplier account&quot;] {
+        string email
+    }
+    s ||--o| a : has
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Zero or one, at either end</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-cardinality-zero-or-one.png" width="122" height="285" style="--w:122" alt="Zero or one, at either end, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-cardinality-zero-or-one.svg" width="216" height="192" style="--w:216" alt="Zero or one, at either end, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    ORDER |o--o| INVOICE : &quot;is billed by&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Exactly one, at either end</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-cardinality-exactly-one.png" width="122" height="285" style="--w:122" alt="Exactly one, at either end, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-cardinality-exactly-one.svg" width="184" height="192" style="--w:184" alt="Exactly one, at either end, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    INVOICE ||--|| ORDER : bills
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Zero or more, at either end</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-cardinality-zero-or-more.png" width="136" height="285" style="--w:136" alt="Zero or more, at either end, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-cardinality-zero-or-more.svg" width="184" height="192" style="--w:184" alt="Zero or more, at either end, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER }o--o{ PRODUCT : stocks
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>One or more, at either end</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-cardinality-one-or-more.png" width="136" height="285" style="--w:136" alt="One or more, at either end, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-cardinality-one-or-more.svg" width="190" height="192" style="--w:190" alt="One or more, at either end, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    ORDER }|--|{ PRODUCT : &quot;asks for&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A mark written the other way round for its end</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-cardinality-mirrored.png" width="136" height="470" style="--w:136" alt="A mark written the other way round for its end, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-cardinality-mirrored.svg" width="223" height="284" style="--w:223" alt="A mark written the other way round for its end, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER o{--|| ORDER : &quot;is chosen for&quot;
+    ORDER |{--o| INVOICE : &quot;are billed on&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>How many, written in words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-cardinality-words.png" width="405" height="655" style="--w:405" alt="How many, written in words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-cardinality-words.svg" width="376" height="376" style="--w:376" alt="How many, written in words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER only one to zero or more ORDER : receives
+    ORDER 1 to one or more ORDER_LINE : contains
+    ORDER zero or one to one or zero INVOICE : &quot;is billed by&quot;
+    PRODUCT one or many to zero or many SUPPLIER : &quot;is stocked by&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>How many, in the short forms: 1, 1+, 0+, many(0), many(1)</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-cardinality-short.png" width="159" height="655" style="--w:159" alt="How many, in the short forms: 1, 1+, 0+, many(0), many(1), as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-cardinality-short.svg" width="223" height="376" style="--w:223" alt="How many, in the short forms: 1, 1+, 0+, many(0), many(1), as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER 1 to 0+ ORDER : receives
+    ORDER 1 to 1+ ORDER_LINE : contains
+    PRODUCT many(1) to many(0) SUPPLIER : &quot;is stocked by&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A relationship that identifies: a solid line</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-identifying.png" width="159" height="285" style="--w:159" alt="A relationship that identifies: a solid line, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-identifying.svg" width="190" height="192" style="--w:190" alt="A relationship that identifies: a solid line, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    ORDER ||--|{ ORDER_LINE : contains
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A relationship that does not identify: a dotted line</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-non-identifying.png" width="136" height="285" style="--w:136" alt="A relationship that does not identify: a dotted line, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-non-identifying.svg" width="184" height="192" style="--w:184" alt="A relationship that does not identify: a dotted line, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER }o..o{ PRODUCT : stocks
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Identifying or not, written in words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-identifying-words.png" width="418" height="285" style="--w:418" alt="Identifying or not, written in words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-identifying-words.svg" width="382" height="192" style="--w:382" alt="Identifying or not, written in words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    ORDER 1 to one or more ORDER_LINE : contains
+    SUPPLIER many(0) optionally to 0+ PRODUCT : stocks
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A relationship's words, in quotes</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-label-quoted.png" width="159" height="285" style="--w:159" alt="A relationship's words, in quotes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-label-quoted.svg" width="203" height="192" style="--w:203" alt="A relationship's words, in quotes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    PRODUCT ||--o{ ORDER_LINE : &quot;appears on&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A relationship with empty words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-label-empty.png" width="136" height="264" style="--w:136" alt="A relationship with empty words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-label-empty.svg" width="184" height="192" style="--w:184" alt="A relationship with empty words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : &quot;&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A relationship written with no spaces</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-no-spaces.png" width="136" height="285" style="--w:136" alt="A relationship written with no spaces, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-no-spaces.svg" width="190" height="192" style="--w:190" alt="A relationship written with no spaces, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER||--o{ORDER : receives
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A relationship from an entity to itself</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-self.png" width="337" height="387" style="--w:337" alt="A relationship from an entity to itself, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-self.svg" width="276" height="192" style="--w:276" alt="A relationship from an entity to itself, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    SUPPLIER }o..o| SUPPLIER : &quot;buys from&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Keys: primary, foreign and unique</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-attribute-keys.png" width="267" height="230" style="--w:267" alt="Keys: primary, foreign and unique, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-attribute-keys.svg" width="280" height="176" style="--w:280" alt="Keys: primary, foreign and unique, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    ORDER {
+        int number PK
+        string supplierAccount FK
+        string reference UK
+        date placed
+    }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Several keys on one attribute</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-attribute-keys-several.png" width="271" height="187" style="--w:271" alt="Several keys on one attribute, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-attribute-keys-several.svg" width="280" height="160" style="--w:280" alt="Several keys on one attribute, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    ORDER_LINE {
+        int orderNumber PK, FK
+        string productCode PK, FK
+        int quantity
+    }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A star before a name, for a primary key</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-attribute-star.png" width="147" height="145" style="--w:147" alt="A star before a name, for a primary key, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-attribute-star.svg" width="184" height="144" style="--w:184" alt="A star before a name, for a primary key, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    PRODUCT {
+        string *code
+        string name
+    }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A comment on an attribute</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A comment is not in its row: it is in the note on its entity, which a reader sees on picking the box</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-attribute-comment.png" width="494" height="187" style="--w:494" alt="A comment on an attribute, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-attribute-comment.svg" width="248" height="160" style="--w:248" alt="A comment on an attribute, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    INVOICE {
+        string number PK &quot;As printed on the invoice&quot;
+        string(40) reference &quot;Only 40 characters are allowed&quot;
+        decimal total
+    }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Types with a length, a list, and two numbers</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-attribute-types.png" width="229" height="230" style="--w:229" alt="Types with a length, a list, and two numbers, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-attribute-types.svg" width="216" height="176" style="--w:216" alt="Types with a length, a list, and two numbers, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    PRODUCT {
+        string(20) code
+        string[] barcodes
+        decimal(10,2) price
+        varchar_max notes
+    }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A type that may be missing</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-attribute-optional.png" width="221" height="187" style="--w:221" alt="A type that may be missing, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-attribute-optional.svg" width="248" height="160" style="--w:248" alt="A type that may be missing, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    INVOICE {
+        date issued
+        date? paid
+        string? disputeReason
+    }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Direction: top to bottom</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-direction-tb.png" width="159" height="470" style="--w:159" alt="Direction: top to bottom, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-direction-tb.svg" width="190" height="284" style="--w:190" alt="Direction: top to bottom, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    direction TB
+    SUPPLIER ||--o{ ORDER : receives
+    ORDER ||--|{ ORDER_LINE : contains
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Direction: left to right</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn top to bottom: boxes of different heights are only placed that way yet</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-direction-lr.png" width="642" height="100" style="--w:642" alt="Direction: left to right, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-direction-lr.svg" width="190" height="284" style="--w:190" alt="Direction: left to right, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    direction LR
+    SUPPLIER ||--o{ ORDER : receives
+    ORDER ||--|{ ORDER_LINE : contains
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A group, named by one word</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-subgraph.png" width="784" height="428" style="--w:784" alt="A group, named by one word, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-subgraph.svg" width="216" height="296" style="--w:216" alt="A group, named by one word, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    subgraph Buying
+        SUPPLIER ||--o{ ORDER : receives
+    end
+    ORDER ||--o| INVOICE : &quot;is billed by&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A group named by words in quotes</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-subgraph-quoted.png" width="784" height="260" style="--w:784" alt="A group named by words in quotes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-subgraph-quoted.svg" width="223" height="216" style="--w:223" alt="A group named by words in quotes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    subgraph &quot;Paying up&quot;
+        INVOICE ||--o{ PAYMENT : &quot;is settled by&quot;
+    end
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A group with an id and a title</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-subgraph-id.png" width="784" height="260" style="--w:784" alt="A group with an id and a title, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-subgraph-id.svg" width="223" height="216" style="--w:223" alt="A group with an id and a title, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    subgraph pay [&quot;Paying up&quot;]
+        INVOICE ||--o{ PAYMENT : &quot;is settled by&quot;
+    end
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A group inside a group</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-subgraph-nested.png" width="784" height="336" style="--w:784" alt="A group inside a group, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-subgraph-nested.svg" width="218" height="348" style="--w:218" alt="A group inside a group, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    subgraph Buying
+        SUPPLIER ||--o{ ORDER : receives
+        subgraph Lines
+            ORDER_LINE {
+                int quantity
+            }
+        end
+        ORDER ||--|{ ORDER_LINE : contains
+    end
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Relationships to and from groups</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A relationship with a group is drawn to where the group starts, or from where it ends</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-subgraph-links.png" width="784" height="332" style="--w:784" alt="Relationships to and from groups, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-subgraph-links.svg" width="223" height="480" style="--w:223" alt="Relationships to and from groups, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    subgraph Buying
+        SUPPLIER ||--o{ ORDER : receives
+    end
+    subgraph Paying
+        INVOICE ||--o{ PAYMENT : &quot;is settled by&quot;
+    end
+    Buying ||--|| Paying : &quot;leads to&quot;
+    Paying ||--o{ RECEIPT : gives
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A group with a direction of its own</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The group's own direction is read past; it runs the way the rest does</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-subgraph-direction.png" width="619" height="772" style="--w:619" alt="A group with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-subgraph-direction.svg" width="216" height="296" style="--w:216" alt="A group with a direction of its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    subgraph Buying
+        direction LR
+        SUPPLIER ||--o{ ORDER : receives
+    end
+    ORDER ||--o| INVOICE : &quot;is billed by&quot;
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>An entity styled on its own</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-style.png" width="136" height="285" style="--w:136" alt="An entity styled on its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-style.svg" width="190" height="192" style="--w:190" alt="An entity styled on its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    style ORDER fill:#fde,stroke:#c00,stroke-width:4px,stroke-dasharray: 5 5
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Several entities styled in one line</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Their outlines are heavy and blue as written, in the design's own blue</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-style-several.png" width="155" height="470" style="--w:155" alt="Several entities styled in one line, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-style-several.svg" width="190" height="284" style="--w:190" alt="Several entities styled in one line, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    ORDER ||--|{ ORDER-LINE : contains
+    style ORDER,ORDER-LINE stroke:#00c,stroke-width:3px
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class made and given to entities</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-class-def.png" width="136" height="470" style="--w:136" alt="A class made and given to entities, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-class-def.svg" width="216" height="284" style="--w:216" alt="A class made and given to entities, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    ORDER ||--o| INVOICE : &quot;is billed by&quot;
+    classDef late stroke:#c62828,stroke-width:2px
+    class ORDER,INVOICE late
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Several classes given at once</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A box is of one kind: of several classes, the first is the one it is</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-class-several.png" width="136" height="285" style="--w:136" alt="Several classes given at once, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-class-several.svg" width="190" height="192" style="--w:190" alt="Several classes given at once, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    classDef late,held stroke:#c62828
+    class ORDER late,held
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class given with :::</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-class-inline.png" width="138" height="287" style="--w:138" alt="A class given with :::, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-class-inline.svg" width="190" height="220" style="--w:190" alt="A class given with :::, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    ORDER:::late {
+        int number
+    }
+    SUPPLIER:::trusted
+    SUPPLIER ||--o{ ORDER : receives
+    classDef late stroke:#c62828
+    classDef trusted stroke:#2e7d32
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class given with ::: in a relationship</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-class-inline-relationship.png" width="136" height="470" style="--w:136" alt="A class given with ::: in a relationship, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-class-inline-relationship.svg" width="216" height="284" style="--w:216" alt="A class given with ::: in a relationship, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER:::trusted ||--o{ ORDER : receives
+    ORDER ||--o| INVOICE:::late : &quot;is billed by&quot;
+    classDef late stroke:#c62828
+    classDef trusted stroke:#2e7d32
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A default class for every entity</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The default class is read past: the look is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-class-default.png" width="136" height="285" style="--w:136" alt="A default class for every entity, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-class-default.svg" width="190" height="192" style="--w:190" alt="A default class for every entity, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+    classDef default fill:#f9f,stroke:#333,stroke-width:4px
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A title and settings in front matter</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look and the placement are Merlive's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-frontmatter.png" width="198" height="331" style="--w:198" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-frontmatter.svg" width="190" height="192" style="--w:190" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: Orders and who fills them
+config:
+    layout: dagre
+    theme: default
+    look: classic
+---
+erDiagram
+    SUPPLIER ||--o{ ORDER : receives
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title and a description for readers who cannot see it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-accessibility.png" width="136" height="285" style="--w:136" alt="A title and a description for readers who cannot see it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-accessibility.svg" width="190" height="192" style="--w:190" alt="A title and a description for readers who cannot see it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    accTitle: Orders and who fills them
+    accDescr: A supplier receives any number of orders
+    SUPPLIER ||--o{ ORDER : receives
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Comments, on lines of their own, between statements and between attributes</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-comments.png" width="138" height="287" style="--w:138" alt="Comments, on lines of their own, between statements and between attributes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-comments.svg" width="190" height="220" style="--w:190" alt="Comments, on lines of their own, between statements and between attributes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>erDiagram
+    %% the heart of it
+    SUPPLIER ||--o{ ORDER : receives
+    ORDER {
+        %% what a buyer quotes
+        int number
+    }
+</pre></details>
+</article>
+</section>
 <section><h2>Sequence diagrams, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>Participants named by the messages they are in</h3>
@@ -1715,10 +2231,10 @@ tf 03 evt OrderPlaced
   Approved --&gt; [*]
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Entity relationship diagram</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er.png" width="385" height="470" style="--w:385" alt="Entity relationship diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a erDiagram is not drawn yet</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er.png" width="385" height="470" style="--w:385" alt="Entity relationship diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er.svg" width="382" height="284" style="--w:382" alt="Entity relationship diagram, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>erDiagram
   SUPPLIER ||--o{ ORDER : receives
   ORDER ||--|{ ORDER_LINE : contains

@@ -4,7 +4,7 @@
 // each should be read as. This runs Merlive over all of it and writes the answer down: docs/COVERAGE.md and a
 // picture of each sample it draws. A development script: the skill does not need it.
 
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
@@ -18,7 +18,7 @@ import { sequencePicture } from '../skills/merlive/scripts/sequence-render.mjs';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /**
- * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],shapes?:string[],notes?:number,direction?:string,loses?:string,family?:string}} Sample
+ * @typedef {{file:string,covers:string,boxes?:number,links?:number,groups?:number,has?:string[],kinds?:string[],title?:string,ends?:string[][],shapes?:string[],notes?:number,direction?:string,rows?:number[],says?:string,loses?:string,family?:string}} Sample
  * @typedef {{sample:Sample,result:'drawn'|'less'|'partly'|'refused'|'left',why:string[],svg:string}} Row
  */
 
@@ -50,14 +50,20 @@ export function judge(sample, source) {
   count('groups', sample.groups, lay.groups.length);
   count('notes', sample.notes, Object.keys(model.notes).length);
   if (sample.direction !== undefined && model.direction !== sample.direction) why.push(`drawn ${model.direction}, not ${sample.direction}`);
-  const said = [...model.nodes.map((n) => n.label), ...model.edges.map((e) => e.label), ...model.groups.map((g) => g.title)];
+  const said = [...model.nodes.flatMap((n) => [n.label, n.over ?? '', ...(n.rows ?? []).flat()]), ...model.edges.flatMap((e) => [e.label, e.near ?? '', e.far ?? '']), ...model.groups.map((g) => g.title)];
   for (const text of sample.has ?? []) if (!said.includes(text)) why.push(`"${text}" is not among its words`);
   for (const kind of sample.kinds ?? []) if (!model.nodes.some((n) => n.kind === kind)) why.push(`no box is of the kind ${kind}`);
   if (sample.title !== undefined && model.title !== sample.title) why.push('its title is not kept');
   if (sample.ends && JSON.stringify(model.edges.map((e) => [e.tail, e.head])) !== JSON.stringify(sample.ends)) why.push('what is at the ends of its links is not kept');
+  const listed = model.nodes.map((n) => (n.rows ?? []).flat().length);
+  if (sample.rows && JSON.stringify(listed) !== JSON.stringify(sample.rows)) why.push(`its boxes list ${listed.join(', ')} rows, not ${sample.rows.join(', ')}`);
+  // What a sample is meant to be told (that it is drawn top to bottom, say) is not something left unread; not
+  // being told it would be.
+  const told = (/** @type {string} */ w) => sample.says !== undefined && w.includes(sample.says);
+  if (sample.says !== undefined && !model.warnings.some(told)) why.push(`it is not told: ${sample.says}`);
   if (sample.shapes && JSON.stringify(model.nodes.map((n) => n.shape)) !== JSON.stringify(sample.shapes)) why.push(`its shapes are read as ${model.nodes.map((n) => n.shape).join(', ')}`);
   // That a flow is wide is true of the sample, not a thing Merlive failed to read.
-  why.push(...model.warnings, ...lay.warnings.filter((w) => !w.includes('will scroll on most screens') && !w.startsWith('written left to right, drawn top to bottom')));
+  why.push(...model.warnings.filter((w) => !told(w)), ...lay.warnings.filter((w) => !w.includes('will scroll on most screens') && !w.startsWith('written left to right, drawn top to bottom')));
   const broken = score(model, lay, design).checks.filter((c) => !c.ok);
   const svg = model.nodes.length ? picture(model, lay, design, { title: sample.covers }) : '';
   if (broken.length) return { sample, result: 'refused', why: [...broken.map((c) => `${c.id} ${c.rule}: ${c.detail}`), ...why], svg };
@@ -113,17 +119,23 @@ function judgeSequence(sample, model) {
  * @param {string} [corpus] the corpus folder
  * @returns {{rows:Row[],markdown:string,pictures:Record<string,string>}}
  */
+/** The lists of samples in corpus/index.json, in the order they are shown: each is a folder of the corpus too. */
+export const lists = /** @type {const} */ (['flowchart', 'state', 'class', 'er', 'sequence', 'kinds']);
+
+/** Every sample of an index, list after list. */
+export const samplesOf = (/** @type {Record<string, any>} */ index) => lists.flatMap((l) => /** @type {Sample[]} */ (index[l] ?? []));
+
 export function coverage(corpus = join(root, 'corpus')) {
-  /** @type {{from:string,flowchart:Sample[],state:Sample[],sequence:Sample[],kinds:Sample[]}} */
+  /** @type {{from:string} & Partial<Record<typeof lists[number], Sample[]>>} */
   const index = JSON.parse(readFileSync(join(corpus, 'index.json'), 'utf8'));
   const run = (/** @type {Sample[]} */ list) => list.map((s) => judge(s, readFileSync(join(corpus, s.file), 'utf8')));
-  const flow = run(index.flowchart), state = run(index.state), seq = run(index.sequence), kinds = run(index.kinds);
+  const flow = run(index.flowchart ?? []), state = run(index.state ?? []), cls = run(index.class ?? []), er = run(index.er ?? []), seq = run(index.sequence ?? []), kinds = run(index.kinds ?? []);
   const tally = (/** @type {Row[]} */ rows, /** @type {Row['result']} */ r) => rows.filter((x) => x.result === r).length;
   const cell = (/** @type {string} */ s) => s.replace(/\|/g, '\\|').replace(/\n/g, ' ');
   const pic = (/** @type {Row} */ r) => `corpus/drawn/${basename(r.sample.file, '.mmd')}.svg`;
   /** @type {Record<string,string>} */
   const pictures = {};
-  for (const r of [...flow, ...state, ...seq, ...kinds]) if (r.svg && r.result !== 'refused') pictures[pic(r)] = r.svg;
+  for (const r of [...flow, ...state, ...cls, ...er, ...seq, ...kinds]) if (r.svg && r.result !== 'refused') pictures[pic(r)] = r.svg;
   const table = (/** @type {Row[]} */ rows) => rows.map((r) => `| ${cell(r.sample.covers)} | ${words[r.result]} | ${cell(r.why.join('; '))} | [source](../corpus/${r.sample.file}) | ${pictures[pic(r)] ? `[picture](../${pic(r)})` : ''} |`).join('\n');
   const families = [...new Set(kinds.map((r) => r.sample.family ?? ''))];
 
@@ -137,8 +149,8 @@ ${index.from}
 
 - **Flowcharts:** of ${flow.length} features, ${tally(flow, 'drawn')} are drawn as written, ${tally(flow, 'less')} are drawn less something Merlive leaves out on purpose or does not have yet, ${tally(flow, 'partly')} are only partly read, and ${tally(flow, 'refused')} are refused.
 - **State diagrams:** of ${state.length} features, ${tally(state, 'drawn')} are drawn as written, ${tally(state, 'less')} are drawn less something, ${tally(state, 'partly')} are only partly read, and ${tally(state, 'refused')} are refused.
-- **Sequence diagrams:** of ${seq.length} features, ${tally(seq, 'drawn')} are drawn as written, ${tally(seq, 'less')} are drawn less something, ${tally(seq, 'partly')} are only partly read, and ${tally(seq, 'refused')} are refused.
-- **Every kind of diagram:** of ${kinds.length}, ${kinds.length - tally(kinds, 'left')} drawn (flowcharts, state diagrams and sequence diagrams, which have their own lists above), and ${tally(kinds, 'left')} left as Mermaid and named.
+${cls.length ? `- **Class diagrams:** of ${cls.length} features, ${tally(cls, 'drawn')} are drawn as written, ${tally(cls, 'less')} are drawn less something, ${tally(cls, 'partly')} are only partly read, and ${tally(cls, 'refused')} are refused.\n` : ''}${er.length ? `- **Entity diagrams:** of ${er.length} features, ${tally(er, 'drawn')} are drawn as written, ${tally(er, 'less')} are drawn less something, ${tally(er, 'partly')} are only partly read, and ${tally(er, 'refused')} are refused.\n` : ''}- **Sequence diagrams:** of ${seq.length} features, ${tally(seq, 'drawn')} are drawn as written, ${tally(seq, 'less')} are drawn less something, ${tally(seq, 'partly')} are only partly read, and ${tally(seq, 'refused')} are refused.
+- **Every kind of diagram:** of ${kinds.length}, ${kinds.length - tally(kinds, 'left')} drawn (those with their own lists above), and ${tally(kinds, 'left')} left as Mermaid and named.
 
 ## Flowcharts, feature by feature
 
@@ -159,7 +171,25 @@ rules. Held to the same measure as the flowcharts above.
 |---|---|---|---|---|
 ${table(state)}
 
-## Sequence diagrams, feature by feature
+${cls.length ? `## Class diagrams, feature by feature
+
+A class is a box that lists its attributes and its methods under its name. Held to the same measure, and to
+the rows each box lists and what each link ends in.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+${table(cls)}
+
+` : ''}${er.length ? `## Entity diagrams, feature by feature
+
+An entity is a box that lists its attributes under its name, and a relationship ends in how many. Held to the
+same measure, and to the rows each box lists and what each link ends in.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+${table(er)}
+
+` : ''}## Sequence diagrams, feature by feature
 
 Held to the same measure: every participant, message, note, frame and word the corpus says a sample has is read,
 and every rule in [SEQUENCE.md](SEQUENCE.md) passes.
@@ -180,12 +210,12 @@ ${families.map((family) => `### ${family.charAt(0).toUpperCase() + family.slice(
 |---|---|---|---|
 ${kinds.filter((r) => r.sample.family === family).map((r) => `| ${cell(r.sample.covers)} | ${words[r.result]} | [source](../corpus/${r.sample.file}) | ${pictures[pic(r)] ? `[picture](../${pic(r)})` : ''} |`).join('\n')}`).join('\n\n')}
 `;
-  return { rows: [...flow, ...state, ...seq, ...kinds], markdown, pictures };
+  return { rows: [...flow, ...state, ...cls, ...er, ...seq, ...kinds], markdown, pictures };
 }
 
 /** The samples on disk, to hold the index to: every one is listed, and every one listed is there. */
 export const samplesOnDisk = (corpus = join(root, 'corpus')) =>
-  ['flowchart', 'state', 'sequence', 'kinds'].flatMap((folder) => readdirSync(join(corpus, folder)).filter((f) => f.endsWith('.mmd')).map((f) => `${folder}/${f}`)).sort();
+  lists.filter((folder) => existsSync(join(corpus, folder))).flatMap((folder) => readdirSync(join(corpus, folder)).filter((f) => f.endsWith('.mmd')).map((f) => `${folder}/${f}`)).sort();
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const { rows, markdown, pictures } = coverage();

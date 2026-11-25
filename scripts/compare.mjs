@@ -9,7 +9,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { coverage } from './coverage.mjs';
+import { coverage, samplesOf } from './coverage.mjs';
 import { blocksOf } from '../skills/merlive/scripts/parse.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -97,7 +97,7 @@ export function comparePage({ rows, pictures, mermaid, sources }) {
   };
 
   const of = (/** @type {string} */ folder) => rows.filter((r) => r.sample.file.startsWith(`${folder}/`));
-  const flow = of('flowchart'), state = of('state'), seq = of('sequence'), kinds = of('kinds');
+  const flow = of('flowchart'), state = of('state'), cls = of('class'), er = of('er'), seq = of('sequence'), kinds = of('kinds');
   const families = [...new Set(kinds.map((r) => r.sample.family ?? ''))];
   const button = (/** @type {string} */ id, /** @type {string} */ text, /** @type {number} */ n) => `<button type="button" data-show="${id}" aria-pressed="${id === 'all'}">${text} <b>${n}</b></button>`;
   // With one result picked, the other cards go, and so does a heading left with none under it.
@@ -140,6 +140,8 @@ ${hide}{display:none}
 ${flow.map(card).join('\n')}
 </section>
 ${state.length ? `<section><h2>State diagrams, feature by feature</h2>\n${state.map(card).join('\n')}\n</section>` : ''}
+${cls.length ? `<section><h2>Class diagrams, feature by feature</h2>\n${cls.map(card).join('\n')}\n</section>` : ''}
+${er.length ? `<section><h2>Entity diagrams, feature by feature</h2>\n${er.map(card).join('\n')}\n</section>` : ''}
 ${seq.length ? `<section><h2>Sequence diagrams, feature by feature</h2>\n${seq.map(card).join('\n')}\n</section>` : ''}
 ${families.map((family) => `<section><h2>Other kinds: ${esc(family)}</h2>\n${kinds.filter((r) => (r.sample.family ?? '') === family).map(card).join('\n')}\n</section>`).join('\n')}
 </main>
@@ -214,7 +216,7 @@ if (asCommand && process.argv.includes('--page')) {
 
   const index = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8'));
   /** @type {string[]} */
-  const files = [...index.flowchart, ...index.state, ...index.sequence, ...index.kinds].map((s) => s.file);
+  const files = samplesOf(index).map((s) => s.file);
   mkdirSync(join(root, 'corpus/mermaid'), { recursive: true });
   /** @type {Record<string, Drawn>} */
   const samples = {};
