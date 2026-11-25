@@ -279,6 +279,25 @@ describe('a table: its shaded rows can be read', () => {
     const plain = parse('flowchart TD\n  A --> B');
     assert.doesNotMatch(score(plain, layout(plain), faint).checks.find((c) => c.id === 'D1')?.detail ?? '', /shaded row/);
   });
+
+  it('checks only what is drawn shaded: an entity of one attribute has no second row to shade', () => {
+    // Words that pass on a box and would fail on a shaded row, were there one.
+    const close = designFrom({ ...builtIn, light: { ...builtIn.light, text: '#767676', node: '#ffffff' } });
+    const one = parse('erDiagram\n  A {\n    int a\n  }'), two = parse('erDiagram\n  A {\n    int a\n    int b\n  }');
+    const d1 = (/** @type {import('../skills/merlive/scripts/parse.mjs').Model} */ m) => score(m, layout(m), close).checks.find((c) => c.id === 'D1')?.detail ?? '';
+    assert.match(d1(two), /text on a shaded row/);
+    assert.doesNotMatch(d1(one), /shaded row/);
+  });
+
+  it('checks only the kinds of box that have shaded rows, not every kind in the diagram', () => {
+    const faint = designFrom({ ...builtIn, light: { ...builtIn.light, text: '#8a8a8a', node: '#ffffff' } });
+    const m = parse('erDiagram\n  A {\n    int a\n    int b\n  }\n  B:::late {\n    int c\n  }\n  classDef late fill:#fee\n  A ||--o{ B : has');
+    const d1 = score(m, layout(m), faint).checks.find((c) => c.id === 'D1')?.detail ?? '';
+    const kindOf = (/** @type {string} */ id) => m.nodes.find((n) => n.id === id)?.kind;
+    assert.match(d1, new RegExp(`text on a shaded row of a ${kindOf('A')} box`));
+    assert.doesNotMatch(d1, new RegExp(`text on a shaded row of a ${kindOf('B')} box`), 'B has one row, and none of it is shaded');
+    assert.match(d1, new RegExp(`text on a ${kindOf('B')} box`), 'its words on the box itself are still checked');
+  });
 });
 
 describe('words a Markdown string stresses', () => {
