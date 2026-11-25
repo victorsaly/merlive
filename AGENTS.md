@@ -83,8 +83,7 @@ can still look wrong; when it does, the fix is a new rule and a check for it, no
 ## Rules
 
 - Write the failing test first, then the fix.
-- **Until 0.1.0 is released, work goes straight to `main`**, and the changelog entry for 0.1.0 grows with it.
-  After that:
+- 0.1.0 is released, so nothing goes straight to `main` any more: work is on a branch, in a pull request.
 - One pull request is one release: bump `.claude-plugin/plugin.json`, SKILL.md's `metadata.version`, `version` in
   merlive.mjs, the README badge and a changelog entry marked `(unreleased)` in the same pull request. `npm test`
   fails when they disagree.

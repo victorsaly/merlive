@@ -1,15 +1,15 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.0 (2026-11-25)
 
-The first version. It draws flowcharts and sequence diagrams, and says what it leaves.
+The first version. It draws flowcharts, state diagrams and sequence diagrams, and says what it leaves.
 
 - **A Mermaid flowchart becomes one page.** `merlive.mjs` reads a Markdown file's `mermaid` blocks (or a `.mmd`
   file) and writes one self-contained HTML page for each flowchart, or a still SVG with `--format svg`. Nothing is
   fetched when the page opens. The Mermaid block is never changed.
 - **Placement is by rule, and the rules are checked.** The main path is one straight line, every box is the same
   size on a grid, lines turn at right angles, leave from ports of their own and go round boxes, loops go to one
-  side. Seven placement rules and two for colour are checked before anything is written; a diagram that breaks
+  side. Eight placement rules and two for colour are checked before anything is written; a diagram that breaks
   one is not written, and the message says which rule, where, and what to change. `--check` reports without
   writing; `--force` writes anyway.
 - **It was run on a diagram somebody really wrote**, the paper trail on blog.victorsaly.com, and what that broke
