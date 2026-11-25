@@ -32,6 +32,7 @@ export const measure = {
   mostLines: 4, // of words in a box, and only when its author wrote that many; a plain label is wrapped to two
   labelWrap: 24, // characters a line of a link's words runs to before it wraps
   labelLine: 14, // px between two lines of a link's words
+  wordsIn: 16, // px from a box to the words on a line that leaves it, and the air under them
   labelOff: 5, // px between a link's words and its line
   framePad: 12, // from a group's boxes to its frame
   frameTitle: 14, // more at the top, for what the group is called
@@ -56,6 +57,8 @@ export const measure = {
   cellGlyph: 6.6, // px per character of a table's cell: the design's own face at 12px
   cellPad: 10, // px between a cell's words and the rule each side of it
   cellLine: 24, // px a table's row takes: a line of words and room above and below it, so the rules do not crowd them
+  overGlyph: 5.9, // px per character of that line, at 11px
+  overIn: 8, // from the side of a box to it
   overLine: 14, // px the short line above a name takes ("«interface»")
   endOff: 7, // from a line to the words at its end
   endAlong: 14, // how far along the line from its box those words sit: beside what is drawn at the end, and far
@@ -154,10 +157,12 @@ function boxFor(/** @type {Model} */ model) {
   // A diagram whose boxes list rows may need a wider box than any label does: every row keeps its one line.
   const longest = Math.max(0, ...model.nodes.flatMap((n) => (n.table ? [] : compartmentsOf(n).flat().map((row) => row.length))));
   const widest = Math.max(0, ...model.nodes.map(tableNeeds));
-  const widths = longest || widest || model.nodes.some((n) => n.text) ? [...measure.widths, ...measure.rowWidths] : measure.widths;
-  const wide = (/** @type {boolean} */ anyNote) => widths.find((width) => fits(width, anyNote) && rowsRoom(width) >= longest && width >= widest);
+  // The short line over a name says what the box is, and is never wrapped: the box is as wide as it needs.
+  const over = Math.max(0, ...model.nodes.map((n) => (n.over ? n.over.length * measure.overGlyph + 2 * measure.overIn : 0)));
+  const widths = longest || widest || over > measure.widths[measure.widths.length - 1] || model.nodes.some((n) => n.text) ? [...measure.widths, ...measure.rowWidths] : measure.widths;
+  const wide = (/** @type {boolean} */ anyNote) => widths.find((width) => fits(width, anyNote) && rowsRoom(width) >= longest && width >= widest && width >= over);
   // When no width keeps every note and sentence short, the widest that fits the rest gives them the fewest lines.
-  const w = wide(false) ?? (model.nodes.some((n) => n.text) ? [...widths].reverse().find((width) => fits(width, true) && rowsRoom(width) >= longest && width >= widest) : wide(true)) ?? widths[widths.length - 1];
+  const w = wide(false) ?? (model.nodes.some((n) => n.text) ? [...widths].reverse().find((width) => fits(width, true) && rowsRoom(width) >= longest && width >= widest && width >= over) : wide(true)) ?? widths[widths.length - 1];
   const most = Math.max(1, ...model.nodes.filter((n) => n.shape !== 'note').map((n) => linesOf(n, w).length));
   return { w, h: measure.boxPad + measure.lineHeight * most };
 }
@@ -344,7 +349,24 @@ function placed(model, dir, reversed = false) {
     const frames = most(ends, r - 1) + most(starts, r);
     // From the far end, a frame's top (and its name) is where the frame ends along the flow, not where it starts.
     const [atEnds, atStarts] = reversed ? [atStart, measure.framePad] : [measure.framePad, atStart];
-    return frames > 1 ? Math.max(0, atEnds * most(ends, r - 1) + atStarts * most(starts, r) + measure.frameAir - rankGap) : 0;
+    const forFrames = frames > 1 ? Math.max(0, atEnds * most(ends, r - 1) + atStarts * most(starts, r) + measure.frameAir - rankGap) : 0;
+    // Words on a link that runs into a group from outside would land on the group's name, which is along the top
+    // of its frame, in this same room. The room is made taller by the words, so they have a row above the name.
+    if (dir === 'LR') return forFrames;
+    const topsHere = model.groups.filter((g) => g.title && g.members.length && (reversed ? ends.get(g.id) === r - 1 : starts.get(g.id) === r));
+    const through = model.edges.filter((e) => {
+      const a = rank.get(e.from) ?? 0, b = rank.get(e.to) ?? 0;
+      return e.label && Math.min(a, b) < r && r <= Math.max(a, b) && topsHere.some((g) => g.members.includes(e.from) !== g.members.includes(e.to));
+    });
+    const forNames = through.length ? atEnds * most(ends, r - 1) + atStarts * most(starts, r) + measure.wordsIn + 4 + measure.labelLine * Math.max(...through.map((e) => wrap(e.label, measure.labelWrap).length)) - rankGap : 0;
+    // A link between boxes that are not in line turns in this room, half way down it. Words of two lines or more
+    // go above or below the turn, and need all of their height on one side of it.
+    const turning = model.edges.filter((e) => {
+      const a = rank.get(e.from) ?? 0, b = rank.get(e.to) ?? 0;
+      return e.label && Math.min(a, b) === r - 1 && Math.max(a, b) === r && lane.get(e.from) !== lane.get(e.to) && wrap(e.label, measure.labelWrap).length > 1;
+    });
+    const forTurns = turning.length ? 2 * (4 + measure.labelLine * Math.max(...turning.map((e) => wrap(e.label, measure.labelWrap).length)) + measure.labelOff + 4) - rankGap : 0;
+    return Math.max(forFrames, forNames, forTurns);
   });
   // A box that lists rows is taller than one that does not. A rank is as tall as its tallest box, every box of
   // it sits on the rank's middle line, and the room to the next rank is the same whatever the heights.

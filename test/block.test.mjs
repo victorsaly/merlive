@@ -2,7 +2,7 @@
 // space that holds a cell open. Merlive places boxes by rule. So these hold two things: that a block diagram
 // which is a flow (every block joined, the grid no more than the order they come in) is read into the model a
 // flowchart gives, and that one whose meaning is in its grid is left as Mermaid, with a sentence that says why
-// and what to do. They also hold the corpus's own list (corpus/block.json) to what is read today.
+// and what to do. They also hold the corpus's own list (the `block` list of corpus/index.json) to what is read today.
 
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
@@ -283,7 +283,7 @@ describe('block: a diagram placed by its author is left as Mermaid', () => {
 
 describe('block: the corpus', () => {
   /** @type {{file:string,covers:string,boxes:number,links:number,groups?:number,has?:string[],shapes?:string[],ends?:string[][],kinds?:string[],title?:string,direction?:string,left?:string,loses?:string}[]} */
-  const list = JSON.parse(readFileSync(join(root, 'corpus/block.json'), 'utf8'));
+  const list = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8')).block;
 
   it('lists every sample that is there, and every sample listed is there', () => {
     assert.deepEqual(list.map((s) => s.file).sort(), readdirSync(join(root, 'corpus/block')).filter((f) => f.endsWith('.mmd')).map((f) => `block/${f}`).sort());

@@ -16,6 +16,11 @@ For coding agents changing this repository. It follows the same habits as
 - `skills/merlive/scripts/class.mjs`, `er.mjs`: the same for a class diagram and an entity diagram. A class or an
   entity is a box that lists rows under its name; what its links end in says "is a", "has" or how many. A new
   kind of boxes and links is a reader like these and one line in `READERS` in parse.mjs. Pure.
+- `skills/merlive/scripts/requirement.mjs`, `c4.mjs`, `architecture.mjs`, `block.mjs`: four more readers of the
+  same kind. A requirement and a C4 element say a sentence about themselves (`text`). A block diagram is drawn
+  only when it is a flow: one whose meaning is in its author's grid is left as Mermaid, and says why
+  (`model.left`). Each has its list in `corpus/index.json`, and its line in `things` in `scripts/coverage.mjs`,
+  which is all the coverage page and the comparison page need to show a new kind. Pure.
 - `skills/merlive/scripts/layout.mjs`: the model to coordinates, by the rules in `docs/PLACEMENT.md`. Every
   measured number is in `measure` at the top, with why. Pure.
 - `skills/merlive/scripts/shapes.mjs`: every shape Merlive draws: its outline, the room it leaves for words, and

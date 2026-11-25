@@ -4,7 +4,7 @@
 
 import { contrast, kindFill, looksOf, mix, rowShade } from './design.mjs';
 import { runtime } from './runtime.mjs';
-import { outlineOf, wordsAt } from './shapes.mjs';
+import { form, outlineOf, wordsAt } from './shapes.mjs';
 import { iconMeasure, icons } from './icons.mjs';
 import { columnsAt, compartmentsOf, measure, textOf, wrap } from './layout.mjs';
 
@@ -155,9 +155,10 @@ function markAt(mark, tip, from) {
 /** The drawing alone: the SVG's insides, the same for a page, a picture and the setup page. */
 export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {import('./layout.mjs').Layout} */ lay, /** @type {import('./design.mjs').Design} */ design, /** @type {boolean} */ live, tag = '') {
   // The main path, link by link: it is drawn heavier, so a reader's eye takes it first.
-  // A class diagram and an entity diagram are of things, not of a flow: no path through one is the way a reader
-  // goes, so none is drawn heavier.
-  const things = /^(classDiagram|erDiagram)/.test(model.kindOfDiagram);
+  // A class diagram, an entity diagram, a requirement diagram, an architecture diagram and a C4 diagram are of
+  // things, not of a flow: no path through one is the way a reader goes, so none is drawn heavier. A C4 dynamic
+  // diagram is the one that is read in order.
+  const things = /^(classDiagram|erDiagram|requirementDiagram|architecture|C4(?!Dynamic))/.test(model.kindOfDiagram);
   const main = new Set(things ? [] : lay.spine.slice(1).map((id, i) => `${lay.spine[i]}>${id}`));
   const label = new Map(model.nodes.map((m) => [m.id, m.label]));
   const links = model.edges.map((e) => {
@@ -182,9 +183,11 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     // above it; under that, each compartment begins with a rule and lists its rows from the left.
     const listed = compartmentsOf(m), over = m.over ? measure.overLine : 0;
     const told = textOf(m, b.w);
-    const nameY = listed.length || over || told.length ? t + over + lay.box.h / 2 : b.y;
-    const above = m.over ? `<text class="mv-over" x="${n(b.x)}" y="${n(t + measure.overLine + 4)}">${esc(m.over)}</text>` : '';
-    let down = t + over + lay.box.h;
+    // What is set from the top of a cylinder starts under its rim, not on it.
+    const rim = m.shape === 'cylinder' && (listed.length || over || told.length) ? form.cap : 0;
+    const nameY = listed.length || over || told.length ? t + rim + over + lay.box.h / 2 : b.y;
+    const above = m.over ? `<text class="mv-over" x="${n(b.x)}" y="${n(t + rim + measure.overLine + 4)}">${esc(m.over)}</text>` : '';
+    let down = t + rim + over + lay.box.h;
     // What the box says about itself: under its name, in a quieter face, each line in the middle of the box.
     const sentence = told.length ? `<text class="mv-told">${told.map((line, i) => `<tspan class="mv-told-line" x="${n(b.x)}" y="${n(down + i * measure.textLine + 6)}">${esc(line)}</tspan>`).join('')}</text>` : '';
     if (told.length) down += told.length * measure.textLine + measure.textPad;

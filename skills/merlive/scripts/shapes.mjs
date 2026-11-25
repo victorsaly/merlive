@@ -21,6 +21,7 @@ export const form = {
   rail: 8, // px from the edge of a subroutine to the line inside it
   ring: 4, // px between the two lines of a double circle
   notch: 14, // px a flag is cut in at the middle of its left side
+  pillMost: 30, // px a pill's ends are rounded at most: a taller one (it says a sentence, or lists things) keeps flat sides for its words
   fold: 12, // px of a note's top right corner that is folded over: enough to see, not enough to take a word's room
 };
 
@@ -66,7 +67,7 @@ export function inset(shape, side, off, w, h) {
     case 'diamond': return within((a / (along / 2)) * (across / 2));
     case 'pill': case 'double-circle': {
       // The ends are half circles: a side port meets one; a top port only past where the flat part ends.
-      const r = h / 2, past = flat ? Math.max(0, a - (w / 2 - r)) : a;
+      const r = Math.min(h / 2, form.pillMost), past = Math.max(0, a - ((flat ? w : h) / 2 - r));
       return within(r - Math.sqrt(Math.max(0, r * r - past * past)));
     }
     case 'hexagon': {
@@ -104,7 +105,7 @@ export function outlineOf(shape, l, t, w, h, radius) {
   const rect = (/** @type {string} */ cls, /** @type {number} */ by, /** @type {number} */ rx) => `<rect class="${cls}" x="${n(l + by)}" y="${n(t + by)}" width="${n(w - 2 * by)}" height="${n(h - 2 * by)}" rx="${n(rx)}"/>`;
   const corner = Math.min(radius, h / 2);
   switch (shape) {
-    case 'pill': return { main: rect('mv-shape mv-pill', 0, h / 2), more: [] };
+    case 'pill': return { main: rect('mv-shape mv-pill', 0, Math.min(h / 2, form.pillMost)), more: [] };
     case 'double-circle': return { main: rect('mv-shape mv-pill', 0, h / 2), more: [rect('mv-shape mv-detail mv-pill', form.ring, h / 2 - form.ring)] };
     case 'diamond': return { main: polygon([[x, t], [r, y], [x, u], [l, y]]), more: [] };
     case 'hexagon': {

@@ -8,10 +8,14 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 - **Flowcharts:** of 70 features, 49 are drawn as written, 21 are drawn less something Merlive leaves out on purpose or does not have yet, 0 are only partly read, and 0 are refused.
 - **State diagrams:** of 27 features, 17 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
-- **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, and 0 are refused.
-- **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
+- **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, 0 are refused.
+- **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, 0 are refused.
+- **Requirement diagrams:** of 46 features, 37 are drawn as written, 9 are drawn less something, 0 are only partly read, 0 are refused.
+- **C4 diagrams:** of 41 features, 25 are drawn as written, 16 are drawn less something, 0 are only partly read, 0 are refused.
+- **Architecture diagrams:** of 28 features, 17 are drawn as written, 11 are drawn less something, 0 are only partly read, 0 are refused.
+- **Block diagrams:** of 36 features, 22 are drawn as written, 4 are drawn less something, 0 are only partly read, 0 are refused, and 10 are left as Mermaid.
 - **Sequence diagrams:** of 42 features, 38 are drawn as written, 4 are drawn less something, 0 are only partly read, and 0 are refused.
-- **Every kind of diagram:** of 32, 4 drawn (those with their own lists above), and 28 left as Mermaid and named.
+- **Every kind of diagram:** of 32, 8 drawn (those with their own lists above), and 24 left as Mermaid and named.
 
 ## Flowcharts, feature by feature
 
@@ -227,6 +231,189 @@ same measure, and to the rows each box lists and what each link ends in.
 | A title and a description for readers who cannot see it | Drawn |  | [source](../corpus/er/er-accessibility.mmd) | [picture](../corpus/drawn/er-accessibility.svg) |
 | Comments, on lines of their own, between statements and between attributes | Drawn |  | [source](../corpus/er/er-comments.mmd) | [picture](../corpus/drawn/er-comments.svg) |
 
+## Requirement diagrams, feature by feature
+
+A requirement is a box that says what kind it is, a sentence of what it asks, and its id, risk and how it is
+verified. Held to the same measure.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| A requirement diagram: a requirement, an element, and how one bears on the other | Drawn |  | [source](../corpus/requirement/requirement-declare.mmd) | [picture](../corpus/drawn/requirement-declare.svg) |
+| The six kinds of requirement | Drawn |  | [source](../corpus/requirement/requirement-types.mmd) | [picture](../corpus/drawn/requirement-types.svg) |
+| What is said of a requirement: its id, its text, its risk and how it is verified | Drawn |  | [source](../corpus/requirement/requirement-fields.mmd) | [picture](../corpus/drawn/requirement-fields.svg) |
+| What is said of a requirement, written in another order | Drawn |  | [source](../corpus/requirement/requirement-fields-order.mmd) | [picture](../corpus/drawn/requirement-fields-order.svg) |
+| Requirements of which only some things are said | Drawn |  | [source](../corpus/requirement/requirement-fields-some.mmd) | [picture](../corpus/drawn/requirement-fields-some.svg) |
+| The three risks: low, medium and high | Drawn |  | [source](../corpus/requirement/requirement-risk.mmd) | [picture](../corpus/drawn/requirement-risk.svg) |
+| The four ways to verify: analysis, demonstration, inspection and test | Drawn |  | [source](../corpus/requirement/requirement-verify.mmd) | [picture](../corpus/drawn/requirement-verify.svg) |
+| Mermaid's own words written with capitals | Drawn |  | [source](../corpus/requirement/requirement-case.mmd) | [picture](../corpus/drawn/requirement-case.svg) |
+| A requirement and an element of which nothing is said | Drawn |  | [source](../corpus/requirement/requirement-empty.mmd) | [picture](../corpus/drawn/requirement-empty.svg) |
+| An id with dots, and one of letters | Drawn |  | [source](../corpus/requirement/requirement-id-dotted.mmd) | [picture](../corpus/drawn/requirement-id-dotted.svg) |
+| An id in quotes | Drawn |  | [source](../corpus/requirement/requirement-id-quoted.mmd) | [picture](../corpus/drawn/requirement-id-quoted.svg) |
+| A text in quotes, with a colon and a comma in it | Drawn |  | [source](../corpus/requirement/requirement-text-quoted.mmd) | [picture](../corpus/drawn/requirement-text-quoted.svg) |
+| A text written as Markdown | Drawn, less something | Bold and italic in a requirement's text are drawn as plain words | [source](../corpus/requirement/requirement-text-markdown.mmd) | [picture](../corpus/drawn/requirement-text-markdown.svg) |
+| An element: its type and the document it points to | Drawn |  | [source](../corpus/requirement/requirement-element.mmd) | [picture](../corpus/drawn/requirement-element.svg) |
+| An element's type and document in quotes | Drawn |  | [source](../corpus/requirement/requirement-element-quoted.mmd) | [picture](../corpus/drawn/requirement-element-quoted.svg) |
+| Elements with a type or a document, not both | Drawn |  | [source](../corpus/requirement/requirement-element-type-only.mmd) | [picture](../corpus/drawn/requirement-element-type-only.svg) |
+| The seven relationships | Drawn |  | [source](../corpus/requirement/requirement-relationships.mmd) | [picture](../corpus/drawn/requirement-relationships.svg) |
+| Relationships written from their other end | Drawn |  | [source](../corpus/requirement/requirement-relationships-reversed.mmd) | [picture](../corpus/drawn/requirement-relationships-reversed.svg) |
+| A requirement that contains others | Drawn, less something | The crossed ring Mermaid draws at the requirement that contains is drawn as a filled circle | [source](../corpus/requirement/requirement-contains.mmd) | [picture](../corpus/drawn/requirement-contains.svg) |
+| Relationships written with no spaces | Drawn |  | [source](../corpus/requirement/requirement-relationship-tight.mmd) | [picture](../corpus/drawn/requirement-relationship-tight.svg) |
+| A relationship's word written with a capital | Drawn |  | [source](../corpus/requirement/requirement-relationship-case.mmd) | [picture](../corpus/drawn/requirement-relationship-case.svg) |
+| A relationship from a requirement to itself | Drawn |  | [source](../corpus/requirement/requirement-relationship-self.mmd) | [picture](../corpus/drawn/requirement-relationship-self.svg) |
+| A relationship written before what it joins is declared | Drawn |  | [source](../corpus/requirement/requirement-relationship-before.mmd) | [picture](../corpus/drawn/requirement-relationship-before.svg) |
+| Names in quotes, of several words | Drawn |  | [source](../corpus/requirement/requirement-name-quoted.mmd) | [picture](../corpus/drawn/requirement-name-quoted.svg) |
+| Names of several words, without quotes | Drawn |  | [source](../corpus/requirement/requirement-name-words.mmd) | [picture](../corpus/drawn/requirement-name-words.svg) |
+| A name and a text in another alphabet | Drawn |  | [source](../corpus/requirement/requirement-name-unicode.mmd) | [picture](../corpus/drawn/requirement-name-unicode.svg) |
+| Names with a dot, and one that starts with a digit | Drawn |  | [source](../corpus/requirement/requirement-name-dot.mmd) | [picture](../corpus/drawn/requirement-name-dot.svg) |
+| A name written as Markdown | Drawn |  | [source](../corpus/requirement/requirement-name-markdown.mmd) | [picture](../corpus/drawn/requirement-name-markdown.svg) |
+| A requirement declared twice | Drawn |  | [source](../corpus/requirement/requirement-twice.mmd) | [picture](../corpus/drawn/requirement-twice.svg) |
+| Direction: top to bottom | Drawn |  | [source](../corpus/requirement/requirement-direction-tb.mmd) | [picture](../corpus/drawn/requirement-direction-tb.svg) |
+| Direction: left to right | Drawn, less something | Drawn top to bottom: boxes of different heights are only placed that way yet | [source](../corpus/requirement/requirement-direction-lr.mmd) | [picture](../corpus/drawn/requirement-direction-lr.svg) |
+| Direction: bottom to top | Drawn, less something | Drawn top to bottom: boxes of different heights are only placed that way yet | [source](../corpus/requirement/requirement-direction-bt.mmd) | [picture](../corpus/drawn/requirement-direction-bt.svg) |
+| A class made with classDef and given to several with class | Drawn |  | [source](../corpus/requirement/requirement-classdef.mmd) | [picture](../corpus/drawn/requirement-classdef.svg) |
+| A class given with ::: where a thing is declared | Drawn |  | [source](../corpus/requirement/requirement-class-inline.mmd) | [picture](../corpus/drawn/requirement-class-inline.svg) |
+| A class given with ::: to a name alone | Drawn |  | [source](../corpus/requirement/requirement-class-shorthand.mmd) | [picture](../corpus/drawn/requirement-class-shorthand.svg) |
+| Several classes given at once | Drawn, less something | A box is of one kind: of several classes, the first is the one it is | [source](../corpus/requirement/requirement-class-several.mmd) | [picture](../corpus/drawn/requirement-class-several.svg) |
+| A default class for every requirement | Drawn, less something | The default class is read past: the look is the design's | [source](../corpus/requirement/requirement-class-default.mmd) | [picture](../corpus/drawn/requirement-class-default.svg) |
+| A requirement styled on its own | Drawn, less something | Its outline is heavy and red as written, in the design's own red; its fill is the design's | [source](../corpus/requirement/requirement-style.mmd) | [picture](../corpus/drawn/requirement-style.svg) |
+| Several styled in one line, one named in quotes | Drawn, less something | Their outlines are broken and red as written, in the design's own red | [source](../corpus/requirement/requirement-style-several.mmd) | [picture](../corpus/drawn/requirement-style-several.svg) |
+| A title in front matter | Drawn |  | [source](../corpus/requirement/requirement-frontmatter.mmd) | [picture](../corpus/drawn/requirement-frontmatter.svg) |
+| A title and a description for readers who cannot see it | Drawn |  | [source](../corpus/requirement/requirement-accessibility.mmd) | [picture](../corpus/drawn/requirement-accessibility.svg) |
+| A description over several lines | Drawn |  | [source](../corpus/requirement/requirement-accessibility-block.mmd) | [picture](../corpus/drawn/requirement-accessibility-block.svg) |
+| Comments: on lines of their own, and after the { that opens a requirement | Drawn |  | [source](../corpus/requirement/requirement-comments.mmd) | [picture](../corpus/drawn/requirement-comments.svg) |
+| A directive for Mermaid's own settings | Drawn, less something | Mermaid's own settings are read past: the look is the design's | [source](../corpus/requirement/requirement-directive.mmd) | [picture](../corpus/drawn/requirement-directive.svg) |
+| Blank lines between and inside declarations | Drawn |  | [source](../corpus/requirement/requirement-blank-lines.mmd) | [picture](../corpus/drawn/requirement-blank-lines.svg) |
+| A whole diagram: requirements of three kinds, two elements, and how they bear on each other | Drawn |  | [source](../corpus/requirement/requirement-whole.mmd) | [picture](../corpus/drawn/requirement-whole.svg) |
+
+## C4 diagrams, feature by feature
+
+A person, a system, a container or a component is a box that says what it is and a sentence of what it does;
+a boundary is a group. Held to the same measure.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| A system in its context: a person, a system and one that is someone else's | Drawn |  | [source](../corpus/c4/c4-context.mmd) | [picture](../corpus/drawn/c4-context.svg) |
+| People: one of the firm and one outside it | Drawn |  | [source](../corpus/c4/c4-people.mmd) | [picture](../corpus/drawn/c4-people.svg) |
+| Systems: a system, one that is a database and one that is a queue | Drawn, less something | A queue is drawn as a pill: there is no cylinder on its side yet | [source](../corpus/c4/c4-systems.mmd) | [picture](../corpus/drawn/c4-systems.svg) |
+| Systems that are someone else's, a database and a queue among them | Drawn, less something | A queue is drawn as a pill: there is no cylinder on its side yet | [source](../corpus/c4/c4-systems-external.mmd) | [picture](../corpus/drawn/c4-systems-external.svg) |
+| Containers, with what each is made in and what it does | Drawn, less something | A queue is drawn as a pill: there is no cylinder on its side yet | [source](../corpus/c4/c4-containers.mmd) | [picture](../corpus/drawn/c4-containers.svg) |
+| Containers that are someone else's | Drawn, less something | A queue is drawn as a pill: there is no cylinder on its side yet | [source](../corpus/c4/c4-containers-external.mmd) | [picture](../corpus/drawn/c4-containers-external.svg) |
+| Components, with what each is made in and what it does | Drawn, less something | A queue is drawn as a pill: there is no cylinder on its side yet | [source](../corpus/c4/c4-components.mmd) | [picture](../corpus/drawn/c4-components.svg) |
+| Components that are someone else's | Drawn, less something | A queue is drawn as a pill: there is no cylinder on its side yet | [source](../corpus/c4/c4-components-external.mmd) | [picture](../corpus/drawn/c4-components-external.svg) |
+| A boundary round some of the elements | Drawn |  | [source](../corpus/c4/c4-boundary.mmd) | [picture](../corpus/drawn/c4-boundary.svg) |
+| A boundary that says what kind of boundary it is | Drawn |  | [source](../corpus/c4/c4-boundary-type.mmd) | [picture](../corpus/drawn/c4-boundary-type.svg) |
+| An enterprise's boundary with a system's boundary inside it | Drawn, less something | Mermaid writes [ENTERPRISE] and [SYSTEM] under the names of these boundaries; a type that was not written is not added | [source](../corpus/c4/c4-boundary-enterprise.mmd) | [picture](../corpus/drawn/c4-boundary-enterprise.svg) |
+| A container's boundary | Drawn, less something | Mermaid writes [CONTAINER] under the name of this boundary; a type that was not written is not added | [source](../corpus/c4/c4-boundary-container.mmd) | [picture](../corpus/drawn/c4-boundary-container.svg) |
+| Boundaries three deep | Drawn, less something | Mermaid writes [ENTERPRISE], [SYSTEM] and [CONTAINER] under the names of these boundaries; a type that was not written is not added | [source](../corpus/c4/c4-boundary-nested.mmd) | [picture](../corpus/drawn/c4-boundary-nested.svg) |
+| A boundary whose { is on the line below it | Drawn |  | [source](../corpus/c4/c4-boundary-brace-below.mmd) | [picture](../corpus/drawn/c4-boundary-brace-below.svg) |
+| A deployment: nodes inside a node, and what runs on each | Drawn |  | [source](../corpus/c4/c4-deployment.mmd) | [picture](../corpus/drawn/c4-deployment.svg) |
+| Nodes written as Node, Node_L and Node_R | Drawn |  | [source](../corpus/c4/c4-deployment-nodes.mmd) | [picture](../corpus/drawn/c4-deployment-nodes.svg) |
+| A node that is described as well as named | Drawn, less something | What a node is described as is not drawn: a group has a name and nothing more | [source](../corpus/c4/c4-deployment-described.mmd) | [picture](../corpus/drawn/c4-deployment-described.svg) |
+| A relation | Drawn |  | [source](../corpus/c4/c4-rel.mmd) | [picture](../corpus/drawn/c4-rel.svg) |
+| A relation that says how it is made, and one that is described | Drawn |  | [source](../corpus/c4/c4-rel-technology.mmd) | [picture](../corpus/drawn/c4-rel-technology.svg) |
+| A relation that runs both ways | Drawn |  | [source](../corpus/c4/c4-rel-both-ways.mmd) | [picture](../corpus/drawn/c4-rel-both-ways.svg) |
+| A relation that runs back, from the second to the first | Drawn |  | [source](../corpus/c4/c4-rel-back.mmd) | [picture](../corpus/drawn/c4-rel-back.svg) |
+| Relations that say which way Mermaid should draw them | Drawn, less something | Up, down, left and right are read past: where a box goes is Merlive's to say | [source](../corpus/c4/c4-rel-directions.mmd) | [picture](../corpus/drawn/c4-rel-directions.svg) |
+| A dynamic diagram: what happens, in order | Drawn |  | [source](../corpus/c4/c4-dynamic.mmd) | [picture](../corpus/drawn/c4-dynamic.svg) |
+| Relations given an index | Drawn |  | [source](../corpus/c4/c4-dynamic-index.mmd) | [picture](../corpus/drawn/c4-dynamic-index.svg) |
+| Arguments given by name | Drawn |  | [source](../corpus/c4/c4-named-arguments.mmd) | [picture](../corpus/drawn/c4-named-arguments.svg) |
+| Tags, links and sprites | Drawn, less something | A link is not followed: a page runs nothing of an author's. Tags and sprites are read past, as Mermaid reads past them | [source](../corpus/c4/c4-tags-links-sprites.mmd) | [picture](../corpus/drawn/c4-tags-links-sprites.svg) |
+| Arguments left empty | Drawn |  | [source](../corpus/c4/c4-empty-arguments.mmd) | [picture](../corpus/drawn/c4-empty-arguments.svg) |
+| An element given colours of its own | Drawn, less something | Its fill is the colour written, as the nearest colour of the design; the colours of its words and its edge are the design's | [source](../corpus/c4/c4-update-element-style.mmd) | [picture](../corpus/drawn/c4-update-element-style.svg) |
+| An element given colours by name | Drawn, less something | A colour given by name is not read: only one written as #rrggbb is | [source](../corpus/c4/c4-update-element-style-named.mmd) | [picture](../corpus/drawn/c4-update-element-style-named.svg) |
+| A relation given colours of its own, and its words moved | Drawn, less something | A link's colour is the design's; where its words sit is Merlive's to place | [source](../corpus/c4/c4-update-rel-style.mmd) | [picture](../corpus/drawn/c4-update-rel-style.svg) |
+| A relation whose words are moved | Drawn |  | [source](../corpus/c4/c4-update-rel-offset.mmd) | [picture](../corpus/drawn/c4-update-rel-offset.svg) |
+| How many elements and boundaries Mermaid should put in a row | Drawn |  | [source](../corpus/c4/c4-update-layout-config.mmd) | [picture](../corpus/drawn/c4-update-layout-config.svg) |
+| A title | Drawn |  | [source](../corpus/c4/c4-title.mmd) | [picture](../corpus/drawn/c4-title.svg) |
+| Front matter with a title | Drawn |  | [source](../corpus/c4/c4-frontmatter.mmd) | [picture](../corpus/drawn/c4-frontmatter.svg) |
+| accTitle and accDescr | Drawn |  | [source](../corpus/c4/c4-accessibility.mmd) | [picture](../corpus/drawn/c4-accessibility.svg) |
+| Comments on lines of their own | Drawn |  | [source](../corpus/c4/c4-comments.mmd) | [picture](../corpus/drawn/c4-comments.svg) |
+| Commas, brackets and %% inside quotes | Drawn |  | [source](../corpus/c4/c4-quotes.mmd) | [picture](../corpus/drawn/c4-quotes.svg) |
+| A line break in a label and in a description | Drawn |  | [source](../corpus/c4/c4-line-breaks.mmd) | [picture](../corpus/drawn/c4-line-breaks.svg) |
+| Words in quotes that run on down the lines | Drawn |  | [source](../corpus/c4/c4-across-lines.mmd) | [picture](../corpus/drawn/c4-across-lines.svg) |
+| An element declared twice | Drawn |  | [source](../corpus/c4/c4-declared-twice.mmd) | [picture](../corpus/drawn/c4-declared-twice.svg) |
+| A whole diagram: people, a boundary of containers, a database, a queue and a system outside | Drawn, less something | A queue is drawn as a pill: there is no cylinder on its side yet | [source](../corpus/c4/c4-whole.mmd) | [picture](../corpus/drawn/c4-whole.svg) |
+
+## Architecture diagrams, feature by feature
+
+A service is a box with its icon, a group is a group, and the sides an edge leaves by say which way the
+diagram runs. Held to the same measure.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| Services, each with an icon and a title, and an edge between them | Drawn |  | [source](../corpus/architecture/architecture-service.mmd) | [picture](../corpus/drawn/architecture-service.svg) |
+| The icons Mermaid is born with: cloud, database, disk, internet, server | Drawn, less something | A disk is drawn with the database's drawing: Merlive has no drawing of a disk of its own yet | [source](../corpus/architecture/architecture-icons-built-in.mmd) | [picture](../corpus/drawn/architecture-icons-built-in.svg) |
+| An icon from a pack by its name (logos:aws-lambda) | Drawn, less something | An icon from a pack is somebody's mark, which Merlive neither fetches nor draws: the words are kept, and it is said | [source](../corpus/architecture/architecture-icon-pack.mmd) | [picture](../corpus/drawn/architecture-icon-pack.svg) |
+| A service with no icon | Drawn |  | [source](../corpus/architecture/architecture-service-no-icon.mmd) | [picture](../corpus/drawn/architecture-service-no-icon.svg) |
+| A service with no title | Drawn, less something | A box says something: a service with no title takes its id for its words, where Mermaid draws the icon alone | [source](../corpus/architecture/architecture-service-no-title.mmd) | [picture](../corpus/drawn/architecture-service-no-title.svg) |
+| A title in quotes, with what a bare title may not hold | Drawn |  | [source](../corpus/architecture/architecture-title-quoted.mmd) | [picture](../corpus/drawn/architecture-title-quoted.svg) |
+| Ids with a hyphen and an underscore | Drawn |  | [source](../corpus/architecture/architecture-id-hyphen.mmd) | [picture](../corpus/drawn/architecture-id-hyphen.svg) |
+| A group, the services in it, and one outside it | Drawn, less something | A group's icon is not drawn: a frame is named by its title | [source](../corpus/architecture/architecture-group.mmd) | [picture](../corpus/drawn/architecture-group.svg) |
+| A group inside a group | Drawn, less something | A group's icon is not drawn: a frame is named by its title | [source](../corpus/architecture/architecture-group-nested.mmd) | [picture](../corpus/drawn/architecture-group-nested.svg) |
+| A group declared after the services said to be in it | Drawn, less something | A group's icon is not drawn: a frame is named by its title | [source](../corpus/architecture/architecture-group-later.mmd) | [picture](../corpus/drawn/architecture-group-later.svg) |
+| A group with no icon | Drawn |  | [source](../corpus/architecture/architecture-group-no-icon.mmd) | [picture](../corpus/drawn/architecture-group-no-icon.svg) |
+| Edges that leave by every side: right to left, left to right, bottom to top | Drawn |  | [source](../corpus/architecture/architecture-edge-sides.mmd) | [picture](../corpus/drawn/architecture-edge-sides.svg) |
+| An edge that leaves by the top and meets a side | Drawn |  | [source](../corpus/architecture/architecture-edge-right-angle.mmd) | [picture](../corpus/drawn/architecture-edge-right-angle.svg) |
+| Arrowheads: into the second, into the first, into both | Drawn |  | [source](../corpus/architecture/architecture-edge-arrows.mmd) | [picture](../corpus/drawn/architecture-edge-arrows.svg) |
+| Words on an edge | Drawn |  | [source](../corpus/architecture/architecture-edge-label.mmd) | [picture](../corpus/drawn/architecture-edge-label.svg) |
+| Words on an edge with arrowheads | Drawn |  | [source](../corpus/architecture/architecture-edge-label-arrows.mmd) | [picture](../corpus/drawn/architecture-edge-label-arrows.svg) |
+| Edges written with no spaces | Drawn |  | [source](../corpus/architecture/architecture-edge-no-spaces.mmd) | [picture](../corpus/drawn/architecture-edge-no-spaces.svg) |
+| An edge out of a group and into a group ({group}) | Drawn, less something | A link out of a group is drawn from the service its author named, not from the frame: a line ends at a box. A group's icon is not drawn: a frame is named by its title | [source](../corpus/architecture/architecture-edge-group.mmd) | [picture](../corpus/drawn/architecture-edge-group.svg) |
+| An edge from a service to itself | Drawn |  | [source](../corpus/architecture/architecture-edge-self.mmd) | [picture](../corpus/drawn/architecture-edge-self.svg) |
+| A junction: where edges meet and part | Drawn, less something | A junction is drawn as a round box with no words, the size of every other box, not as the point where lines meet | [source](../corpus/architecture/architecture-junction.mmd) | [picture](../corpus/drawn/architecture-junction.svg) |
+| A junction in a group | Drawn, less something | A junction is drawn as a round box with no words, the size of every other box, not as the point where lines meet. A group's icon is not drawn: a frame is named by its title | [source](../corpus/architecture/architecture-junction-group.mmd) | [picture](../corpus/drawn/architecture-junction-group.svg) |
+| Services lined up in a column (align) | Drawn, less something | Lining services up in a row or a column is read past: where a box goes is by rule. A group's icon is not drawn: a frame is named by its title | [source](../corpus/architecture/architecture-align.mmd) | [picture](../corpus/drawn/architecture-align.svg) |
+| A title written in the diagram | Drawn |  | [source](../corpus/architecture/architecture-title.mmd) | [picture](../corpus/drawn/architecture-title.svg) |
+| Front matter: a title, and Mermaid's own settings | Drawn |  | [source](../corpus/architecture/architecture-frontmatter.mmd) | [picture](../corpus/drawn/architecture-frontmatter.svg) |
+| accTitle and accDescr, on a line and over several | Drawn |  | [source](../corpus/architecture/architecture-accessibility.mmd) | [picture](../corpus/drawn/architecture-accessibility.svg) |
+| Comments, on a line of their own and after a line | Drawn |  | [source](../corpus/architecture/architecture-comments.mmd) | [picture](../corpus/drawn/architecture-comments.svg) |
+| A diagram whose edges run top to bottom | Drawn |  | [source](../corpus/architecture/architecture-direction-down.mmd) | [picture](../corpus/drawn/architecture-direction-down.svg) |
+| A whole diagram: groups in groups, services, a junction, edges with arrowheads and words | Drawn, less something | A junction is drawn as a round box with no words, the size of every other box, not as the point where lines meet. A link out of a group is drawn from the service its author named. A group's icon is not drawn: a frame is named by its title | [source](../corpus/architecture/architecture-whole.mmd) | [picture](../corpus/drawn/architecture-whole.svg) |
+
+## Block diagrams, feature by feature
+
+Blocks joined by links are read as a flowchart is. One whose meaning is in its grid is left as Mermaid, and
+said.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| A block diagram that is a flow: blocks in a row, each joined to the next | Drawn |  | [source](../corpus/block/block-flow.mmd) | [picture](../corpus/drawn/block-flow.svg) |
+| The older name of the kind: block-beta | Drawn |  | [source](../corpus/block/block-beta.mmd) | [picture](../corpus/drawn/block-beta.svg) |
+| columns 1: blocks one under the other, joined | Drawn |  | [source](../corpus/block/block-flow-down.mmd) | [picture](../corpus/drawn/block-flow-down.svg) |
+| No columns given: one row | Drawn |  | [source](../corpus/block/block-flow-no-columns.mmd) | [picture](../corpus/drawn/block-flow-no-columns.svg) |
+| columns auto: one row, each column as wide as it needs | Drawn |  | [source](../corpus/block/block-columns-auto.mmd) | [picture](../corpus/drawn/block-columns-auto.svg) |
+| Blocks that wrap to a second row, joined in the order written | Drawn |  | [source](../corpus/block/block-columns-wrap.mmd) | [picture](../corpus/drawn/block-columns-wrap.svg) |
+| Blocks with no words: each is called by its id | Drawn |  | [source](../corpus/block/block-ids-only.mmd) | [picture](../corpus/drawn/block-ids-only.svg) |
+| Words broken with <br/>, and an entity code | Drawn |  | [source](../corpus/block/block-line-break.mmd) | [picture](../corpus/drawn/block-line-break.svg) |
+| A link with no arrowhead | Drawn |  | [source](../corpus/block/block-link-plain.mmd) | [picture](../corpus/drawn/block-link-plain.svg) |
+| Words written into a link | Drawn |  | [source](../corpus/block/block-link-words.mmd) | [picture](../corpus/drawn/block-link-words.svg) |
+| Links thick and dotted, ending in a circle, a cross, an arrow at both ends, and dotted with words | Drawn |  | [source](../corpus/block/block-link-kinds.mmd) | [picture](../corpus/drawn/block-link-kinds.svg) |
+| Blocks given their shape and words in the link that joins them | Drawn |  | [source](../corpus/block/block-link-inline-labels.mmd) | [picture](../corpus/drawn/block-link-inline-labels.svg) |
+| A link to a block not written anywhere else, which makes it | Drawn |  | [source](../corpus/block/block-link-new-block.mmd) | [picture](../corpus/drawn/block-link-new-block.svg) |
+| A space between two blocks, to make room for the link that joins them (how Mermaid says to draw a link) | Drawn |  | [source](../corpus/block/block-link-space.mmd) | [picture](../corpus/drawn/block-link-space.svg) |
+| A space between two blocks one under the other, for the link that joins them | Drawn |  | [source](../corpus/block/block-space-down.mmd) | [picture](../corpus/drawn/block-space-down.svg) |
+| space:3 between two joined blocks: more room for the same link | Drawn |  | [source](../corpus/block/block-space-wide.mmd) | [picture](../corpus/drawn/block-space-wide.svg) |
+| Every shape of a block, joined in a chain | Drawn, less something | A block with round corners is a box, and a circle is a pill, as in a flowchart | [source](../corpus/block/block-shapes.mmd) | [picture](../corpus/drawn/block-shapes.svg) |
+| A block that holds others: a group | Drawn |  | [source](../corpus/block/block-nested.mmd) | [picture](../corpus/drawn/block-nested.svg) |
+| A block that holds others, with a name and columns of its own | Drawn, less something | Merlive draws the name its author gave the block; Mermaid 11 draws none | [source](../corpus/block/block-nested-label.mmd) | [picture](../corpus/drawn/block-nested-label.svg) |
+| A block that holds others and has no id | Drawn |  | [source](../corpus/block/block-nested-anonymous.mmd) | [picture](../corpus/drawn/block-nested-anonymous.svg) |
+| Blocks that hold others, inside one that holds them | Drawn |  | [source](../corpus/block/block-nested-deep.mmd) | [picture](../corpus/drawn/block-nested-deep.svg) |
+| Links to and from a block that holds others: joined to what is inside it | Drawn |  | [source](../corpus/block/block-nested-link.mmd) | [picture](../corpus/drawn/block-nested-link.svg) |
+| A block styled on its own: a heavy outline, a broken one | Drawn, less something | The colour is drawn in the design's nearest colour | [source](../corpus/block/block-style.mmd) | [picture](../corpus/drawn/block-style.svg) |
+| A class, and the blocks that are of it | Drawn, less something | The colour is drawn in the design's nearest colour | [source](../corpus/block/block-classdef.mmd) | [picture](../corpus/drawn/block-classdef.svg) |
+| Comments on lines of their own | Drawn |  | [source](../corpus/block/block-comments.mmd) | [picture](../corpus/drawn/block-comments.svg) |
+| Front matter with a title | Drawn |  | [source](../corpus/block/block-frontmatter.mmd) | [picture](../corpus/drawn/block-frontmatter.svg) |
+| A grid of blocks with no links: what it says is where each block is | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Shop", "Portal", "Phone" and 3 more are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-grid.mmd) |  |
+| Every shape of a block, laid out in a grid with no links | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Box", "Round", "Stadium" and 11 more are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-shapes-grid.mmd) |  |
+| One block on its own | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "ERP" is joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-alone.mmd) |  |
+| Blocks that span columns: a wide block over two narrower ones | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Web shop" spans 3 columns (line 3); "ERP" spans 2 columns (line 4). To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-span.mmd) |  |
+| A block that spans the grid under two others, a space between them and an empty row | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Warehouse" spans 3 columns (line 5). To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-space.mmd) |  |
+| Spaces that put a block under the one it belongs to | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: the space on line 4 places a block, and does not make room for a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-space-offset.mmd) |  |
+| Block arrows between cells: arrows drawn as blocks, placed by the grid | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "orders" is a block arrow (line 3); "stock" is a block arrow (line 4); the space on line 4 places a block, and does not make room for a link; and 2 more. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-arrows.mmd) |  |
+| A block arrow pointing every way it can | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Right" is a block arrow (line 3); "Left" is a block arrow (line 3); "Up" is a block arrow (line 3); and 4 more. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-arrow-directions.mmd) |  |
+| Blocks that hold grids of their own, and span columns of the grid they are in | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Everything" spans 3 columns (line 3); "left" spans 2 columns (line 4); "wide" spans 3 columns (line 9); and 1 more. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-nested-columns.mmd) |  |
+| A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide) | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "feeds" is a block arrow (line 4); "DB", "A", "A wide one in the middle" are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-mixed.mmd) |  |
+
 ## Sequence diagrams, feature by feature
 
 Held to the same measure: every participant, message, note, frame and word the corpus says a sample has is read,
@@ -302,10 +489,10 @@ drawing of their own.
 | Class diagram | Drawn | [source](../corpus/kinds/class.mmd) | [picture](../corpus/drawn/class.svg) |
 | State diagram | Drawn | [source](../corpus/kinds/state.mmd) | [picture](../corpus/drawn/state.svg) |
 | Entity relationship diagram | Drawn | [source](../corpus/kinds/er.mmd) | [picture](../corpus/drawn/er.svg) |
-| Requirement diagram | Left as Mermaid | [source](../corpus/kinds/requirement.mmd) |  |
-| C4 diagram | Left as Mermaid | [source](../corpus/kinds/c4.mmd) |  |
-| Block diagram | Left as Mermaid | [source](../corpus/kinds/block.mmd) |  |
-| Architecture diagram | Left as Mermaid | [source](../corpus/kinds/architecture.mmd) |  |
+| Requirement diagram | Drawn | [source](../corpus/kinds/requirement.mmd) | [picture](../corpus/drawn/requirement.svg) |
+| C4 diagram | Drawn | [source](../corpus/kinds/c4.mmd) | [picture](../corpus/drawn/c4.svg) |
+| Block diagram | Drawn | [source](../corpus/kinds/block.mmd) | [picture](../corpus/drawn/block.svg) |
+| Architecture diagram | Drawn | [source](../corpus/kinds/architecture.mmd) | [picture](../corpus/drawn/architecture.svg) |
 | Swimlane diagram | Left as Mermaid | [source](../corpus/kinds/swimlane.mmd) |  |
 | Use case diagram | Left as Mermaid | [source](../corpus/kinds/usecase.mmd) |  |
 | Agent flow | Left as Mermaid | [source](../corpus/kinds/agentflow.mmd) |  |

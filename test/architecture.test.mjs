@@ -320,7 +320,7 @@ describe('architecture: what it does not read', () => {
 
 describe('architecture: the corpus', () => {
   /** @type {{file:string,covers:string,boxes:number,links:number,groups?:number,has?:string[],kinds?:string[],ends?:string[][],shapes?:string[],direction?:string,title?:string,says?:string,loses?:string}[]} */
-  const samples = JSON.parse(readFileSync(join(root, 'corpus/architecture.json'), 'utf8'));
+  const samples = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8')).architecture;
 
   it('has a sample for each thing Mermaid\'s page on architecture diagrams shows, each read as its list says', () => {
     assert.ok(samples.length >= 20);

@@ -1,6 +1,6 @@
 // Why: a requirement diagram is boxes and links too: requirements and the elements that meet them, each with
 // the few things said of it, and relationships that say how one bears on another. These hold the reading,
-// through parse(), and hold the corpus's own list (corpus/requirement.json) to what is read today. How a box
+// through parse(), and hold the corpus's own list (the `requirement` list of corpus/index.json) to what is read today. How a box
 // with rows, a line above its name and a sentence under it is drawn is tested where it is drawn.
 
 import assert from 'node:assert/strict';
@@ -308,7 +308,7 @@ describe('requirement: drawn', () => {
 
 describe('requirement: the corpus', () => {
   /** @type {{file:string,covers:string,boxes:number,links:number,has?:string[],rows:number[],ends:string[][],kinds?:string[],title?:string,loses?:string,says?:string}[]} */
-  const list = JSON.parse(readFileSync(join(root, 'corpus/requirement.json'), 'utf8'));
+  const list = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8')).requirement;
 
   it('lists every sample that is there, and every sample listed is there', () => {
     assert.deepEqual(list.map((s) => s.file).sort(), readdirSync(join(root, 'corpus/requirement')).filter((f) => f.endsWith('.mmd')).map((f) => `requirement/${f}`).sort());

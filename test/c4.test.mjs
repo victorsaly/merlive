@@ -1,6 +1,6 @@
 // Why: a C4 diagram is boxes and links too: people, systems, containers and components, the boundaries they sit
 // in, and what each asks of another. These hold the reading, through parse(), and hold the corpus's own list
-// (corpus/c4.json) to what is read today. How a box's description is placed and drawn is tested where it is
+// (the `c4` list of corpus/index.json) to what is read today. How a box's description is placed and drawn is tested where it is
 // placed and drawn.
 
 import assert from 'node:assert/strict';
@@ -311,7 +311,7 @@ describe('c4: what it is called, and Merlive\'s own lines', () => {
 
 describe('c4: the corpus', () => {
   /** @type {{file:string,covers:string,boxes:number,links:number,groups?:number,has?:string[],ends:string[][],shapes?:string[],kinds?:string[],title?:string,loses?:string,says?:string}[]} */
-  const list = JSON.parse(readFileSync(join(root, 'corpus/c4.json'), 'utf8'));
+  const list = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8')).c4;
 
   it('lists every sample that is there, and every sample listed is there', () => {
     assert.deepEqual(list.map((s) => s.file).sort(), readdirSync(join(root, 'corpus/c4')).filter((f) => f.endsWith('.mmd')).map((f) => `c4/${f}`).sort());
