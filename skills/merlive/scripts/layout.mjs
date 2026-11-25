@@ -9,7 +9,7 @@ import { inset, roomIn } from './shapes.mjs';
 /** @typedef {'top'|'bottom'|'left'|'right'} Side */
 /** @typedef {{id:string,x:number,y:number,w:number,h:number,rank:number,lane:number,spine:boolean,lines:string[]}} Placed */
 /** @typedef {{x:number,y:number,w:number,h:number,text:string,lines:string[]}} Words a link's words: the middle of where they sit, their size, and the lines they are wrapped to */
-/** @typedef {{id:string,points:Pt[],back:boolean,label:null|Words}} Routed */
+/** @typedef {{id:string,points:Pt[],back:boolean,label:null|Words,near?:Words,far?:Words}} Routed near, far: the few words at the end it comes from and the end it leads to */
 /** @typedef {{id:string,title:string,x:number,y:number,w:number,h:number,name:{x:number,y:number,w:number,h:number,plate:boolean}}} Frame a group's frame, from its top left corner; name: where its name sits, from its middle, and whether a line has to pass behind it */
 /** @typedef {{width:number,height:number,direction:'TD'|'LR',box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[]}} Layout */
 
@@ -41,6 +41,15 @@ export const measure = {
   nameStep: 8, // how far apart the places tried for a name are, along the top of its frame
   portStep: 20, // between two lines on one side of a box
   portShare: 0.31, // how far from the middle of a side a line may leave, as a share of the side
+  rowWidths: [320, 352, 384], // wider boxes, only for a diagram whose boxes list rows: a method's line is longer than a label
+  rowGlyph: 6.9, // px per character of a row: rows are set in a face where every character is as wide, at 11.5px
+  rowLine: 16, // px from one row to the next
+  rowPad: 6, // above the first row of a compartment and below its last
+  rowIn: 12, // from the side of a box to where its rows begin
+  overLine: 14, // px the short line above a name takes ("«interface»")
+  endOff: 7, // from a line to the words at its end
+  endAlong: 14, // how far along the line from its box those words sit: beside what is drawn at the end, and far
+  // enough from the words at the other end of a line one rank long that both fit on one side of it
   icon: 22, // px an icon takes beside a box's words: its 16px grid and the gap to the first letter
   clear: 4, // how close a line may come to a box it does not belong to
   wide: 1100, // past this a left-to-right flow no longer fits a laptop's reading column
@@ -68,6 +77,16 @@ export const roomFor = (/** @type {{shape:import('./shapes.mjs').Shape,icon?:str
 export const linesOf = (/** @type {import('./parse.mjs').Node} */ n, /** @type {number} */ width) =>
   n.breaks ? n.breaks.flatMap((b) => wrap(b, roomFor(n, width))) : wrap(n.label, roomFor(n, width));
 
+/** How many characters a row may run to in a box of this width. */
+export const rowsRoom = (/** @type {number} */ width) => Math.floor((width - 2 * measure.rowIn) / measure.rowGlyph);
+
+/** The compartments of a box that have something in them: one with nothing is not drawn. */
+export const compartmentsOf = (/** @type {{rows?:string[][]}} */ n) => (n.rows ?? []).filter((c) => c.length);
+
+/** How much taller than a plain box one is for what it lists under its name and the line above it. */
+export const extraHeight = (/** @type {{rows?:string[][],over?:string}} */ n) =>
+  (n.over ? measure.overLine : 0) + compartmentsOf(n).reduce((sum, c) => sum + 2 * measure.rowPad + measure.rowLine * c.length, 0);
+
 /**
  * One box size for the whole diagram: the narrowest width in which a plain label takes two lines or fewer and
  * a label its author broke keeps the lines it was given.
@@ -78,7 +97,10 @@ function boxFor(/** @type {Model} */ model) {
       const lines = linesOf(n, w);
       return lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0)) && lines.every((l) => l.length <= roomFor(n, w));
     });
-  const w = measure.widths.find(fits) ?? measure.widths[measure.widths.length - 1];
+  // A diagram whose boxes list rows may need a wider box than any label does: every row keeps its one line.
+  const longest = Math.max(0, ...model.nodes.flatMap((n) => compartmentsOf(n).flat().map((row) => row.length)));
+  const widths = longest ? [...measure.widths, ...measure.rowWidths] : measure.widths;
+  const w = widths.find((width) => fits(width) && rowsRoom(width) >= longest) ?? widths[widths.length - 1];
   const most = Math.max(1, ...model.nodes.map((n) => linesOf(n, w).length));
   return { w, h: 28 + measure.lineHeight * most };
 }
@@ -125,6 +147,9 @@ export function meet(/** @type {Pt[]} */ one, /** @type {Pt[]} */ other) {
  * @returns {Layout}
  */
 export function layout(model) {
+  // Boxes of different heights are placed top to bottom only, for now: across the flow they would need lanes
+  // of different widths.
+  if (model.nodes.some((n) => extraHeight(n) > 0)) return placed(model, 'TD');
   const first = placed(model, model.direction);
   // A flow written left to right that comes out wider than a screen cannot be read without scrolling sideways,
   // and nobody scrolls a diagram sideways. Top to bottom it is the same flow, and scrolls the way a page does.
@@ -259,8 +284,13 @@ function placed(model, dir) {
     const frames = most(ends, r - 1) + most(starts, r);
     return frames > 1 ? Math.max(0, measure.framePad * most(ends, r - 1) + atStart * most(starts, r) + measure.frameAir - rankGap) : 0;
   });
-  /** Where rank r begins along the flow: the grid, moved on by every wider gap before it. */
-  const along = (/** @type {number} */ r) => measure.pad + r * (bh + rankGap) + wider.slice(0, r + 1).reduce((a, b) => a + b, 0);
+  // A box that lists rows is taller than one that does not. A rank is as tall as its tallest box, every box of
+  // it sits on the rank's middle line, and the room to the next rank is the same whatever the heights.
+  const byId = new Map(model.nodes.map((n) => [n.id, n]));
+  const high = (/** @type {string} */ id) => bh + (dir === 'LR' ? 0 : extraHeight(byId.get(id) ?? {}));
+  const tall = Array.from({ length: ranks + 1 }, (_, r) => Math.max(bh, ...ids.filter((id) => rank.get(id) === r).map(high)));
+  /** Where rank r begins along the flow: after every rank before it and its gap, and every wider gap. */
+  const along = (/** @type {number} */ r) => measure.pad + tall.slice(0, r).reduce((a, b) => a + b + rankGap, 0) + wider.slice(0, r + 1).reduce((a, b) => a + b, 0);
 
   /**
    * Everything that follows from where the boxes are: their coordinates, each link's route, its port and its
@@ -275,9 +305,9 @@ function placed(model, dir) {
     for (const n of model.nodes) {
       const l = (lane.get(n.id) ?? 0) - firstLane, r = rank.get(n.id) ?? 0;
       nodes[n.id] = {
-        id: n.id, w: bw, h: bh, rank: r, lane: l, spine: onSpine.has(n.id), lines: linesOf(n, box.w),
+        id: n.id, w: bw, h: high(n.id), rank: r, lane: l, spine: onSpine.has(n.id), lines: linesOf(n, box.w),
         x: measure.pad + l * (bw + laneGap) + bw / 2,
-        y: along(r) + bh / 2,
+        y: along(r) + tall[r] / 2,
       };
     }
     const all = Object.values(nodes);
@@ -291,7 +321,7 @@ function placed(model, dir) {
     const others = (/** @type {Placed} */ s, /** @type {Placed} */ t) => all.filter((n) => n !== s && n !== t);
     const hits = (/** @type {Pt[]} */ pts, /** @type {Placed} */ s, /** @type {Placed} */ t) => segmentsOf(pts).reduce((sum, seg) => sum + others(s, t).filter((n) => hitsBox(seg, n)).length, 0);
     /** The middle of the room after rank g, where a line may run across. */
-    const roomAfter = (/** @type {number} */ g) => along(g) + bh + (rankGap + (wider[g + 1] ?? 0)) / 2;
+    const roomAfter = (/** @type {number} */ g) => along(g) + (tall[g] ?? bh) + (rankGap + (wider[g + 1] ?? 0)) / 2;
     const shapeOf = (/** @type {Route} */ r, /** @type {Pt} */ a, /** @type {Pt} */ b) =>
       r.shape === 'straight' ? [a, b]
         : r.shape === 'HV' ? [a, { x: b.x, y: a.y }, b]
@@ -554,7 +584,8 @@ function placed(model, dir) {
   const flip = (/** @type {Pt} */ p) => (model.hints.side === 'left' ? { x: farRight + measure.pad - (p.x + over), y: p.y } : { x: p.x + over, y: p.y });
   const turn = (/** @type {Pt} */ p) => (dir === 'LR' ? { x: p.y, y: p.x } : p);
   const place = (/** @type {Pt} */ p) => turn(flip(p));
-  for (const n of all) Object.assign(n, place(n), { w: box.w, h: box.h });
+  // Turned on its side, a box is as wide and as tall as it really is; top to bottom, it keeps its own height.
+  for (const n of all) Object.assign(n, place(n), dir === 'LR' ? { w: box.w, h: box.h } : { w: box.w });
 
   /** @type {Record<string, Routed>} */
   const edges = {};
@@ -625,12 +656,34 @@ function placed(model, dir) {
     f.name = { x: clear ?? first, y, w, h, plate: clear === undefined };
   }
 
+  // The few words at an end of a link ("1", "0..*") sit beside the line, just out from its box and past what
+  // is drawn at that end, on whichever side is clear of boxes and of other words.
+  /** @type {Words[]} */
+  const ended = [];
+  const on = (/** @type {{x:number,y:number,w:number,h:number}} */ a, /** @type {{x:number,y:number,w:number,h:number}} */ b) => Math.abs(a.x - b.x) < (a.w + b.w) / 2 + 2 && Math.abs(a.y - b.y) < (a.h + b.h) / 2 + 2;
+  const atEnd = (/** @type {string} */ text, /** @type {Pt} */ p, /** @type {Pt} */ q) => {
+    const w = Math.round(text.length * measure.labelGlyph + 6), h = measure.labelLine;
+    const dx = Math.sign(q.x - p.x), dy = Math.sign(q.y - p.y);
+    const places = [1, -1].map((side) => (dy !== 0
+      ? { x: p.x + side * (measure.endOff + w / 2), y: p.y + dy * measure.endAlong }
+      : { x: p.x + dx * (measure.endAlong + w / 2 - 6), y: p.y + side * (measure.endOff + h / 2) }));
+    const clear = places.find((c) => !all.some((n) => on({ ...c, w, h }, n)) && !ended.some((o) => on({ ...c, w, h }, o))) ?? places[0];
+    const words = { ...clear, w, h, text, lines: [text] };
+    ended.push(words);
+    return words;
+  };
+  for (const e of model.edges) {
+    const points = edges[e.id].points, last = points.length - 1;
+    if (e.near) edges[e.id].near = atEnd(e.near, points[0], points[1]);
+    if (e.far) edges[e.id].far = atEnd(e.far, points[last], points[last - 1]);
+  }
+
   // Each link's words, one link at a time, each where it sits on no box, no other words and, if it can, no line.
   /** @type {Words[]} */
   const worded = [];
   for (const e of model.edges) {
     if (!e.label) continue;
-    const here = wordsFor(edges[e.id].points, e.label, all, [...worded, ...groups.map((f) => f.name)], Object.values(edges).map((x) => x.points));
+    const here = wordsFor(edges[e.id].points, e.label, all, [...worded, ...ended, ...groups.map((f) => f.name)], Object.values(edges).map((x) => x.points));
     worded.push(here);
     edges[e.id].label = here;
   }
@@ -638,7 +691,7 @@ function placed(model, dir) {
   // Words beside a line that goes round the near outside, or a frame's title, can reach past the top or the
   // left of what the boxes and lines take up. Everything then moves over, so they keep the margin all else has.
   const least = (/** @type {'x'|'y'} */ a) => Math.min(
-    ...Object.values(edges).flatMap((e) => (e.label ? [e.label[a] - (a === 'x' ? e.label.w : e.label.h) / 2] : [])),
+    ...Object.values(edges).flatMap((e) => [e.label, e.near, e.far].flatMap((l) => (l ? [l[a] - (a === 'x' ? l.w : l.h) / 2] : []))),
     ...groups.map((f) => Math.min(f[a], f.name[a] - (a === 'x' ? f.name.w : f.name.h) / 2)),
     measure.pad / 2,
   );
@@ -655,12 +708,12 @@ function placed(model, dir) {
     });
     for (const e of Object.values(edges)) {
       e.points.forEach(move);
-      if (e.label) move(e.label);
+      for (const l of [e.label, e.near, e.far]) if (l) move(l);
     }
   }
 
-  const xs = [...all.map((n) => n.x + n.w / 2), ...groups.map((f) => f.x + f.w), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.x), ...(e.label ? [e.label.x + e.label.w / 2] : [])])];
-  const ys = [...all.map((n) => n.y + n.h / 2), ...groups.map((f) => f.y + f.h), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.y), ...(e.label ? [e.label.y + e.label.h / 2] : [])])];
+  const xs = [...all.map((n) => n.x + n.w / 2), ...groups.map((f) => f.x + f.w), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.x), ...[e.label, e.near, e.far].flatMap((l) => (l ? [l.x + l.w / 2] : []))])];
+  const ys = [...all.map((n) => n.y + n.h / 2), ...groups.map((f) => f.y + f.h), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.y), ...[e.label, e.near, e.far].flatMap((l) => (l ? [l.y + l.h / 2] : []))])];
   const width = Math.ceil(Math.max(0, ...xs) + measure.pad), height = Math.ceil(Math.max(0, ...ys) + measure.pad);
   if (dir === 'LR' && width > measure.wide && model.hints.turn === false) warnings.push(`left to right, this flow is ${width}px wide and will scroll on most screens; "flowchart TD" would read better`);
   return { width, height, direction: dir, box, nodes, edges, groups, spine, warnings };

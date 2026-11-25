@@ -38,6 +38,11 @@ double circle, a flag), in the same footprint as every other box: a rhombus is a
 round it, not a diamond twice their size. Each line runs on to the outline of the shape it meets. No two boxes
 come closer than 16 px.
 
+A class and an entity list rows under their name, so their boxes cannot all be one height. They keep one width
+(up to 384 px, wide enough for the longest row, which is never broken), and each is as tall as what it lists. A
+rank is as tall as its tallest box, its boxes sit on its middle line, and the room to the next rank is the same
+whatever the heights. Such a diagram is drawn top to bottom.
+
 - **Pass:** eight boxes, all 128 by 60.
 - **Fail:** a diamond 180 px wide beside a 90 px rectangle.
 - **Why:** unequal boxes are the first thing that makes a Mermaid diagram look unplanned.
@@ -89,7 +94,9 @@ the box.
 A link's words ("Yes", "No") are tried beside each run of its line, near where it leaves first: the first place
 that sits on no box and no other words wins, and of those, one no line passes through. Long words are wrapped,
 and wrapped again to fit a short run between two boxes. Words beside a line that goes round the outside stay
-inside the picture: everything moves over to give them the margin the boxes have.
+inside the picture: everything moves over to give them the margin the boxes have. The few words at an end of a
+link ("1", "0..*") sit beside the line just out from its box, the two ends on one side and the link's own words
+on the other, and are held to the same.
 
 - **Fail:** the words of a line round the left side are cut off by the edge of the picture.
 

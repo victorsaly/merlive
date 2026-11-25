@@ -1,7 +1,7 @@
 // Why: a rule nobody checks is a wish. Every placement rule in docs/PLACEMENT.md is a check here, so a
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
-import { hitsBox, meet, measure, roomFor, segmentsOf } from './layout.mjs';
+import { compartmentsOf, hitsBox, meet, measure, roomFor, rowsRoom, segmentsOf } from './layout.mjs';
 import { colourChecks, looksOf } from './design.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
@@ -70,7 +70,7 @@ export function score(model, lay, design) {
   /** @type {string[]} */
   const close = [];
   nodes.forEach((a, i) => nodes.slice(i + 1).forEach((b) => overlap(a, b, limits.boxGap) && close.push(`"${label(a.id)}" and "${label(b.id)}" are closer than ${limits.boxGap}px`)));
-  add('P2', 'Boxes are one size, on a grid, with room between them', close, `${nodes.length} boxes of ${lay.box.w}×${lay.box.h}`);
+  add('P2', 'Boxes are one size, on a grid, with room between them', close, `${nodes.length} boxes of ${lay.box.w}×${lay.box.h}${nodes.some((n) => n.h !== lay.box.h) ? ', taller where they list rows' : ''}`);
 
   // P3
   /** @type {string[]} */
@@ -106,6 +106,9 @@ export function score(model, lay, design) {
     const lines = lay.nodes[n.id].lines, room = roomFor(n, lay.box.w);
     if (lines.length > measure.mostLines) tight.push(`"${n.label}" needs ${lines.length} lines; shorten it or put the detail in a "%% note"`);
     else if (lines.some((l) => l.length > room)) tight.push(`"${n.label}" has a word too long for a ${lay.box.w}px box`);
+    // A row keeps its one line: breaking a method's name in two would make two of it.
+    const long = compartmentsOf(n).flat().find((row) => row.length > rowsRoom(lay.box.w));
+    if (long) tight.push(`"${n.label}" lists a line too long for any box: "${long}"; shorten it, or its type`);
   }
   add('P6', 'Words fit their box', tight, 'all fit');
 
@@ -120,6 +123,14 @@ export function score(model, lay, design) {
     for (const f of lay.groups) if (overlap(l, f.name)) covered.push(`the label "${l.text}" sits on the name of the group "${f.title}"`);
     for (const o of labels.slice(i + 1)) if (o.label && overlap(l, o.label)) covered.push(`the labels "${l.text}" and "${o.label.text}" overlap`);
   });
+  // The few words at the ends of a link are held to the same: off every box, and inside the picture.
+  for (const e of edges) {
+    for (const l of [e.near, e.far]) {
+      if (!l) continue;
+      if (l.x - l.w / 2 < 0 || l.y - l.h / 2 < 0 || l.x + l.w / 2 > lay.width || l.y + l.h / 2 > lay.height) covered.push(`"${l.text}", at an end of a link, runs off the picture`);
+      for (const n of nodes) if (overlap(l, n)) covered.push(`"${l.text}", at an end of a link, sits on "${label(n.id)}"`);
+    }
+  }
   add('P7', "A link's words sit clear of boxes and of each other", covered, `${labels.length} labels clear`);
 
   // P8: a name on a plate has its line pass behind it, which is drawn so; any other must be clear of every line.

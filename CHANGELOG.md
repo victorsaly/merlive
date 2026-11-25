@@ -4,6 +4,14 @@
 
 Class diagrams and entity diagrams.
 
+- **A box can list rows under its name.** A class's attributes and methods, an entity's columns: each row on a
+  line of its own, in a face where columns stay in line, under a rule. Boxes keep one width and are as tall as
+  what they list; a rank is as tall as its tallest box. A short line above a name says what it is («interface»).
+- **A link can end in more than an arrowhead**: the hollow triangle of "is a", the filled diamond of "is made
+  of", the open one of "has", and how many an entity's line means: one, none or one, one or more, any. The few
+  words at each end of a link ("1", "0..*") sit beside it, clear of the boxes and of its own words.
+- **No path is drawn heavier in a diagram of things.** A class diagram has no way through it.
+
 ## 0.1.0 (2026-11-25)
 
 The first version. It draws flowcharts, state diagrams and sequence diagrams, and says what it leaves.
