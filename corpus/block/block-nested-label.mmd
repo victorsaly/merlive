@@ -1,0 +1,9 @@
+block
+  columns 1
+  shop["Shop"]
+  block:back["Back office"]
+    columns 2
+    erp["ERP"] ledger["Ledger"]
+  end
+  shop --> erp
+  erp --> ledger

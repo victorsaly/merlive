@@ -1,0 +1,11 @@
+block
+  columns 1
+  shop["Shop"]
+  block:back
+    erp["ERP"]
+    ledger["Ledger"]
+  end
+  bank["Bank"]
+  shop --> back
+  erp --> ledger
+  back --> bank

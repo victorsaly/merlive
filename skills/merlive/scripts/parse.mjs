@@ -8,6 +8,7 @@ import { c4Reader } from './c4.mjs';
 import { classReader } from './class.mjs';
 import { architectureReader } from './architecture.mjs';
 import { requirementReader } from './requirement.mjs';
+import { blockReader } from './block.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
@@ -36,6 +37,8 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
  * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
  * @property {string[]} warnings
+ * @property {string} [left] why a diagram of a kind Merlive reads is left as Mermaid all the same, in a sentence that says what to do; its type is then 'unsupported' (a block diagram placed by its author's grid)
+ * @property {import('./block.mjs').Grid} [grid] a block diagram as its author placed it, cell by cell
  */
 
 // Longest opener first, so "([" is not read as "(" and then "[". A shape that leans may close either way: it
@@ -211,6 +214,7 @@ const READERS = /** @type {const} */ ([
   [/^architecture(-beta)?;?$/, architectureReader],
   [/^requirementDiagram;?$/, requirementReader],
   [/^C4(Context|Container|Component|Dynamic|Deployment)$/, c4Reader],
+  [/^block(-beta)?;?$/, blockReader],
 ]);
 
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own

@@ -1,0 +1,353 @@
+[
+  {
+    "file": "block/block-flow.mmd",
+    "covers": "A block diagram that is a flow: blocks in a row, each joined to the next",
+    "boxes": 3,
+    "links": 2,
+    "direction": "LR",
+    "has": [
+      "Web shop",
+      "ERP",
+      "Warehouse"
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "block/block-beta.mmd",
+    "covers": "The older name of the kind: block-beta",
+    "boxes": 3,
+    "links": 2,
+    "direction": "LR"
+  },
+  {
+    "file": "block/block-flow-down.mmd",
+    "covers": "columns 1: blocks one under the other, joined",
+    "boxes": 3,
+    "links": 2,
+    "direction": "TD",
+    "has": [
+      "Order",
+      "Pick",
+      "Pack"
+    ]
+  },
+  {
+    "file": "block/block-flow-no-columns.mmd",
+    "covers": "No columns given: one row",
+    "boxes": 3,
+    "links": 2,
+    "direction": "LR"
+  },
+  {
+    "file": "block/block-columns-auto.mmd",
+    "covers": "columns auto: one row, each column as wide as it needs",
+    "boxes": 3,
+    "links": 2,
+    "direction": "LR"
+  },
+  {
+    "file": "block/block-columns-wrap.mmd",
+    "covers": "Blocks that wrap to a second row, joined in the order written",
+    "boxes": 4,
+    "links": 3,
+    "direction": "TD"
+  },
+  {
+    "file": "block/block-ids-only.mmd",
+    "covers": "Blocks with no words: each is called by its id",
+    "boxes": 3,
+    "links": 2,
+    "has": [
+      "quote",
+      "order",
+      "invoice"
+    ]
+  },
+  {
+    "file": "block/block-line-break.mmd",
+    "covers": "Words broken with <br/>, and an entity code",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "Web shop and portal",
+      "ERP & stock"
+    ]
+  },
+  {
+    "file": "block/block-link-plain.mmd",
+    "covers": "A link with no arrowhead",
+    "boxes": 2,
+    "links": 1,
+    "ends": [
+      [
+        "none",
+        "none"
+      ]
+    ]
+  },
+  {
+    "file": "block/block-link-words.mmd",
+    "covers": "Words written into a link",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "sends orders"
+    ]
+  },
+  {
+    "file": "block/block-link-kinds.mmd",
+    "covers": "Links thick and dotted, ending in a circle, a cross, an arrow at both ends, and dotted with words",
+    "boxes": 7,
+    "links": 6,
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "circle"
+      ],
+      [
+        "none",
+        "cross"
+      ],
+      [
+        "arrow",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "later"
+    ]
+  },
+  {
+    "file": "block/block-link-inline-labels.mmd",
+    "covers": "Blocks given their shape and words in the link that joins them",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "Start",
+      "Stop"
+    ]
+  },
+  {
+    "file": "block/block-link-new-block.mmd",
+    "covers": "A link to a block not written anywhere else, which makes it",
+    "boxes": 2,
+    "links": 1,
+    "has": [
+      "Shop",
+      "erp"
+    ]
+  },
+  {
+    "file": "block/block-link-space.mmd",
+    "covers": "A space between two blocks, to make room for the link that joins them (how Mermaid says to draw a link)",
+    "boxes": 2,
+    "links": 1,
+    "direction": "LR"
+  },
+  {
+    "file": "block/block-space-down.mmd",
+    "covers": "A space between two blocks one under the other, for the link that joins them",
+    "boxes": 2,
+    "links": 1,
+    "direction": "TD"
+  },
+  {
+    "file": "block/block-space-wide.mmd",
+    "covers": "space:3 between two joined blocks: more room for the same link",
+    "boxes": 3,
+    "links": 2,
+    "direction": "LR"
+  },
+  {
+    "file": "block/block-shapes.mmd",
+    "covers": "Every shape of a block, joined in a chain",
+    "boxes": 14,
+    "links": 13,
+    "shapes": [
+      "box",
+      "box",
+      "pill",
+      "subroutine",
+      "cylinder",
+      "pill",
+      "flag",
+      "diamond",
+      "hexagon",
+      "lean-right",
+      "lean-left",
+      "trapezoid",
+      "trapezoid-alt",
+      "double-circle"
+    ],
+    "kinds": [
+      "data"
+    ],
+    "loses": "A block with round corners is a box, and a circle is a pill, as in a flowchart"
+  },
+  {
+    "file": "block/block-nested.mmd",
+    "covers": "A block that holds others: a group",
+    "boxes": 3,
+    "links": 2,
+    "groups": 1
+  },
+  {
+    "file": "block/block-nested-label.mmd",
+    "covers": "A block that holds others, with a name and columns of its own",
+    "boxes": 3,
+    "links": 2,
+    "groups": 1,
+    "has": [
+      "Back office"
+    ],
+    "loses": "Merlive draws the name its author gave the block; Mermaid 11 draws none"
+  },
+  {
+    "file": "block/block-nested-anonymous.mmd",
+    "covers": "A block that holds others and has no id",
+    "boxes": 3,
+    "links": 2,
+    "groups": 1
+  },
+  {
+    "file": "block/block-nested-deep.mmd",
+    "covers": "Blocks that hold others, inside one that holds them",
+    "boxes": 3,
+    "links": 2,
+    "groups": 3
+  },
+  {
+    "file": "block/block-nested-link.mmd",
+    "covers": "Links to and from a block that holds others: joined to what is inside it",
+    "boxes": 4,
+    "links": 3,
+    "groups": 1,
+    "has": [
+      "Shop",
+      "Bank"
+    ]
+  },
+  {
+    "file": "block/block-style.mmd",
+    "covers": "A block styled on its own: a heavy outline, a broken one",
+    "boxes": 2,
+    "links": 1,
+    "loses": "The colour is drawn in the design's nearest colour"
+  },
+  {
+    "file": "block/block-classdef.mmd",
+    "covers": "A class, and the blocks that are of it",
+    "boxes": 3,
+    "links": 2,
+    "kinds": [
+      "back"
+    ],
+    "loses": "The colour is drawn in the design's nearest colour"
+  },
+  {
+    "file": "block/block-comments.mmd",
+    "covers": "Comments on lines of their own",
+    "boxes": 2,
+    "links": 1
+  },
+  {
+    "file": "block/block-frontmatter.mmd",
+    "covers": "Front matter with a title",
+    "boxes": 3,
+    "links": 2,
+    "title": "From shop to ledger"
+  },
+  {
+    "file": "block/block-grid.mmd",
+    "covers": "A grid of blocks with no links: what it says is where each block is",
+    "boxes": 6,
+    "links": 0,
+    "left": "\"Shop\", \"Portal\", \"Phone\" and 3 more are joined to nothing by a link"
+  },
+  {
+    "file": "block/block-shapes-grid.mmd",
+    "covers": "Every shape of a block, laid out in a grid with no links",
+    "boxes": 14,
+    "links": 0,
+    "left": "are joined to nothing by a link"
+  },
+  {
+    "file": "block/block-alone.mmd",
+    "covers": "One block on its own",
+    "boxes": 1,
+    "links": 0,
+    "left": "\"ERP\" is joined to nothing by a link"
+  },
+  {
+    "file": "block/block-span.mmd",
+    "covers": "Blocks that span columns: a wide block over two narrower ones",
+    "boxes": 3,
+    "links": 2,
+    "left": "\"Web shop\" spans 3 columns (line 3); \"ERP\" spans 2 columns (line 4)"
+  },
+  {
+    "file": "block/block-space.mmd",
+    "covers": "A block that spans the grid under two others, a space between them and an empty row",
+    "boxes": 3,
+    "links": 2,
+    "left": "\"Warehouse\" spans 3 columns (line 5)"
+  },
+  {
+    "file": "block/block-space-offset.mmd",
+    "covers": "Spaces that put a block under the one it belongs to",
+    "boxes": 4,
+    "links": 3,
+    "left": "the space on line 4 places a block, and does not make room for a link"
+  },
+  {
+    "file": "block/block-arrows.mmd",
+    "covers": "Block arrows between cells: arrows drawn as blocks, placed by the grid",
+    "boxes": 5,
+    "links": 0,
+    "left": "\"orders\" is a block arrow (line 3)"
+  },
+  {
+    "file": "block/block-arrow-directions.mmd",
+    "covers": "A block arrow pointing every way it can",
+    "boxes": 7,
+    "links": 0,
+    "left": "\"Right\" is a block arrow (line 3)"
+  },
+  {
+    "file": "block/block-nested-columns.mmd",
+    "covers": "Blocks that hold grids of their own, and span columns of the grid they are in",
+    "boxes": 9,
+    "links": 0,
+    "groups": 2,
+    "left": "\"Everything\" spans 3 columns (line 3)"
+  },
+  {
+    "file": "block/block-mixed.mmd",
+    "covers": "A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide)",
+    "boxes": 6,
+    "links": 2,
+    "groups": 1,
+    "left": "\"feeds\" is a block arrow (line 4)"
+  }
+]
