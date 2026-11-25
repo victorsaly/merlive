@@ -1,7 +1,7 @@
 // Why: a rule nobody checks is a wish. Every placement rule in docs/PLACEMENT.md is a check here, so a
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
-import { compartmentsOf, hitsBox, meet, measure, roomFor, rowsRoom, segmentsOf, tableNeeds } from './layout.mjs';
+import { compartmentsOf, hitsBox, meet, measure, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf } from './layout.mjs';
 import { colourChecks, looksOf } from './design.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
@@ -108,6 +108,7 @@ export function score(model, lay, design) {
     else if (lines.some((l) => l.length > room)) tight.push(`"${n.label}" has a word too long for a ${lay.box.w}px box`);
     // A row keeps its one line: breaking a method's name in two would make two of it.
     const long = n.table ? undefined : compartmentsOf(n).flat().find((row) => row.length > rowsRoom(lay.box.w));
+    if (textOf(n, lay.box.w).some((l) => l.length * measure.textGlyph > lay.box.w - 2 * measure.textIn)) tight.push(`"${n.label}" says a word too long for any box; break it or shorten it`);
     // A table's columns are each as wide as their widest cell: all of them together have to fit.
     if (tableNeeds(n) > lay.box.w) tight.push(`"${n.label}" lists a row too wide for any box: it needs ${tableNeeds(n)}px and the widest box is ${lay.box.w}px; shorten its longest type or name`);
     if (long) tight.push(`"${n.label}" lists a line too long for any box: "${long}"; shorten it, or its type`);

@@ -48,6 +48,11 @@ export const measure = {
   rowLine: 16, // px from one row to the next
   rowPad: 6, // above the first row of a compartment and below its last
   rowIn: 12, // from the side of a box to where its rows begin
+  textGlyph: 6.2, // px per character of a box's sentence: the design's own face at 11.5px
+  textLine: 15, // px between two lines of it
+  textPad: 12, // px under its last line, before the bottom of the box or what the box lists
+  textIn: 12, // from the side of a box to its sentence
+  textMost: 4, // lines a sentence runs to in the width looked for first: past that it reads as a paragraph
   cellGlyph: 6.6, // px per character of a table's cell: the design's own face at 12px
   cellPad: 10, // px between a cell's words and the rule each side of it
   cellLine: 24, // px a table's row takes: a line of words and room above and below it, so the rules do not crowd them
@@ -111,6 +116,11 @@ export const columnsAt = (/** @type {{table?:string[][]}} */ n, /** @type {numbe
   return at;
 };
 
+/**
+ * The sentence a box says about itself, wrapped to a box of this width: no lines when it says nothing.
+ */
+export const textOf = (/** @type {{text?:string}} */ n, /** @type {number} */ width) => (n.text ? wrap(n.text, Math.floor((width - 2 * measure.textIn) / measure.textGlyph)) : []);
+
 /** The compartments of a box that have something in them: one with nothing is not drawn. */
 export const compartmentsOf = (/** @type {{rows?:string[][]}} */ n) => (n.rows ?? []).filter((c) => c.length);
 
@@ -119,8 +129,10 @@ export const compartmentsOf = (/** @type {{rows?:string[][]}} */ n) => (n.rows ?
  * it is a note, for every line of its words a plain box has no room for. A note is the one box whose words may
  * run on: saying more than a name is what it is there to do.
  */
-export const extraHeight = (/** @type {{rows?:string[][],table?:string[][],over?:string,shape?:string}} */ n, /** @type {{w:number,h:number}} */ box) =>
+export const extraHeight = (/** @type {{rows?:string[][],table?:string[][],over?:string,shape?:string,text?:string}} */ n, /** @type {{w:number,h:number}} */ box) =>
   (n.over ? measure.overLine : 0) +
+  // A sentence about the box goes under its name, in as many lines as the box's width gives it.
+  (n.text ? measure.textLine * textOf(n, box.w).length + measure.textPad : 0) +
   // A table's rows are cells with a rule between them, and need more room than the lines of a list.
   (n.table ? measure.cellLine * n.table.length : compartmentsOf(n).reduce((sum, c) => sum + 2 * measure.rowPad + measure.rowLine * c.length, 0)) +
   (n.shape === 'note' ? Math.max(0, measure.boxPad + measure.lineHeight * linesOf(/** @type {import('./parse.mjs').Node} */ (n), box.w).length - box.h) : 0);
@@ -132,18 +144,20 @@ export const extraHeight = (/** @type {{rows?:string[][],table?:string[][],over?
 function boxFor(/** @type {Model} */ model) {
   // A note takes the lines it needs and is as tall as they are. A width in which it keeps the lines its author
   // broke it into, or runs to a few lines and no more, is looked for first; when no width does that, it wraps.
+  // A sentence a box says about itself is treated the same way: a width that keeps it to a few lines first.
   const fits = (/** @type {number} */ w, /** @type {boolean} */ anyNote) =>
     model.nodes.every((n) => {
       const lines = linesOf(n, w), note = n.shape === 'note';
       const few = note ? (n.breaks ? lines.length === n.breaks.length : lines.length <= measure.mostLines) || anyNote : lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0));
-      return few && lines.every((l) => l.length <= roomFor(n, w));
+      return few && (anyNote || textOf(n, w).length <= measure.textMost) && lines.every((l) => l.length <= roomFor(n, w));
     });
   // A diagram whose boxes list rows may need a wider box than any label does: every row keeps its one line.
   const longest = Math.max(0, ...model.nodes.flatMap((n) => (n.table ? [] : compartmentsOf(n).flat().map((row) => row.length))));
   const widest = Math.max(0, ...model.nodes.map(tableNeeds));
-  const widths = longest || widest ? [...measure.widths, ...measure.rowWidths] : measure.widths;
+  const widths = longest || widest || model.nodes.some((n) => n.text) ? [...measure.widths, ...measure.rowWidths] : measure.widths;
   const wide = (/** @type {boolean} */ anyNote) => widths.find((width) => fits(width, anyNote) && rowsRoom(width) >= longest && width >= widest);
-  const w = wide(false) ?? wide(true) ?? widths[widths.length - 1];
+  // When no width keeps every note and sentence short, the widest that fits the rest gives them the fewest lines.
+  const w = wide(false) ?? (model.nodes.some((n) => n.text) ? [...widths].reverse().find((width) => fits(width, true) && rowsRoom(width) >= longest && width >= widest) : wide(true)) ?? widths[widths.length - 1];
   const most = Math.max(1, ...model.nodes.filter((n) => n.shape !== 'note').map((n) => linesOf(n, w).length));
   return { w, h: measure.boxPad + measure.lineHeight * most };
 }

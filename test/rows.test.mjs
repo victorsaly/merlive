@@ -5,7 +5,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
-import { hitsBox, layout, measure, meet, roomFor, rowsRoom, tableNeeds } from '../skills/merlive/scripts/layout.mjs';
+import { hitsBox, layout, measure, meet, roomFor, rowsRoom, tableNeeds, textOf } from '../skills/merlive/scripts/layout.mjs';
 import { builtIn, designFrom } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { draw, picture } from '../skills/merlive/scripts/render.mjs';
@@ -327,5 +327,62 @@ describe('words a Markdown string stresses', () => {
   it('are reckoned wider when bold, so a line of them still fits its box', () => {
     const plain = parse('flowchart LR\n  A[Twelve chars] --> B').nodes[0], bold = parse('flowchart LR\n  A["`**Twelve chars**`"] --> B').nodes[0];
     assert.ok(roomFor(bold, 160) < roomFor(plain, 160));
+  });
+});
+
+describe('a box that says a sentence about itself', () => {
+  const told = (/** @type {string} */ text, more = '') => {
+    const m = parse(`flowchart TD\n  Shop[Web shop] --> Ledger[General ledger]${more}`);
+    /** @type {any} */ (m.nodes[0]).text = text;
+    return m;
+  };
+  const short = 'Where buyers raise their orders', long = 'Takes every order a buyer raises, checks it against the budget of the department that raised it, and holds it until a manager has approved it or sent it back with a reason';
+
+  it('wraps the sentence under the name, and is as tall as its lines need: only that box', () => {
+    const m = told(short), lay = layout(m), lines = textOf(m.nodes[0], lay.box.w);
+    assert.equal(lines.join(' '), short);
+    assert.equal(lay.nodes.Shop.h, lay.box.h + lines.length * measure.textLine + measure.textPad);
+    assert.equal(lay.nodes.Ledger.h, lay.box.h);
+    assert.equal(lay.direction, 'TD');
+  });
+
+  it('looks for a width in which a long sentence runs to a few lines, before it lets it run on', () => {
+    const m = told(long), lay = layout(m);
+    assert.ok(lay.box.w > 224, `${lay.box.w}px`);
+    assert.ok(textOf(m.nodes[0], lay.box.w).length <= measure.textMost + 2);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+  });
+
+  it('draws the name at the top and the sentence under it, every line inside the box', () => {
+    const m = told(long), lay = layout(m), b = lay.nodes.Shop;
+    const g = /<g class="mv-node" data-node="Shop".*?<\/g>/s.exec(picture(m, lay, builtIn, { title: 't' }))?.[0] ?? '';
+    const lines = [...g.matchAll(/<tspan class="mv-told-line" x="([\d.]+)" y="([\d.]+)">([^<]*)</g)].map((x) => ({ x: Number(x[1]), y: Number(x[2]), words: x[3] }));
+    assert.equal(lines.map((l) => l.words).join(' '), long);
+    const nameY = Number(/<text><tspan x="[\d.]+" y="([\d.]+)">Web shop/.exec(g)?.[1]);
+    assert.ok(nameY < lines[0].y, 'the name is above the sentence');
+    for (const l of lines) {
+      assert.ok(l.y > b.y - b.h / 2 && l.y < b.y + b.h / 2, l.words);
+      assert.ok(l.words.length * measure.textGlyph <= b.w - 2 * measure.textIn + 1, l.words);
+    }
+  });
+
+  it('puts what the box lists under the sentence, not on it', () => {
+    const m = told(short);
+    /** @type {any} */ (m.nodes[0]).rows = [['id: 1.1', 'risk: high']];
+    const lay = layout(m), g = /<g class="mv-node" data-node="Shop".*?<\/g>/s.exec(picture(m, lay, builtIn, { title: 't' }))?.[0] ?? '';
+    const last = Math.max(...[...g.matchAll(/class="mv-told-line" x="[\d.]+" y="([\d.]+)"/g)].map((x) => Number(x[1])));
+    const first = Math.min(...[...g.matchAll(/class="mv-row" x="[\d.]+" y="([\d.]+)"/g)].map((x) => Number(x[1])));
+    assert.ok(first > last + 8, `${last} then ${first}`);
+  });
+
+  it('fails P6 when a word of the sentence is wider than any box', () => {
+    const m = told(`See ${'x'.repeat(90)} for more`), p6 = score(m, layout(m), builtIn).checks.find((c) => c.id === 'P6');
+    assert.equal(p6?.ok, false);
+    assert.match(p6?.detail ?? '', /"Web shop" says a word too long for any box/);
+  });
+
+  it('leaves a box that says nothing as it was', () => {
+    const m = parse('flowchart TD\n  A --> B');
+    assert.doesNotMatch(picture(m, layout(m), builtIn, { title: 't' }), /class="mv-told/);
   });
 });

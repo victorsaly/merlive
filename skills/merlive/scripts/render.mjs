@@ -6,7 +6,7 @@ import { contrast, kindFill, looksOf, mix, rowShade } from './design.mjs';
 import { runtime } from './runtime.mjs';
 import { outlineOf, wordsAt } from './shapes.mjs';
 import { iconMeasure, icons } from './icons.mjs';
-import { columnsAt, compartmentsOf, measure, wrap } from './layout.mjs';
+import { columnsAt, compartmentsOf, measure, textOf, wrap } from './layout.mjs';
 
 /** @typedef {import('./layout.mjs').Pt} Pt */
 
@@ -87,6 +87,7 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 .mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
 .mv-band{fill:var(--mv-text);opacity:${rowShade};stroke:none}
 .mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
+.mv-node .mv-told{font-size:11.5px;font-weight:400}
 .mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
 .mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
 .mv-icon{fill:none;stroke:var(--mv-text);stroke-width:${iconMeasure.stroke};stroke-linecap:round;stroke-linejoin:round}
@@ -180,9 +181,13 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     // A box that lists rows keeps its name in a block at the top, the size a plain box is, with any short line
     // above it; under that, each compartment begins with a rule and lists its rows from the left.
     const listed = compartmentsOf(m), over = m.over ? measure.overLine : 0;
-    const nameY = listed.length || over ? t + over + lay.box.h / 2 : b.y;
+    const told = textOf(m, b.w);
+    const nameY = listed.length || over || told.length ? t + over + lay.box.h / 2 : b.y;
     const above = m.over ? `<text class="mv-over" x="${n(b.x)}" y="${n(t + measure.overLine + 4)}">${esc(m.over)}</text>` : '';
     let down = t + over + lay.box.h;
+    // What the box says about itself: under its name, in a quieter face, each line in the middle of the box.
+    const sentence = told.length ? `<text class="mv-told">${told.map((line, i) => `<tspan class="mv-told-line" x="${n(b.x)}" y="${n(down + i * measure.textLine + 6)}">${esc(line)}</tspan>`).join('')}</text>` : '';
+    if (told.length) down += told.length * measure.textLine + measure.textPad;
     // An entity is a table: a rule under its name, a row for each attribute with a rule between rows and
     // between columns, and every second row shaded, so a reader can follow one across.
     const table = () => {
@@ -245,7 +250,7 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     // What its author's own style said of its outline: broken, heavy, or both.
     const said = [m.dashed ? 'dashed' : '', m.heavy ? 'heavy' : ''].filter(Boolean).join(' ');
     const outline = said ? ` data-outline="${said}"` : '';
-    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${outline}${role}>${shape}${stripe}${icon}${above}<text>${words}</text>${rows}</g>`;
+    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${outline}${role}>${shape}${stripe}${icon}${above}<text>${words}</text>${sentence}${rows}</g>`;
   });
   // A group's frame, behind everything, with what the group is called at its top left.
   const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/></g>`);
