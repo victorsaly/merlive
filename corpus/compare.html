@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 101 samples, Merlive draws 54 whole and 15 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>101</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>32</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>22</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>15</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>32</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 101 samples, Merlive draws 66 whole and 3 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>101</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>35</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>31</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>3</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>32</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -185,10 +185,10 @@ flowchart LR
   A[&quot;Total (net) &amp; tax&quot;] --&gt; B[&quot;Is it &gt; 100?&quot;]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>Characters written as entity codes</h3>
-<p class="result"><b>Partly read</b> <span class="why">&quot;Marked &quot;rush&quot;&quot; is not among its words; &quot;Thanks ♥&quot; is not among its words</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-entities.png" width="353" height="70" style="--w:353" alt="Characters written as entity codes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-entities.svg" width="448" height="116" style="--w:448" alt="Characters written as entity codes, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-entities.png" width="353" height="70" style="--w:353" alt="Characters written as entity codes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-entities.svg" width="384" height="100" style="--w:384" alt="Characters written as entity codes, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[&quot;Marked #quot;rush#quot;&quot;] --&gt; B[&quot;Thanks #9829;&quot;]
 </pre></details>
@@ -201,19 +201,19 @@ flowchart LR
   A[&quot;Check stock&lt;br/&gt;in both warehouses&quot;] --&gt; B[Pick&lt;br&gt;and pack]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="less">
 <h3>Markdown strings: bold, italic and a real line break</h3>
-<p class="result"><b>Partly read</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-markdown.png" width="354" height="94" style="--w:354" alt="Markdown strings: bold, italic and a real line break, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 2 boxes; read 0 of 1 links; &quot;Urgent order&quot; is not among its words; &quot;Pick today and pack&quot; is not among its words; line 2: not read: &quot;A[&quot;`**Urgent** order`&quot;] --&gt; B[&quot;`Pick *today*&quot;; line 3: not read: &quot;and pack`&quot;]&quot;</p></figure></div>
+<p class="result"><b>Drawn, less something</b> <span class="why">Bold and italic are drawn as plain words</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-markdown.png" width="354" height="94" style="--w:354" alt="Markdown strings: bold, italic and a real line break, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-markdown.svg" width="384" height="116" style="--w:384" alt="Markdown strings: bold, italic and a real line break, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[&quot;`**Urgent** order`&quot;] --&gt; B[&quot;`Pick *today*
   and pack`&quot;]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="less">
 <h3>A Font Awesome icon in a label</h3>
-<p class="result"><b>Partly read</b> <span class="why">&quot;Shipped&quot; is not among its words; &quot;Delivered&quot; is not among its words</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-fontawesome.png" width="362" height="70" style="--w:362" alt="A Font Awesome icon in a label, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-fontawesome.svg" width="384" height="116" style="--w:384" alt="A Font Awesome icon in a label, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn, less something</b> <span class="why">The icon is left out; its words are kept</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/node-fontawesome.png" width="362" height="70" style="--w:362" alt="A Font Awesome icon in a label, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/node-fontawesome.svg" width="384" height="100" style="--w:384" alt="A Font Awesome icon in a label, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[&quot;fa:fa-truck Shipped&quot;] --&gt; B[fa:fa-check Delivered]
 </pre></details>
@@ -258,10 +258,10 @@ flowchart LR
   A[Before] --&gt; B((Hub)) --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="less">
 <h3>Shape: Asymmetric, a flag</h3>
-<p class="result"><b>Partly read</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-asymmetric.png" width="400" height="70" style="--w:400" alt="Shape: Asymmetric, a flag, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 3 boxes; read 0 of 2 links; &quot;Before&quot; is not among its words; &quot;Flagged&quot; is not among its words; &quot;After&quot; is not among its words; line 2: not read: &quot;A[Before] --&gt; B&gt;Flagged] --&gt; C[After]&quot;</p></figure></div>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-asymmetric.png" width="400" height="70" style="--w:400" alt="Shape: Asymmetric, a flag, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-asymmetric.svg" width="584" height="100" style="--w:584" alt="Shape: Asymmetric, a flag, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B&gt;Flagged] --&gt; C[After]
 </pre></details>
@@ -282,42 +282,42 @@ flowchart LR
   A[Before] --&gt; B{{Prepare}} --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="less">
 <h3>Shape: Parallelogram</h3>
-<p class="result"><b>Partly read</b> <span class="why">&quot;Input&quot; is not among its words</span></p>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-parallelogram.png" width="407" height="70" style="--w:407" alt="Shape: Parallelogram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-parallelogram.svg" width="584" height="100" style="--w:584" alt="Shape: Parallelogram, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[/Input/] --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="less">
 <h3>Shape: Parallelogram, leaning back</h3>
-<p class="result"><b>Partly read</b> <span class="why">&quot;Output&quot; is not among its words</span></p>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-parallelogram-alt.png" width="419" height="70" style="--w:419" alt="Shape: Parallelogram, leaning back, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-parallelogram-alt.svg" width="584" height="100" style="--w:584" alt="Shape: Parallelogram, leaning back, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[\Output\] --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="less">
 <h3>Shape: Trapezoid</h3>
-<p class="result"><b>Partly read</b> <span class="why">&quot;Manual step&quot; is not among its words</span></p>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-trapezoid.png" width="459" height="70" style="--w:459" alt="Shape: Trapezoid, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-trapezoid.svg" width="584" height="100" style="--w:584" alt="Shape: Trapezoid, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[/Manual step\] --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="less">
 <h3>Shape: Trapezoid, upside down</h3>
-<p class="result"><b>Partly read</b> <span class="why">&quot;Priority&quot; is not among its words</span></p>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a plain box</span></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-trapezoid-alt.png" width="451" height="70" style="--w:451" alt="Shape: Trapezoid, upside down, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-trapezoid-alt.svg" width="584" height="100" style="--w:584" alt="Shape: Trapezoid, upside down, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B[\Priority/] --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="less">
 <h3>Shape: Double circle</h3>
-<p class="result"><b>Partly read</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-double-circle.png" width="380" height="79" style="--w:380" alt="Shape: Double circle, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 3 boxes; read 0 of 2 links; &quot;Before&quot; is not among its words; &quot;Stop&quot; is not among its words; &quot;After&quot; is not among its words; line 2: not read: &quot;A[Before] --&gt; B(((Stop))) --&gt; C[After]&quot;</p></figure></div>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn as a pill</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-double-circle.png" width="380" height="79" style="--w:380" alt="Shape: Double circle, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-double-circle.svg" width="584" height="100" style="--w:584" alt="Shape: Double circle, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Before] --&gt; B(((Stop))) --&gt; C[After]
 </pre></details>
@@ -517,10 +517,10 @@ flowchart LR
   C ==&gt;|always| D[Ship]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="less">
 <h3>An invisible link, used to nudge placement</h3>
-<p class="result"><b>Partly read</b> <span class="why">read 2 of 3 boxes; read 1 of 2 links; line 2: not read: &quot;A[Order] ~~~ B[Pick]&quot;</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-invisible.png" width="403" height="70" style="--w:403" alt="An invisible link, used to nudge placement, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-invisible.svg" width="384" height="100" style="--w:384" alt="An invisible link, used to nudge placement, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn, less something</b> <span class="why">Its boxes are read and the link is left out: it is only there to nudge Mermaid's placement, and placement is Merlive's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-invisible.png" width="403" height="70" style="--w:403" alt="An invisible link, used to nudge placement, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-invisible.svg" width="384" height="184" style="--w:384" alt="An invisible link, used to nudge placement, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Order] ~~~ B[Pick]
   B --&gt; C[Pack]
@@ -550,19 +550,19 @@ flowchart LR
   A[Web order] &amp; B[Phone order] --&gt; C[Pick] &amp; D[Bill]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>A link ending in a circle or a cross</h3>
-<p class="result"><b>Partly read</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-circle-cross.png" width="481" height="70" style="--w:481" alt="A link ending in a circle or a cross, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 3 boxes; read 0 of 2 links; line 2: not read: &quot;A[Order] --o B[Line items]&quot;; line 3: not read: &quot;B --x C[Cancelled]&quot;</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-circle-cross.png" width="481" height="70" style="--w:481" alt="A link ending in a circle or a cross, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-circle-cross.svg" width="584" height="100" style="--w:584" alt="A link ending in a circle or a cross, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[Order] --o B[Line items]
   B --x C[Cancelled]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>Arrows at both ends</h3>
-<p class="result"><b>Partly read</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-both-ways.png" width="626" height="70" style="--w:626" alt="Arrows at both ends, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: read 0 of 4 boxes; read 0 of 3 links; line 2: not read: &quot;A[ERP] &lt;--&gt; B[Warehouse]&quot;; line 3: not read: &quot;B o--o C[Carrier]&quot;; line 4: not read: &quot;C x--x D[Blocked]&quot;</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-both-ways.png" width="626" height="70" style="--w:626" alt="Arrows at both ends, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-both-ways.svg" width="784" height="100" style="--w:784" alt="Arrows at both ends, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart LR
   A[ERP] &lt;--&gt; B[Warehouse]
   B o--o C[Carrier]
