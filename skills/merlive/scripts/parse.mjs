@@ -1,7 +1,7 @@
 // Why: Merlive reads a small, honest part of Mermaid's flowchart language and says what it left out, so a
 // diagram is never drawn from a guess. Everything here is pure: text in, a model out.
 
-/** @typedef {{id:string,label:string,shape:'box'|'pill'|'decision',kind:string}} Node */
+/** @typedef {{id:string,label:string,shape:'box'|'pill'|'decision',kind:string,breaks?:string[]}} Node */
 /** @typedef {{id:string,from:string,to:string,label:string,style:'solid'|'dotted'|'thick',arrow:boolean}} Edge */
 /** @typedef {{title:string,text:string,path:string,seq:string[],loop:boolean}} Step */
 /**
@@ -9,6 +9,8 @@
  * @property {'flowchart'|'unsupported'} type
  * @property {string} kindOfDiagram the first word of the source, for the message when it is not a flowchart
  * @property {'TD'|'LR'} direction
+ * @property {string} title what the author called the picture (accTitle), for a reader who cannot see it
+ * @property {string} describes what the author says it shows (accDescr)
  * @property {Node[]} nodes
  * @property {Edge[]} edges
  * @property {Record<string,string>} notes
@@ -48,7 +50,7 @@ const escapeRe = (/** @type {string} */ s) => s.replace(/[.*+?^${}()|[\]\\]/g, '
  */
 export function parse(src) {
   /** @type {Model} */
-  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', nodes: [], edges: [], notes: {}, steps: [], hints: {}, warnings: [] };
+  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, warnings: [] };
   /** @type {Map<string, Node>} */
   const byId = new Map();
   const seenEdge = new Map();
@@ -80,7 +82,11 @@ export function parse(src) {
       const quoted = s[start] === '"' ? s.indexOf('"', start + 1) : -1;
       const end = s.indexOf(close, quoted > 0 ? quoted + 1 : start);
       if (end < 0) return null;
-      n.label = s.slice(start, end).trim().replace(/^"|"$/g, '').replace(/<br\s*\/?>/gi, ' ').replace(/\s+/g, ' ');
+      // Where an author broke a label, the lines are kept as written; the label itself is the words in one line.
+      const lines = s.slice(start, end).trim().replace(/^"|"$/g, '').split(/<br\s*\/?>/i).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+      n.label = lines.join(' ');
+      if (lines.length > 1) n.breaks = lines;
+      else delete n.breaks;
       n.shape = shape;
       p = end + close.length;
       break;
@@ -106,15 +112,22 @@ export function parse(src) {
   };
 
   const statement = (/** @type {string} */ s, /** @type {number} */ line) => {
+    const had = { nodes: model.nodes.length, edges: model.edges.length };
+    // A line that could not be read leaves nothing behind: no box from its first word, no half of a chain.
+    const notRead = (/** @type {string} */ what = `not read: "${s}"`) => {
+      for (const n of model.nodes.splice(had.nodes)) byId.delete(n.id);
+      for (const e of model.edges.splice(had.edges)) seenEdge.set(`${e.from}-${e.to}`, (seenEdge.get(`${e.from}-${e.to}`) ?? 1) - 1);
+      warn(line, what);
+    };
     const first = readNode(s, 0);
-    if (!first) return warn(line, `not read: "${s}"`);
+    if (!first) return notRead();
     let pos = first.pos;
     let prev = first.node;
     while (s.slice(pos).trim() !== '') {
-      if (/^\s*&/.test(s.slice(pos))) return warn(line, `"&" between nodes is not read yet; write one link per line: "${s}"`);
+      if (/^\s*&/.test(s.slice(pos))) return notRead(`"&" between nodes is not read yet; write one link per line: "${s}"`);
       const link = readLink(s, pos);
       const next = link && readNode(s, link.pos);
-      if (!link || !next) return warn(line, `not read: "${s}"`);
+      if (!link || !next) return notRead();
       if (prev.id === next.node.id) {
         warn(line, `a link from ${prev.id} to itself is not drawn`);
       } else {
@@ -128,10 +141,36 @@ export function parse(src) {
     }
   };
 
+  /** A line cut at each ; that is not inside quotes. */
+  const statementsIn = (/** @type {string} */ text) => {
+    /** @type {string[]} */
+    const out = [''];
+    let quoted = false;
+    for (const c of text) {
+      if (c === '"') quoted = !quoted;
+      if (c === ';' && !quoted) out.push('');
+      else out[out.length - 1] += c;
+    }
+    return out.map((x) => x.trim()).filter(Boolean);
+  };
+  /** @type {string[]|null} */
+  let describing = null;
+
   src.split(/\r?\n/).forEach((raw, i) => {
     const line = i + 1;
     const text = raw.trim();
     if (!text) return;
+    // What the picture is called and what it shows, in Mermaid's own words for it.
+    if (describing) {
+      if (text === '}') {
+        model.describes = describing.join(' ');
+        describing = null;
+      } else describing.push(text);
+      return;
+    }
+    const acc = /^acc(Title|Descr)\s*(?::\s*(.*)|\{\s*)$/.exec(text);
+    if (acc && acc[2] === undefined) return void (describing = []);
+    if (acc) return void (acc[1] === 'Title' ? (model.title = acc[2].trim()) : (model.describes = acc[2].trim()));
 
     // Merlive's own lines live in Mermaid comments, so every other Mermaid renderer still reads the block.
     const note = /^%%\s*note\s+(\w+)\s*:\s*(.+)$/.exec(text);
@@ -172,7 +211,7 @@ export function parse(src) {
       for (const id of cls[1].split(',').map((x) => x.trim())) if (byId.has(id)) node(id).kind = cls[2];
       return;
     }
-    for (const part of text.split(';').map((x) => x.trim()).filter(Boolean)) statement(part, line);
+    for (const part of statementsIn(text)) statement(part, line);
   });
 
   for (const n of model.nodes) if (!n.kind) n.kind = n.shape === 'decision' ? 'decision' : n.shape === 'pill' ? 'terminal' : 'step';
@@ -232,13 +271,21 @@ function resolveSteps(/** @type {Model} */ model) {
 }
 
 /**
- * The Mermaid blocks of a Markdown file, each with the heading it sits under.
+ * The Mermaid in a file, each block with the heading it sits under and the line it starts on.
  * @param {string} text
- * @param {boolean} wholeFile true for a .mmd file, which is one block with no fences
+ * @param {'md'|'mmd'|'code'} [kind] md: fenced blocks in Markdown. mmd: the whole file is one block. code: a page
+ *   or a script that keeps a flowchart in a string between backticks.
  * @returns {{source:string,title:string,line:number}[]}
  */
-export function blocksOf(text, wholeFile = false) {
-  if (wholeFile) return [{ source: text, title: '', line: 1 }];
+export function blocksOf(text, kind = 'md') {
+  if (kind === 'mmd') return [{ source: text, title: '', line: 1 }];
+  if (kind === 'code') {
+    // A string that starts as a flowchart does. One with ${...} in it is put together when the page runs, and
+    // cannot be read here.
+    return [...text.matchAll(/`\s*((?:flowchart|graph)[ \t]+(?:TD|TB|BT|LR|RL)\b[^`]*)`/g)]
+      .filter((m) => !m[1].includes('${'))
+      .map((m) => ({ source: m[1].trimEnd(), title: '', line: text.slice(0, m.index).split('\n').length }));
+  }
   const out = [];
   let heading = '';
   /** @type {string[]|null} */

@@ -20,6 +20,9 @@ const reads = {
 };
 
 const DARK = /\.dark\b|\.theme-dark\b|\[data-(?:theme|mode|color-scheme|bs-theme)=["']?dark["']?\]/g;
+// A selector's theme switches other than the dark ones: "not light", or "light" said outright. A switch for
+// anything else (a second face, a density) is not the page as it starts out, and is left on, so the rule is not read.
+const THEME = /:not\(\[data-(?:theme|mode|color-scheme|bs-theme)=["']?\w+["']?\]\)|\[data-(?:theme|mode|color-scheme|bs-theme)=["']?light["']?\]|\.light\b/g;
 const names = {
   bg: /^--(?:color-|clr-|c-)?(?:bg|background|paper|page|canvas|surface|base)(?:-color|-default|-primary)?$/i,
   text: /^--(?:color-|clr-|c-)?(?:text|fg|foreground|ink|body)(?:-color|-default|-primary)?$/i,
@@ -119,7 +122,8 @@ export function readingOf(sheets) {
   const corners = [];
   for (const r of rules) {
     const mode = r.dark ? 'dark' : 'light';
-    const parts = r.selector.split(',').map((s) => s.replace(new RegExp(DARK.source, 'g'), '').trim());
+    // What is left of each selector once its theme switches are taken off: ":root:not([data-theme='light'])" is :root.
+    const parts = r.selector.split(',').map((s) => s.replace(new RegExp(DARK.source, 'g'), '').replace(THEME, '').trim());
     const page = parts.some((s) => ['', ':root', 'html', 'body'].includes(s));
     for (const [name, value] of r.decls) {
       if (page && name.startsWith('--')) tokens[mode].set(name, value);

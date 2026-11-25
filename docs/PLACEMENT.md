@@ -23,6 +23,11 @@ in a left-to-right flow). Everything else sits to one side of it.
 - **Fail:** the third box of the main path is pushed sideways to make room for a branch.
 - **Why:** a reader finds the normal case first, then the exceptions.
 
+Off the main path, a box has a side. What leaves the main path (a branch, a loop) goes to one side of it; what
+feeds it (a box nothing leads to, that comes in part-way) comes in from the other, one step before what it feeds.
+So a line coming in never has to cross a line going out. A box takes another free place only when that costs less
+in crossings, and the lanes it leaves empty are closed up.
+
 ## P2. Boxes are one size, on a grid, with room between them
 
 A diagram uses one box width (128, 160, 192 or 224 px: the narrowest that fits every label in two lines) and one
@@ -36,6 +41,9 @@ boxes come closer than 16 px.
 ## P3. No line passes through a box
 
 A line goes round any box it does not start or end at.
+
+A branch turns in the room between two ranks, never across a row of boxes, and two lines that share that room
+each have a track of their own.
 
 - **Fail:** a loop back to the second box is drawn straight up through the third.
 - **What to do:** usually nothing, Merlive routes round. If it cannot, name the main path with `%% main:` so the
@@ -58,7 +66,9 @@ each have a channel of their own. A straight line keeps the middle of its side.
 
 ## P6. Words fit their box
 
-A label takes at most three lines, and no word is wider than the box.
+A label takes at most three lines, and no word is wider than the box. Where the author broke a label with
+`<br/>`, their lines are kept as written: the first is the box's name, in bold, and the rest say more, more
+quietly.
 
 - **What to do when it fails:** shorten the label and put the detail in a `%% note`.
 
@@ -99,5 +109,5 @@ lines whatever the design says.
 ## What is not here yet
 
 - Subgraph boxes: the nodes are placed, the group's outline is not drawn.
-- Balancing branches on both sides of the spine: everything goes to one side.
+- Tracks in the room between two lanes: two loops up the same side of a box can still lie on each other.
 - A box with more than four lines on one side: the order of its ports is not tried exhaustively.

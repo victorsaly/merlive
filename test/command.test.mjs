@@ -241,17 +241,19 @@ describe('the command: what a project asks for in its design file', () => {
 describe('the command: --setup, with nobody choosing a colour', () => {
   it("reads the project's own stylesheet, writes the design file and a page to look at, and says what it did", async () => {
     const cwd = temp();
-    put(cwd, 'src/styles/site.css', siteCss);
+    // The colours in one sheet, and what body does with them in the sheet beside it, as a real site keeps them.
+    put(cwd, 'src/styles/tokens.css', siteCss.split('\n').slice(0, 2).join('\n'));
+    put(cwd, 'src/styles/base.css', siteCss.split('\n')[2]);
     put(cwd, 'node_modules/loud/loud.css', 'body{background:#ff00ff;color:#00ff00} a{color:#ff0000}');
     put(cwd, 'docs/flow.md', flowMd);
     const { code, text } = await go(['--setup'], cwd);
     assert.equal(code, exits.drawn);
-    assert.match(text, /^read src\/styles\/site\.css\n {2}found: page #ffffff, text #000000, accent #ffc400, face 'Atkinson Hyperlegible', in light and dark/);
+    assert.match(text, /^read src\/styles\n {2}found: page #ffffff, text #000000, accent #ffc400, face 'Atkinson Hyperlegible', in light and dark/);
     assert.match(text, /\n {2}changed: accent #ffc400 is 1\.\d to 1 on the light page/);
     assert.match(text, /\nwrote merlive\.design\.json\n/);
     assert.match(text, /wrote .*merlive-setup\.html/);
     const file = json(join(cwd, 'merlive.design.json'));
-    assert.equal(file.from, 'src/styles/site.css');
+    assert.equal(file.from, 'src/styles');
     assert.equal(file.modes, 'both');
     assert.equal(file.light.bg, '#ffffff');
     assert.equal(file.dark.bg, '#1c1c1c');

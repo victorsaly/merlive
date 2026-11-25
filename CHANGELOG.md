@@ -12,11 +12,21 @@ The first version. It draws flowcharts and nothing else, and says so.
   side. Seven placement rules and two for colour are checked before anything is written; a diagram that breaks
   one is not written, and the message says which rule, where, and what to change. `--check` reports without
   writing; `--force` writes anyway.
+- **It was run on a diagram somebody really wrote**, the paper trail on blog.victorsaly.com, and what that broke
+  is fixed and held by tests. A branch now turns in the room between two ranks, with a track of its own, where
+  it used to cut across a row of boxes. What feeds the main path comes in from one side and what leaves it goes
+  out the other, and a box moves to a better lane when that removes a crossing. A box nothing leads to sits one
+  step before what it feeds.
+- **A label's own lines are kept.** Where the author wrote `<br/>`, the first line is the box's name, in bold, and
+  the rest are quieter. `accTitle` and `accDescr` are read and written into the picture for readers who cannot
+  see it. A line that cannot be read leaves no box behind, and a `;` inside quotes no longer cuts a label.
+- **Mermaid kept in code is found**: a flowchart in a string in an `.astro` page or a script is drawn like one
+  in Markdown.
 - **Steps and notes live in the Mermaid source**, as `%%` comments other renderers ignore: `%% step:` for a
   walkthrough, `%% note X:` for what a box means, `%% main:` to name the main path, `%% side:` for where loops go.
 - **A reader can pick a box or a line** to see only what it connects to, and walk the steps. Nothing moves until
   they press play, and then one dot follows the path; a loop repeats until paused.
-- **It sets itself up.** `--setup` reads the project's own stylesheet, or the site named in `package.json` or
+- **It sets itself up.** `--setup` reads the project's own stylesheets, a folder of them together, or the site named in `package.json` or
   with `--from`, and writes `merlive.design.json` with nobody choosing a colour: the site's page, text and accent
   colours, its face and corner, a dark mode when the site has one, and the rest a diagram needs made from them.
   Whatever would break a colour rule is put right and said. It reads hex, `rgb()`, `hsl()`, bare hsl numbers and

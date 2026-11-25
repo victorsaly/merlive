@@ -62,6 +62,8 @@ export function rulesFor(/** @type {import('./design.mjs').Design} */ design, /*
 .mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
 ${kinds.map((k) => `[data-kind="${k}"] .mv-shape{fill:var(--mv-kf-${k});stroke:var(--mv-k-${k})}`).join('\n')}
 .mv-node text{font-size:13px;font-weight:${design.weight};fill:var(--mv-text);text-anchor:middle}
+.mv-first{font-weight:700}
+.mv-rest{fill:var(--mv-muted)}
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.6}
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
 [data-style="thick"] .mv-line{stroke-width:2.8}
@@ -99,7 +101,9 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
       ? `<polygon class="mv-shape" points="${n(l + c)},${n(t)} ${n(r - c)},${n(t)} ${n(r)},${n(b.y)} ${n(r - c)},${n(u)} ${n(l + c)},${n(u)} ${n(l)},${n(b.y)}"/>`
       : `<rect class="mv-shape${m.shape === 'pill' ? ' mv-pill' : ''}" x="${n(l)}" y="${n(t)}" width="${b.w}" height="${b.h}" rx="${m.shape === 'pill' ? b.h / 2 : Math.min(design.radius, b.h / 2)}"/>`;
     const first = b.y - ((b.lines.length - 1) * 16) / 2 + draw.baseline;
-    const words = b.lines.map((line, i) => `<tspan x="${n(b.x)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
+    // Where the author broke the label, its first line is the box's name and the rest say more, more quietly.
+    const part = (/** @type {number} */ i) => (b.titled ? ` class="${i ? 'mv-rest' : 'mv-first'}"` : '');
+    const words = b.lines.map((line, i) => `<tspan${part(i)} x="${n(b.x)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${m.label}, ${kindName(m.kind)}`)}"` : '';
     return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${role}>${shape}<text>${words}</text></g>`;
   });
@@ -117,7 +121,7 @@ export const kindsIn = (/** @type {import('./parse.mjs').Model} */ model) => [..
  */
 export function picture(model, lay, design, about) {
   return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" width="${lay.width}" height="${lay.height}" role="img" aria-label="${esc(about.title)}">
-<title>${esc(about.title)}</title>
+<title>${esc(about.title)}</title>${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
 <style>${styleOf(design, kindsIn(model), '.mv-svg')}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
 ${inside(model, lay, design, false)}
@@ -218,7 +222,7 @@ body[data-motion="lively"].mv-playing .mv-on .mv-line{stroke-dasharray:7 6;anima
 <h1>${esc(about.title)}</h1>
 <div class="mv-layout">
 <figure class="mv-stage">
-<svg class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" role="group" aria-label="${esc(about.title)}">
+<svg class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" role="group" aria-label="${esc(about.title)}">${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
 ${inside(model, lay, design, true)}
 <g id="mv-dot" style="display:none"><circle r="6"/></g>
 </svg>

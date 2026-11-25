@@ -9,7 +9,6 @@ import { colourChecks, looksOf } from './design.mjs';
 // What a drawing is held to. Each is named in docs/PLACEMENT.md with a picture of pass and fail.
 export const limits = {
   linksPerCrossing: 8, // one crossing is allowed for every eight links; fewer than eight links, none
-  mostLines: 3, // of words in a box
   boxGap: 16, // the least room between two boxes
 };
 
@@ -70,7 +69,7 @@ export function score(model, lay, design) {
   const tight = [];
   for (const n of model.nodes) {
     const lines = lay.nodes[n.id].lines, room = roomFor(n, lay.box.w);
-    if (lines.length > limits.mostLines) tight.push(`"${n.label}" needs ${lines.length} lines; shorten it or put the detail in a "%% note"`);
+    if (lines.length > measure.mostLines) tight.push(`"${n.label}" needs ${lines.length} lines; shorten it or put the detail in a "%% note"`);
     else if (lines.some((l) => l.length > room)) tight.push(`"${n.label}" has a word too long for a ${lay.box.w}px box`);
   }
   add('P6', 'Words fit their box', tight, 'all fit');

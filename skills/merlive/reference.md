@@ -13,12 +13,18 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A([Text])`, `A((Text))` | A start or end (a pill) |
 | `A{Text}`, `A{{Text}}` | A decision (a box with cut corners, the same size as the others) |
 | `A["Text with (brackets)"]` | A quoted label |
+| `A["name<br/>more about it"]` | A label in the author's own lines: the first is the box's name, in bold; the rest are quieter |
+| `accTitle: …`, `accDescr: …` | What the picture is called and what it shows, kept for readers who cannot see it |
 | `A --> B`, `A --- B` | A link, with or without an arrowhead |
 | `A -.-> B`, `A ==> B` | A dotted link, a thick link |
 | `A -->\|Yes\| B`, `A -- Yes --> B` | A link with words |
 | `A --> B --> C` | A chain |
 | `class A,B rework`, `A:::rework` | The kind of a box: its colour comes from the design's `kinds` |
 | `classDef`, `style`, `linkStyle`, `click`, `direction` | Read past: the look comes from the design |
+
+Where the Mermaid is kept decides how it is found: fenced `mermaid` blocks in Markdown (`.md`, `.mdx`); the whole
+of a `.mmd` file; and, in any other file (an `.astro` page, a script), a string between backticks that starts as
+a flowchart does. A string put together with `${…}` when the page runs cannot be read.
 
 Not read yet, each named in a `note,` line when met: `subgraph` outlines (the boxes inside are still placed),
 `A & B --> C`, a link from a box to itself.
@@ -101,8 +107,9 @@ never write one by hand. Everything in it is optional, and what is left out come
 
 ## What setup reads
 
-`--setup` looks, in this order, at: the site or stylesheet named with `--from`; the project's own stylesheet with
-the most to say (any `.css` up to five folders down, leaving out what was installed or built); the `homepage` in
+`--setup` looks, in this order, at: the site, stylesheet or folder of stylesheets named with `--from`; the folder
+of the project's own stylesheet with the most to say (any `.css` up to five folders down, leaving out what was
+installed or built), all of its sheets read together; the `homepage` in
 `package.json`, unless it is where the code lives (GitHub and the like). From a site's address it reads the page,
 the stylesheets it links to and the styles written in it.
 

@@ -133,6 +133,6 @@ describe('blocksOf', () => {
   });
 
   it('takes a .mmd file whole', () => {
-    assert.deepEqual(blocksOf('flowchart TD\nA --> B', true), [{ source: 'flowchart TD\nA --> B', title: '', line: 1 }]);
+    assert.deepEqual(blocksOf('flowchart TD\nA --> B', 'mmd'), [{ source: 'flowchart TD\nA --> B', title: '', line: 1 }]);
   });
 });

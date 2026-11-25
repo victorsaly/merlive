@@ -39,7 +39,8 @@ node ${CLAUDE_SKILL_DIR}/scripts/merlive.mjs docs/orders.md --check   # what wou
 node ${CLAUDE_SKILL_DIR}/scripts/merlive.mjs docs/orders.md           # diagrams/orders-1.html beside the file
 ```
 
-- One file at a time. Each flowchart becomes `<file>-<n>.html` in a `diagrams` folder beside the Markdown file;
+- One file at a time: Markdown, a `.mmd` file, or a page or script that keeps a flowchart in a string (an
+  `.astro` page, say). Each flowchart becomes `<file>-<n>.html` in a `diagrams` folder beside the Markdown file;
   `--out` puts them elsewhere, `--only 2` draws just the second block.
 - `--format svg` writes a still picture instead, for a wiki or anywhere a page cannot be opened.
 - A line starting `note,` is something the script read past (a subgraph, an `&`): pass it on if it changes what

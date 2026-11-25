@@ -36,12 +36,14 @@ const looks = {
 
 export const help = `Merlive ${version}: Mermaid flowcharts, placed by rule and made live.
 
-  node merlive.mjs <file.md | file.mmd> [options]     draw a file's flowcharts
+  node merlive.mjs <file> [options]                   draw a file's flowcharts: Markdown, a .mmd file, or a
+                                                      page or script that keeps one in a string
   node merlive.mjs --setup [file.md] [--from <site>]  once for a project: read its colours, write its design
 
   --setup             read the project's colours (its own stylesheet, or the site named in package.json) and
                       write merlive.design.json and a page showing a diagram in them. Asks nothing.
-  --from <site>       with --setup: the address of the site the diagrams will be read on, or a stylesheet's path
+  --from <site>       with --setup: the address of the site the diagrams will be read on, or the path of a
+                      stylesheet or a folder of them
   --out <folder>      where the diagrams go (default: a "diagrams" folder beside the file)
   --design <file>     a design file to draw with (default: merlive.design.json in this folder if there is
                       one, else Merlive's own look, in light and dark)
@@ -88,6 +90,9 @@ export function optionsFrom(argv) {
   }
   return o;
 }
+
+/** How a file keeps its Mermaid: fenced in Markdown, as the whole of a .mmd file, or in a string in code. */
+const kindOf = (/** @type {string} */ path) => (extname(path) === '.mmd' ? 'mmd' : ['.md', '.mdx', '.markdown'].includes(extname(path)) ? 'md' : 'code');
 
 /** The design to draw with: the file named, the folder's own, or Merlive's. */
 function designFor(/** @type {string} */ asked, /** @type {string} */ cwd) {
@@ -148,7 +153,8 @@ async function sheetsFrom(/** @type {string} */ from, /** @type {string} */ cwd)
     return [...linked, ...inline];
   }
   const path = resolve(cwd, from);
-  if (!existsSync(path)) throw new Error(`No file at ${path}. --from takes a site's address or the path of a stylesheet.`);
+  if (!existsSync(path)) throw new Error(`No file at ${path}. --from takes a site's address, or the path of a stylesheet or of a folder of them.`);
+  if (statSync(path).isDirectory()) return readdirSync(path).filter((f) => extname(f) === '.css').sort().map((f) => readFileSync(join(path, f), 'utf8').slice(0, looks.bytes));
   const text = readFileSync(path, 'utf8');
   return extname(path) === '.css' ? [text] : stylesheetsOf(text, pathToFileURL(path).href).inline;
 }
@@ -159,9 +165,10 @@ function sourceIn(/** @type {string} */ cwd) {
     const r = readingOf([readFileSync(path, 'utf8')]);
     return (r.light?.bg ? 2 : 0) + (r.light?.text ? 2 : 0) + (r.light?.accent ? 1 : 0) + (r.dark ? 1 : 0);
   };
-  // The first with the most to say: nearest the project's own folder, as filesOf lists them.
+  // The folder of the stylesheet with the most to say, nearest the project's own folder as filesOf lists them.
+  // The whole folder, because a site keeps its colours in one sheet and says what body uses them for in another.
   const best = filesOf(cwd, ['.css']).map((path) => ({ path, weight: weigh(path) })).filter((s) => s.weight > 0).sort((a, b) => b.weight - a.weight)[0];
-  if (best) return relative(cwd, best.path).split('\\').join('/');
+  if (best) return relative(cwd, dirname(best.path)).split('\\').join('/') || '.';
   try {
     const home = new URL(JSON.parse(readFileSync(join(cwd, 'package.json'), 'utf8')).homepage);
     if (/^https?:$/.test(home.protocol) && !looks.notASite.test(home.hostname)) return home.href;
@@ -173,9 +180,9 @@ function sourceIn(/** @type {string} */ cwd) {
 
 /** The first flowchart there is to show: in the file named, else anywhere in the project, else Merlive's sample. */
 function flowchartFor(/** @type {string} */ file, /** @type {string} */ cwd) {
-  const paths = file ? [resolve(cwd, file)] : filesOf(cwd, ['.md', '.mmd']);
+  const paths = file ? [resolve(cwd, file)] : filesOf(cwd, ['.md', '.mdx', '.mmd', '.astro']);
   for (const path of paths) {
-    for (const block of blocksOf(readFileSync(path, 'utf8'), extname(path) === '.mmd')) {
+    for (const block of blocksOf(readFileSync(path, 'utf8'), kindOf(path))) {
       const model = parse(block.source);
       if (model.type === 'flowchart' && model.nodes.length) return model;
     }
@@ -229,7 +236,7 @@ export async function run(argv, io = {}) {
     if (o.help) return say(help), exits.drawn;
     if (o.file && !existsSync(resolve(cwd, o.file))) throw new Error(`No file at ${resolve(cwd, o.file)}.`);
     if (o.setup) return await setup(o, cwd, say);
-    if (!o.file) throw new Error('Which file? node merlive.mjs <file.md | file.mmd>. Run with --help to see the options.');
+    if (!o.file) throw new Error('Which file? node merlive.mjs <file>. Run with --help to see the options.');
     design = designFor(o.design, cwd);
   } catch (e) {
     return say(/** @type {Error} */ (e).message), exits.missing;
@@ -240,7 +247,7 @@ export async function run(argv, io = {}) {
   const outDir = o.out ? resolve(cwd, o.out) : join(dirname(file), 'diagrams');
   const asked = o.format || design.output.format;
   const formats = /** @type {('html'|'svg')[]} */ (asked === 'both' ? ['html', 'svg'] : [asked]);
-  const blocks = blocksOf(readFileSync(file, 'utf8'), extname(file) === '.mmd');
+  const blocks = blocksOf(readFileSync(file, 'utf8'), kindOf(file));
   let drawn = 0, broke = 0;
 
   blocks.forEach((block, i) => {
@@ -262,7 +269,7 @@ export async function run(argv, io = {}) {
       for (const c of result.checks.filter((x) => !x.ok)) say(`  ${c.id} ${c.rule}: ${c.detail}`);
       if (!o.force || o.check) return;
     }
-    const about = { title: block.title || stem, source: block.source, version };
+    const about = { title: block.title || model.title || stem, source: block.source, version };
     for (const format of formats) {
       const name = `${stem}-${number}.${format}`;
       if (o.check) {
