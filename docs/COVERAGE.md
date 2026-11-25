@@ -6,7 +6,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 ## In short
 
-- **Flowcharts:** of 69 features, 31 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 15 are only partly read, and 1 are refused.
+- **Flowcharts:** of 69 features, 32 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 15 are only partly read, and 0 are refused.
 - **Other kinds of diagram:** of 32, 0 are drawn and 32 are left as Mermaid and named.
 
 ## Flowcharts, feature by feature
@@ -65,7 +65,7 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | An invisible link, used to nudge placement | Partly read | read 2 of 3 boxes; read 1 of 2 links; line 2: not read: "A[Order] ~~~ B[Pick]" | [source](../corpus/flowchart/link-invisible.mmd) | [picture](../corpus/drawn/link-invisible.svg) |
 | Links chained in one line | Drawn |  | [source](../corpus/flowchart/link-chain.mmd) | [picture](../corpus/drawn/link-chain.svg) |
 | One line linking to several boxes with & | Drawn |  | [source](../corpus/flowchart/link-chain-and.mmd) | [picture](../corpus/drawn/link-chain-and.svg) |
-| Several boxes to several boxes with & | Refused | P5 No two lines share a path: A-D and B-C run along each other | [source](../corpus/flowchart/link-and-both.mmd) |  |
+| Several boxes to several boxes with & | Drawn |  | [source](../corpus/flowchart/link-and-both.mmd) | [picture](../corpus/drawn/link-and-both.svg) |
 | A link ending in a circle or a cross | Partly read | read 0 of 3 boxes; read 0 of 2 links; line 2: not read: "A[Order] --o B[Line items]"; line 3: not read: "B --x C[Cancelled]" | [source](../corpus/flowchart/link-circle-cross.mmd) |  |
 | Arrows at both ends | Partly read | read 0 of 4 boxes; read 0 of 3 links; line 2: not read: "A[ERP] <--> B[Warehouse]"; line 3: not read: "B o--o C[Carrier]"; line 4: not read: "C x--x D[Blocked]" | [source](../corpus/flowchart/link-both-ways.mmd) |  |
 | Links drawn longer, to push a box further on | Drawn, less something | The extra length is read past: placement is Merlive's | [source](../corpus/flowchart/link-length.mmd) | [picture](../corpus/drawn/link-length.svg) |

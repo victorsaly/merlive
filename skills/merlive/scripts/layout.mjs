@@ -321,7 +321,7 @@ export function layout(model) {
 
     // Ports. A straight line keeps the middle of its side. The others share the rest, in an order chosen to
     // cross as little as possible.
-    /** @typedef {{r:Route,end:'s'|'t',off:number}} End */
+    /** @typedef {{r:Route,end:'s'|'t',off:number,step:number}} End */
     /** @type {Map<string, End[]>} */
     const groups = new Map();
     /** @type {Map<Route, {s:End,t:End}>} */
@@ -335,7 +335,7 @@ export function layout(model) {
       groups.clear();
       endsOf.clear();
       for (const r of routes) {
-        const s = /** @type {End} */ ({ r, end: 's', off: 0 }), t = /** @type {End} */ ({ r, end: 't', off: 0 });
+        const s = /** @type {End} */ ({ r, end: 's', off: 0, step: 0 }), t = /** @type {End} */ ({ r, end: 't', off: 0, step: 0 });
         endsOf.set(r, { s, t });
         if (r.shape === 'straight') continue;
         for (const [en, n, side] of /** @type {[End,Placed,Side][]} */ ([[s, r.s, r.sSide], [t, r.t, r.tSide]])) {
@@ -357,21 +357,47 @@ export function layout(model) {
         const reach = length * measure.portShare;
         if (half === 'all') {
           const step = list.length > 1 ? Math.min(measure.portStep, (2 * reach) / (list.length - 1)) : 0;
-          list.forEach((en, i) => (en.off = (i - (list.length - 1) / 2) * step));
+          list.forEach((en, i) => Object.assign(en, { step, off: (i - (list.length - 1) / 2) * step }));
         } else {
           const step = Math.min(measure.portStep, reach / list.length);
-          list.forEach((en, i) => (en.off = half === 'low' ? -step * (list.length - i) : step * (i + 1)));
+          list.forEach((en, i) => Object.assign(en, { step, off: half === 'low' ? -step * (list.length - i) : step * (i + 1) }));
         }
+      }
+    };
+    const draw = (/** @type {Route} */ r) => {
+      const en = endsOf.get(r);
+      r.points = shapeOf(r, mid(r.s, r.sSide, en?.s.off), mid(r.t, r.tSide, en?.t.off));
+    };
+    /** The stretch of a line that touches a box: its first if it leaves there, its last if it arrives. */
+    const stub = (/** @type {End} */ en) => (en.end === 's' ? en.r.points.slice(0, 2) : en.r.points.slice(-2));
+    // A port is a line's own on its box, but the box below has ports at the same places. Where a line leaving a
+    // box and a line entering the one under it would lie on each other in the room between them, the one
+    // entering steps aside, half a port further from the middle. Two lines that swap sides always meet so:
+    // whichever turns first, one of the two columns is shared.
+    const stepAside = () => {
+      /** @type {Map<string, End[]>} */
+      const leaving = new Map();
+      /** @type {[End, Placed][]} */
+      const entering = [];
+      for (const { s, t } of endsOf.values()) {
+        for (const [en, n, side] of /** @type {[End,Placed,Side][]} */ ([[s, s.r.s, s.r.sSide], [t, t.r.t, t.r.tSide]])) {
+          if (side === 'bottom') leaving.set(`${n.lane}:${n.rank}`, [...(leaving.get(`${n.lane}:${n.rank}`) ?? []), en]);
+          if (side === 'top') entering.push([en, n]);
+        }
+      }
+      for (const [en, n] of entering) {
+        const shared = (leaving.get(`${n.lane}:${n.rank - 1}`) ?? []).some((o) => o.r !== en.r && meet(stub(o), stub(en)).overlaps > 0);
+        if (!shared) continue;
+        en.off += (Math.sign(en.off) || (far(en, 'top') < n.x ? -1 : 1)) * (en.step || measure.portStep) / 2;
+        draw(en.r);
       }
     };
     const build = () => {
       setChannels();
       setOffsets();
       setTracks();
-      for (const r of routes) {
-        const en = endsOf.get(r);
-        r.points = shapeOf(r, mid(r.s, r.sSide, en?.s.off), mid(r.t, r.tSide, en?.t.off));
-      }
+      routes.forEach(draw);
+      stepAside();
     };
     const cost = () => {
       let c = 0;

@@ -37,10 +37,8 @@ test('every link on the page leads somewhere', () => {
   for (const [, to] of coverage().markdown.matchAll(/\]\((\.\.\/[^)]+)\)/g)) assert.ok(existsSync(join(root, 'docs', to)), to);
 });
 
-test('only what is known to break a rule is refused', () => {
-  // Two boxes that each lead to the same two: the lines that swap sides share a stretch of path (P5). It is the
-  // first thing left in docs/ROADMAP.md. Take it out of this list when it is drawn; add nothing to it.
-  assert.deepEqual(coverage().rows.filter((r) => r.result === 'refused').map((r) => r.sample.file), ['flowchart/link-and-both.mmd']);
+test('nothing in the corpus is drawn with a rule broken', () => {
+  assert.deepEqual(coverage().rows.filter((r) => r.result === 'refused').map((r) => r.sample.file), []);
 });
 
 test('a sample read whole is drawn', () => {

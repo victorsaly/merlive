@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout } from '../skills/merlive/scripts/layout.mjs';
 import { apart, builtIn, contrast, designFrom, kindFill, mix, sights } from '../skills/merlive/scripts/design.mjs';
-import { score } from '../skills/merlive/scripts/score.mjs';
+import { forcedCrossings, score } from '../skills/merlive/scripts/score.mjs';
 
 const check = (/** @type {string} */ src, design = builtIn) => {
   const model = parse(src);
@@ -75,6 +75,32 @@ describe('score: a broken rule is named, with where', () => {
     lay.edges['F-E'].points = lay.edges['G-H'].points.map((p) => ({ ...p }));
     const out = failed(score(model, lay, builtIn));
     assert.ok(out.includes('P4') && out.includes('P5'), out.join());
+  });
+
+  it('P4 allows the crossing a diagram forces: two boxes that each lead to the same two', () => {
+    const { model, lay, result } = check('flowchart TD\nA[Web order] & B[Phone order] --> C[Pick] & D[Bill]');
+    assert.equal(forcedCrossings(model, lay), 1);
+    assert.deepEqual(failed(result), []);
+    assert.equal(result.checks.find((c) => c.id === 'P4')?.detail, '1 crossing, which this diagram cannot be drawn without');
+  });
+
+  it('P4 counts one forced crossing for every two boxes of a rank that share two of another, and none for a diamond', () => {
+    const forced = (/** @type {string} */ src) => {
+      const { model, lay } = check(`flowchart TD\n${src}`);
+      return forcedCrossings(model, lay);
+    };
+    assert.equal(forced('A & B & C --> D & E'), 3);
+    assert.equal(forced('A --> B & C --> D'), 0, 'a diamond is drawn with no crossing');
+    assert.equal(forced('A & B --> C\nA --> D\nC --> E\nB --> E'), 0);
+    assert.equal(forced('D --> A & B\nC --> A & B'), 1, 'whichever way the links point');
+  });
+
+  it('P4 still refuses a crossing the diagram does not force, and says how many it does', () => {
+    const { model, lay } = check('flowchart TD\nA[Web order] & B[Phone order] --> C[Pick] & D[Bill]');
+    lay.edges['A-C'].points = [{ x: 0, y: (lay.nodes.A.y + lay.nodes.C.y) / 2 }, { x: 900, y: (lay.nodes.A.y + lay.nodes.C.y) / 2 }];
+    const p4 = score(model, lay, builtIn).checks.find((c) => c.id === 'P4');
+    assert.equal(p4?.ok, false);
+    assert.match(p4?.detail ?? '', /^\d+ crossings; 4 links allow 0, and the diagram forces 1 more$/);
   });
 
   it('P6 when a label needs too many lines, or holds a word too long for any box', () => {

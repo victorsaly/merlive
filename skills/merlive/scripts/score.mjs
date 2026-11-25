@@ -8,12 +8,44 @@ import { colourChecks, looksOf } from './design.mjs';
 
 // What a drawing is held to. Each is named in docs/PLACEMENT.md with a picture of pass and fail.
 export const limits = {
-  linksPerCrossing: 8, // one crossing is allowed for every eight links; fewer than eight links, none
+  linksPerCrossing: 8, // one crossing is allowed for every eight links; fewer than eight links, none but those the diagram forces
   boxGap: 16, // the least room between two boxes
 };
 
 const overlap = (/** @type {{x:number,y:number,w:number,h:number}} */ a, /** @type {{x:number,y:number,w:number,h:number}} */ b, gap = 0) =>
   Math.abs(a.x - b.x) < (a.w + b.w) / 2 + gap && Math.abs(a.y - b.y) < (a.h + b.h) / 2 + gap;
+
+/**
+ * The crossings a diagram cannot be drawn without. Two boxes of one rank that are each linked to the same two
+ * boxes of another have four lines between them, and two of those swap sides: whichever way round the boxes
+ * sit, they cross once. Each such four is a crossing of its own, so they are counted, not guessed at.
+ * @param {Pick<import('./parse.mjs').Model,'edges'>} model
+ * @param {Pick<import('./layout.mjs').Layout,'nodes'>} lay
+ * @returns {number}
+ */
+export function forcedCrossings(model, lay) {
+  /** @type {Map<string, Set<string>>} */
+  const linked = new Map();
+  for (const { from, to } of model.edges) {
+    if (from === to || !lay.nodes[from] || !lay.nodes[to]) continue;
+    linked.set(from, (linked.get(from) ?? new Set()).add(to));
+    linked.set(to, (linked.get(to) ?? new Set()).add(from));
+  }
+  const ids = [...linked.keys()];
+  let forced = 0;
+  ids.forEach((a, i) => ids.slice(i + 1).forEach((b) => {
+    if (lay.nodes[a].rank !== lay.nodes[b].rank) return;
+    // What both are linked to, further down the flow, counted rank by rank: every two of a rank make a four.
+    /** @type {Map<number, number>} */
+    const shared = new Map();
+    for (const c of linked.get(a) ?? []) {
+      const rank = lay.nodes[c].rank;
+      if (rank > lay.nodes[a].rank && linked.get(b)?.has(c)) shared.set(rank, (shared.get(rank) ?? 0) + 1);
+    }
+    for (const n of shared.values()) forced += (n * (n - 1)) / 2;
+  }));
+  return forced;
+}
 
 /**
  * @param {import('./parse.mjs').Model} model
@@ -60,8 +92,11 @@ export function score(model, lay, design) {
     crossings += m.crossings;
     if (m.overlaps) along.push(`${a.id} and ${b.id} run along each other`);
   }));
-  const allowed = Math.floor(edges.length / limits.linksPerCrossing);
-  add('P4', 'Lines cross as little as the graph allows', crossings > allowed ? [`${crossings} crossings, and ${edges.length} links allow ${allowed}`] : [], `${crossings} crossings`);
+  const allowed = Math.floor(edges.length / limits.linksPerCrossing), forced = forcedCrossings(model, lay);
+  const count = crossings === 1 ? '1 crossing' : `${crossings} crossings`;
+  const tooMany = forced ? `${count}; ${edges.length} links allow ${allowed}, and the diagram forces ${forced} more` : `${count}, and ${edges.length} links allow ${allowed}`;
+  const fine = !forced || !crossings ? count : crossings <= forced ? `${count}, which this diagram cannot be drawn without` : `${count}, ${forced} of which this diagram cannot be drawn without`;
+  add('P4', 'Lines cross as little as the graph allows', crossings > allowed + forced ? [tooMany] : [], fine);
   add('P5', 'No two lines share a path', along, 'none do');
 
   // P6

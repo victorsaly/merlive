@@ -56,6 +56,11 @@ each have a track of their own.
 One crossing is allowed for every eight links; with fewer than eight links, none. The order in which lines leave
 each side of a box is chosen to keep crossings down.
 
+A crossing the diagram forces is allowed on top of that, and counted exactly. Two boxes of one rank that are each
+linked to the same two boxes of another (`A & B --> C & D`) have two lines that swap sides, and they cross once
+however the boxes are ordered. One crossing is allowed for each such four, and no more: `A & B & C --> D & E`
+holds three. The check says so: "1 crossing, which this diagram cannot be drawn without".
+
 - **What to do when it fails:** the flow is too tangled for one picture. Split it into two diagrams, or name a
   different main path.
 
@@ -63,6 +68,9 @@ each side of a box is chosen to keep crossings down.
 
 Each line has a port of its own on the side of a box it leaves or enters, and lines that go round the outside
 each have a channel of their own, on whichever side crosses less. A straight line keeps the middle of its side.
+
+A box and the box under it have their ports at the same places. Where a line leaving the one and a line entering
+the other would lie on each other in the room between them, the line entering steps aside by half a port.
 
 - **Fail:** two links into the same box arrive on top of each other, so a reader cannot tell them apart.
 

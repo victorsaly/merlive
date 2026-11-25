@@ -165,3 +165,35 @@ describe('layout: odd graphs', () => {
     assert.deepEqual([lay.width, lay.height], [measure.pad, measure.pad]);
   });
 });
+
+describe('layout: two boxes that each lead to the same two', () => {
+  const swap = 'flowchart TD\nA[Web order] & B[Phone order] --> C[Pick] & D[Bill]';
+  const pairs = (/** @type {string} */ src) => {
+    const edges = Object.values(layout(parse(src)).edges);
+    let crossings = 0, overlaps = 0;
+    for (let i = 0; i < edges.length; i++) for (let j = i + 1; j < edges.length; j++) {
+      const m = meet(edges[i].points, edges[j].points);
+      crossings += m.crossings;
+      overlaps += m.overlaps;
+    }
+    return { crossings, overlaps };
+  };
+
+  it('crosses the two lines that swap sides once, and lays neither along the other', () => {
+    assert.deepEqual(pairs(swap), { crossings: 1, overlaps: 0 });
+  });
+
+  it('does the same left to right, and further down a flow', () => {
+    assert.deepEqual(pairs(swap.replace('TD', 'LR')), { crossings: 1, overlaps: 0 });
+    assert.deepEqual(pairs('flowchart TD\nS --> A & B\nA & B --> C & D\nC & D --> E'), { crossings: 1, overlaps: 0 });
+  });
+
+  it('keeps a line that steps aside on the side of the box it enters', () => {
+    const lay = layout(parse(swap));
+    for (const e of Object.values(lay.edges)) {
+      const end = e.points[e.points.length - 1], to = lay.nodes[e.id.split('-')[1]];
+      assert.ok(Math.abs(end.x - to.x) < to.w / 2 - 8, `${e.id} enters ${Math.abs(end.x - to.x)} from the middle of a box ${to.w} wide`);
+    }
+  });
+});
+

@@ -42,16 +42,17 @@ draws of each, written again whenever the code changes. Its first run found seve
 matter, `&` between boxes, and everything written with `@{ … }`. What is left, worst first, is all flowchart
 features, so it comes before any new kind of diagram:
 
-1. **Two boxes that each lead to the same two boxes are refused** (`A & B --> C & D`). Reading `&` brought this
-   out. The two lines that swap sides share a stretch of path, which breaks P5; and drawn right they must cross
-   once, which P4 does not allow a diagram of fewer than eight links. The first is a fault in placement. The
-   second is a question about the rule.
-2. **Links that end in a circle or a cross, or point both ways**, and the invisible link.
-3. **Six of the older shapes**: the flag, the double circle, and the four leaning ones, which today keep their
+1. **Links that end in a circle or a cross, or point both ways**, and the invisible link.
+2. **Six of the older shapes**: the flag, the double circle, and the four leaning ones, which today keep their
    slashes as words.
-4. **Words**: entity codes, Markdown strings and Font Awesome icons are drawn as they were typed.
-5. **Bottom-to-top and right-to-left** are drawn the other way round, and a group inside a group is drawn as part
+3. **Words**: entity codes, Markdown strings and Font Awesome icons are drawn as they were typed.
+4. **Bottom-to-top and right-to-left** are drawn the other way round, and a group inside a group is drawn as part
    of the outer one. Both are said when met.
+
+Reading `&` brought out a fourth thing, now done: two boxes that each lead to the same two (`A & B --> C & D`)
+were refused. The lines that swap sides no longer lie on each other, and P4 allows the one crossing such a
+diagram cannot be drawn without. Three boxes that each lead to the same three are still refused: that forces
+nine crossings, and placement does not yet find the order that has only those.
 
 And one thing no check caught, seen in the pictures: a line coming into a group from above runs through the
 group's name. By this project's habit that is a new rule and a check for it, not a nudge.

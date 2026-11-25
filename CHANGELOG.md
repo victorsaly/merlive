@@ -57,6 +57,10 @@ The first version. It draws flowcharts and nothing else, and says so.
   drawn, and its `title` kept; `A & B --> C` links every box before the link to every box after it; and anything
   written with `@{ … }` is read, on one line or several: a box's shape and label, an icon or image kept as its
   label, a link's id, and what Mermaid sets on a link or a group read past.
+- **A crossing a diagram forces is allowed, and only that one.** Two boxes that each lead to the same two
+  (`A & B --> C & D`) cannot be drawn without two lines crossing once. P4 counts such crossings exactly and
+  allows them on top of one for every eight links; any other crossing is refused as before. The two lines no
+  longer lie on each other on the way: a line entering a box steps aside from one leaving the box above it.
 - **What Merlive draws of Mermaid is written down, and checked.** `corpus/` holds one sample of each of the 32
   other kinds of diagram Mermaid documents and of 69 features of its flowcharts; `npm run coverage` runs Merlive
   over all of it and writes `docs/COVERAGE.md` and a picture of each flowchart sample. The tests fail when the
