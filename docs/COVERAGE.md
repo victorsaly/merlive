@@ -6,8 +6,8 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 ## In short
 
-- **Flowcharts:** of 69 features, 44 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 3 are only partly read, and 0 are refused.
-- **State diagrams:** of 27 features, 14 are drawn as written, 10 are drawn less something, 3 are only partly read, and 0 are refused.
+- **Flowcharts:** of 70 features, 45 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 3 are only partly read, and 0 are refused.
+- **State diagrams:** of 27 features, 15 are drawn as written, 10 are drawn less something, 2 are only partly read, and 0 are refused.
 - **Sequence diagrams:** of 42 features, 35 are drawn as written, 5 are drawn less something, 2 are only partly read, and 0 are refused.
 - **Every kind of diagram:** of 32, 2 drawn (flowcharts, state diagrams and sequence diagrams, which have their own lists above), and 30 left as Mermaid and named.
 
@@ -71,6 +71,7 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | A link ending in a circle or a cross | Drawn |  | [source](../corpus/flowchart/link-circle-cross.mmd) | [picture](../corpus/drawn/link-circle-cross.svg) |
 | Arrows at both ends | Drawn |  | [source](../corpus/flowchart/link-both-ways.mmd) | [picture](../corpus/drawn/link-both-ways.svg) |
 | Links drawn longer, to push a box further on | Drawn, less something | The extra length is read past: placement is Merlive's | [source](../corpus/flowchart/link-length.mmd) | [picture](../corpus/drawn/link-length.svg) |
+| A link from a box to itself | Drawn |  | [source](../corpus/flowchart/link-self.mmd) | [picture](../corpus/drawn/link-self.svg) |
 | A link given an id | Drawn |  | [source](../corpus/flowchart/link-id.mmd) | [picture](../corpus/drawn/link-id.svg) |
 | A link set to animate | Drawn, less something | Mermaid's animation is read past: movement is the design's, and starts when a reader asks | [source](../corpus/flowchart/link-animate.mmd) | [picture](../corpus/drawn/link-animate.svg) |
 | Links played one step after another | Drawn, less something | The step numbers are read past; a walkthrough is written with "%% step" | [source](../corpus/flowchart/link-steps.mmd) | [picture](../corpus/drawn/link-steps.svg) |
@@ -105,7 +106,7 @@ rules. Held to the same measure as the flowcharts above.
 | A name with spaces, by way of an id | Drawn |  | [source](../corpus/state/state-spaces.mmd) | [picture](../corpus/drawn/state-spaces.svg) |
 | Transitions | Drawn |  | [source](../corpus/state/state-transition.mmd) | [picture](../corpus/drawn/state-transition.svg) |
 | Transitions with words | Drawn |  | [source](../corpus/state/state-transition-words.mmd) | [picture](../corpus/drawn/state-transition-words.svg) |
-| A transition from a state to itself | Partly read | read 1 of 2 links; "try again" is not among its words; line 2: a link from Connecting to itself is not drawn | [source](../corpus/state/state-self.mmd) | [picture](../corpus/drawn/state-self.svg) |
+| A transition from a state to itself | Drawn |  | [source](../corpus/state/state-self.mmd) | [picture](../corpus/drawn/state-self.svg) |
 | Where it starts and where it ends | Drawn, less something | Where it starts and where it ends are pills that say so, not dots | [source](../corpus/state/state-start-end.mmd) | [picture](../corpus/drawn/state-start-end.svg) |
 | A composite state | Drawn, less something | A transition to a composite state is drawn to where it starts inside, and one from it from where it ends | [source](../corpus/state/state-composite.mmd) | [picture](../corpus/drawn/state-composite.svg) |
 | A composite state named on a line of its own | Drawn, less something | A transition to a composite state is drawn to where it starts inside, and one from it from where it ends | [source](../corpus/state/state-composite-named.mmd) | [picture](../corpus/drawn/state-composite-named.svg) |

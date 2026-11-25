@@ -236,3 +236,33 @@ describe('layout: a flow written left to right that is wider than a screen', () 
   });
 });
 
+describe('layout: a link from a box to itself', () => {
+  const retry = 'flowchart TD\nA[Order] --> B[Connect]\nB -->|try again| B\nB --> C[Send]\nB --> D[Give up]';
+
+  it('goes out from one side of its box and comes back to the same side, clear of everything', () => {
+    for (const src of [retry, retry.replace('TD', 'LR')]) {
+      const m = parse(src), lay = layout(m), loop = lay.edges['B-B'], b = lay.nodes.B;
+      assert.ok(loop.points.length >= 4, 'out, along and back');
+      const [first, last] = [loop.points[0], loop.points[loop.points.length - 1]];
+      assert.ok(Math.hypot(first.x - last.x, first.y - last.y) >= 12, 'it leaves and returns at two places');
+      const far = Math.max(...loop.points.map((p) => Math.max(Math.abs(p.x - b.x) - b.w / 2, Math.abs(p.y - b.y) - b.h / 2)));
+      assert.ok(far >= 10 && far <= 24, `it goes ${far}px out from its box`);
+      for (const n of Object.values(lay.nodes)) if (n.id !== 'B') for (const seg of loop.points.slice(1).map((p, i) => /** @type {[{x:number,y:number},{x:number,y:number}]} */ ([loop.points[i], p]))) assert.ok(!hitsBox(seg, n), `through ${n.id}`);
+      for (const e of Object.values(lay.edges)) if (e.id !== 'B-B') assert.deepEqual(meet(loop.points, e.points), { crossings: 0, overlaps: 0 }, e.id);
+      assert.ok(loop.label && loop.label.text === 'try again');
+    }
+  });
+
+  it('does not move its box along the flow, or off the main path', () => {
+    const lay = layout(parse(retry));
+    assert.deepEqual(lay.spine.slice(0, 2), ['A', 'B']);
+    assert.equal(lay.nodes.B.rank, 1);
+  });
+
+  it('is drawn for a box that stands alone, and for one nothing else leads to', () => {
+    const lay = layout(parse('flowchart TD\nA --> A\nB --> B\nB --> C'));
+    assert.ok(lay.edges['A-A'].points.length >= 4 && lay.edges['B-B'].points.length >= 4);
+    assert.equal(lay.nodes.B.rank, 0);
+  });
+});
+

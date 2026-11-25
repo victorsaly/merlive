@@ -72,10 +72,10 @@ describe('state: transitions', () => {
     assert.deepEqual(links(state('A --> B : one\nA --> B : two')), [['A-B', 'one'], ['A-B#2', 'two']]);
   });
 
-  it('says a transition from a state to itself is not drawn', () => {
+  it('reads a transition from a state to itself', () => {
     const m = state('Connecting --> Connecting : retry\nConnecting --> Open');
-    assert.match(m.warnings[0], /^line 2: a link from Connecting to itself is not drawn/);
-    assert.deepEqual(links(m), [['Connecting-Open', '']]);
+    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(links(m), [['Connecting-Connecting', 'retry'], ['Connecting-Open', '']]);
   });
 
   it('reads past a comment at the end of a line and on a line of its own', () => {

@@ -114,9 +114,9 @@ describe("parse: an author's own styling", () => {
     assert.deepEqual(m.nodes.map((n) => [n.kind, n.dashed ?? false, n.heavy ?? false]), [['risk', false, true], ['draft', true, false]]);
   });
 
-  it('styles links by the number Mermaid gives them, counting those that are not drawn', () => {
+  it('styles links by the number Mermaid gives them, counting one that is not drawn', () => {
     const m = flow('A --> B\nB ~~~ C\nC --> C\nC --> D & E\nlinkStyle 0 stroke:#c00,stroke-width:4px\nlinkStyle 3,4 stroke:#00c,stroke-dasharray: 5 5\nlinkStyle 1,2,9 stroke:#0c0');
-    assert.deepEqual(m.edges.map((e) => [e.id, e.style, e.kind ?? '']), [['A-B', 'thick', 'red'], ['C-D', 'dotted', 'blue'], ['C-E', 'dotted', 'blue']]);
+    assert.deepEqual(m.edges.map((e) => [e.id, e.style, e.kind ?? '']), [['A-B', 'thick', 'red'], ['C-C', 'solid', 'green'], ['C-D', 'dotted', 'blue'], ['C-E', 'dotted', 'blue']]);
   });
 
   it('reads past a default for every box and for every link: that look is the design\'s', () => {
@@ -302,13 +302,19 @@ describe('parse: @{ … }', () => {
 });
 
 describe('parse: what it does not read, it says', () => {
-  it('names a link to itself and a line it cannot read, each with its line', () => {
+  it('names a line it cannot read, with its line, and leaves nothing of it behind', () => {
     const m = flow('A & --> C\nD --> D\nE --> F\nG ~~> H');
-    assert.equal(m.warnings.length, 3);
+    assert.equal(m.warnings.length, 2);
     assert.match(m.warnings[0], /^line 2: not read/);
-    assert.match(m.warnings[1], /^line 3: a link from D to itself/);
-    assert.match(m.warnings[2], /^line 5: not read/);
+    assert.match(m.warnings[1], /^line 5: not read/);
     assert.deepEqual(m.nodes.map((n) => n.id), ['D', 'E', 'F'], 'what could be read is kept, and nothing of what could not');
+  });
+
+  it('reads a link from a box to itself, with its words, and does not count it as a loop of the flow', () => {
+    const m = flow('A[Try] -->|again| A\nA --> B\nB --> A\nsubgraph g\n  C --> C\nend\nB --> g');
+    assert.deepEqual(m.edges.map((e) => [e.id, e.label]), [['A-A', 'again'], ['A-B', ''], ['B-A', ''], ['C-C', ''], ['B-C', '']]);
+    assert.deepEqual(findLoops(m), [['A', 'B']]);
+    assert.deepEqual(m.warnings, []);
   });
 
   it('says a group with no boxes has none, and leaves the links to it out', () => {

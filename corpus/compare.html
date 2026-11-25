@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 170 samples, Merlive draws 132 whole and 8 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>170</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>95</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>37</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>8</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>30</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 171 samples, Merlive draws 134 whole and 7 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>171</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>97</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>37</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>7</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>30</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -91,7 +91,7 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <article class="card" data-result="less">
 <h3>A title and settings in front matter</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look is the design's</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/frontmatter.png" width="270" height="123" style="--w:270" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/frontmatter.svg" width="384" height="100" style="--w:384" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/frontmatter.png" width="271" height="123" style="--w:271" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/frontmatter.svg" width="384" height="100" style="--w:384" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>---
 title: Order to cash
 config:
@@ -583,6 +583,16 @@ flowchart LR
 </pre></details>
 </article>
 <article class="card" data-result="drawn">
+<h3>A link from a box to itself</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-self.png" width="224" height="353" style="--w:224" alt="A link from a box to itself, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-self.svg" width="276" height="284" style="--w:276" alt="A link from a box to itself, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>flowchart TD
+  A[Order] --&gt; B[Connect]
+  B --&gt;|try again| B
+  B --&gt; C[Send]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
 <h3>A link given an id</h3>
 <p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/link-id.png" width="403" height="70" style="--w:403" alt="A link given an id, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/link-id.svg" width="584" height="100" style="--w:584" alt="A link given an id, as Merlive draws it"></div></figure></div>
@@ -861,10 +871,10 @@ flowchart LR
   Submitted --&gt; Draft : send back
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>A transition from a state to itself</h3>
-<p class="result"><b>Partly read</b> <span class="why">read 1 of 2 links; &quot;try again&quot; is not among its words; line 2: a link from Connecting to itself is not drawn</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-self.png" width="177" height="245" style="--w:177" alt="A transition from a state to itself, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-self.svg" width="190" height="192" style="--w:190" alt="A transition from a state to itself, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-self.png" width="177" height="245" style="--w:177" alt="A transition from a state to itself, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-self.svg" width="276" height="192" style="--w:276" alt="A transition from a state to itself, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>stateDiagram-v2
   Connecting --&gt; Connecting : try again
   Connecting --&gt; Open : answered

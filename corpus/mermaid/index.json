@@ -38,7 +38,7 @@
     },
     "flowchart/frontmatter.mmd": {
       "ok": true,
-      "width": 270,
+      "width": 271,
       "height": 123
     },
     "flowchart/init-directive.mmd": {
@@ -258,6 +258,11 @@
       "ok": true,
       "width": 269,
       "height": 772
+    },
+    "flowchart/link-self.mmd": {
+      "ok": true,
+      "width": 224,
+      "height": 353
     },
     "flowchart/link-id.mmd": {
       "ok": true,

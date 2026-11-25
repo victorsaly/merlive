@@ -330,10 +330,6 @@ export function parse(src) {
 
   /** A link between two boxes, named apart from any other between the same two. */
   const connect = (/** @type {Node} */ a, /** @type {Node} */ b, /** @type {Pick<Edge,'label'|'style'|'head'|'tail'>} */ l, /** @type {number} */ line) => {
-    if (a.id === b.id) {
-      warn(line, `a link from ${a.id} to itself is not drawn`);
-      return null;
-    }
     const base = `${a.id}-${b.id}`;
     const count = (seenEdge.get(base) ?? 0) + 1;
     seenEdge.set(base, count);
@@ -536,15 +532,19 @@ export function parse(src) {
   for (const g of model.groups) join(g);
   function join(/** @type {{id:string,title:string,members:string[]}} */ g) {
     if (!byId.has(g.id) || shaped.has(g.id) || g.members.includes(g.id)) return;
-    const within = model.edges.filter((e) => g.members.includes(e.from) && g.members.includes(e.to));
+    // A link from a box to itself leads nowhere, so it says nothing about where a group ends or starts.
+    const within = model.edges.filter((e) => e.from !== e.to && g.members.includes(e.from) && g.members.includes(e.to));
     const exit = [...g.members].reverse().find((id) => !within.some((e) => e.from === id));
     const entry = g.members.find((id) => !within.some((e) => e.to === id));
+    // A link between a group and itself would come out as one box linked to itself, which nobody wrote.
+    const joined = new Set();
     for (const e of model.edges) {
+      if (e.from === g.id || e.to === g.id) joined.add(e);
       if (e.from === g.id && exit) e.from = exit;
       if (e.to === g.id && entry) e.to = entry;
     }
     if (!g.members.length) model.warnings.push(`the group "${g.title}" has no boxes, so links to it are left out`);
-    model.edges = model.edges.filter((e) => e.from !== g.id && e.to !== g.id && e.from !== e.to);
+    model.edges = model.edges.filter((e) => e.from !== g.id && e.to !== g.id && !(joined.has(e) && e.from === e.to));
     model.nodes = model.nodes.filter((n) => n.id !== g.id);
     byId.delete(g.id);
     for (const other of model.groups) other.members = other.members.filter((id) => id !== g.id);
@@ -598,7 +598,8 @@ export function findLoops(model) {
   const index = new Map(model.nodes.map((n, i) => [n.id, i]));
   /** @type {Map<string,string[]>} */
   const next = new Map(model.nodes.map((n) => [n.id, []]));
-  for (const e of model.edges) if (!next.get(e.from)?.includes(e.to)) next.get(e.from)?.push(e.to);
+  // A link from a box to itself is not a loop of the flow: "loop 1" means the shortest way round, through others.
+  for (const e of model.edges) if (e.from !== e.to && !next.get(e.from)?.includes(e.to)) next.get(e.from)?.push(e.to);
   /** @type {string[][]} */
   const loops = [];
   const at = (/** @type {string} */ id) => index.get(id) ?? -1;

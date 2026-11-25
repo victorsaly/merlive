@@ -70,6 +70,8 @@ The first version. It draws flowcharts and sequence diagrams, and says what it l
 - **An author's own styling is kept as what it means.** `style` and `classDef` give a box a broken outline, a
   heavy one, and a colour; `linkStyle` does the same for a link, by Mermaid's number for it. The colour is named
   for its hue and drawn in the design's own nearest colour, so the colour rules still hold.
+- **A link from a box to itself is drawn**, as a small loop beside its box, in a flowchart and in a state
+  diagram, where a retry is written that way.
 - **A flow too wide for a screen is turned.** Written left to right and wider than 1,100 px, a flow is drawn top
   to bottom, and the command says so and how wide it would have been. `%% turn: no` keeps it as written.
 - **A link's words never run off the picture.** Words beside a line that goes round the near outside were cut
@@ -108,4 +110,3 @@ The first version. It draws flowcharts and sequence diagrams, and says what it l
   the messages one at a time; nothing moves until a reader asks. 42 samples in the corpus hold it, one for each
   feature on Mermaid's sequence page.
 - **What Merlive does not draw is left as Mermaid and named**: class diagrams, timelines and the rest come later.
-  Links from a box to itself are not drawn yet, and each is said when met.

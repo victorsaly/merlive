@@ -24,6 +24,7 @@ export const measure = {
   rankGap: { TD: 48, LR: 72 }, // between a box and the next one along the flow
   channel: 26, // from the outermost box to the first loop that goes round the outside
   channelStep: 16, // between two such loops
+  loop: 16, // how far a link from a box to itself goes out from the side of its box before it comes back
   trackStep: 12, // between two lines that share the room between two ranks
   trackEdge: 12, // the least from such a line to the boxes either side of that room
   mostLines: 4, // of words in a box, and only when its author wrote that many; a plain label is wrapped to two
@@ -161,7 +162,8 @@ function placed(model, dir) {
     }
     seen.set(id, 'done');
   };
-  const entered = new Set(model.edges.map((e) => e.to));
+  // A link from a box to itself says nothing of where the flow starts: a box with only that leading to it is a first box.
+  const entered = new Set(model.edges.filter((e) => e.from !== e.to).map((e) => e.to));
   for (const id of ids) if (!entered.has(id) && !seen.has(id)) visit(id);
   for (const id of ids) if (!seen.has(id)) visit(id);
   const forward = model.edges.filter((e) => !back.has(e.id));
@@ -312,6 +314,12 @@ function placed(model, dir) {
       for (const r of routes.filter((x) => x.shape === 'outer').sort((a, b) => Math.abs(a.s.rank - a.t.rank) - Math.abs(b.s.rank - b.t.rank))) {
         const lo = Math.min(r.s.rank, r.t.rank), hi = Math.max(r.s.rank, r.t.rank);
         r.sSide = r.tSide = r.out > 0 ? 'right' : 'left';
+        // A link from a box to itself is the smallest loop there is: out from its own side and straight back, in
+        // the room beside it, taking no channel from the lines that go round the whole flow.
+        if (r.s === r.t) {
+          r.cx = r.s.x + r.out * (r.s.w / 2 + measure.loop);
+          continue;
+        }
         r.cx = outside(r.s, r.t, r.out) + r.out * measure.channelStep * used.filter((u) => u.out === r.out && u.lo <= hi && u.hi >= lo).length;
         used.push({ lo, hi, out: r.out });
       }

@@ -609,6 +609,15 @@
       "loses": "The extra length is read past: placement is Merlive's"
     },
     {
+      "file": "flowchart/link-self.mmd",
+      "covers": "A link from a box to itself",
+      "boxes": 3,
+      "links": 3,
+      "has": [
+        "try again"
+      ]
+    },
+    {
       "file": "flowchart/link-id.mmd",
       "covers": "A link given an id",
       "boxes": 3,
