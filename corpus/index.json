@@ -1427,7 +1427,8 @@
           "diamond-open"
         ]
       ],
-      "loses": "Drawn top to bottom: boxes of different heights are only placed that way yet"
+      "loses": "Drawn top to bottom: boxes of different heights are only placed that way yet",
+      "says": "a class diagram is drawn top to bottom for now"
     },
     {
       "file": "class/class-interaction.mmd",

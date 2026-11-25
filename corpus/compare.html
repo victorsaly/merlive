@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 219 samples, Merlive draws 185 whole and 5 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>219</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>138</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>47</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>5</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>29</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 255 samples, Merlive draws 221 whole and 6 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>255</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>164</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>57</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>6</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>28</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -91,7 +91,7 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <article class="card" data-result="less">
 <h3>A title and settings in front matter</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look is the design's</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/frontmatter.png" width="271" height="123" style="--w:271" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/frontmatter.svg" width="384" height="100" style="--w:384" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/frontmatter.png" width="270" height="123" style="--w:270" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/frontmatter.svg" width="384" height="100" style="--w:384" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>---
 title: Order to cash
 config:
@@ -1095,7 +1095,478 @@ stateDiagram-v2
 </pre></details>
 </article>
 </section>
-
+<section><h2>Class diagrams, feature by feature</h2>
+<article class="card" data-result="drawn">
+<h3>A class, declared with &quot;class&quot;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-declare.png" width="222" height="100" style="--w:222" alt="A class, declared with &quot;class&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-declare.svg" width="376" height="100" style="--w:376" alt="A class, declared with &quot;class&quot;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order
+  class Supplier
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Two classes made by tying one to the other</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-declare-relation.png" width="105" height="234" style="--w:105" alt="Two classes made by tying one to the other, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-declare-relation.svg" width="184" height="192" style="--w:184" alt="Two classes made by tying one to the other, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  Order --&gt; Supplier
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class diagram, declared with &quot;classDiagram-v2&quot;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-declare-v2.png" width="105" height="234" style="--w:105" alt="A class diagram, declared with &quot;classDiagram-v2&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-declare-v2.svg" width="184" height="192" style="--w:184" alt="A class diagram, declared with &quot;classDiagram-v2&quot;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram-v2
+  class Order
+  Order --&gt; Supplier
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title in front matter</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-title.png" width="172" height="206" style="--w:172" alt="A title in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-title.svg" width="184" height="156" style="--w:184" alt="A title in front matter, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: Ordering
+---
+classDiagram
+  class Order
+  Order : +String number
+  Order : +total()
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class with a label</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-label.png" width="219" height="234" style="--w:219" alt="A class with a label, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-label.svg" width="184" height="224" style="--w:184" alt="A class with a label, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order[&quot;A purchase order&quot;]
+  class Line[&quot;Order line, with *! signs&quot;]
+  Order --&gt; Line
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class named between backticks</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-backticks.png" width="163" height="234" style="--w:163" alt="A class named between backticks, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-backticks.svg" width="184" height="224" style="--w:184" alt="A class named between backticks, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class `Purchase order!`
+  class `Order line`
+  `Purchase order!` --&gt; `Order line`
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Members given one at a time, after a colon</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-members-colon.png" width="172" height="208" style="--w:172" alt="Members given one at a time, after a colon, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-members-colon.svg" width="184" height="188" style="--w:184" alt="Members given one at a time, after a colon, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order
+  Order : +String number
+  Order : +Date placed
+  Order : +total()
+  Order: +cancel()
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Members given together, between brackets</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-members-block.png" width="172" height="208" style="--w:172" alt="Members given together, between brackets, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-members-block.svg" width="184" height="188" style="--w:184" alt="Members given together, between brackets, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order{
+    +String number
+    +Date placed
+    +total()
+    +cancel()
+  }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>What a method gives back</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-return-type.png" width="174" height="184" style="--w:174" alt="What a method gives back, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-return-type.svg" width="184" height="172" style="--w:184" alt="What a method gives back, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order{
+    +String number
+    +total() Money
+    +cancel() bool
+  }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Generic types, in a class, a member and what a method gives back</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-generics.png" width="288" height="256" style="--w:288" alt="Generic types, in a class, a member and what a method gives back, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-generics.svg" width="280" height="220" style="--w:280" alt="Generic types, in a class, a member and what a method gives back, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Basket~Item~{
+    int id
+    List~Item~ items
+    add(List~Item~ more)
+    lines() List~Item~
+    byShelf() List~List~Item~~
+  }
+  Basket : -List~string~ notes
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Who may see a member: public, private, protected, package</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-visibility.png" width="178" height="256" style="--w:178" alt="Who may see a member: public, private, protected, package, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-visibility.svg" width="184" height="220" style="--w:184" alt="Who may see a member: public, private, protected, package, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Invoice{
+    +String number
+    -Money total
+    #Date due
+    ~Ledger ledger
+    +pay()
+    -post()
+  }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Members marked abstract or static</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Abstract and static are said in words at the end of the row, where Mermaid slants or underlines it</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-classifiers.png" width="174" height="232" style="--w:174" alt="Members marked abstract or static, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-classifiers.svg" width="280" height="204" style="--w:280" alt="Members marked abstract or static, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order{
+    +String prefix$
+    +total() Money*
+    +count()$
+    +next() int$
+    +check()*
+  }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>The eight relations</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-relations.png" width="658" height="502" style="--w:658" alt="The eight relations, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-relations.svg" width="1144" height="376" style="--w:1144" alt="The eight relations, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  Document &lt;|-- Order
+  Order *-- OrderLine
+  Warehouse o-- Product
+  Invoice --&gt; Order
+  Supplier -- Contact
+  Order ..&gt; PriceList
+  Payable &lt;|.. Invoice
+  Buyer .. Note
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>The eight relations written the other way round, each with words</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">&quot;Is a&quot; is drawn from the parent down to the child, whichever way it was written</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-relations-reversed.png" width="782" height="416" style="--w:782" alt="The eight relations written the other way round, each with words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-relations-reversed.svg" width="1170" height="376" style="--w:1170" alt="The eight relations written the other way round, each with words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  Order --|&gt; Document : Inheritance
+  OrderLine --* Order : Composition
+  Product --o Warehouse : Aggregation
+  Invoice --&gt; Order : Association
+  Supplier -- Contact : Link(Solid)
+  Order ..&gt; PriceList : Dependency
+  Invoice ..|&gt; Payable : Realization
+  Buyer .. Note : Link(Dashed)
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Words on a relation</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-relation-labels.png" width="278" height="416" style="--w:278" alt="Words on a relation, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-relation-labels.svg" width="376" height="284" style="--w:376" alt="Words on a relation, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  Document &lt;|-- Order : is a
+  Order *-- OrderLine : holds
+  Warehouse o-- Product : stocks
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A relation that says something at both ends</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-two-way.png" width="364" height="234" style="--w:364" alt="A relation that says something at both ends, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-two-way.svg" width="568" height="192" style="--w:568" alt="A relation that says something at both ends, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  Order &lt;|--|&gt; Request
+  Supplier &lt;--&gt; Buyer
+  Bundle *--o Product
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A lollipop interface</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A lollipop is drawn as a box of its own, named for the interface and marked «interface», with the circle on its line</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-lollipop.png" width="266" height="294" style="--w:266" alt="A lollipop interface, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-lollipop.svg" width="376" height="262" style="--w:376" alt="A lollipop interface, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Invoice {
+    Money total
+    pay()
+  }
+  Payable ()-- Invoice
+  Order --() Printable
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>How many, at either end of a relation</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-cardinality.png" width="276" height="392" style="--w:276" alt="How many, at either end of a relation, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-cardinality.svg" width="376" height="284" style="--w:376" alt="How many, at either end of a relation, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  Customer &quot;1&quot; --&gt; &quot;*&quot; Order
+  Order &quot;1&quot; *-- &quot;1..*&quot; OrderLine
+  Warehouse --&gt; &quot;many&quot; Product : Stocks
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A namespace</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-namespace.png" width="383" height="230" style="--w:383" alt="A namespace, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-namespace.svg" width="196" height="260" style="--w:196" alt="A namespace, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  namespace Buying {
+    class Order
+    class OrderLine {
+      int quantity
+      Money price
+    }
+  }
+  Order *-- OrderLine
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A namespace with a label</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-namespace-label.png" width="197" height="236" style="--w:197" alt="A namespace with a label, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-namespace-label.svg" width="196" height="168" style="--w:196" alt="A namespace with a label, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  namespace Auth[&quot;Signing in&quot;] {
+    class User {
+      +login()
+      +logout()
+    }
+  }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A namespace written inside another</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-namespace-nested.png" width="496" height="468" style="--w:496" alt="A namespace written inside another, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-namespace-nested.svg" width="410" height="284" style="--w:410" alt="A namespace written inside another, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  namespace Ordering {
+    namespace Buying {
+      class Order {
+        +raise()
+      }
+    }
+    namespace Paying {
+      class Invoice {
+        +pay()
+      }
+    }
+    class Ledger {
+      +post()
+    }
+  }
+  Ledger --&gt; Order : records
+  Ledger --&gt; Invoice : records
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Namespaces inside one another, spelt with dots</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-namespace-dotted.png" width="489" height="662" style="--w:489" alt="Namespaces inside one another, spelt with dots, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-namespace-dotted.svg" width="434" height="322" style="--w:434" alt="Namespaces inside one another, spelt with dots, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  namespace Shop.Ordering.Buying {
+    class Order {
+      +raise()
+    }
+  }
+  namespace Shop.Ordering.Paying {
+    class Invoice {
+      +pay()
+    }
+  }
+  namespace Shop.Ordering {
+    class Ledger {
+      +post()
+    }
+  }
+  Ledger --&gt; Order : records
+  Ledger --&gt; Invoice : records
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An annotation, on the line that declares the class</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-annotation-inline.png" width="120" height="124" style="--w:120" alt="An annotation, on the line that declares the class, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-annotation-inline.svg" width="184" height="114" style="--w:184" alt="An annotation, on the line that declares the class, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Payable &lt;&lt;interface&gt;&gt;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An annotation, on a line of its own</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-annotation-line.png" width="163" height="184" style="--w:163" alt="An annotation, on a line of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-annotation-line.svg" width="184" height="170" style="--w:184" alt="An annotation, on a line of its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Payable
+  &lt;&lt;interface&gt;&gt; Payable
+  Payable : amountDue
+  Payable : pay()
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An annotation, inside the class</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-annotation-nested.png" width="344" height="208" style="--w:344" alt="An annotation, inside the class, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-annotation-nested.svg" width="376" height="174" style="--w:376" alt="An annotation, inside the class, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Payable{
+    &lt;&lt;interface&gt;&gt;
+    amountDue
+    pay()
+  }
+  class Status{
+    &lt;&lt;enumeration&gt;&gt;
+    DRAFT
+    SENT
+    PAID
+  }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A comment on a line of its own</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-comments.png" width="113" height="142" style="--w:113" alt="A comment on a line of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-comments.svg" width="184" height="128" style="--w:184" alt="A comment on a line of its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  %% This whole line is a comment: class Ghost &lt;&lt;interface&gt;&gt;
+  class Order{
+    +total()
+  }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A direction for the whole diagram</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Drawn top to bottom: boxes of different heights are only placed that way yet</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-direction.png" width="417" height="160" style="--w:417" alt="A direction for the whole diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-direction.svg" width="184" height="264" style="--w:184" alt="A direction for the whole diagram, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  direction RL
+  class Buyer {
+    -badge : Badge
+  }
+  class Badge{
+    -id : int
+    -name : string
+  }
+  Buyer &quot;1&quot; --o &quot;1&quot; Badge : carries
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A class that opens a link or calls a function when clicked</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The clicks are left out: a page of Merlive opens no links and runs no code of yours</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-interaction.png" width="486" height="100" style="--w:486" alt="A class that opens a link or calls a function when clicked, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-interaction.svg" width="760" height="100" style="--w:760" alt="A class that opens a link or calls a function when clicked, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order
+  class Invoice
+  class Supplier
+  class Product
+  link Order &quot;https://example.com/orders&quot; &quot;Open the order&quot;
+  click Invoice href &quot;https://example.com/invoices&quot; &quot;Open the invoice&quot;
+  callback Supplier &quot;showSupplier&quot; &quot;Show the supplier&quot;
+  click Product call showProduct() &quot;Show the product&quot;
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A note for a class</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-note-for.png" width="342" height="228" style="--w:342" alt="A note for a class, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-note-for.svg" width="184" height="128" style="--w:184" alt="A note for a class, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order{
+    +total()
+  }
+  note for Order &quot;Raised by a buyer\nApproved by a manager&quot;
+</pre></details>
+</article>
+<article class="card" data-result="partly">
+<h3>A note for no class in particular</h3>
+<p class="result"><b>Partly read</b> <span class="why">line 2: a note for no class in particular is not drawn: &quot;From order to invoice&quot;</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-note-general.png" width="303" height="234" style="--w:303" alt="A note for no class in particular, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-note-general.svg" width="184" height="192" style="--w:184" alt="A note for no class in particular, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  note &quot;From order to invoice&quot;
+  Order --&gt; Invoice
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A class styled on its own</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Each outline is heavy or broken as written, in the design's own nearest colour; the fill is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-style.png" width="213" height="100" style="--w:213" alt="A class styled on its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-style.svg" width="376" height="100" style="--w:376" alt="A class styled on its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order
+  class Invoice
+  style Order fill:#f9f,stroke:#333,stroke-width:4px
+  style Invoice fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A style class made with classDef and given with cssClass</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><p class="none">Mermaid could not draw this: Error: Lexical error on line 7. Unrecognized text.</p></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-classdef.svg" width="568" height="100" style="--w:568" alt="A style class made with classDef and given with cssClass, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order
+  class Invoice
+  class Refund
+  classDef late fill:#f9f,stroke:#c62828,stroke-width:4px;
+  classDef held,parked stroke:#888,stroke-dasharray: 4 3;
+  cssClass &quot;Order&quot; late;
+  cssClass &quot;Invoice,Refund&quot; held;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A style class given with :::</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-css-inline.png" width="274" height="160" style="--w:274" alt="A style class given with :::, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-css-inline.svg" width="376" height="156" style="--w:376" alt="A style class given with :::, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order:::late
+  class Invoice:::late {
+    -Money total
+    -pay()
+  }
+  classDef late fill:#f96
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A default style class for every class</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The default class is read past: the look is the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-default-class.png" width="213" height="100" style="--w:213" alt="A default style class for every class, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-default-class.svg" width="376" height="100" style="--w:376" alt="A default style class for every class, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order:::quiet
+  class Invoice
+  classDef default fill:#f96,color:red
+  classDef quiet color:#99f
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A style class kept in the page's own stylesheet</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A page's own stylesheet cannot be read from here: the class is of that kind, in the design's plain look</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-css-class.png" width="84" height="100" style="--w:84" alt="A style class kept in the page's own stylesheet, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-css-class.svg" width="184" height="100" style="--w:184" alt="A style class kept in the page's own stylesheet, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>classDiagram
+  class Order:::styleClass
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A whole diagram: classes, what they list, what they inherit, and a note</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class-whole.png" width="483" height="448" style="--w:483" alt="A whole diagram: classes, what they list, what they inherit, and a note, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class-whole.svg" width="440" height="336" style="--w:440" alt="A whole diagram: classes, what they list, what they inherit, and a note, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: Orders and what they hold
+---
+classDiagram
+  note for Invoice &quot;Sent when the order is delivered&lt;br&gt;Paid within thirty days&quot;
+  Document &lt;|-- Order
+  Document &lt;|-- Invoice
+  Document : +String number
+  Document : +Date raised
+  Document: +print()
+  class Order{
+    +String buyer
+    +approve()
+    +total() Money
+  }
+  class Invoice{
+    -Money amountDue
+    -pay()
+  }
+</pre></details>
+</article>
+</section>
 <section><h2>Entity diagrams, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>An entity diagram: entities, and the relationships between them</h3>
@@ -2201,10 +2672,10 @@ tf 03 evt OrderPlaced
 </article>
 </section>
 <section><h2>Other kinds: boxes and links</h2>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Class diagram</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class.png" width="313" height="378" style="--w:313" alt="Class diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a classDiagram is not drawn yet</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/class.png" width="313" height="378" style="--w:313" alt="Class diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/class.svg" width="376" height="308" style="--w:376" alt="Class diagram, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>classDiagram
   class Order {
     +String number

@@ -19,31 +19,34 @@ On the branch `class-er`, to be one pull request and one release.
 
 Done on the branch:
 
-- The model holds them (`parse.mjs` typedefs): a box may list `rows` (a compartment at a time) and carry a short
-  line `over` its name; a link may end in `triangle`, `diamond`, `diamond-open`, `one`, `zero-or-one`,
+- **The model holds them** (`parse.mjs` typedefs): a box may list `rows` (a compartment at a time) and carry a
+  short line `over` its name; a link may end in `triangle`, `diamond`, `diamond-open`, `one`, `zero-or-one`,
   `one-or-many` or `zero-or-many`, and carry a few words `near` and `far`.
-- They are placed and drawn (`layout.mjs`, `render.mjs`, `score.mjs`; `test/rows.test.mjs`): one width for the
-  diagram, each box as tall as what it lists, a rank as tall as its tallest box, rows in a fixed-width face with
-  their spaces kept, the new ends of a line, the words at a line's ends, and no path drawn heavier in a diagram
-  of things.
+- **They are placed and drawn** (`layout.mjs`, `render.mjs`, `score.mjs`; `test/rows.test.mjs`): one width for
+  the diagram, each box as tall as what it lists, a rank as tall as its tallest box, rows in a fixed-width face
+  with their spaces kept, the new ends of a line, the words at a line's ends, and no path drawn heavier in a
+  diagram of things.
+- **They are read** (`class.mjs`, `er.mjs`, each a reader in `READERS` in `parse.mjs`, with `test/class.test.mjs`
+  and `test/er.test.mjs`), and held to a corpus: the lists `class` and `er` in `corpus/index.json`, shown in
+  `docs/COVERAGE.md` and on the comparison page, with their sections in `skills/merlive/reference.md`.
 
 Still to do, in this order:
 
-1. **The two readers.** `class.mjs` and `er.mjs`, each a line reader plugged into `parse()` the way `state.mjs`
-   is, with tests, a corpus list (`corpus/class.json`, `corpus/er.json`, samples in `corpus/class/` and
-   `corpus/er/`) and a section for the reference. They were being written on the branches `class-reader` and
-   `er-reader`. If those branches are not there, write them: the brief is the model above and Mermaid's own
-   pages (`docs/syntax/classDiagram.md` and `entityRelationshipDiagram.md` in mermaid-js/mermaid).
-2. **Fold the readers in.** Their samples into `corpus/index.json` as lists `class` and `er`;
-   `scripts/coverage.mjs` and `scripts/compare.mjs` given those two lists the way `state` and `sequence` were
-   (sections in `docs/COVERAGE.md` and on the comparison page); their reference sections into
-   `skills/merlive/reference.md`; `SKILL.md`, the README's status line and `AGENTS.md` told of the two kinds.
-3. **Look.** `npm run compare`, then open `corpus/compare.html` and look at every class and entity sample beside
-   Mermaid's. A picture that passes its checks and looks wrong gets a new rule and a check, not a special case.
-   Known to look at: where the words at a line's ends land when several lines meet one box; a line entering the
-   side of a tall box among its rows; a class with a very long method.
-4. **Release.** The pull request, with the changelog's `0.2.0 (unreleased)` given its date on the day it is
-   merged; then the tag.
+1. **Look, sample by sample.** Open `corpus/compare.html` and go through every class and entity sample beside
+   Mermaid's. Only four were looked at closely (`class-whole`, `class`, `er`, and two made by hand). A picture
+   that passes its checks and looks wrong gets a new rule and a check, not a special case. Known to look at:
+   where the words at a line's ends land when several lines meet one box; a line entering the side of a tall box
+   among its rows; a class with a very long method; a lollipop interface.
+2. **What is known to be missing**, each said by the command when met: a class diagram's note for no class in
+   particular; a direction other than top to bottom, for either kind (boxes of different heights are only placed
+   top to bottom); attributes written on the line that opens an entity. A picked class is called "Step" on the
+   page, since a class has no kind of its own.
+3. **One thing the class reader changed for flowcharts too**: two groups with one id are now one group
+   (`frame()` in `parse.mjs` reopens a group whose id exists). Dotted namespaces need it. Nothing in the corpus
+   or in Victor's diagrams has two subgraphs with one id, but it is a change of behaviour, so say so in the pull
+   request.
+4. **Release.** The pull request for `class-er`, with the changelog's `0.2.0 (unreleased)` given its date on
+   the day it is merged; then the tag.
 
 ## Waiting on Victor
 

@@ -38,7 +38,7 @@
     },
     "flowchart/frontmatter.mmd": {
       "ok": true,
-      "width": 271,
+      "width": 270,
       "height": 123
     },
     "flowchart/init-directive.mmd": {
@@ -483,6 +483,185 @@
       "ok": true,
       "width": 86,
       "height": 195
+    },
+    "class/class-declare.mmd": {
+      "ok": true,
+      "width": 222,
+      "height": 100
+    },
+    "class/class-declare-relation.mmd": {
+      "ok": true,
+      "width": 105,
+      "height": 234
+    },
+    "class/class-declare-v2.mmd": {
+      "ok": true,
+      "width": 105,
+      "height": 234
+    },
+    "class/class-title.mmd": {
+      "ok": true,
+      "width": 172,
+      "height": 206
+    },
+    "class/class-label.mmd": {
+      "ok": true,
+      "width": 219,
+      "height": 234
+    },
+    "class/class-backticks.mmd": {
+      "ok": true,
+      "width": 163,
+      "height": 234
+    },
+    "class/class-members-colon.mmd": {
+      "ok": true,
+      "width": 172,
+      "height": 208
+    },
+    "class/class-members-block.mmd": {
+      "ok": true,
+      "width": 172,
+      "height": 208
+    },
+    "class/class-return-type.mmd": {
+      "ok": true,
+      "width": 174,
+      "height": 184
+    },
+    "class/class-generics.mmd": {
+      "ok": true,
+      "width": 288,
+      "height": 256
+    },
+    "class/class-visibility.mmd": {
+      "ok": true,
+      "width": 178,
+      "height": 256
+    },
+    "class/class-classifiers.mmd": {
+      "ok": true,
+      "width": 174,
+      "height": 232
+    },
+    "class/class-relations.mmd": {
+      "ok": true,
+      "width": 658,
+      "height": 502
+    },
+    "class/class-relations-reversed.mmd": {
+      "ok": true,
+      "width": 782,
+      "height": 416
+    },
+    "class/class-relation-labels.mmd": {
+      "ok": true,
+      "width": 278,
+      "height": 416
+    },
+    "class/class-two-way.mmd": {
+      "ok": true,
+      "width": 364,
+      "height": 234
+    },
+    "class/class-lollipop.mmd": {
+      "ok": true,
+      "width": 266,
+      "height": 294
+    },
+    "class/class-cardinality.mmd": {
+      "ok": true,
+      "width": 276,
+      "height": 392
+    },
+    "class/class-namespace.mmd": {
+      "ok": true,
+      "width": 383,
+      "height": 230
+    },
+    "class/class-namespace-label.mmd": {
+      "ok": true,
+      "width": 197,
+      "height": 236
+    },
+    "class/class-namespace-nested.mmd": {
+      "ok": true,
+      "width": 496,
+      "height": 468
+    },
+    "class/class-namespace-dotted.mmd": {
+      "ok": true,
+      "width": 489,
+      "height": 662
+    },
+    "class/class-annotation-inline.mmd": {
+      "ok": true,
+      "width": 120,
+      "height": 124
+    },
+    "class/class-annotation-line.mmd": {
+      "ok": true,
+      "width": 163,
+      "height": 184
+    },
+    "class/class-annotation-nested.mmd": {
+      "ok": true,
+      "width": 344,
+      "height": 208
+    },
+    "class/class-comments.mmd": {
+      "ok": true,
+      "width": 113,
+      "height": 142
+    },
+    "class/class-direction.mmd": {
+      "ok": true,
+      "width": 417,
+      "height": 160
+    },
+    "class/class-interaction.mmd": {
+      "ok": true,
+      "width": 486,
+      "height": 100
+    },
+    "class/class-note-for.mmd": {
+      "ok": true,
+      "width": 342,
+      "height": 228
+    },
+    "class/class-note-general.mmd": {
+      "ok": true,
+      "width": 303,
+      "height": 234
+    },
+    "class/class-style.mmd": {
+      "ok": true,
+      "width": 213,
+      "height": 100
+    },
+    "class/class-classdef.mmd": {
+      "ok": false,
+      "error": "Error: Lexical error on line 7. Unrecognized text."
+    },
+    "class/class-css-inline.mmd": {
+      "ok": true,
+      "width": 274,
+      "height": 160
+    },
+    "class/class-default-class.mmd": {
+      "ok": true,
+      "width": 213,
+      "height": 100
+    },
+    "class/class-css-class.mmd": {
+      "ok": true,
+      "width": 84,
+      "height": 100
+    },
+    "class/class-whole.mmd": {
+      "ok": true,
+      "width": 483,
+      "height": 448
     },
     "er/er-declare.mmd": {
       "ok": true,

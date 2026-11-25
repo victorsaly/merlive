@@ -50,7 +50,7 @@ export function judge(sample, source) {
   count('groups', sample.groups, lay.groups.length);
   count('notes', sample.notes, Object.keys(model.notes).length);
   if (sample.direction !== undefined && model.direction !== sample.direction) why.push(`drawn ${model.direction}, not ${sample.direction}`);
-  const said = [...model.nodes.flatMap((n) => [n.label, n.over ?? '', ...(n.rows ?? []).flat()]), ...model.edges.flatMap((e) => [e.label, e.near ?? '', e.far ?? '']), ...model.groups.map((g) => g.title)];
+  const said = [...model.nodes.flatMap((n) => [n.label, n.over ?? '', ...(n.rows ?? []).flat()]), ...model.edges.flatMap((e) => [e.label, e.near ?? '', e.far ?? '']), ...model.groups.map((g) => g.title), ...Object.values(model.notes)];
   for (const text of sample.has ?? []) if (!said.includes(text)) why.push(`"${text}" is not among its words`);
   for (const kind of sample.kinds ?? []) if (!model.nodes.some((n) => n.kind === kind)) why.push(`no box is of the kind ${kind}`);
   if (sample.title !== undefined && model.title !== sample.title) why.push('its title is not kept');

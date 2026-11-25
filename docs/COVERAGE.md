@@ -2,15 +2,16 @@
 
 Written by `npm run coverage`. Do not edit it by hand: change the code or the corpus and run it again.
 
-The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram, entity diagram and sequence diagram pages set out. The samples are our own.
+The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for every kind of diagram it documents and every feature its flowchart, state diagram, class diagram, entity diagram and sequence diagram pages set out. The samples are our own.
 
 ## In short
 
 - **Flowcharts:** of 70 features, 46 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 2 are only partly read, and 0 are refused.
 - **State diagrams:** of 27 features, 16 are drawn as written, 10 are drawn less something, 1 are only partly read, and 0 are refused.
+- **Class diagrams:** of 36 features, 25 are drawn as written, 10 are drawn less something, 1 are only partly read, and 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Sequence diagrams:** of 42 features, 35 are drawn as written, 5 are drawn less something, 2 are only partly read, and 0 are refused.
-- **Every kind of diagram:** of 32, 3 drawn (those with their own lists above), and 29 left as Mermaid and named.
+- **Every kind of diagram:** of 32, 4 drawn (those with their own lists above), and 28 left as Mermaid and named.
 
 ## Flowcharts, feature by feature
 
@@ -125,6 +126,50 @@ rules. Held to the same measure as the flowcharts above.
 | A class given with ::: | Drawn |  | [source](../corpus/state/state-class-inline.mmd) | [picture](../corpus/drawn/state-class-inline.svg) |
 | A title and a description for readers who cannot see it | Drawn |  | [source](../corpus/state/state-accessibility.mmd) | [picture](../corpus/drawn/state-accessibility.svg) |
 | A title and settings in front matter | Drawn, less something | Mermaid's own settings are read past: the look is the design's | [source](../corpus/state/state-frontmatter.mmd) | [picture](../corpus/drawn/state-frontmatter.svg) |
+
+## Class diagrams, feature by feature
+
+A class is a box that lists its attributes and its methods under its name. Held to the same measure, and to
+the rows each box lists and what each link ends in.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| A class, declared with "class" | Drawn |  | [source](../corpus/class/class-declare.mmd) | [picture](../corpus/drawn/class-declare.svg) |
+| Two classes made by tying one to the other | Drawn |  | [source](../corpus/class/class-declare-relation.mmd) | [picture](../corpus/drawn/class-declare-relation.svg) |
+| A class diagram, declared with "classDiagram-v2" | Drawn |  | [source](../corpus/class/class-declare-v2.mmd) | [picture](../corpus/drawn/class-declare-v2.svg) |
+| A title in front matter | Drawn |  | [source](../corpus/class/class-title.mmd) | [picture](../corpus/drawn/class-title.svg) |
+| A class with a label | Drawn |  | [source](../corpus/class/class-label.mmd) | [picture](../corpus/drawn/class-label.svg) |
+| A class named between backticks | Drawn |  | [source](../corpus/class/class-backticks.mmd) | [picture](../corpus/drawn/class-backticks.svg) |
+| Members given one at a time, after a colon | Drawn |  | [source](../corpus/class/class-members-colon.mmd) | [picture](../corpus/drawn/class-members-colon.svg) |
+| Members given together, between brackets | Drawn |  | [source](../corpus/class/class-members-block.mmd) | [picture](../corpus/drawn/class-members-block.svg) |
+| What a method gives back | Drawn |  | [source](../corpus/class/class-return-type.mmd) | [picture](../corpus/drawn/class-return-type.svg) |
+| Generic types, in a class, a member and what a method gives back | Drawn |  | [source](../corpus/class/class-generics.mmd) | [picture](../corpus/drawn/class-generics.svg) |
+| Who may see a member: public, private, protected, package | Drawn |  | [source](../corpus/class/class-visibility.mmd) | [picture](../corpus/drawn/class-visibility.svg) |
+| Members marked abstract or static | Drawn, less something | Abstract and static are said in words at the end of the row, where Mermaid slants or underlines it | [source](../corpus/class/class-classifiers.mmd) | [picture](../corpus/drawn/class-classifiers.svg) |
+| The eight relations | Drawn |  | [source](../corpus/class/class-relations.mmd) | [picture](../corpus/drawn/class-relations.svg) |
+| The eight relations written the other way round, each with words | Drawn, less something | "Is a" is drawn from the parent down to the child, whichever way it was written | [source](../corpus/class/class-relations-reversed.mmd) | [picture](../corpus/drawn/class-relations-reversed.svg) |
+| Words on a relation | Drawn |  | [source](../corpus/class/class-relation-labels.mmd) | [picture](../corpus/drawn/class-relation-labels.svg) |
+| A relation that says something at both ends | Drawn |  | [source](../corpus/class/class-two-way.mmd) | [picture](../corpus/drawn/class-two-way.svg) |
+| A lollipop interface | Drawn, less something | A lollipop is drawn as a box of its own, named for the interface and marked «interface», with the circle on its line | [source](../corpus/class/class-lollipop.mmd) | [picture](../corpus/drawn/class-lollipop.svg) |
+| How many, at either end of a relation | Drawn |  | [source](../corpus/class/class-cardinality.mmd) | [picture](../corpus/drawn/class-cardinality.svg) |
+| A namespace | Drawn |  | [source](../corpus/class/class-namespace.mmd) | [picture](../corpus/drawn/class-namespace.svg) |
+| A namespace with a label | Drawn |  | [source](../corpus/class/class-namespace-label.mmd) | [picture](../corpus/drawn/class-namespace-label.svg) |
+| A namespace written inside another | Drawn |  | [source](../corpus/class/class-namespace-nested.mmd) | [picture](../corpus/drawn/class-namespace-nested.svg) |
+| Namespaces inside one another, spelt with dots | Drawn |  | [source](../corpus/class/class-namespace-dotted.mmd) | [picture](../corpus/drawn/class-namespace-dotted.svg) |
+| An annotation, on the line that declares the class | Drawn |  | [source](../corpus/class/class-annotation-inline.mmd) | [picture](../corpus/drawn/class-annotation-inline.svg) |
+| An annotation, on a line of its own | Drawn |  | [source](../corpus/class/class-annotation-line.mmd) | [picture](../corpus/drawn/class-annotation-line.svg) |
+| An annotation, inside the class | Drawn |  | [source](../corpus/class/class-annotation-nested.mmd) | [picture](../corpus/drawn/class-annotation-nested.svg) |
+| A comment on a line of its own | Drawn |  | [source](../corpus/class/class-comments.mmd) | [picture](../corpus/drawn/class-comments.svg) |
+| A direction for the whole diagram | Drawn, less something | Drawn top to bottom: boxes of different heights are only placed that way yet | [source](../corpus/class/class-direction.mmd) | [picture](../corpus/drawn/class-direction.svg) |
+| A class that opens a link or calls a function when clicked | Drawn, less something | The clicks are left out: a page of Merlive opens no links and runs no code of yours | [source](../corpus/class/class-interaction.mmd) | [picture](../corpus/drawn/class-interaction.svg) |
+| A note for a class | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/class/class-note-for.mmd) | [picture](../corpus/drawn/class-note-for.svg) |
+| A note for no class in particular | Partly read | line 2: a note for no class in particular is not drawn: "From order to invoice" | [source](../corpus/class/class-note-general.mmd) | [picture](../corpus/drawn/class-note-general.svg) |
+| A class styled on its own | Drawn, less something | Each outline is heavy or broken as written, in the design's own nearest colour; the fill is the design's | [source](../corpus/class/class-style.mmd) | [picture](../corpus/drawn/class-style.svg) |
+| A style class made with classDef and given with cssClass | Drawn |  | [source](../corpus/class/class-classdef.mmd) | [picture](../corpus/drawn/class-classdef.svg) |
+| A style class given with ::: | Drawn |  | [source](../corpus/class/class-css-inline.mmd) | [picture](../corpus/drawn/class-css-inline.svg) |
+| A default style class for every class | Drawn, less something | The default class is read past: the look is the design's | [source](../corpus/class/class-default-class.mmd) | [picture](../corpus/drawn/class-default-class.svg) |
+| A style class kept in the page's own stylesheet | Drawn, less something | A page's own stylesheet cannot be read from here: the class is of that kind, in the design's plain look | [source](../corpus/class/class-css-class.mmd) | [picture](../corpus/drawn/class-css-class.svg) |
+| A whole diagram: classes, what they list, what they inherit, and a note | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/class/class-whole.mmd) | [picture](../corpus/drawn/class-whole.svg) |
 
 ## Entity diagrams, feature by feature
 
@@ -254,7 +299,7 @@ drawing of their own.
 
 | Kind | Result | Sample | Picture |
 |---|---|---|---|
-| Class diagram | Left as Mermaid | [source](../corpus/kinds/class.mmd) |  |
+| Class diagram | Drawn | [source](../corpus/kinds/class.mmd) | [picture](../corpus/drawn/class.svg) |
 | State diagram | Drawn | [source](../corpus/kinds/state.mmd) | [picture](../corpus/drawn/state.svg) |
 | Entity relationship diagram | Drawn | [source](../corpus/kinds/er.mmd) | [picture](../corpus/drawn/er.svg) |
 | Requirement diagram | Left as Mermaid | [source](../corpus/kinds/requirement.mmd) |  |

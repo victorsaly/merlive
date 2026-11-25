@@ -23,20 +23,23 @@ hand, and the colours are yours, read from your site, but checked, for contrast 
 
 ## Milestones
 
-1. **0.1, flowcharts and sequence diagrams (this version).** Parse, place, check, draw; steps and notes; setup
-   that reads a project's colours and choices with nothing asked; the two colour rules. A sequence diagram has
-   rules of its own ([SEQUENCE.md](SEQUENCE.md)) and is gone through one message at a time.
-2. **0.2, setup that reads more.** Colours kept in a Tailwind config or a component's own styles; a dark look made
-   from a light one when a site has none and the reader wants one; the setup page saving its settings itself.
-3. **0.3, bigger flowcharts.** A group's own direction (rows inside a column), groups inside groups, pan, zoom and a search
-   box for diagrams past about twenty boxes.
-4. **0.4, state diagrams.** Read and drawn already, by the placement flowcharts have. What is left is what a
-   state diagram needs that a flowchart seldom does: regions side by side in one group.
-5. **0.5, more of a sequence.** Played over a flowchart in the same document when the names match; half arrows
-   and messages to the middle of a line; symbols for the typed participants; the page's own shell shared with
-   a flowchart's instead of copied.
-6. **Later.** A build step for docs sites (Docusaurus first), an audit mode over a whole repository, evals for the
-   skill, a film export.
+1. **0.1, released.** Flowcharts, state diagrams and sequence diagrams: parse, place, check, draw; steps and
+   notes; setup that reads a project's colours and choices with nothing asked; the two colour rules. A sequence
+   diagram has rules of its own ([SEQUENCE.md](SEQUENCE.md)) and is gone through one message at a time.
+2. **0.2, class diagrams and entity diagrams (in hand).** Boxes that list rows under their name, in one width and
+   their own height; links that end in "is a", "has" or how many.
+3. **Next, where Mermaid still reads better.** A person drawn as a figure and the typed participants of a
+   sequence diagram; forks and joins as bars and regions side by side in a state diagram; a group's own
+   direction; bottom-to-top and right-to-left; the rest of the newer shapes.
+4. **Then the other kinds**, picked by what real documents use: those of boxes and links first (requirement, C4,
+   block, architecture), which the placement there is can draw; then timelines, charts and trees, each of which
+   needs a way of drawing of its own.
+5. **Setup that reads more.** Colours kept in a Tailwind config or a component's own styles; a dark look made
+   from a light one when a site has none; the setup page saving its settings itself.
+6. **Later.** Pan, zoom and search for diagrams past about twenty boxes; a build step for docs sites (Docusaurus
+   first); an audit mode over a whole repository; evals for the skill; a film export.
+
+[PLAN.md](PLAN.md) says where the work stands today and what to do next.
 
 ## What the corpus found
 

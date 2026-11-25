@@ -4,6 +4,13 @@
 
 Class diagrams and entity diagrams.
 
+- **Class diagrams are drawn.** Classes with what they hold and what they do, annotations («interface»), every
+  relation Mermaid has (is a, is made of, has, uses, depends on, in either direction) with the words and the
+  counts at its ends, namespaces as groups, and notes on a class. A parent sits above its children whichever
+  way the relation was written.
+- **Entity diagrams are drawn.** Entities with their attributes and keys, and relationships that say how many at
+  each end, in the crow's foot marks or in words, solid or dotted. An attribute's comment goes in the note on
+  its entity, so a sentence does not make every box as wide as itself.
 - **A box can list rows under its name.** A class's attributes and methods, an entity's columns: each row on a
   line of its own, in a face where columns stay in line, under a rule. Boxes keep one width and are as tall as
   what they list; a rank is as tall as its tallest box. A short line above a name says what it is («interface»).

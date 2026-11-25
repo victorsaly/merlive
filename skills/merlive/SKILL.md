@@ -1,6 +1,6 @@
 ---
 name: merlive
-description: Turns the Mermaid flowcharts, state diagrams and sequence diagrams in a Markdown file into well placed, live diagrams, one self-contained HTML page (or a still SVG) each, in the project's own colours, which it reads from the project's site by itself, with the main path straight, boxes of one size, and steps a reader can walk through. The Mermaid stays the source and is not changed. Use when asked to make a Mermaid diagram live, interactive, better looking or better laid out, to "merlive" a document, to add a walkthrough to a flowchart, or to set the look of a project's diagrams. Load it before planning the diagrams, even when asked not to run anything yet.
+description: Turns the Mermaid flowcharts, state, class, entity and sequence diagrams in a Markdown file into well placed, live diagrams, one self-contained HTML page (or a still SVG) each, in the project's own colours, which it reads from the project's site by itself, with the main path straight, boxes of one size, and steps a reader can walk through. The Mermaid stays the source and is not changed. Use when asked to make a Mermaid diagram live, interactive, better looking or better laid out, to "merlive" a document, to add a walkthrough to a flowchart, or to set the look of a project's diagrams. Load it before planning the diagrams, even when asked not to run anything yet.
 license: MIT
 metadata:
   version: 0.2.0
@@ -29,10 +29,10 @@ Three things hold throughout:
 - **Draw** a flowchart that has a path worth following: about six boxes or more, a loop, or a decision.
 - **Leave as Mermaid** a diagram of three or four boxes with nothing to step through. Say so; a live page adds
   nothing there.
-- **Flowcharts** (`flowchart` or `graph`), **state diagrams** (`stateDiagram`, `stateDiagram-v2`), which are
-  placed by the same rules, **and sequence diagrams** (`sequenceDiagram`), which have rules of their own. Class,
-  timeline and the rest are left as they are, and the script names each one it leaves. Tell the person which
-  were left.
+- **Flowcharts** (`flowchart` or `graph`), **state diagrams** (`stateDiagram`), **class diagrams**
+  (`classDiagram`) and **entity diagrams** (`erDiagram`), which are placed by the same rules, **and sequence
+  diagrams** (`sequenceDiagram`), which have rules of their own. Timeline, gantt and the rest are left as they
+  are, and the script names each one it leaves. Tell the person which were left.
 
 ## 2. Check first, then draw
 
