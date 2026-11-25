@@ -29,9 +29,10 @@ Three things hold throughout:
 - **Draw** a flowchart that has a path worth following: about six boxes or more, a loop, or a decision.
 - **Leave as Mermaid** a diagram of three or four boxes with nothing to step through. Say so; a live page adds
   nothing there.
-- **Flowcharts** (`flowchart` or `graph`) **and state diagrams** (`stateDiagram`, `stateDiagram-v2`), which are
-  placed by the same rules. Sequence, class and the rest are left as they are, and the script names each one it
-  leaves. Tell the person which were left.
+- **Flowcharts** (`flowchart` or `graph`), **state diagrams** (`stateDiagram`, `stateDiagram-v2`), which are
+  placed by the same rules, **and sequence diagrams** (`sequenceDiagram`), which have rules of their own. Class,
+  timeline and the rest are left as they are, and the script names each one it leaves. Tell the person which
+  were left.
 
 ## 2. Check first, then draw
 
@@ -58,6 +59,7 @@ Mermaid, with the person's agreement:
 |---|---|
 | P6 words do not fit | Shorten the label; put the detail in a `%% note` |
 | P4 too many crossings | Name the main path with `%% main:`, or split the diagram in two |
+| S7 a name or words too long (a sequence diagram) | Give the participant a shorter name with `as`; break a message with `<br/>` |
 | P3 a line through a box | Name the main path with `%% main:` so the box in the way moves aside |
 | D1 contrast | Change the colour the message names, in the design file |
 | D2 kinds look alike | Make one of the two colours named lighter or darker, in the design file |

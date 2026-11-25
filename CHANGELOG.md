@@ -2,7 +2,7 @@
 
 ## 0.1.0 (unreleased)
 
-The first version. It draws flowcharts and nothing else, and says so.
+The first version. It draws flowcharts and sequence diagrams, and says what it leaves.
 
 - **A Mermaid flowchart becomes one page.** `merlive.mjs` reads a Markdown file's `mermaid` blocks (or a `.mmd`
   file) and writes one self-contained HTML page for each flowchart, or a still SVG with `--format svg`. Nothing is
@@ -97,5 +97,13 @@ The first version. It draws flowcharts and nothing else, and says so.
   other kinds of diagram Mermaid documents and of 69 features of its flowcharts; `npm run coverage` runs Merlive
   over all of it and writes `docs/COVERAGE.md` and a picture of each flowchart sample. The tests fail when the
   page no longer says what the code does.
-- **What is neither a flowchart nor a state diagram is left as Mermaid and named**: sequence diagrams, timelines and the rest come later.
+- **Sequence diagrams are drawn**, by rules of their own (`docs/SEQUENCE.md`, S1 to S7), each one checked:
+  participants one size and one step apart; one message or note to a row; a message's words beside its sender
+  and off every lifeline, however far it goes; frames that hold exactly what is in them, their names clear of
+  lifelines; bars that stack. Read: participants, actors and typed participants, aliases, every message arrow
+  but the half arrows, messages to self, activations, notes, `loop`, `alt`, `opt`, `par`, `critical`, `break`
+  and `rect` inside one another, groups (`box`), `create` and `destroy`, `autonumber`. The page goes through
+  the messages one at a time; nothing moves until a reader asks. 42 samples in the corpus hold it, one for each
+  feature on Mermaid's sequence page.
+- **What Merlive does not draw is left as Mermaid and named**: class diagrams, timelines and the rest come later.
   Links from a box to itself are not drawn yet, and each is said when met.

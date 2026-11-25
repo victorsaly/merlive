@@ -33,7 +33,13 @@ For coding agents changing this repository. It follows the same habits as
   is drawn. What an icon is held to is in `iconMeasure` at the top. Pure.
 - `skills/merlive/scripts/runtime.mjs`: handed to the page as source and run there, so browser globals, not
   Node's, and nothing from outside the function.
-- `docs/PLACEMENT.md`: the rules, each with pass, fail and what to do. `docs/ROADMAP.md`: what comes next and what
+- `skills/merlive/scripts/sequence.mjs`: a sequence diagram, start to finish but for the drawing: its text to a
+  model, the model to coordinates by the rules in `docs/SEQUENCE.md`, and those rules as checks. Every measured
+  number is in `across` at the top. `parse()` hands it any block that starts `sequenceDiagram`. Pure.
+  `sequence-render.mjs` draws it (one page or one SVG, with a flowchart's own colours and box and line styles),
+  and `sequence-runtime.mjs` is that page's script, run in the browser like runtime.mjs.
+- `docs/PLACEMENT.md`: the rules, each with pass, fail and what to do. `docs/SEQUENCE.md`: the same for a sequence
+  diagram. `docs/ROADMAP.md`: what comes next and what
   was borrowed from where.
 - `examples/`: a real document and what Merlive draws from it. Drawn again with `npm run examples`.
 - `corpus/`: one sample of every kind of diagram Mermaid documents and of every feature of its flowcharts and its
@@ -62,7 +68,7 @@ can still look wrong; when it does, the fix is a new rule and a check for it, no
   British spelling (colour, licence).
 - The skill needs nothing but Node 22. No dependencies in `skills/`.
 - A number that is measured is named and explained where it is defined (`measure` in layout.mjs, `form` in
-  shapes.mjs, `limits` in score.mjs, `draw` in render.mjs), not left in the code.
+  shapes.mjs, `limits` in score.mjs, `draw` in render.mjs, `across` in sequence.mjs), not left in the code.
 - Errors say what to do next, in a sentence an agent can act on; exit 1 when a diagram broke a rule, 2 for what is
   missing, 3 for nothing to draw.
 - The Mermaid a person wrote is never changed by a script.

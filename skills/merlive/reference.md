@@ -72,6 +72,29 @@ this page holds for them: the rules, the design, Merlive's own lines.
 Not read yet, each named in a `note,` line when met: a transition from a state to itself, a composite state
 inside another (drawn as part of the outer one), and concurrency (`--`), whose regions are drawn as one.
 
+## A sequence diagram
+
+A block that starts `sequenceDiagram` is read, placed and checked by rules of its own (S1 to S7, with D1 and D2).
+
+| Written | Read as |
+|---|---|
+| `participant B as Buyer`, `actor B`, or a name first met in a message | Who is in it, left to right in the order named. An actor is a pill; `@{ "type": "database" }` is a box of the `data` kind; the other types are plain boxes |
+| `A->B`, `A-->B`, `A->>B`, `A-->>B`, `A<<->>B`, `A-xB`, `A-)B` | A message: solid or dotted, with nothing, an arrowhead, an arrowhead at both ends, a cross or an open arrow |
+| `A->>A: words` | A message to itself: a loop to the right |
+| `A->>+B`, `B-->>-A`, `activate B`, `deactivate B` | A bar on a participant at work; a second on the same one sits beside the first |
+| `Note right of A: …`, `Note left of A: …`, `Note over A: …`, `Note over A,B: …` | A note, on a row of its own |
+| `loop`, `alt` / `else`, `opt`, `par` / `and`, `critical` / `option`, `break` … `end` | A frame round its rows, named, one inside another |
+| `rect rgb(…)` … `end` | A highlight behind its rows, in the design's tint: the colour is read past |
+| `box Aqua Buying` … `end` | A group of participants, framed and titled: the colour is read past |
+| `create participant J`, `destroy J` | A participant that starts at the message that makes it, and ends in a cross |
+| `autonumber`, `autonumber 10 5` | Each message numbered, from a start and by a step |
+| `title: …`, `accTitle`, `accDescr`, front matter, `%%` comments, `<br/>`, `#9829;` | As in a flowchart |
+| `link A: … @ url`, `links A: {…}` | Read past: a page of Merlive opens no links |
+
+Not read yet, each named in a `note,` line when met: half arrows (`-|\`, `-//`) and a message to the middle of a
+line (`()`). There are no `%%` lines of Merlive's own for a sequence: its page goes through the messages in order
+without being told.
+
 ## Merlive's own lines
 
 All are Mermaid comments, anywhere in the block.
@@ -188,3 +211,8 @@ It does not yet read colours kept only in a Tailwind config, in a component's ow
 P1 the main path is straight. P2 boxes are one size with room between. P3 no line through a box. P4 few
 crossings. P5 no two lines share a path. P6 words fit. P7 link labels sit clear. D1 contrast. D2 kinds can be told apart. Each is set out,
 with what passes and fails, in `docs/PLACEMENT.md` of the repository.
+
+A sequence diagram has its own: S1 participants in one row, one size, one step apart. S2 one message or note to
+a row, evenly down the page. S3 a message's words beside its sender, off every lifeline. S4 a frame holds exactly
+what is in it. S5 notes sit clear. S6 bars stack and never overlap. S7 names, words and notes fit. D1 and D2 as
+above. They are set out in `docs/SEQUENCE.md`.
