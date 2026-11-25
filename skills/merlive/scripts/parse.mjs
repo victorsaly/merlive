@@ -37,7 +37,9 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
  * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
  * @property {string[]} warnings
- * @property {string} [left] why a diagram of a kind Merlive reads is left as Mermaid all the same, in a sentence that says what to do; its type is then 'unsupported' (a block diagram placed by its author's grid)
+ * @property {string} [left] why a diagram of a kind Merlive reads is left as Mermaid all the same, in a sentence that says what to do; its type is then 'unsupported'
+ * @property {'grid'} [placedBy] set when its boxes are placed where its author put them and not by rule: a block diagram whose meaning is in its grid
+ * @property {string} [placedWhy] what in it says so, in a sentence
  * @property {import('./block.mjs').Grid} [grid] a block diagram as its author placed it, cell by cell
  */
 

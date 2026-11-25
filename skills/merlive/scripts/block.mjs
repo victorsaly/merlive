@@ -4,9 +4,9 @@
 // It reads every line into the model a flowchart gives (a block is a box, a block that holds others is a group,
 // a link is a link), with the tools parse.mjs lends it. And it says whether the grid meant anything: where
 // every block is joined by a link and the grid is no more than the order they come in, the diagram is a flow
-// and is drawn as one; where a block spans columns, a space places a block, an arrow is drawn as a block, or a
-// block is joined to nothing, the placement is the author's own, and the diagram is left as Mermaid with a
-// sentence saying why and what to do. What was written, cell by cell, is kept either way. Pure.
+// and is placed as one; where a block spans columns, a space places a block, an arrow is drawn as a block, or a
+// block is joined to nothing, the placement is the author's own, and the diagram is marked to be placed on its
+// grid (grid.mjs), cell by cell as it was written. What was written, cell by cell, is kept either way. Pure.
 
 /** @typedef {import('./parse.mjs').Model} Model */
 /** @typedef {import('./parse.mjs').Node} Node */
@@ -119,7 +119,7 @@ export function blockReader({ model, node, say, connect, frame, unframe, outline
   const classed = [];
   let unnamed = 0;
 
-  const called = (/** @type {string} */ id) => model.nodes.find((n) => n.id === id)?.label ?? id;
+  const called = (/** @type {string} */ id) => model.nodes.find((n) => n.id === id)?.label || id;
 
   /**
    * One block as it is written at the start of `s`: its id, then perhaps its shape with its words, then perhaps
@@ -159,6 +159,19 @@ export function blockReader({ model, node, say, connect, frame, unframe, outline
     return b;
   };
 
+  /**
+   * The shape of a block arrow, from the ways it points. Merlive draws an arrow along one line: across (right,
+   * left, or both) or up and down. One that points along both is drawn along the first, and said.
+   */
+  const arrowShape = (/** @type {string[]} */ ways, /** @type {string} */ name, /** @type {number} */ line) => {
+    const flat = ways.filter((w) => w === 'right' || w === 'left' || w === 'x'), upright = ways.filter((w) => w === 'up' || w === 'down' || w === 'y');
+    const along = flat.length ? flat : upright, [first, last, both] = flat.length ? ['left', 'right', 'x'] : ['up', 'down', 'y'];
+    const two = along.includes(both) || (along.includes(first) && along.includes(last));
+    const shape = /** @type {Shape} */ (`arrow-${two ? both : along[0]}`);
+    if (flat.length && upright.length) warn(line, `the block arrow "${name}" points ${ways.join(' and ')}, and is drawn pointing ${two ? 'both ways across' : along[0]}: Merlive draws an arrow along one line`);
+    return shape;
+  };
+
   /** Makes the box of a block that was read, gives it what was written of it, and keeps its cell. */
   const declare = (/** @type {NonNullable<ReturnType<typeof blockAt>>} */ b, /** @type {number} */ line) => {
     const n = node(b.id);
@@ -173,6 +186,9 @@ export function blockReader({ model, node, say, connect, frame, unframe, outline
     // Mermaid draws a block's words as a page would, so a space may be written "&nbsp;": read as its own "#nbsp;" is.
     const words = b.words?.replace(/&#?(\w+);/g, '#$1;');
     if (words !== undefined && wordsOf(words).length) say(n, words);
+    // An arrow with no words is an arrow and nothing else: it does not take its id for a name, as a box would.
+    else if (b.points && words !== undefined) n.label = '';
+    if (b.points?.length) n.shape = arrowShape(b.points, n.label || b.id, line);
     if (b.shape) {
       n.shape = b.shape;
       // A cylinder is a store of data, as it is in a flowchart.
@@ -180,9 +196,9 @@ export function blockReader({ model, node, say, connect, frame, unframe, outline
     }
     if (b.span > 1) {
       cell.span = b.span;
-      placed.push({ line, why: `"${n.label}" spans ${b.span} columns (line ${line})` });
+      placed.push({ line, why: `"${n.label || n.id}" spans ${b.span} columns (line ${line})` });
     }
-    if (b.points) placed.push({ line, why: `"${n.label}" is a block arrow (line ${line})` });
+    if (b.points) placed.push({ line, why: `"${n.label || n.id}" is a block arrow (line ${line})` });
     return n;
   };
 
@@ -345,11 +361,11 @@ export function blockReader({ model, node, say, connect, frame, unframe, outline
     if (!placed.length) return;
     // Two spaces on one line are one thing to put right.
     const reasons = placed.filter((r, i) => placed.findIndex((x) => x.why === r.why) === i);
-    // Its meaning is in its grid, and a grid is what Merlive does not keep: it is not guessed at.
     const said = reasons.slice(0, limits.reasons).map((r) => r.why), more = reasons.length - said.length;
-    model.left = `its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: ${[...said, ...(more > 0 ? [`and ${more} more`] : [])].join('; ')}. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins`;
-    model.type = 'unsupported';
-    warn(placed[0].line, `left as Mermaid: ${model.left}`);
+    // Its meaning is in its grid, so it is placed on its grid (grid.mjs) and not by rule. Nothing is wrong with
+    // it, so nothing is said against it: why is kept for whoever asks.
+    model.placedBy = 'grid';
+    model.placedWhy = [...said, ...(more > 0 ? [`and ${more} more`] : [])].join('; ');
   };
 
   return { read, done };

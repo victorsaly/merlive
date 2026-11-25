@@ -32,9 +32,9 @@ Three things hold throughout:
 - **Flowcharts** (`flowchart` or `graph`), **state diagrams** (`stateDiagram`), **class diagrams**
   (`classDiagram`), **entity diagrams** (`erDiagram`), **requirement diagrams** (`requirementDiagram`), **C4
   diagrams** (`C4Context` and the rest), **architecture diagrams** (`architecture-beta`) and **block diagrams**
-  (`block-beta`) that are a flow, all placed by the same rules, **and sequence diagrams** (`sequenceDiagram`),
-  which have rules of their own. A block diagram whose meaning is in its grid, and timeline, gantt and the rest,
-  are left as they are, and the script names each one it leaves and why. Tell the person which were left.
+  (`block-beta`, on the grid their author wrote), **and sequence diagrams** (`sequenceDiagram`), which have
+  rules of their own. Timeline, gantt and the rest are left as they are, and the script names each one it
+  leaves. Tell the person which were left.
 
 ## 2. Check first, then draw
 

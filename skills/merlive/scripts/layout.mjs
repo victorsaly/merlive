@@ -3,6 +3,7 @@
 // same size, and lines turn at right angles and never share a port. Pure: a model in, coordinates out.
 
 import { inset, roomIn } from './shapes.mjs';
+import { placeGrid } from './grid.mjs';
 
 /** @typedef {import('./parse.mjs').Model} Model */
 /** @typedef {{x:number,y:number}} Pt */
@@ -11,7 +12,7 @@ import { inset, roomIn } from './shapes.mjs';
 /** @typedef {{x:number,y:number,w:number,h:number,text:string,lines:string[]}} Words a link's words: the middle of where they sit, their size, and the lines they are wrapped to */
 /** @typedef {{id:string,points:Pt[],back:boolean,label:null|Words,near?:Words,far?:Words}} Routed near, far: the few words at the end it comes from and the end it leads to */
 /** @typedef {{id:string,title:string,x:number,y:number,w:number,h:number,name:{x:number,y:number,w:number,h:number,plate:boolean}}} Frame a group's frame, from its top left corner; name: where its name sits, from its middle, and whether a line has to pass behind it */
-/** @typedef {{width:number,height:number,direction:'TD'|'LR',reversed:boolean,box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[]}} Layout */
+/** @typedef {{width:number,height:number,direction:'TD'|'LR',reversed:boolean,box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[],grids?:import('./grid.mjs').PlacedGrid[]}} Layout grids: set when the boxes are on a grid their author placed, each grid as it came out */
 
 // What is measured, named once. Boxes are sized without a browser, from the average glyph of a 13px UI face.
 export const measure = {
@@ -209,6 +210,8 @@ export function meet(/** @type {Pt[]} */ one, /** @type {Pt[]} */ other) {
  * @returns {Layout}
  */
 export function layout(model) {
+  // A block diagram whose meaning is in its grid is placed on that grid, where its author put each block.
+  if (model.placedBy === 'grid' && model.grid) return placeGrid(model);
   // Boxes of different heights are placed top to bottom only, for now: across the flow they would need lanes
   // of different widths.
   const box = boxFor(model);
@@ -828,7 +831,7 @@ function tidy(/** @type {Pt[]} */ pts) {
  * @param {Pt[][]} lines every link's line
  * @returns {Words}
  */
-function wordsFor(pts, text, boxes, placed, lines) {
+export function wordsFor(pts, text, boxes, placed, lines) {
   const sized = (/** @type {string[]} */ wrapped) => ({ lines: wrapped, w: Math.round(Math.max(...wrapped.map((l) => l.length)) * measure.labelGlyph + 10), h: 4 + measure.labelLine * wrapped.length });
   const usual = sized(wrap(text, measure.labelWrap));
   /** @type {{x:number,y:number,w:number,h:number,lines:string[]}[]} */
