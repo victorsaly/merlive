@@ -1,0 +1,31 @@
+requirementDiagram
+  requirement approval {
+    id: 1
+    text: Orders over the limit are approved by a manager.
+    risk: high
+    verifymethod: test
+  }
+  functionalRequirement limit {
+    id: 1.1
+    text: The limit is set per buyer.
+    risk: medium
+    verifymethod: inspection
+  }
+  performanceRequirement speed {
+    id: 1.2
+    text: An approval is asked for within a minute.
+    risk: low
+    verifymethod: analysis
+  }
+  element approval_flow {
+    type: workflow
+    docref: docs/approval.md
+  }
+  element test_suite {
+    type: tests
+    docref: tests/approval
+  }
+  approval - contains -> limit
+  speed - derives -> approval
+  approval_flow - satisfies -> approval
+  test_suite - verifies -> limit

@@ -6,6 +6,7 @@ import { stateReader } from './state.mjs';
 import { erReader } from './er.mjs';
 import { classReader } from './class.mjs';
 import { architectureReader } from './architecture.mjs';
+import { requirementReader } from './requirement.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
@@ -207,6 +208,7 @@ const READERS = /** @type {const} */ ([
   [/^classDiagram(-v2)?;?$/, classReader],
   [/^erDiagram;?$/, erReader],
   [/^architecture(-beta)?;?$/, architectureReader],
+  [/^requirementDiagram;?$/, requirementReader],
 ]);
 
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own

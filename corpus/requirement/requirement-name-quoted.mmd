@@ -1,0 +1,8 @@
+requirementDiagram
+  requirement "Order approval" {
+    id: 1
+  }
+  element "Approval flow" {
+    type: workflow
+  }
+  "Approval flow" - satisfies -> "Order approval"

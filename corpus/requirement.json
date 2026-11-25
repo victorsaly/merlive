@@ -1,0 +1,859 @@
+[
+  {
+    "file": "requirement/requirement-declare.mmd",
+    "covers": "A requirement diagram: a requirement, an element, and how one bears on the other",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "approval",
+      "approval_flow",
+      "«requirement»",
+      "«element»",
+      "id: 1",
+      "type: workflow",
+      "satisfies",
+      "Orders over the limit are approved by a manager."
+    ]
+  },
+  {
+    "file": "requirement/requirement-types.mmd",
+    "covers": "The six kinds of requirement",
+    "boxes": 6,
+    "links": 0,
+    "rows": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "ends": [],
+    "has": [
+      "«requirement»",
+      "«functional requirement»",
+      "«interface requirement»",
+      "«performance requirement»",
+      "«physical requirement»",
+      "«design constraint»"
+    ]
+  },
+  {
+    "file": "requirement/requirement-fields.mmd",
+    "covers": "What is said of a requirement: its id, its text, its risk and how it is verified",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      3
+    ],
+    "ends": [],
+    "has": [
+      "id: 1",
+      "risk: high",
+      "verify: test",
+      "Orders over the limit are approved by a manager."
+    ]
+  },
+  {
+    "file": "requirement/requirement-fields-order.mmd",
+    "covers": "What is said of a requirement, written in another order",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      3
+    ],
+    "ends": [],
+    "has": [
+      "id: 1",
+      "risk: high",
+      "verify: test"
+    ]
+  },
+  {
+    "file": "requirement/requirement-fields-some.mmd",
+    "covers": "Requirements of which only some things are said",
+    "boxes": 3,
+    "links": 0,
+    "rows": [
+      1,
+      0,
+      2
+    ],
+    "ends": [],
+    "has": [
+      "id: 1",
+      "The limit is set per buyer.",
+      "risk: low",
+      "verify: analysis"
+    ]
+  },
+  {
+    "file": "requirement/requirement-risk.mmd",
+    "covers": "The three risks: low, medium and high",
+    "boxes": 3,
+    "links": 0,
+    "rows": [
+      2,
+      2,
+      2
+    ],
+    "ends": [],
+    "has": [
+      "risk: high",
+      "risk: medium",
+      "risk: low"
+    ]
+  },
+  {
+    "file": "requirement/requirement-verify.mmd",
+    "covers": "The four ways to verify: analysis, demonstration, inspection and test",
+    "boxes": 4,
+    "links": 0,
+    "rows": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "ends": [],
+    "has": [
+      "verify: test",
+      "verify: inspection",
+      "verify: analysis",
+      "verify: demonstration"
+    ]
+  },
+  {
+    "file": "requirement/requirement-case.mmd",
+    "covers": "Mermaid's own words written with capitals",
+    "boxes": 2,
+    "links": 0,
+    "rows": [
+      3,
+      2
+    ],
+    "ends": [],
+    "has": [
+      "«requirement»",
+      "«element»",
+      "id: 1",
+      "risk: high",
+      "verify: test",
+      "type: workflow",
+      "doc: docs/approval.md"
+    ]
+  },
+  {
+    "file": "requirement/requirement-empty.mmd",
+    "covers": "A requirement and an element of which nothing is said",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      0,
+      0
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "approval",
+      "approval_flow"
+    ]
+  },
+  {
+    "file": "requirement/requirement-id-dotted.mmd",
+    "covers": "An id with dots, and one of letters",
+    "boxes": 2,
+    "links": 0,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [],
+    "has": [
+      "id: 1.2.1",
+      "id: REQ_7"
+    ]
+  },
+  {
+    "file": "requirement/requirement-id-quoted.mmd",
+    "covers": "An id in quotes",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": [],
+    "has": [
+      "id: REQ-1.2 b"
+    ]
+  },
+  {
+    "file": "requirement/requirement-text-quoted.mmd",
+    "covers": "A text in quotes, with a colon and a comma in it",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": [],
+    "has": [
+      "Orders over the limit: approved by a manager, on the same day."
+    ]
+  },
+  {
+    "file": "requirement/requirement-text-markdown.mmd",
+    "covers": "A text written as Markdown",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": [],
+    "has": [
+      "Orders over the limit are approved by a manager."
+    ],
+    "loses": "Bold and italic in a requirement's text are drawn as plain words"
+  },
+  {
+    "file": "requirement/requirement-element.mmd",
+    "covers": "An element: its type and the document it points to",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      2
+    ],
+    "ends": [],
+    "has": [
+      "«element»",
+      "type: workflow",
+      "doc: docs/approval.md"
+    ]
+  },
+  {
+    "file": "requirement/requirement-element-quoted.mmd",
+    "covers": "An element's type and document in quotes",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      2
+    ],
+    "ends": [],
+    "has": [
+      "type: word processor",
+      "doc: docs/approval flow.md"
+    ]
+  },
+  {
+    "file": "requirement/requirement-element-type-only.mmd",
+    "covers": "Elements with a type or a document, not both",
+    "boxes": 2,
+    "links": 0,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [],
+    "has": [
+      "type: workflow",
+      "doc: tests/approval"
+    ]
+  },
+  {
+    "file": "requirement/requirement-relationships.mmd",
+    "covers": "The seven relationships",
+    "boxes": 8,
+    "links": 7,
+    "rows": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "circle",
+        "none"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "contains",
+      "derives",
+      "copies",
+      "refines",
+      "traces",
+      "satisfies",
+      "verifies"
+    ]
+  },
+  {
+    "file": "requirement/requirement-relationships-reversed.mmd",
+    "covers": "Relationships written from their other end",
+    "boxes": 4,
+    "links": 3,
+    "rows": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "circle",
+        "none"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "contains",
+      "derives",
+      "satisfies"
+    ]
+  },
+  {
+    "file": "requirement/requirement-contains.mmd",
+    "covers": "A requirement that contains others",
+    "boxes": 3,
+    "links": 2,
+    "rows": [
+      1,
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "circle",
+        "none"
+      ],
+      [
+        "circle",
+        "none"
+      ]
+    ],
+    "has": [
+      "contains"
+    ],
+    "loses": "The crossed ring Mermaid draws at the requirement that contains is drawn as a filled circle"
+  },
+  {
+    "file": "requirement/requirement-relationship-tight.mmd",
+    "covers": "Relationships written with no spaces",
+    "boxes": 2,
+    "links": 2,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "circle",
+        "none"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "contains",
+      "traces"
+    ]
+  },
+  {
+    "file": "requirement/requirement-relationship-case.mmd",
+    "covers": "A relationship's word written with a capital",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "satisfies"
+    ]
+  },
+  {
+    "file": "requirement/requirement-relationship-self.mmd",
+    "covers": "A relationship from a requirement to itself",
+    "boxes": 1,
+    "links": 1,
+    "rows": [
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "refines"
+    ]
+  },
+  {
+    "file": "requirement/requirement-relationship-before.mmd",
+    "covers": "A relationship written before what it joins is declared",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "«requirement»",
+      "«element»",
+      "satisfies"
+    ]
+  },
+  {
+    "file": "requirement/requirement-name-quoted.mmd",
+    "covers": "Names in quotes, of several words",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "Order approval",
+      "Approval flow"
+    ]
+  },
+  {
+    "file": "requirement/requirement-name-words.mmd",
+    "covers": "Names of several words, without quotes",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "order approval",
+      "the flow"
+    ]
+  },
+  {
+    "file": "requirement/requirement-name-unicode.mmd",
+    "covers": "A name and a text in another alphabet",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": [],
+    "has": [
+      "Händler ❤",
+      "Zahlung für die Bestellung"
+    ]
+  },
+  {
+    "file": "requirement/requirement-name-dot.mmd",
+    "covers": "Names with a dot, and one that starts with a digit",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "order.approval",
+      "2nd_approval"
+    ]
+  },
+  {
+    "file": "requirement/requirement-name-markdown.mmd",
+    "covers": "A name written as Markdown",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": [],
+    "has": [
+      "Order approval"
+    ]
+  },
+  {
+    "file": "requirement/requirement-twice.mmd",
+    "covers": "A requirement declared twice",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": [],
+    "has": [
+      "id: 1"
+    ],
+    "says": "approval is declared twice: the first is kept, as Mermaid keeps it"
+  },
+  {
+    "file": "requirement/requirement-direction-tb.mmd",
+    "covers": "Direction: top to bottom",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ]
+  },
+  {
+    "file": "requirement/requirement-direction-lr.mmd",
+    "covers": "Direction: left to right",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "says": "a requirement diagram is drawn top to bottom for now: \"direction LR\" is read past",
+    "loses": "Drawn top to bottom: boxes of different heights are only placed that way yet"
+  },
+  {
+    "file": "requirement/requirement-direction-bt.mmd",
+    "covers": "Direction: bottom to top",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "circle",
+        "none"
+      ]
+    ],
+    "says": "a requirement diagram is drawn top to bottom for now: \"direction BT\" is read past",
+    "loses": "Drawn top to bottom: boxes of different heights are only placed that way yet"
+  },
+  {
+    "file": "requirement/requirement-classdef.mmd",
+    "covers": "A class made with classDef and given to several with class",
+    "boxes": 3,
+    "links": 0,
+    "rows": [
+      1,
+      1,
+      1
+    ],
+    "ends": [],
+    "kinds": [
+      "urgent"
+    ]
+  },
+  {
+    "file": "requirement/requirement-class-inline.mmd",
+    "covers": "A class given with ::: where a thing is declared",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "kinds": [
+      "urgent",
+      "built"
+    ]
+  },
+  {
+    "file": "requirement/requirement-class-shorthand.mmd",
+    "covers": "A class given with ::: to a name alone",
+    "boxes": 2,
+    "links": 0,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [],
+    "kinds": [
+      "urgent",
+      "built"
+    ]
+  },
+  {
+    "file": "requirement/requirement-class-several.mmd",
+    "covers": "Several classes given at once",
+    "boxes": 2,
+    "links": 0,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [],
+    "kinds": [
+      "urgent"
+    ],
+    "loses": "A box is of one kind: of several classes, the first is the one it is"
+  },
+  {
+    "file": "requirement/requirement-class-default.mmd",
+    "covers": "A default class for every requirement",
+    "boxes": 2,
+    "links": 0,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [],
+    "kinds": [
+      "urgent"
+    ],
+    "loses": "The default class is read past: the look is the design's"
+  },
+  {
+    "file": "requirement/requirement-style.mmd",
+    "covers": "A requirement styled on its own",
+    "boxes": 2,
+    "links": 0,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [],
+    "kinds": [
+      "red"
+    ],
+    "loses": "Its outline is heavy and red as written, in the design's own red; its fill is the design's"
+  },
+  {
+    "file": "requirement/requirement-style-several.mmd",
+    "covers": "Several styled in one line, one named in quotes",
+    "boxes": 3,
+    "links": 0,
+    "rows": [
+      1,
+      1,
+      1
+    ],
+    "ends": [],
+    "kinds": [
+      "red"
+    ],
+    "loses": "Their outlines are broken and red as written, in the design's own red"
+  },
+  {
+    "file": "requirement/requirement-frontmatter.mmd",
+    "covers": "A title in front matter",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "title": "What an order needs"
+  },
+  {
+    "file": "requirement/requirement-accessibility.mmd",
+    "covers": "A title and a description for readers who cannot see it",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": [],
+    "title": "What an order needs"
+  },
+  {
+    "file": "requirement/requirement-accessibility-block.mmd",
+    "covers": "A description over several lines",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": []
+  },
+  {
+    "file": "requirement/requirement-comments.mmd",
+    "covers": "Comments: on lines of their own, and after the { that opens a requirement",
+    "boxes": 2,
+    "links": 1,
+    "rows": [
+      1,
+      1
+    ],
+    "ends": [
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "id: 1"
+    ]
+  },
+  {
+    "file": "requirement/requirement-directive.mmd",
+    "covers": "A directive for Mermaid's own settings",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": [],
+    "loses": "Mermaid's own settings are read past: the look is the design's"
+  },
+  {
+    "file": "requirement/requirement-blank-lines.mmd",
+    "covers": "Blank lines between and inside declarations",
+    "boxes": 1,
+    "links": 0,
+    "rows": [
+      1
+    ],
+    "ends": [],
+    "has": [
+      "id: 1",
+      "Orders over the limit are approved by a manager."
+    ]
+  },
+  {
+    "file": "requirement/requirement-whole.mmd",
+    "covers": "A whole diagram: requirements of three kinds, two elements, and how they bear on each other",
+    "boxes": 5,
+    "links": 4,
+    "rows": [
+      3,
+      3,
+      3,
+      2,
+      2
+    ],
+    "ends": [
+      [
+        "circle",
+        "none"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ],
+      [
+        "none",
+        "arrow"
+      ]
+    ],
+    "has": [
+      "«requirement»",
+      "«functional requirement»",
+      "«performance requirement»",
+      "«element»",
+      "risk: medium",
+      "verify: inspection",
+      "doc: tests/approval",
+      "An approval is asked for within a minute.",
+      "contains",
+      "derives",
+      "satisfies",
+      "verifies"
+    ]
+  }
+]
