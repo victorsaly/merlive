@@ -211,7 +211,7 @@ It does not yet read colours kept only in a Tailwind config, in a component's ow
 ## The rules it checks
 
 P1 the main path is straight. P2 boxes are one size with room between. P3 no line through a box. P4 few
-crossings. P5 no two lines share a path. P6 words fit. P7 link labels sit clear. D1 contrast. D2 kinds can be told apart. Each is set out,
+crossings. P5 no two lines share a path. P6 words fit. P7 link labels sit clear. P8 a group's name can be read. D1 contrast. D2 kinds can be told apart. Each is set out,
 with what passes and fails, in `docs/PLACEMENT.md` of the repository.
 
 A sequence diagram has its own: S1 participants in one row, one size, one step apart. S2 one message or note to

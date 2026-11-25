@@ -56,8 +56,8 @@ were refused. The lines that swap sides no longer lie on each other, and P4 allo
 diagram cannot be drawn without. Three boxes that each lead to the same three are still refused: that forces
 nine crossings, and placement does not yet find the order that has only those.
 
-And one thing no check caught, seen in the pictures: a line coming into a group from above runs through the
-group's name. By this project's habit that is a new rule and a check for it, not a nudge.
+One thing no check caught was seen in the pictures: a line coming into a group from above ran through the
+group's name. It is a rule now, P8, with a check.
 
 ## What it will not become
 

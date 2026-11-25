@@ -95,9 +95,18 @@ inside the picture: everything moves over to give them the margin the boxes have
 
 ## Groups
 
-A group the author made (`subgraph`) gets a frame round its boxes, with what it is called at the top left. A
+A group the author made (`subgraph`) gets a frame round its boxes, with what it is called along the top (P8). A
 link to a group is a link from the end of one to the start of the next. A frame that would take in a box that is
 not in the group, or run into another frame, would say something untrue: it is left out, and the script says so.
+
+## P8. A group's name can be read
+
+A group's name goes along the top of its frame, in the first stretch no line runs through: at the left, then at
+the right, then anywhere between. A link's words keep off it. Where every stretch has a line in it (a narrow
+frame, a long name, a line coming in at the middle), the name stays at the left on a plate of the frame's own
+colour, and the line passes behind it.
+
+- **Fail:** a line is drawn through the letters of a group's name.
 
 ## D1. Words and lines can be read against what is behind them
 

@@ -41,7 +41,7 @@ describe('score: what Merlive places itself passes', () => {
   });
 
   it('has a check for each rule in docs/PLACEMENT.md', () => {
-    assert.deepEqual(check(orders).result.checks.map((c) => c.id), ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'D1', 'D2']);
+    assert.deepEqual(check(orders).result.checks.map((c) => c.id), ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'D1', 'D2']);
   });
 });
 
@@ -127,6 +127,17 @@ describe('score: a broken rule is named, with where', () => {
     yes.x = 2;
     const p7 = score(model, lay, builtIn).checks.find((c) => c.id === 'P7');
     assert.match(p7?.detail ?? '', /the label "Yes" runs off the picture/);
+  });
+
+  it("P8 when a line runs through a group's name that is on no plate, and not when it is on one", () => {
+    const { model, lay } = check('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [Hub]\n  B --> C[Pack]\n  B --> D[Label]\nend\nC --> E[Ship]');
+    assert.equal(score(model, lay, builtIn).checks.find((c) => c.id === 'P8')?.ok, true);
+    const name = lay.groups[0].name, into = lay.edges['A-B'].points;
+    Object.assign(name, { x: into[0].x, y: (into[0].y + into[into.length - 1].y) / 2 });
+    const p8 = score(model, lay, builtIn).checks.find((c) => c.id === 'P8');
+    assert.match(p8?.detail ?? '', /a line runs through the name of the group "Hub"/);
+    name.plate = true;
+    assert.equal(score(model, lay, builtIn).checks.find((c) => c.id === 'P8')?.ok, true);
   });
 
   it('D1 when words cannot be read, in the mode where they cannot', () => {

@@ -266,3 +266,35 @@ describe('layout: a link from a box to itself', () => {
   });
 });
 
+describe("layout: a group's name", () => {
+  const struck = (/** @type {ReturnType<typeof layout>} */ lay, /** @type {{x:number,y:number,w:number,h:number}} */ name) =>
+    Object.values(lay.edges).some((e) => e.points.slice(1).some((p, i) => hitsBox([e.points[i], p], name, 0)));
+
+  it('sits along the top of its frame where no line runs through it, when there is such a place', () => {
+    const lay = layout(parse('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [Hub]\n  B --> C[Pack]\n  B --> D[Label]\nend\nC --> E[Ship]'));
+    const [frame] = lay.groups;
+    assert.equal(frame.name.plate, false);
+    assert.ok(!struck(lay, frame.name), 'no line through the name');
+    assert.ok(frame.name.x - frame.name.w / 2 >= frame.x && frame.name.x + frame.name.w / 2 <= frame.x + frame.w, 'inside its frame');
+    assert.ok(frame.name.y < lay.nodes.B.y - lay.nodes.B.h / 2, 'above its boxes');
+  });
+
+  it('moves to the other end of the top when a line comes in at the first', () => {
+    const lay = layout(parse('flowchart TB\nsubgraph wh [Hub]\n  B[Pick] --> C[Pack]\nend\nA[Order] --> B\n%% main: A>B>C'));
+    const [frame] = lay.groups;
+    assert.ok(!struck(lay, frame.name));
+  });
+
+  it('is put on a plate when a line has to pass behind it, so it can still be read', () => {
+    const lay = layout(parse('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [The whole warehouse floor]\n  B --> C[Pack]\nend\nC --> D[Ship]'));
+    const [frame] = lay.groups;
+    assert.equal(frame.name.plate, true);
+  });
+
+  it("keeps a link's words off it", () => {
+    const lay = layout(parse('flowchart TB\nA[Order] -->|when it is paid for in full| B[Pick]\nsubgraph wh [Warehouse]\n  B --> C[Pack]\nend'));
+    const words = lay.edges['A-B'].label, name = lay.groups[0].name;
+    assert.ok(words && !(Math.abs(words.x - name.x) < (words.w + name.w) / 2 && Math.abs(words.y - name.y) < (words.h + name.h) / 2));
+  });
+});
+

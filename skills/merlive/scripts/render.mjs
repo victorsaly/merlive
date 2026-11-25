@@ -87,7 +87,7 @@ ${kinds.map((k) => `[data-kind="${k}"] .mv-stripe{fill:var(--mv-k-${k})}`).join(
 .mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
 ${lines.map((k) => `[data-kind="${k}"] .mv-line,[data-kind="${k}"] .mv-cross{stroke:var(--mv-k-${k})}[data-kind="${k}"] .mv-head{fill:var(--mv-k-${k})}\n`).join('')}.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
 .mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
-.mv-group text{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}`;
+.mv-name{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase;text-anchor:middle;paint-order:stroke;stroke:var(--mv-group);stroke-width:4px;stroke-linejoin:round}`;
 }
 
 /** The colours of the looks a design is drawn in: one, or light with dark for readers whose system asks for it. */
@@ -157,13 +157,16 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${outline}${role}>${shape}${stripe}${icon}<text>${words}</text></g>`;
   });
   // A group's frame, behind everything, with what the group is called at its top left.
-  const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/><text x="${n(f.x + 10)}" y="${n(f.y + 16)}">${esc(f.title)}</text></g>`);
+  const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/></g>`);
+  // A group's name is drawn over the lines, with the frame's own colour round its letters: where a line has to
+  // pass, it passes behind the name.
+  const names = lay.groups.map((f) => `<text class="mv-name" x="${n(f.name.x)}" y="${n(f.name.y + 4)}">${esc(f.title)}</text>`);
   // The ground: the grid the boxes are placed on, shown as dots faint enough to sit behind everything.
   // A live page spreads them over its whole stage instead, so they do not stop at the drawing's edge.
   const ground = design.ground === 'dots' && !live
     ? `<defs><pattern id="mv-dots${tag}" width="${draw.dots}" height="${draw.dots}" patternUnits="userSpaceOnUse"><circle cx="${draw.dots / 2}" cy="${draw.dots / 2}" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="${lay.width}" height="${lay.height}" fill="url(#mv-dots${tag})"/>`
     : '';
-  return `${ground}<g>${frames.join('')}</g><g>${links.join('')}</g><g>${boxes.join('')}</g>`;
+  return `${ground}<g>${frames.join('')}</g><g>${links.join('')}</g><g>${names.join('')}</g><g>${boxes.join('')}</g>`;
 }
 
 /** The kinds a diagram uses: of its boxes, then any that only a link has, from the colour its author gave it. */

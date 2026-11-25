@@ -134,6 +134,15 @@ describe('what is drawn', () => {
     }
   });
 
+  it("draws a group's name over the lines, with the frame's own colour round it, and its frame under them", () => {
+    const grouped = parse('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [Warehouse]\n  B --> C[Pack]\nend');
+    const svg = picture(grouped, layout(grouped), builtIn, { title: 'Groups' });
+    assert.ok(svg.indexOf('<g class="mv-group">') < svg.indexOf('class="mv-edge'), 'the frame is behind the lines');
+    assert.ok(svg.lastIndexOf('class="mv-edge') < svg.indexOf('<text class="mv-name"'), 'the name is in front of them');
+    assert.match(svg, /<text class="mv-name" x="[\d.]+" y="[\d.]+">Warehouse<\/text>/);
+    assert.match(svg, /\.mv-name\{[^}]*paint-order:stroke;stroke:var\(--mv-group\)/);
+  });
+
   it('draws an icon beside the words of its box, and gives the words less room for it', () => {
     const iconed = parse('flowchart LR\nA["fa:fa-truck Shipped to the customer"] --> B[Shipped to the customer]');
     const lay = layout(iconed), svg = picture(iconed, lay, builtIn, { title: 'Icons' });

@@ -10,7 +10,7 @@ import { inset, roomIn } from './shapes.mjs';
 /** @typedef {{id:string,x:number,y:number,w:number,h:number,rank:number,lane:number,spine:boolean,lines:string[]}} Placed */
 /** @typedef {{x:number,y:number,w:number,h:number,text:string,lines:string[]}} Words a link's words: the middle of where they sit, their size, and the lines they are wrapped to */
 /** @typedef {{id:string,points:Pt[],back:boolean,label:null|Words}} Routed */
-/** @typedef {{id:string,title:string,x:number,y:number,w:number,h:number}} Frame a group's frame, from its top left corner */
+/** @typedef {{id:string,title:string,x:number,y:number,w:number,h:number,name:{x:number,y:number,w:number,h:number,plate:boolean}}} Frame a group's frame, from its top left corner; name: where its name sits, from its middle, and whether a line has to pass behind it */
 /** @typedef {{width:number,height:number,direction:'TD'|'LR',box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[]}} Layout */
 
 // What is measured, named once. Boxes are sized without a browser, from the average glyph of a 13px UI face.
@@ -33,6 +33,11 @@ export const measure = {
   labelOff: 5, // px between a link's words and its line
   framePad: 12, // from a group's boxes to its frame
   frameTitle: 14, // more at the top, for what the group is called
+  nameGlyph: 7.8, // px per character of a group's name: 11px capitals, spaced
+  nameLine: 12, // px the name takes from top to bottom
+  nameDown: 12, // from the top of a frame to the middle of its name
+  nameIn: 10, // from the side of a frame to its name
+  nameStep: 8, // how far apart the places tried for a name are, along the top of its frame
   portStep: 20, // between two lines on one side of a box
   portShare: 0.31, // how far from the middle of a side a line may leave, as a share of the side
   icon: 22, // px an icon takes beside a box's words: its 16px grid and the gap to the first letter
@@ -544,16 +549,6 @@ function placed(model, dir) {
     meetOutline(points[0], e.from);
     meetOutline(points[points.length - 1], e.to);
   }
-  // Each link's words, one link at a time, each where it sits on no box, no other words and, if it can, no line.
-  /** @type {Words[]} */
-  const worded = [];
-  for (const e of model.edges) {
-    if (!e.label) continue;
-    const here = wordsFor(edges[e.id].points, e.label, all, worded, Object.values(edges).map((x) => x.points));
-    worded.push(here);
-    edges[e.id].label = here;
-  }
-
   // A group's frame goes round its boxes, with room at the top for what it is called. One that would take in a
   // box that is not its own, or run into another frame, would say something untrue, so it is left out and said.
   /** @type {Frame[]} */
@@ -563,7 +558,7 @@ function placed(model, dir) {
   for (const g of model.groups) {
     const own = g.members.map((id) => nodes[id]).filter(Boolean);
     const l = Math.min(...own.map((n) => n.x - n.w / 2)) - measure.framePad, t = Math.min(...own.map((n) => n.y - n.h / 2)) - measure.framePad - measure.frameTitle;
-    const frame = { id: g.id, title: g.title, x: l, y: t, w: Math.max(...own.map((n) => n.x + n.w / 2)) + measure.framePad - l, h: Math.max(...own.map((n) => n.y + n.h / 2)) + measure.framePad - t };
+    const frame = { name: { x: 0, y: 0, w: 0, h: 0, plate: false }, id: g.id, title: g.title, x: l, y: t, w: Math.max(...own.map((n) => n.x + n.w / 2)) + measure.framePad - l, h: Math.max(...own.map((n) => n.y + n.h / 2)) + measure.framePad - t };
     const stranger = all.find((n) => !g.members.includes(n.id) && meets(frame, n));
     const other = groups.find((f) => meets(frame, { x: f.x + f.w / 2, y: f.y + f.h / 2, w: f.w, h: f.h }));
     if (stranger) warnings.push(`the frame of "${g.title}" is left out: "${label(stranger.id)}" is not in it and would fall inside`);
@@ -571,11 +566,36 @@ function placed(model, dir) {
     else groups.push(frame);
   }
 
+  // A group's name goes along the top of its frame, in the first stretch no line runs through: at the left,
+  // then at the right, then anywhere between. Where every stretch has a line in it, the name stays at the left
+  // on a plate of the frame's own colour: the line passes behind it, and the name can still be read.
+  const drawn = Object.values(edges).map((e) => e.points);
+  for (const f of groups) {
+    const w = Math.round(f.title.length * measure.nameGlyph), h = measure.nameLine, y = f.y + measure.nameDown;
+    const struck = (/** @type {number} */ x) => drawn.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, { x, y, w, h }, measure.clear)));
+    const first = f.x + measure.nameIn + w / 2, last = f.x + f.w - measure.nameIn - w / 2;
+    /** @type {number[]} */
+    const between = [];
+    for (let x = first + measure.nameStep; x < last; x += measure.nameStep) between.push(x);
+    const clear = [first, ...(last > first ? [last, ...between] : [])].find((x) => !struck(x));
+    f.name = { x: clear ?? first, y, w, h, plate: clear === undefined };
+  }
+
+  // Each link's words, one link at a time, each where it sits on no box, no other words and, if it can, no line.
+  /** @type {Words[]} */
+  const worded = [];
+  for (const e of model.edges) {
+    if (!e.label) continue;
+    const here = wordsFor(edges[e.id].points, e.label, all, [...worded, ...groups.map((f) => f.name)], Object.values(edges).map((x) => x.points));
+    worded.push(here);
+    edges[e.id].label = here;
+  }
+
   // Words beside a line that goes round the near outside, or a frame's title, can reach past the top or the
   // left of what the boxes and lines take up. Everything then moves over, so they keep the margin all else has.
   const least = (/** @type {'x'|'y'} */ a) => Math.min(
     ...Object.values(edges).flatMap((e) => (e.label ? [e.label[a] - (a === 'x' ? e.label.w : e.label.h) / 2] : [])),
-    ...groups.map((f) => f[a]),
+    ...groups.map((f) => Math.min(f[a], f.name[a] - (a === 'x' ? f.name.w : f.name.h) / 2)),
     measure.pad / 2,
   );
   const by = { x: measure.pad / 2 - least('x'), y: measure.pad / 2 - least('y') };
@@ -585,7 +605,10 @@ function placed(model, dir) {
       p.y += by.y;
     };
     all.forEach(move);
-    groups.forEach(move);
+    groups.forEach((f) => {
+      move(f);
+      move(f.name);
+    });
     for (const e of Object.values(edges)) {
       e.points.forEach(move);
       if (e.label) move(e.label);

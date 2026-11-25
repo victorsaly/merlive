@@ -63,7 +63,7 @@ node skills/merlive/scripts/merlive.mjs --setup --from https://your.site        
 - **Character that means something.** The main path is drawn heavier. A box of a kind carries a stripe of its
   colour. A group sits in a faintly filled frame. Boxes lift off a ground of dots, the grid they are placed on.
   Nothing is decoration, and a site with no shadows gets diagrams with none.
-- **Rules that are checked.** Seven placement rules and two for colour run before anything is written. A diagram
+- **Rules that are checked.** Eight placement rules and two for colour run before anything is written. A diagram
   that breaks one is not written, and the message says which rule, where, and what to change.
   [The rules](docs/PLACEMENT.md).
 - **Your Mermaid, unchanged.** It stays the thing people edit and still renders anywhere Mermaid does. Steps and

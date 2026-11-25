@@ -117,9 +117,14 @@ export function score(model, lay, design) {
     const l = /** @type {NonNullable<typeof e.label>} */ (e.label);
     if (l.x - l.w / 2 < 0 || l.y - l.h / 2 < 0 || l.x + l.w / 2 > lay.width || l.y + l.h / 2 > lay.height) covered.push(`the label "${l.text}" runs off the picture`);
     for (const n of nodes) if (overlap(l, n)) covered.push(`the label "${l.text}" sits on "${label(n.id)}"`);
+    for (const f of lay.groups) if (overlap(l, f.name)) covered.push(`the label "${l.text}" sits on the name of the group "${f.title}"`);
     for (const o of labels.slice(i + 1)) if (o.label && overlap(l, o.label)) covered.push(`the labels "${l.text}" and "${o.label.text}" overlap`);
   });
   add('P7', "A link's words sit clear of boxes and of each other", covered, `${labels.length} labels clear`);
+
+  // P8: a name on a plate has its line pass behind it, which is drawn so; any other must be clear of every line.
+  const struck = lay.groups.filter((f) => !f.name.plate && edges.some((e) => segmentsOf(e.points).some((seg) => hitsBox(seg, f.name, 0)))).map((f) => `a line runs through the name of the group "${f.title}"`);
+  add('P8', "A group's name can be read", struck, lay.groups.length ? `${lay.groups.length} clear of lines, or on a plate` : 'no groups');
 
   // D1, D2: the sums are in design.mjs, where the setup page uses them too.
   const kinds = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])];
