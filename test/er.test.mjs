@@ -300,3 +300,15 @@ describe('er: the corpus', () => {
     assert.deepEqual([...new Set(models.flatMap((m) => m.edges.map((e) => e.style)))].sort(), ['dotted', 'solid']);
   });
 });
+
+describe('er: an entity is a table', () => {
+  it('keeps each attribute cell by cell beside its row: its type, its name, its keys', () => {
+    const m = er('ORDER_LINE {\n  int orderNumber PK, FK\n  string *productCode\n  int quantity\n}');
+    assert.deepEqual(m.nodes[0].table, [['int', 'orderNumber', 'PK, FK'], ['string', 'productCode', 'PK'], ['int', 'quantity', '']]);
+    assert.deepEqual(m.nodes[0].rows, [['int orderNumber PK, FK', 'string productCode PK', 'int quantity']]);
+  });
+
+  it('gives an entity with no attributes no table', () => {
+    assert.equal(er('SUPPLIER ||--o{ ORDER : receives').nodes[0].table, undefined);
+  });
+});

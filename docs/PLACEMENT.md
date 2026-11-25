@@ -37,7 +37,8 @@ height. A shape is what its author drew (a rhombus, a hexagon, a cylinder, a sub
 double circle, a flag), in the same footprint as every other box: a rhombus is as wide and as tall as the boxes
 round it, not a diamond twice their size. Each line runs on to the outline of the shape it meets. No two boxes
 come closer than 16 px. Two boxes are taller than the rest: one that lists rows under its name, and a note, each
-by what it holds.
+by what it holds. An entity's rows are a table: every column is as wide as its widest cell, what the box has to
+spare goes to the names, and the whole table has to fit the widest box there is (384 px).
 
 A class and an entity list rows under their name, so their boxes cannot all be one height. They keep one width
 (up to 384 px, wide enough for the longest row, which is never broken), and each is as tall as what it lists. A

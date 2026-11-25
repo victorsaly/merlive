@@ -5,8 +5,8 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
-import { hitsBox, layout, measure, meet, rowsRoom } from '../skills/merlive/scripts/layout.mjs';
-import { builtIn } from '../skills/merlive/scripts/design.mjs';
+import { hitsBox, layout, measure, meet, rowsRoom, tableNeeds } from '../skills/merlive/scripts/layout.mjs';
+import { builtIn, designFrom } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { draw, picture } from '../skills/merlive/scripts/render.mjs';
 
@@ -208,5 +208,75 @@ describe('a title its author gave the picture', () => {
       const m = titled('Orders and what they hold', body);
       assert.match(picture(m, layout(m), builtIn, { title: 'x' }), /class="mv-title"/, body);
     }
+  });
+});
+
+describe('a table: an entity drawn cell by cell', () => {
+  const entity = (/** @type {string} */ body) => parse(`erDiagram\n  ORDER_LINE {\n${body}\n  }\n  ORDER ||--o{ ORDER_LINE : contains`);
+  const three = '    int orderNumber PK, FK\n    string productCode PK, FK\n    int quantity';
+  const drawn = (/** @type {string} */ body) => {
+    const m = entity(body), lay = layout(m);
+    return { m, lay, svg: picture(m, lay, builtIn, { title: 't' }), box: lay.nodes.ORDER_LINE };
+  };
+  const node = (/** @type {string} */ svg) => /<g class="mv-node" data-node="ORDER_LINE".*?<\/g>/s.exec(svg)?.[0] ?? '';
+
+  it('is as tall as its name and a row for each attribute, and wide enough for every column', () => {
+    const { m, lay, box } = drawn(three);
+    assert.equal(box.h, lay.box.h + 3 * measure.cellLine);
+    assert.ok(tableNeeds(/** @type {any} */ (m.nodes.find((n) => n.id === 'ORDER_LINE'))) <= lay.box.w);
+  });
+
+  it('puts every cell of a column at one place, each column right of the one before', () => {
+    const g = node(drawn(three).svg);
+    const cells = [...g.matchAll(/<text class="mv-cell" x="([\d.]+)" y="([\d.]+)">([^<]*)</g)].map((c) => [Number(c[1]), Number(c[2]), c[3]]);
+    assert.deepEqual(cells.map((c) => c[2]), ['int', 'orderNumber', 'PK, FK', 'string', 'productCode', 'PK, FK', 'int', 'quantity']);
+    const xOf = (/** @type {string} */ words) => cells.filter((c) => c[2] === words).map((c) => c[0]);
+    assert.equal(new Set([...xOf('int'), ...xOf('string')]).size, 1, 'types in one column');
+    assert.equal(new Set([...xOf('orderNumber'), ...xOf('productCode'), ...xOf('quantity')]).size, 1, 'names in one column');
+    assert.ok(xOf('int')[0] < xOf('quantity')[0] && xOf('quantity')[0] < xOf('PK, FK')[0]);
+    assert.equal(new Set(cells.map((c) => c[1])).size, 3, 'three rows');
+  });
+
+  it('rules it into cells and shades every second row', () => {
+    const g = node(drawn(three).svg);
+    assert.equal((g.match(/class="mv-band"/g) ?? []).length, 1, 'the second row of three');
+    assert.equal((g.match(/class="mv-grid"/g) ?? []).length, 2 + 2, 'between three rows, and between three columns');
+  });
+
+  it('has no column for keys when no attribute has one', () => {
+    const g = node(drawn('    int quantity\n    string unit').svg);
+    assert.equal((g.match(/class="mv-grid"/g) ?? []).length, 1 + 1);
+  });
+
+  it('keeps every word inside its box, in every sample of the corpus', () => {
+    const { lay, svg, box } = drawn(three);
+    const l = box.x - box.w / 2, r = box.x + box.w / 2;
+    for (const c of node(svg).matchAll(/<text class="mv-cell" x="([\d.]+)" y="[\d.]+">([^<]*)</g)) {
+      assert.ok(Number(c[1]) >= l && Number(c[1]) + c[2].length * measure.cellGlyph <= r, c[2]);
+    }
+    assert.ok(lay.width > 0);
+  });
+
+  it('fails P6 when a table is wider than any box, and says which entity', () => {
+    const m = entity('    aVeryLongTypeNameThatNobodyShouldWrite(120) aVeryLongAttributeNameThatGoesOnAndOn PK, FK, UK'), p6 = score(m, layout(m), builtIn).checks.find((c) => c.id === 'P6');
+    assert.equal(p6?.ok, false);
+    assert.match(p6?.detail ?? '', /"ORDER_LINE" lists a row too wide for any box/);
+  });
+
+  it('leaves a class as it was: a list, not a table', () => {
+    const m = parse('classDiagram\n  class Order{\n    +String number\n    +total()\n  }'), svg = picture(m, layout(m), builtIn, { title: 't' });
+    assert.doesNotMatch(svg, /class="mv-(cell|band|grid)"/);
+    assert.match(svg, /class="mv-rows"/);
+  });
+});
+
+describe('a table: its shaded rows can be read', () => {
+  it('holds the words on a shaded row to the same contrast as words on a box', () => {
+    const faint = designFrom({ ...builtIn, light: { ...builtIn.light, text: '#8a8a8a', node: '#ffffff' } });
+    const m = parse('erDiagram\n  A {\n    int a\n    int b\n  }');
+    const d1 = score(m, layout(m), faint).checks.find((c) => c.id === 'D1');
+    assert.match(d1?.detail ?? '', /text on a shaded row/);
+    const plain = parse('flowchart TD\n  A --> B');
+    assert.doesNotMatch(score(plain, layout(plain), faint).checks.find((c) => c.id === 'D1')?.detail ?? '', /shaded row/);
   });
 });

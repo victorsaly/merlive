@@ -2,15 +2,16 @@
 // with scripts off); the page around it adds picking and steps. Pure: a model, a layout and a design in, a
 // string out.
 
-import { contrast, kindFill, looksOf, mix } from './design.mjs';
+import { contrast, kindFill, looksOf, mix, rowShade } from './design.mjs';
 import { runtime } from './runtime.mjs';
 import { outlineOf, wordsAt } from './shapes.mjs';
 import { iconMeasure, icons } from './icons.mjs';
-import { compartmentsOf, measure, wrap } from './layout.mjs';
+import { columnsAt, compartmentsOf, measure, wrap } from './layout.mjs';
 
 /** @typedef {import('./layout.mjs').Pt} Pt */
 
 export const draw = {
+  rim: 0.75, // px a table's shading stays in from the edge of its box: half the line the box is drawn with
   titleGlyph: 8.4, // px per character of a picture's title, at 15px and heavy
   titleLine: 20, // px between two lines of a title
   titlePad: 18, // px above a title, and again between it and the picture
@@ -83,6 +84,9 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 [data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
 [data-outline~="heavy"] .mv-shape{stroke-width:2.6}
 .mv-node .mv-rows{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
+.mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
+.mv-band{fill:var(--mv-text);opacity:${rowShade};stroke:none}
+.mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
 .mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
 .mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
 .mv-icon{fill:none;stroke:var(--mv-text);stroke-width:${iconMeasure.stroke};stroke-linecap:round;stroke-linejoin:round}
@@ -177,7 +181,27 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     const nameY = listed.length || over ? t + over + lay.box.h / 2 : b.y;
     const above = m.over ? `<text class="mv-over" x="${n(b.x)}" y="${n(t + measure.overLine + 4)}">${esc(m.over)}</text>` : '';
     let down = t + over + lay.box.h;
-    const rows = listed.map((lines) => {
+    // An entity is a table: a rule under its name, a row for each attribute with a rule between rows and
+    // between columns, and every second row shaded, so a reader can follow one across.
+    const table = () => {
+      const at = columnsAt(m, b.w), all = m.table ?? [], top = down, e = draw.rim;
+      const curve = Math.max(0, Math.min(design.radius, b.h / 2) - e);
+      const parts = [`<path class="mv-shape mv-detail" d="M${n(l)},${n(top)}H${n(r)}"/>`];
+      all.forEach((cells, i) => {
+        const y = top + i * measure.cellLine, last = i === all.length - 1;
+        // The last row ends where the box does, and takes the round of its corners.
+        if (i % 2) parts.push(last
+          ? `<path class="mv-band" d="M${n(l + e)},${n(y)}H${n(r - e)}V${n(u - e - curve)}a${n(curve)},${n(curve)} 0 0 1 ${n(-curve)},${n(curve)}H${n(l + e + curve)}a${n(curve)},${n(curve)} 0 0 1 ${n(-curve)},${n(-curve)}Z"/>`
+          : `<rect class="mv-band" x="${n(l + e)}" y="${n(y)}" width="${n(b.w - 2 * e)}" height="${measure.cellLine}"/>`);
+      });
+      all.slice(1).forEach((_, i) => parts.push(`<path class="mv-grid" d="M${n(l)},${n(top + (i + 1) * measure.cellLine)}H${n(r)}"/>`));
+      at.slice(1, -1).forEach((x) => parts.push(`<path class="mv-grid" d="M${n(l + x)},${n(top)}V${n(u)}"/>`));
+      all.forEach((cells, i) => cells.forEach((cell, c) => {
+        if (cell && c < at.length - 1) parts.push(`<text class="mv-cell" x="${n(l + at[c] + measure.cellPad)}" y="${n(top + i * measure.cellLine + measure.cellLine / 2 + 4)}">${esc(cell)}</text>`);
+      }));
+      return parts.join('');
+    };
+    const rows = m.table ? table() : listed.map((lines) => {
       const rule = `<path class="mv-shape mv-detail" d="M${n(l)},${n(down)}H${n(r)}"/>`;
       const spans = lines.map((line, i) => `<tspan class="mv-row" x="${n(l + measure.rowIn)}" y="${n(down + measure.rowPad + measure.rowLine * i + 12)}">${esc(line)}</tspan>`).join('');
       down += 2 * measure.rowPad + measure.rowLine * lines.length;

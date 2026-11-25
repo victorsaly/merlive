@@ -40,17 +40,21 @@ Still to do, in this order:
 2. **What is known to be missing**, each said by the command when met: a direction other than top to bottom,
    for either kind (boxes of different heights are only placed top to bottom); attributes written on the line
    that opens an entity. A picked class is called "Step" on the page, since a class has no kind of its own.
-3. **Notes in a state diagram are not drawn yet.** A class diagram's notes are (a `note` shape, a box of kind
+3. **An attribute's comment is not on the picture.** An entity is drawn as a table of type, name and keys. A
+   comment (`string number PK "As printed"`) is Mermaid's fourth column; here it is in the note on the entity,
+   since one sentence would make every box of the diagram as wide as itself. To draw it, a comment column needs
+   to wrap inside its cell and make only its own row taller.
+4. **Notes in a state diagram are not drawn yet.** A class diagram's notes are (a `note` shape, a box of kind
    `note`, a dotted link with nothing at its ends: `class.mjs`). A state diagram's (`note right of X`) are still
    only what a reader sees on picking the state. Drawing them the same way needs one thing first: a state
    diagram has a main path and steps, and a note's link must not be taken for part of the flow (a note has
    nothing coming in, so it looks like a place to start). A note is drawn in the design's own colours, not
    Mermaid's yellow: the colours are the user's.
-4. **One thing the class reader changed for flowcharts too**: two groups with one id are now one group
+5. **One thing the class reader changed for flowcharts too**: two groups with one id are now one group
    (`frame()` in `parse.mjs` reopens a group whose id exists). Dotted namespaces need it. Nothing in the corpus
    or in Victor's diagrams has two subgraphs with one id, but it is a change of behaviour, so say so in the pull
    request.
-5. **Release.** The pull request for `class-er`, with the changelog's `0.2.0 (unreleased)` given its date on
+6. **Release.** The pull request for `class-er`, with the changelog's `0.2.0 (unreleased)` given its date on
    the day it is merged; then the tag.
 
 ## Waiting on Victor

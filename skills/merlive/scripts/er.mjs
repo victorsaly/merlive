@@ -143,7 +143,7 @@ export function erReader({ model, node, say, connect, outline, warn, wordsOf }) 
   /** @type {Map<string, string[]>} */
   const commented = new Map();
   /**
-   * One attribute as its row: its type, its name and its keys, in the order Mermaid has them. Its comment is a
+   * One attribute as the cells of its row: its type, its name and its keys, in the order Mermaid has them. Its comment is a
    * sentence, and a sentence in a row makes every box of the diagram as wide as the longest: it goes in the note
    * on its entity, which a reader sees on picking the box and a still picture prints beneath.
    */
@@ -155,7 +155,7 @@ export function erReader({ model, node, say, connect, outline, warn, wordsOf }) 
     const all = [...(name.startsWith('*') && !/\bPK\b/.test(keys) ? ['PK'] : []), ...keys.split(',').map((k) => k.trim()).filter(Boolean)];
     const called = name.replace(/^\*/, '');
     if (comment !== undefined && wordsOf(comment).length) (commented.get(listing?.n.id ?? '') ?? commented.set(listing?.n.id ?? '', []).get(listing?.n.id ?? '') ?? []).push(`${called}: ${wordsOf(comment).join(' ')}`);
-    return [type, called, all.join(', ')].filter(Boolean).join(' ');
+    return [type, called, all.join(', ')];
   };
 
   const read = (/** @type {string} */ raw, /** @type {number} */ line) => {
@@ -164,9 +164,13 @@ export function erReader({ model, node, say, connect, outline, warn, wordsOf }) 
 
     if (listing) {
       if (text === '}') return (listing = null), true;
-      const row = attribute(text, line);
-      // Every attribute of an entity is in one compartment, however many times the entity is declared.
-      if (row) (listing.n.rows ??= [[]])[0].push(row);
+      const cells = attribute(text, line);
+      // Every attribute of an entity is in one compartment, however many times the entity is declared. A row is
+      // kept twice: as what it says, for anyone who reads the model, and cell by cell, to be drawn as a table.
+      if (cells) {
+        (listing.n.rows ??= [[]])[0].push(cells.filter(Boolean).join(' '));
+        (listing.n.table ??= []).push(cells);
+      }
       return true;
     }
     if (text === '}') return warn(line, 'not read: a "}" with no entity open'), true;

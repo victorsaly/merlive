@@ -1,7 +1,7 @@
 // Why: a rule nobody checks is a wish. Every placement rule in docs/PLACEMENT.md is a check here, so a
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
-import { compartmentsOf, hitsBox, meet, measure, roomFor, rowsRoom, segmentsOf } from './layout.mjs';
+import { compartmentsOf, hitsBox, meet, measure, roomFor, rowsRoom, segmentsOf, tableNeeds } from './layout.mjs';
 import { colourChecks, looksOf } from './design.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
@@ -107,7 +107,9 @@ export function score(model, lay, design) {
     if (n.shape !== 'note' && lines.length > measure.mostLines) tight.push(`"${n.label}" needs ${lines.length} lines; shorten it or put the detail in a "%% note"`);
     else if (lines.some((l) => l.length > room)) tight.push(`"${n.label}" has a word too long for a ${lay.box.w}px box`);
     // A row keeps its one line: breaking a method's name in two would make two of it.
-    const long = compartmentsOf(n).flat().find((row) => row.length > rowsRoom(lay.box.w));
+    const long = n.table ? undefined : compartmentsOf(n).flat().find((row) => row.length > rowsRoom(lay.box.w));
+    // A table's columns are each as wide as their widest cell: all of them together have to fit.
+    if (tableNeeds(n) > lay.box.w) tight.push(`"${n.label}" lists a row too wide for any box: it needs ${tableNeeds(n)}px and the widest box is ${lay.box.w}px; shorten its longest type or name`);
     if (long) tight.push(`"${n.label}" lists a line too long for any box: "${long}"; shorten it, or its type`);
   }
   add('P6', 'Words fit their box', tight, 'all fit');
@@ -139,7 +141,7 @@ export function score(model, lay, design) {
 
   // D1, D2: the sums are in design.mjs, where the setup page uses them too.
   const kinds = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])];
-  const [d1, d2] = colourChecks(design, kinds);
+  const [d1, d2] = colourChecks(design, kinds, model.nodes.some((n) => n.table));
   const looks = looksOf(design).map(([mode]) => mode).join(' and ');
   add('D1', 'Words and lines can be read against what is behind them', d1.broken, `${design.name} passes in ${looks}`);
   add('D2', 'Kinds of box can be told apart', d2.broken, 'apart in ordinary and red-green colour-blind sight');

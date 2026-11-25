@@ -47,6 +47,9 @@ export const measure = {
   rowLine: 16, // px from one row to the next
   rowPad: 6, // above the first row of a compartment and below its last
   rowIn: 12, // from the side of a box to where its rows begin
+  cellGlyph: 6.6, // px per character of a table's cell: the design's own face at 12px
+  cellPad: 10, // px between a cell's words and the rule each side of it
+  cellLine: 24, // px a table's row takes: a line of words and room above and below it, so the rules do not crowd them
   overLine: 14, // px the short line above a name takes ("«interface»")
   endOff: 7, // from a line to the words at its end
   endAlong: 14, // how far along the line from its box those words sit: beside what is drawn at the end, and far
@@ -81,6 +84,31 @@ export const linesOf = (/** @type {import('./parse.mjs').Node} */ n, /** @type {
 /** How many characters a row may run to in a box of this width. */
 export const rowsRoom = (/** @type {number} */ width) => Math.floor((width - 2 * measure.rowIn) / measure.rowGlyph);
 
+/**
+ * The columns of a table: how many characters the widest cell of each runs to. A column nobody wrote in (keys,
+ * when no attribute has one) is not a column.
+ */
+export const columnsOf = (/** @type {{table?:string[][]}} */ n) => {
+  const wide = (n.table?.[0] ?? []).map((_, c) => Math.max(...(n.table ?? []).map((row) => (row[c] ?? '').length)));
+  while (wide.length && !wide[wide.length - 1]) wide.pop();
+  return wide;
+};
+
+/** The px a table needs across: every column as wide as its widest cell, with room each side of it. */
+export const tableNeeds = (/** @type {{table?:string[][]}} */ n) => columnsOf(n).reduce((sum, chars) => sum + Math.ceil(chars * measure.cellGlyph) + 2 * measure.cellPad, 0);
+
+/**
+ * Where each column of a table begins, from the left edge of its box, and where the last one ends. What a box
+ * has to spare goes to the names, the one column a reader's eye runs down.
+ */
+export const columnsAt = (/** @type {{table?:string[][]}} */ n, /** @type {number} */ width) => {
+  const spare = Math.max(0, width - tableNeeds(n));
+  /** @type {number[]} */
+  const at = [0];
+  columnsOf(n).forEach((chars, c) => at.push(at[c] + Math.ceil(chars * measure.cellGlyph) + 2 * measure.cellPad + (c === 1 ? spare : 0)));
+  return at;
+};
+
 /** The compartments of a box that have something in them: one with nothing is not drawn. */
 export const compartmentsOf = (/** @type {{rows?:string[][]}} */ n) => (n.rows ?? []).filter((c) => c.length);
 
@@ -89,9 +117,10 @@ export const compartmentsOf = (/** @type {{rows?:string[][]}} */ n) => (n.rows ?
  * it is a note, for every line of its words a plain box has no room for. A note is the one box whose words may
  * run on: saying more than a name is what it is there to do.
  */
-export const extraHeight = (/** @type {{rows?:string[][],over?:string,shape?:string}} */ n, /** @type {{w:number,h:number}} */ box) =>
+export const extraHeight = (/** @type {{rows?:string[][],table?:string[][],over?:string,shape?:string}} */ n, /** @type {{w:number,h:number}} */ box) =>
   (n.over ? measure.overLine : 0) +
-  compartmentsOf(n).reduce((sum, c) => sum + 2 * measure.rowPad + measure.rowLine * c.length, 0) +
+  // A table's rows are cells with a rule between them, and need more room than the lines of a list.
+  (n.table ? measure.cellLine * n.table.length : compartmentsOf(n).reduce((sum, c) => sum + 2 * measure.rowPad + measure.rowLine * c.length, 0)) +
   (n.shape === 'note' ? Math.max(0, measure.boxPad + measure.lineHeight * linesOf(/** @type {import('./parse.mjs').Node} */ (n), box.w).length - box.h) : 0);
 
 /**
@@ -108,9 +137,10 @@ function boxFor(/** @type {Model} */ model) {
       return few && lines.every((l) => l.length <= roomFor(n, w));
     });
   // A diagram whose boxes list rows may need a wider box than any label does: every row keeps its one line.
-  const longest = Math.max(0, ...model.nodes.flatMap((n) => compartmentsOf(n).flat().map((row) => row.length)));
-  const widths = longest ? [...measure.widths, ...measure.rowWidths] : measure.widths;
-  const wide = (/** @type {boolean} */ anyNote) => widths.find((width) => fits(width, anyNote) && rowsRoom(width) >= longest);
+  const longest = Math.max(0, ...model.nodes.flatMap((n) => (n.table ? [] : compartmentsOf(n).flat().map((row) => row.length))));
+  const widest = Math.max(0, ...model.nodes.map(tableNeeds));
+  const widths = longest || widest ? [...measure.widths, ...measure.rowWidths] : measure.widths;
+  const wide = (/** @type {boolean} */ anyNote) => widths.find((width) => fits(width, anyNote) && rowsRoom(width) >= longest && width >= widest);
   const w = wide(false) ?? wide(true) ?? widths[widths.length - 1];
   const most = Math.max(1, ...model.nodes.filter((n) => n.shape !== 'note').map((n) => linesOf(n, w).length));
   return { w, h: measure.boxPad + measure.lineHeight * most };
