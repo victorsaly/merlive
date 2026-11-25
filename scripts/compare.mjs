@@ -10,6 +10,7 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { coverage } from './coverage.mjs';
+import { blocksOf } from '../skills/merlive/scripts/parse.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -225,6 +226,13 @@ if (asCommand && process.argv.includes('--page')) {
       samples[file] = size ? { ok: true, ...size } : { ok: false, error: firstLineOf(said) };
     }
   }));
+  // The README opens on one real pair: the example's first block as Mermaid draws it, beside what Merlive draws
+  // of it. Mermaid's half is drawn here, so it is never a picture somebody made by hand.
+  const example = blocksOf(readFileSync(join(root, 'examples/order-approval.md'), 'utf8'))[0];
+  writeFileSync(join(work, 'example.mmd'), example.source);
+  const pair = await draw(join(work, 'example.mmd'), join(root, 'examples/diagrams/order-approval-1.mermaid.png'));
+  if (!pair.ok) console.error(`Mermaid could not draw the example for the README (${firstLineOf(pair.said)})`);
+
   /** @type {Mermaid} */
   const mermaid = { by: `mermaid-cli ${version.stdout.trim()}`, samples: Object.fromEntries(files.map((f) => [f, samples[f]])) };
   writeFileSync(join(root, 'corpus/mermaid/index.json'), `${JSON.stringify(mermaid, null, 2)}\n`);

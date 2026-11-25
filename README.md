@@ -1,7 +1,14 @@
 <h1 align="center">Merlive</h1>
-<h3 align="center">Mermaid flowcharts, placed by rule and made live.</h3>
+<h3 align="center">Your Mermaid flowcharts, placed by rule and made live.</h3>
 
-<p align="center"><img src="examples/diagrams/order-approval-1.svg" alt="A purchase order approval flow drawn by Merlive: the main path in one straight line, boxes of one size, and a revision loop to one side" width="420" /></p>
+<table align="center">
+  <tr><th>Mermaid</th><th>Merlive</th></tr>
+  <tr>
+    <td align="center"><img src="examples/diagrams/order-approval-1.mermaid.png" alt="A purchase order approval flow as Mermaid draws it: diamonds twice the size of the boxes, a main path that wanders from side to side, and long curved lines to and from Revise order" width="330" /></td>
+    <td align="center"><img src="examples/diagrams/order-approval-1.svg" alt="The same flow drawn by Merlive: the main path in one straight line, boxes of one size, and the way back to Revise order going round to one side" width="330" /></td>
+  </tr>
+</table>
+<p align="center"><sub>One Mermaid block, drawn twice. Nobody edited it and nobody placed a box.</sub></p>
 
 <p align="center"><strong>Mermaid is the easy way to write a diagram and an odd way to look at one.</strong> Tell your
 coding agent to <em>merlive this document</em>. It keeps your Mermaid as the source, places every box by rule (the
@@ -9,13 +16,24 @@ main path straight, boxes of one size, lines that go round boxes), checks those 
 self-contained page per flowchart, in your own design, that readers can step through.</p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Agent_Skill-Claude_Code_%C2%B7_Codex_%C2%B7_Cursor_%C2%B7_OpenCode-000000?style=flat-square" alt="An Agent Skill, for Claude Code, Codex, Cursor and OpenCode" />
+  <a href="https://skills.victorsaly.com/merlive"><strong>See it at work</strong></a> &nbsp;·&nbsp;
+  <a href="#start"><strong>Get started</strong></a> &nbsp;·&nbsp;
+  <a href="#what-you-get"><strong>What you get</strong></a> &nbsp;·&nbsp;
+  <a href="#in-the-mermaid"><strong>In the Mermaid</strong></a> &nbsp;·&nbsp;
+  <a href="docs/COVERAGE.md"><strong>What it draws of Mermaid</strong></a> &nbsp;·&nbsp;
+  <a href="docs/PLACEMENT.md"><strong>The rules</strong></a>
+</p>
+
+<p align="center">
+  <a href="https://skills.sh"><img src="https://img.shields.io/badge/Agent_Skill-Claude_Code_%C2%B7_Codex_%C2%B7_Cursor_%C2%B7_OpenCode-000000?style=flat-square" alt="An Agent Skill, for Claude Code, Codex, Cursor and OpenCode" /></a>
   <img src="https://img.shields.io/badge/version-0.1.0-000000?style=flat-square" alt="Version 0.1.0" />
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-000000?style=flat-square" alt="MIT licence" /></a>
 </p>
 
 > **0.1.0, not released yet.** It draws flowcharts and nothing else. Sequence, state and the other diagram kinds are
 > left as Mermaid and named. [What it draws of Mermaid today](docs/COVERAGE.md), feature by feature. [What comes next](docs/ROADMAP.md).
+
+<a id="start"></a>
 
 ## Install, then ask
 
@@ -95,7 +113,8 @@ goes. The full list, and the Mermaid that is read, is in [reference.md](skills/m
 ```bash
 npm run check      # the tests, with coverage
 npm run examples   # draw the examples again
-npm run coverage   # run every sample in corpus/ and write docs/COVERAGE.md again
+npm run coverage   # run every sample in corpus/ and write docs/COVERAGE.md and corpus/compare.html again
+npm run compare    # draw Mermaid's side of corpus/compare.html again (needs mermaid-cli and Chrome)
 ```
 
 [AGENTS.md](AGENTS.md) says how the code is laid out and written.

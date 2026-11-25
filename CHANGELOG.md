@@ -57,6 +57,8 @@ The first version. It draws flowcharts and nothing else, and says so.
   drawn, and its `title` kept; `A & B --> C` links every box before the link to every box after it; and anything
   written with `@{ … }` is read, on one line or several: a box's shape and label, an icon or image kept as its
   label, a link's id, and what Mermaid sets on a link or a group read past.
+- **The README opens on one real pair**: the example's Mermaid block as Mermaid draws it, beside what Merlive
+  draws of it. `npm run compare` draws Mermaid's half, so it is never made by hand.
 - **Links are drawn with what their author put at each end**: an arrowhead, a circle or a cross, at either end
   or both (`--o`, `--x`, `<-->`, `o--o`, `x--x`), solid, dotted or thick. An invisible link (`~~~`) gives its
   boxes and no link.
