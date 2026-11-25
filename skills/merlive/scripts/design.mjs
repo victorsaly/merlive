@@ -123,8 +123,16 @@ export const kindFill = (/** @type {Palette} */ p, /** @type {string} */ kind) =
 export function designWith(design, model) {
   const strangers = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])].filter((k) => !design.light.kinds[k] && HEX.test(model.classes[k] ?? ''));
   if (!strangers.length) return design;
+  const present = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])];
   const more = (/** @type {Palette} */ p) => {
-    const nearest = (/** @type {string} */ c) => Object.values(p.kinds).reduce((a, b) => (apart(b, c) < apart(a, c) ? b : a));
+    // A colour one of the design's own kinds has in this diagram would make two kinds one to the eye, so the
+    // nearest of the rest is taken; only when every colour is taken is one shared. Two colours an author chose
+    // may still come to the same one: they chose them alike.
+    const taken = new Set(present.flatMap((k) => (p.kinds[k] ? [p.kinds[k]] : [])));
+    const nearest = (/** @type {string} */ c) => {
+      const all = Object.values(p.kinds), free = all.filter((x) => !taken.has(x));
+      return (free.length ? free : all).reduce((a, b) => (apart(b, c) < apart(a, c) ? b : a));
+    };
     return { ...p, kinds: { ...p.kinds, ...Object.fromEntries(strangers.map((k) => [k, nearest(model.classes[k])])) } };
   };
   return { ...design, light: more(design.light), ...(design.dark ? { dark: more(design.dark) } : {}) };

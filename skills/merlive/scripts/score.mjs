@@ -64,13 +64,27 @@ export function score(model, lay, design) {
   // P1
   const across = lay.direction === 'LR' ? 'y' : 'x';
   const line = lay.spine.length ? lay.nodes[lay.spine[0]][across] : 0;
-  add('P1', 'The main path is one straight line', lay.spine.filter((id) => lay.nodes[id][across] !== line).map((id) => `"${label(id)}" is off the line`), `${lay.spine.length} boxes in line`);
+  // On a grid its author placed there is no main path to hold straight: where each block is, is what was written.
+  add('P1', 'The main path is one straight line', lay.spine.filter((id) => lay.nodes[id][across] !== line).map((id) => `"${label(id)}" is off the line`), lay.grids ? 'a grid its author placed has no main path' : `${lay.spine.length} boxes in line`);
 
   // P2
   /** @type {string[]} */
   const close = [];
   nodes.forEach((a, i) => nodes.slice(i + 1).forEach((b) => overlap(a, b, limits.boxGap) && close.push(`"${label(a.id)}" and "${label(b.id)}" are closer than ${limits.boxGap}px`)));
-  add('P2', 'Boxes are one size, on a grid, with room between them', close, `${nodes.length} boxes of ${lay.box.w}×${lay.box.h}${nodes.some((n) => n.h !== lay.box.h) ? ', taller where they list rows or carry a note' : ''}`);
+  // On a grid its author placed, one size means one size of cell: a block is exactly the cells it takes, as
+  // wide as the columns it spans and the gaps between them, and as tall as its row. So is a frame.
+  const near = (/** @type {number} */ a, /** @type {number} */ b) => Math.abs(a - b) < 1;
+  for (const g of lay.grids ?? []) {
+    for (const c of g.cells) {
+      const it = c.frame ? lay.groups.find((f) => f.id === c.id) : lay.nodes[c.id], row = g.rows[c.row];
+      if (!it || !row) continue;
+      const l = c.frame ? it.x : it.x - it.w / 2, t = c.frame ? it.y : it.y - it.h / 2;
+      const exact = near(l, g.x + c.col * (g.colW + g.gapX)) && near(it.w, c.span * g.colW + (c.span - 1) * g.gapX) && near(t, row.y) && near(it.h, row.h);
+      if (!exact) close.push(c.frame ? `the frame of "${/** @type {{title:string}} */ (it).title || c.id}" is not exactly its cells` : `"${label(c.id)}" is not exactly its cells`);
+    }
+  }
+  const sizes = lay.grids ? `${nodes.length} blocks, each exactly its cells on a grid of ${lay.box.w}px columns` : `${nodes.length} boxes of ${lay.box.w}×${lay.box.h}${nodes.some((n) => n.h !== lay.box.h) ? ', taller where they list rows or carry a note' : ''}`;
+  add('P2', 'Boxes are one size, on a grid, with room between them', close, sizes);
 
   // P3
   /** @type {string[]} */
@@ -92,7 +106,8 @@ export function score(model, lay, design) {
     crossings += m.crossings;
     if (m.overlaps) along.push(`${a.id} and ${b.id} run along each other`);
   }));
-  const allowed = Math.floor(edges.length / limits.linksPerCrossing), forced = forcedCrossings(model, lay);
+  // Where its author placed the blocks, a crossing is not forced by the graph but chosen with the places: none is forgiven for it.
+  const allowed = Math.floor(edges.length / limits.linksPerCrossing), forced = lay.grids ? 0 : forcedCrossings(model, lay);
   const count = crossings === 1 ? '1 crossing' : `${crossings} crossings`;
   const tooMany = forced ? `${count}; ${edges.length} links allow ${allowed}, and the diagram forces ${forced} more` : `${count}, and ${edges.length} links allow ${allowed}`;
   const fine = !forced || !crossings ? count : crossings <= forced ? `${count}, which this diagram cannot be drawn without` : `${count}, ${forced} of which this diagram cannot be drawn without`;
@@ -103,9 +118,10 @@ export function score(model, lay, design) {
   /** @type {string[]} */
   const tight = [];
   for (const n of model.nodes) {
-    const lines = lay.nodes[n.id].lines, room = roomFor(n, lay.box.w);
+    // A box's own width: on a grid, a block that spans columns has more room than one that does not.
+    const lines = lay.nodes[n.id].lines, room = roomFor(n, lay.nodes[n.id].w);
     if (n.shape !== 'note' && lines.length > measure.mostLines) tight.push(`"${n.label}" needs ${lines.length} lines; shorten it or put the detail in a "%% note"`);
-    else if (lines.some((l) => l.length > room)) tight.push(`"${n.label}" has a word too long for a ${lay.box.w}px box`);
+    else if (lines.some((l) => l.length > room)) tight.push(`"${n.label}" has a word too long for a ${lay.nodes[n.id].w}px box`);
     // A row keeps its one line: breaking a method's name in two would make two of it.
     const long = n.table ? undefined : compartmentsOf(n).flat().find((row) => row.length > rowsRoom(lay.box.w));
     if (textOf(n, lay.box.w).some((l) => l.length * measure.textGlyph > lay.box.w - 2 * measure.textIn)) tight.push(`"${n.label}" says a word too long for any box; break it or shorten it`);

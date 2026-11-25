@@ -1,7 +1,7 @@
 // Why: a block diagram is boxes and links, but its author places the boxes: a grid, a block that spans it, a
 // space that holds a cell open. Merlive places boxes by rule. So these hold two things: that a block diagram
 // which is a flow (every block joined, the grid no more than the order they come in) is read into the model a
-// flowchart gives, and that one whose meaning is in its grid is left as Mermaid, with a sentence that says why
+// flowchart gives, and that one whose meaning is in its grid is marked to be placed on that grid, with why
 // and what to do. They also hold the corpus's own list (the `block` list of corpus/index.json) to what is read today.
 
 import assert from 'node:assert/strict';
@@ -59,8 +59,10 @@ describe('block: a flow', () => {
     const m = block('shop["Web shop<br/>and portal"] erp["ERP #amp; stock"]\nshop --> erp');
     assert.deepEqual(m.nodes[0].breaks, ['Web shop', 'and portal']);
     assert.equal(m.nodes[1].label, 'ERP & stock');
-    // A block arrow that holds only spaces has no words, and is called by its id.
-    assert.match(block('a b\na --> b\nfeeds<["&nbsp;&nbsp;"]>(down)').left ?? '', /"feeds" is a block arrow/);
+    // A block arrow that holds only spaces has no words: it is an arrow, and is named by its id only where it has to be named.
+    const blank = block('a b\na --> b\nfeeds<["&nbsp;&nbsp;"]>(down)');
+    assert.equal(blank.nodes[2].label, '');
+    assert.match(blank.placedWhy ?? '', /"feeds" is a block arrow/);
   });
 
   it('makes a block that is only named in a link, as Mermaid does', () => {
@@ -200,28 +202,28 @@ describe('block: what is not a block', () => {
   });
 });
 
-describe('block: a diagram placed by its author is left as Mermaid', () => {
-  const why = (/** @type {Model} */ m) => m.left ?? '';
+describe('block: a diagram placed by its author is placed on its grid', () => {
+  const why = (/** @type {Model} */ m) => m.placedWhy ?? '';
+  const onGrid = (/** @type {Model} */ m) => m.type === 'flowchart' && m.placedBy === 'grid' && m.left === undefined;
 
-  it('leaves one whose blocks no link joins, and says why and what to do', () => {
+  it('marks one whose blocks no link joins, keeps why, and says nothing against it', () => {
     const m = block('columns 3\na["Shop"] b["Portal"] c["Phone"]\nd["ERP"] e["Stock"] f["Ledger"]');
-    assert.equal(m.type, 'unsupported');
-    assert.equal(why(m), 'its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Shop", "Portal", "Phone" and 3 more are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins');
-    assert.deepEqual(m.warnings, [`line 3: left as Mermaid: ${why(m)}`]);
-    // What was read is still there, for whoever draws the grid one day.
+    assert.ok(onGrid(m));
+    assert.equal(why(m), '"Shop", "Portal", "Phone" and 3 more are joined to nothing by a link');
+    assert.deepEqual(m.warnings, []);
     assert.equal(m.nodes.length, 6);
   });
 
   it('leaves one with a block that spans columns, which says more than the order of a flow', () => {
     const m = block('columns 3\nshop["Web shop"]:3\nerp["ERP"]:2 stock["Stock"]\nshop --> erp\nerp --> stock');
-    assert.equal(m.type, 'unsupported');
-    assert.match(why(m), /: "Web shop" spans 3 columns \(line 3\); "ERP" spans 2 columns \(line 4\)\. To have it drawn/);
+    assert.ok(onGrid(m));
+    assert.match(why(m), /^"Web shop" spans 3 columns \(line 3\); "ERP" spans 2 columns \(line 4\)$/);
   });
 
   it('leaves one with a block arrow, which is an arrow between two cells and not a block', () => {
     const m = block('columns 3\nshop["Shop"] to<["orders"]>(right) erp["ERP"]\nshop --> erp');
-    assert.equal(m.type, 'unsupported');
-    assert.match(why(m), /: "orders" is a block arrow \(line 3\)\. To have it drawn/);
+    assert.ok(onGrid(m));
+    assert.match(why(m), /^"orders" is a block arrow \(line 3\)$/);
   });
 
   it('reads past a space that makes room for a link, along a row or down a column', () => {
@@ -234,21 +236,21 @@ describe('block: a diagram placed by its author is left as Mermaid', () => {
 
   it('leaves one with a space that puts a block where its author wanted it', () => {
     const m = block('columns 3\na b c\nspace d space\na --> b\nb --> c\nb --> d');
-    assert.equal(m.type, 'unsupported');
-    assert.match(why(m), /: the space on line 4 places a block, and does not make room for a link\. To have it drawn/);
-    assert.equal(block('space a b\na --> b').type, 'unsupported', 'a space before the first block');
-    assert.equal(block('a b space\na --> b').type, 'unsupported', 'a space after the last');
+    assert.ok(onGrid(m));
+    assert.match(why(m), /^the space on line 4 places a block, and does not make room for a link$/);
+    assert.ok(onGrid(block('space a b\na --> b')), 'a space before the first block');
+    assert.ok(onGrid(block('a b space\na --> b')), 'a space after the last');
   });
 
   it('leaves one with a block inside another that no link of its own joins', () => {
     const m = block('block:g\n  a\n  b\nend\nc\ng --> c');
-    assert.equal(m.type, 'unsupported');
-    assert.match(why(m), /: "a", "b" are joined to nothing by a link\./);
+    assert.ok(onGrid(m));
+    assert.match(why(m), /^"a", "b" are joined to nothing by a link$/);
   });
 
   it('says every reason up to three, and how many more there are', () => {
     const m = block('columns 4\na:2 b:2\nc:2 d:2\ne:4');
-    assert.match(why(m), /: "a" spans 2 columns \(line 3\); "b" spans 2 columns \(line 3\); "c" spans 2 columns \(line 4\); and 3 more\. To have it drawn/);
+    assert.match(why(m), /^"a" spans 2 columns \(line 3\); "b" spans 2 columns \(line 3\); "c" spans 2 columns \(line 4\); and 3 more$/);
   });
 
   it('keeps what was written, cell by cell, for whoever places a grid', () => {
@@ -274,15 +276,15 @@ describe('block: a diagram placed by its author is left as Mermaid', () => {
     assert.deepEqual(said(block('a<["x"]>(sideways) b\na --> b')).slice(0, 1), ['not read: "(sideways)": a block arrow points right, left, up, down, x (both ways across) or y (both ways up and down)']);
   });
 
-  it('leaves a block diagram of one block, which has nothing to join it to', () => {
-    assert.equal(block('erp["ERP"]').type, 'unsupported');
+  it('places a block diagram of one block on its grid: it has nothing to join it to', () => {
+    assert.ok(onGrid(block('erp["ERP"]')));
     // One with no blocks at all is a blank block, as any diagram with nothing in it.
-    assert.deepEqual([block('columns 2').type, block('columns 2').left], ['flowchart', undefined]);
+    assert.deepEqual([block('columns 2').type, block('columns 2').placedBy], ['flowchart', undefined]);
   });
 });
 
 describe('block: the corpus', () => {
-  /** @type {{file:string,covers:string,boxes:number,links:number,groups?:number,has?:string[],shapes?:string[],ends?:string[][],kinds?:string[],title?:string,direction?:string,left?:string,loses?:string}[]} */
+  /** @type {{file:string,covers:string,boxes:number,links:number,groups?:number,has?:string[],shapes?:string[],ends?:string[][],kinds?:string[],title?:string,direction?:string,placedBy?:string,says?:string,loses?:string}[]} */
   const list = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8')).block;
 
   it('lists every sample that is there, and every sample listed is there', () => {
@@ -304,19 +306,20 @@ describe('block: the corpus', () => {
       for (const w of s.has ?? []) assert.ok(words.includes(w), `${s.file}: "${w}" is not among its words: ${words.join(' | ')}`);
       for (const kind of s.kinds ?? []) assert.ok(m.nodes.some((n) => n.kind === kind), `${s.file}: no box of the kind ${kind}`);
       if (s.title !== undefined) assert.equal(m.title, s.title, s.file);
-      // A sample is drawn, with nothing to say, or left as Mermaid, saying only why.
-      assert.equal(m.type, s.left ? 'unsupported' : 'flowchart', `${s.file}: ${m.left ?? 'drawn'}`);
-      if (s.left) assert.ok((m.left ?? '').includes(s.left), `${s.file}: left because "${m.left}", not "${s.left}"`);
-      assert.deepEqual(m.warnings.map((w) => w.replace(/^line \d+: /, '')), s.left ? [`left as Mermaid: ${m.left}`] : [], s.file);
+      // Every sample is drawn: a flow placed by rule, or a grid placed where its author put each block.
+      assert.equal(m.type, 'flowchart', s.file);
+      assert.equal(m.placedBy, s.placedBy, `${s.file}: ${m.placedWhy ?? 'a flow'}`);
+      assert.deepEqual(m.warnings.filter((w) => !(s.says && w.includes(s.says))), [], s.file);
+      if (s.says) assert.ok(m.warnings.some((w) => w.includes(/** @type {string} */ (s.says))), `${s.file}: not told "${s.says}"`);
     }
   });
 
-  it('has both kinds: flows that are drawn, and grids that are left', () => {
-    assert.ok(list.filter((s) => !s.left).length >= 15 && list.filter((s) => s.left).length >= 8);
+  it('has both kinds: flows placed by rule, and grids placed by their author', () => {
+    assert.ok(list.filter((s) => !s.placedBy).length >= 15 && list.filter((s) => s.placedBy === 'grid').length >= 8);
   });
 
-  it('places every sample that is drawn, and each passes its rules', () => {
-    for (const s of list.filter((x) => !x.left)) {
+  it('places every sample, and each passes its rules', () => {
+    for (const s of list) {
       const m = parse(readFileSync(join(root, 'corpus', s.file), 'utf8')), lay = layout(m);
       assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), [], s.file);
     }

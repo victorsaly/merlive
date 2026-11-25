@@ -22,7 +22,7 @@ squeezed into a column, a legend that said "Red", and code in a face the site do
 - **The agent offers the choices once, after setup.** Motion, look, output and steps, each with setup's own as
   the recommendation (SKILL.md, section 5). A colour, a face or a corner is still never asked: it is read.
 
-## 0.3.0 (unreleased)
+## 0.3.0 (2026-11-25)
 
 More kinds of diagram that are boxes and links: requirement, C4, architecture and block diagrams.
 
@@ -34,8 +34,12 @@ More kinds of diagram that are boxes and links: requirement, C4, architecture an
   for it; boundaries and deployment nodes as groups, nested; relations with their technology.
 - **Architecture diagrams are drawn.** Services with their icons, groups inside groups, edges with the
   arrowheads written. The sides an edge leaves by say which way the diagram runs.
-- **Block diagrams that are a flow are drawn.** One whose meaning is in its author's grid (blocks joined to
-  nothing, spans, block arrows) is left as Mermaid, and the command says why and what would change that.
+- **Block diagrams are drawn.** One that is a flow is placed by rule. One whose meaning is in its grid is placed
+  on that grid: every block in its cell, as wide as the columns it spans, spaces left empty, a block that holds
+  others as a frame round a grid of its own, block arrows as arrows, and links at right angles round the blocks
+  between.
+- **A junction is a dot where lines meet.**
+- **An author's colour never takes the colour of a kind already in the diagram.**
 - **A box can say a sentence about itself**, wrapped under its name, the box as tall as it needs.
 - **Words on a link have the room they need**: a row above a group's name where a link runs into the group,
   and room above or below the turn where a link with two lines of words turns between two ranks.

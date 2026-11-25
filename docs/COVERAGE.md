@@ -13,7 +13,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 - **Requirement diagrams:** of 46 features, 37 are drawn as written, 9 are drawn less something, 0 are only partly read, 0 are refused.
 - **C4 diagrams:** of 41 features, 25 are drawn as written, 16 are drawn less something, 0 are only partly read, 0 are refused.
 - **Architecture diagrams:** of 28 features, 17 are drawn as written, 11 are drawn less something, 0 are only partly read, 0 are refused.
-- **Block diagrams:** of 36 features, 22 are drawn as written, 4 are drawn less something, 0 are only partly read, 0 are refused, and 10 are left as Mermaid.
+- **Block diagrams:** of 36 features, 31 are drawn as written, 5 are drawn less something, 0 are only partly read, 0 are refused.
 - **Sequence diagrams:** of 42 features, 38 are drawn as written, 4 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Every kind of diagram:** of 32, 8 drawn (those with their own lists above), and 24 left as Mermaid and named.
 
@@ -372,8 +372,8 @@ diagram runs. Held to the same measure.
 
 ## Block diagrams, feature by feature
 
-Blocks joined by links are read as a flowchart is. One whose meaning is in its grid is left as Mermaid, and
-said.
+Blocks joined by links are read as a flowchart is and placed by rule. One whose meaning is in its grid is
+placed on that grid, each block in the cell its author gave it.
 
 | Feature | Result | What is missing | Sample | Picture |
 |---|---|---|---|---|
@@ -403,16 +403,16 @@ said.
 | A class, and the blocks that are of it | Drawn, less something | The colour is drawn in the design's nearest colour | [source](../corpus/block/block-classdef.mmd) | [picture](../corpus/drawn/block-classdef.svg) |
 | Comments on lines of their own | Drawn |  | [source](../corpus/block/block-comments.mmd) | [picture](../corpus/drawn/block-comments.svg) |
 | Front matter with a title | Drawn |  | [source](../corpus/block/block-frontmatter.mmd) | [picture](../corpus/drawn/block-frontmatter.svg) |
-| A grid of blocks with no links: what it says is where each block is | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Shop", "Portal", "Phone" and 3 more are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-grid.mmd) |  |
-| Every shape of a block, laid out in a grid with no links | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Box", "Round", "Stadium" and 11 more are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-shapes-grid.mmd) |  |
-| One block on its own | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "ERP" is joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-alone.mmd) |  |
-| Blocks that span columns: a wide block over two narrower ones | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Web shop" spans 3 columns (line 3); "ERP" spans 2 columns (line 4). To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-span.mmd) |  |
-| A block that spans the grid under two others, a space between them and an empty row | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Warehouse" spans 3 columns (line 5). To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-space.mmd) |  |
-| Spaces that put a block under the one it belongs to | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: the space on line 4 places a block, and does not make room for a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-space-offset.mmd) |  |
-| Block arrows between cells: arrows drawn as blocks, placed by the grid | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "orders" is a block arrow (line 3); "stock" is a block arrow (line 4); the space on line 4 places a block, and does not make room for a link; and 2 more. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-arrows.mmd) |  |
-| A block arrow pointing every way it can | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Right" is a block arrow (line 3); "Left" is a block arrow (line 3); "Up" is a block arrow (line 3); and 4 more. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-arrow-directions.mmd) |  |
-| Blocks that hold grids of their own, and span columns of the grid they are in | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "Everything" spans 3 columns (line 3); "left" spans 2 columns (line 4); "wide" spans 3 columns (line 9); and 1 more. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-nested-columns.mmd) |  |
-| A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide) | Left as Mermaid | its blocks are placed by its author, in a grid, and Merlive places boxes by rule and does not keep a grid yet: "feeds" is a block arrow (line 4); "DB", "A", "A wide one in the middle" are joined to nothing by a link. To have it drawn, join every block to another with a link, give each one column, and keep a space only between two blocks that a link joins | [source](../corpus/block/block-mixed.mmd) |  |
+| A grid of blocks with no links: what it says is where each block is | Drawn |  | [source](../corpus/block/block-grid.mmd) | [picture](../corpus/drawn/block-grid.svg) |
+| Every shape of a block, laid out in a grid with no links | Drawn |  | [source](../corpus/block/block-shapes-grid.mmd) | [picture](../corpus/drawn/block-shapes-grid.svg) |
+| One block on its own | Drawn |  | [source](../corpus/block/block-alone.mmd) | [picture](../corpus/drawn/block-alone.svg) |
+| Blocks that span columns: a wide block over two narrower ones | Drawn |  | [source](../corpus/block/block-span.mmd) | [picture](../corpus/drawn/block-span.svg) |
+| A block that spans the grid under two others, a space between them and an empty row | Drawn |  | [source](../corpus/block/block-space.mmd) | [picture](../corpus/drawn/block-space.svg) |
+| Spaces that put a block under the one it belongs to | Drawn |  | [source](../corpus/block/block-space-offset.mmd) | [picture](../corpus/drawn/block-space-offset.svg) |
+| Block arrows between cells: arrows drawn as blocks, placed by the grid | Drawn |  | [source](../corpus/block/block-arrows.mmd) | [picture](../corpus/drawn/block-arrows.svg) |
+| A block arrow pointing every way it can | Drawn, less something | An arrow that points across and down is drawn pointing both ways across: Merlive draws an arrow along one line | [source](../corpus/block/block-arrow-directions.mmd) | [picture](../corpus/drawn/block-arrow-directions.svg) |
+| Blocks that hold grids of their own, and span columns of the grid they are in | Drawn |  | [source](../corpus/block/block-nested-columns.mmd) | [picture](../corpus/drawn/block-nested-columns.svg) |
+| A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide) | Drawn |  | [source](../corpus/block/block-mixed.mmd) | [picture](../corpus/drawn/block-mixed.svg) |
 
 ## Sequence diagrams, feature by feature
 

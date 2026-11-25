@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 25 November 2026, with 0.3.0 merged and 0.4.0 in hand.
+Last brought up to date: 25 November 2026, with 0.3.0 released and 0.4.0 in hand.
 
 ## Released
 
@@ -41,6 +41,29 @@ What 0.2.0 left, each said by the command when met or named on the comparison pa
   or in Victor's diagrams has two subgraphs with one id, but it is a change of behaviour, so say so in the pull
   request.
 
+**0.3.0** (25 November 2026). Requirement, C4, architecture and block diagrams (`requirement.mjs`, `c4.mjs`,
+`architecture.mjs`, `block.mjs`, and `grid.mjs` for a block diagram placed on its author's grid), a box's
+sentence (`Node.text`), a junction as a dot, room for words that run into a group or sit by a turn. Most of it went to
+`main` with 0.2.0 in one pull request (`class-er`); block grids, the junction and the release itself followed
+in a pull request of their own, since they were merged into that branch seconds after it went to `main`. Every sample Merlive reads is drawn with no rule broken.
+
+What 0.3.0 left, in the order worth doing:
+
+
+1. **A grid its author placed** is drawn (`grid.mjs`, `model.placedBy = 'grid'`). What is weak in it: the room
+   between cells holds three lines, and a fourth through one gap is not routed (a warning, and P3 refuses);
+   a link to a block that holds others is joined to a block inside it, so two lines can run side by side where
+   Mermaid draws one to the frame; a block fills its whole cell, so a circle in a wide column is a wide pill; a
+   grid inside a frame stretches its columns to the frame and not its rows; a flow written with `columns 2` is
+   still one chain placed by rank.
+2. **A junction** is a dot (the `point` shape) in a footprint as big as any box, so the room round it is a
+   box's. A box smaller than the one box size would let the diagram close up round it.
+3. **Smaller things**: an edge out of a group (`a{group}:R`) is drawn from the service named, not from the frame;
+   a group has nowhere to keep an icon or a description (a Deployment_Node's); `disk` is drawn with the database
+   icon; `contains` in a requirement diagram ends in a circle where Mermaid has a crossed ring; emphasis inside a
+   box's sentence is dropped; the page's side panel does not show a box's sentence.
+4. **Look, sample by sample**, at the requirement samples on `corpus/compare.html`: the C4, architecture and
+   block samples were looked through on contact sheets, the requirement ones only by their rules passing.
 ## In hand: 0.4.0, what a real project's documents showed
 
 On the branch `fit-the-page-and-ask`. Found by drawing the diagrams of a business analyst demo (its
@@ -56,38 +79,12 @@ does not read `%% kind` yet; the main path is still the longest one, which in a 
 then OpenAI when its limit is reached) puts the fallback on the straight line. `%% main:` fixes it by hand;
 picking the path that takes no decision's exception would fix it by rule.
 
-## Merged, not released: 0.3.0, more kinds that are boxes and links
-
-On the branch `kinds`, stacked on `class-er` until the 0.2.0 pull request is merged. One pull request, one release.
-
-Done: readers for requirement, C4, architecture and block diagrams (`requirement.mjs`, `c4.mjs`,
-`architecture.mjs`, `block.mjs`), each with its tests, its list in `corpus/index.json` and its section in
-`skills/merlive/reference.md`; a box's sentence (`Node.text`); room for words that run into a group or sit by a
-turn; the line over a name fitted to its box. Every sample is drawn with no rule broken, or left on purpose.
-
-Left, in the order worth doing:
-
-1. **A grid its author placed.** Ten of the 36 block samples are left as Mermaid because what they say is where
-   each block is. `block.mjs` already reads the grid into `model.grid` (`{columns, cells}`, each cell a block,
-   a space, an arrow or a group with a grid of its own, with its span). To draw them: fill cells row by row, one
-   column width for a grid and one height for a row, a block of span `s` as wide as `s` columns and their gaps
-   (P2 needs a clause and a check for that), a group cell as a frame round its own grid, a block-arrow shape in
-   `shapes.mjs`, and links routed at right angles in the gaps between cells, never through one.
-2. **A junction** in an architecture diagram is an empty pill the size of a box. It should be a point: a shape
-   with no room for words, and a box smaller than the one box size.
-3. **Smaller things**: an edge out of a group (`a{group}:R`) is drawn from the service named, not from the frame;
-   a group has nowhere to keep an icon or a description (a Deployment_Node's); `disk` is drawn with the database
-   icon; `contains` in a requirement diagram ends in a circle where Mermaid has a crossed ring; emphasis inside a
-   box's sentence is dropped; the page's side panel does not show a box's sentence.
-4. **Look, sample by sample**, at the 151 new samples on `corpus/compare.html`: one whole sample of each kind
-   was looked at closely, the rest only by their rules passing.
-5. **Release**: the changelog's date, the README's status line, the pull request.
-
 ## Waiting on Victor
 
 - **The tags.** No session so far could push a tag. In a clone, `v0.1.0` first:
-  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0" && git push origin v0.1.0`. Then, once the 0.2.0 pull request is
-  merged, on the merge commit: `git tag -a v0.2.0 -m "Merlive 0.2.0" && git push origin v0.2.0`.
+  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0" && git push origin v0.1.0`. Then `v0.2.0` at the last commit that was only 0.2.0:
+  `git tag -a v0.2.0 faa35cd -m "Merlive 0.2.0" && git push origin v0.2.0`. Then, once the pull request from
+  `class-er` is merged, `v0.3.0` on the merge commit.
 - **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11) takes "not released
   yet" off Merlive's page; merge it after the tag. Then, in the skills repository: `npm install`,
   `npm run build` (the Merlive page has never been built: it could not be, where it was written),

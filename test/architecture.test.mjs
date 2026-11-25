@@ -196,7 +196,7 @@ describe('architecture: a group', () => {
 describe('architecture: a junction', () => {
   it('is where lines meet: a small round box with no words, of a kind of its own', () => {
     const m = arch('service a(server)[A]\nservice b(server)[B]\nservice c(server)[C]\njunction j\na:R -- L:j\nj:R -- L:b\nj:B -- T:c');
-    assert.deepEqual(m.nodes.map((n) => [n.id, n.label, n.shape, n.kind]).at(-1), ['j', '', 'pill', 'junction']);
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.label, n.shape, n.kind]).at(-1), ['j', '', 'point', 'junction']);
     assert.deepEqual(ties(m).map((t) => t[0]), ['a-j', 'j-b', 'j-c']);
     assert.deepEqual(m.warnings, []);
   });

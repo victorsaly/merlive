@@ -104,6 +104,7 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
 .mv-stripe{stroke:none}
+.mv-node .mv-point{fill:var(--mv-edge);stroke:var(--mv-edge)}
 .mv-node .mv-strong{font-weight:${Math.min(900, Math.max(700, design.weight + 200))}}
 .mv-node .mv-em{font-style:italic}
 .mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
@@ -255,7 +256,7 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
       return runs.map(([l, text]) => (l ? `<tspan class="${l}">${esc(text)}</tspan>` : esc(text))).join('');
     };
     const words = b.lines.map((line, i) => `<tspan x="${n(b.x + at.dx + aside)}" y="${n(first + i * 16)}">${looks.length ? stressed(line) : esc(line)}</tspan>`).join('');
-    const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${m.label}, ${meaningOf(model, m.kind)}`)}"` : '';
+    const role = live ? ` tabindex="0" role="button" aria-label="${esc(m.label ? `${m.label}, ${meaningOf(model, m.kind)}` : meaningOf(model, m.kind))}"` : '';
     // A box of a kind that means something carries a stripe of its colour down its near edge. Any other shape
     // already says what it is by its outline, and a plain step has nothing to say.
     const round = Math.min(design.radius, b.h / 2);
