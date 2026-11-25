@@ -1,0 +1,6 @@
+C4Container
+  Person(buyer, "Buyer", $descr="Raises purchase orders")
+  Container(api, "Order API", $techn="C#", $descr="Checks and saves orders")
+  ContainerDb(db, "Orders", $techn="SQL Server")
+  Rel(buyer, api, "Raises orders through", $techn="HTTPS")
+  Rel(api, db, "Saves to", $descr="One row an order")

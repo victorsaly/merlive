@@ -4,7 +4,7 @@
 
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { cut, inset, outlineOf, roomIn, shapes, wordsAt } from '../skills/merlive/scripts/shapes.mjs';
+import { cut, form, inset, outlineOf, roomIn, shapes, wordsAt } from '../skills/merlive/scripts/shapes.mjs';
 
 const w = 160, h = 60;
 
@@ -99,5 +99,15 @@ describe('shapes: a note', () => {
     assert.equal(inset('note', 'right', h / 2, w, h), 0);
     assert.equal(inset('note', 'bottom', w / 2, w, h), 0);
     assert.equal(inset('note', 'left', -h / 2, w, h), 0);
+  });
+});
+
+describe('shapes: a pill taller than a plain box', () => {
+  it('keeps flat sides for its words: its ends are rounded no more than a plain pill of two lines is', () => {
+    const { main } = outlineOf('pill', 0, 0, 200, 140, 8);
+    assert.match(main, new RegExp(`rx="${form.pillMost}"`));
+    assert.equal(inset('pill', 'left', 0, 200, 140), 0, 'the middle of a tall side is flat');
+    assert.ok(inset('pill', 'left', 68, 200, 140) > 0, 'and the corner is still round');
+    assert.equal(outlineOf('pill', 0, 0, 160, 44, 8).main.includes('rx="22"'), true, 'a plain pill is as it was');
   });
 });

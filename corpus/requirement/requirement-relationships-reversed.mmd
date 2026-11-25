@@ -1,0 +1,16 @@
+requirementDiagram
+  requirement approval {
+    id: 1
+  }
+  requirement limit {
+    id: 1.1
+  }
+  requirement speed {
+    id: 1.2
+  }
+  element approval_flow {
+    type: workflow
+  }
+  limit <- contains - approval
+  approval <- derives - speed
+  approval <- satisfies - approval_flow

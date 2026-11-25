@@ -1,0 +1,15 @@
+block
+  columns 1
+  a["Order"]
+  b["Pick"]
+  c["Pack"]
+  d["Send"]
+  e["Invoice"]
+  f["Paid"]
+  g["Filed"]
+  a ==> b
+  b -.-> c
+  c --o d
+  d --x e
+  e <--> f
+  f -. "later" .-> g

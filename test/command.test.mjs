@@ -98,7 +98,7 @@ describe('the command', () => {
   it('leaves and names a kind of diagram it does not draw', async () => {
     const cwd = temp();
     writeFileSync(join(cwd, 'mixed.md'), '```mermaid\nflowchart TD\nA --> B\n```\n\n```mermaid\npie title Orders\n  "UK" : 46\n```\n');
-    assert.match((await go(['mixed.md', '--check'], cwd)).text, /left as Mermaid: block 2 \(line 6\) is a pie, and Merlive draws flowcharts, state, class, entity and sequence diagrams for now/);
+    assert.match((await go(['mixed.md', '--check'], cwd)).text, /left as Mermaid: block 2 \(line 6\) is a pie, and Merlive draws flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams for now/);
   });
 
   it('writes a page that fetches nothing and carries its source', async () => {
@@ -215,7 +215,7 @@ describe('the command: what is missing ends with 2, nothing to draw with 3', () 
     const { code, text } = await go(['plain.md'], cwd);
     assert.equal(code, exits.nothingToDraw);
     assert.match(text, /block 2 \(line 8\) has no boxes/);
-    assert.match(text, /Nothing to draw: plain\.md has no Mermaid flowchart or sequence diagram\./);
+    assert.match(text, /Nothing to draw: plain\.md has no Mermaid diagram of a kind Merlive draws\./);
     assert.match((await go([example, '--only', '9'])).text, /at block 9/);
   });
 });

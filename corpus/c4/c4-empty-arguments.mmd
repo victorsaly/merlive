@@ -1,0 +1,6 @@
+C4Container
+  Container(web, "Web shop", "", "Where buyers raise orders")
+  Container(api, "Order API",, "Checks and saves orders")
+  ContainerDb(db, "Orders", "SQL Server")
+  Rel(web, api, "Calls", "")
+  Rel(api, db, "Saves to")

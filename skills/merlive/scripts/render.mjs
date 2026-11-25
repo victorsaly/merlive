@@ -4,9 +4,9 @@
 
 import { contrast, kindFill, looksOf, mix, rowShade } from './design.mjs';
 import { runtime } from './runtime.mjs';
-import { outlineOf, wordsAt } from './shapes.mjs';
+import { form, outlineOf, wordsAt } from './shapes.mjs';
 import { iconMeasure, icons } from './icons.mjs';
-import { columnsAt, compartmentsOf, measure, wrap } from './layout.mjs';
+import { columnsAt, compartmentsOf, measure, textOf, wrap } from './layout.mjs';
 
 /** @typedef {import('./layout.mjs').Pt} Pt */
 
@@ -87,6 +87,7 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 .mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
 .mv-band{fill:var(--mv-text);opacity:${rowShade};stroke:none}
 .mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
+.mv-node .mv-told{font-size:11.5px;font-weight:400}
 .mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
 .mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
 .mv-icon{fill:none;stroke:var(--mv-text);stroke-width:${iconMeasure.stroke};stroke-linecap:round;stroke-linejoin:round}
@@ -154,9 +155,10 @@ function markAt(mark, tip, from) {
 /** The drawing alone: the SVG's insides, the same for a page, a picture and the setup page. */
 export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {import('./layout.mjs').Layout} */ lay, /** @type {import('./design.mjs').Design} */ design, /** @type {boolean} */ live, tag = '') {
   // The main path, link by link: it is drawn heavier, so a reader's eye takes it first.
-  // A class diagram and an entity diagram are of things, not of a flow: no path through one is the way a reader
-  // goes, so none is drawn heavier.
-  const things = /^(classDiagram|erDiagram)/.test(model.kindOfDiagram);
+  // A class diagram, an entity diagram, a requirement diagram, an architecture diagram and a C4 diagram are of
+  // things, not of a flow: no path through one is the way a reader goes, so none is drawn heavier. A C4 dynamic
+  // diagram is the one that is read in order.
+  const things = /^(classDiagram|erDiagram|requirementDiagram|architecture|C4(?!Dynamic))/.test(model.kindOfDiagram);
   const main = new Set(things ? [] : lay.spine.slice(1).map((id, i) => `${lay.spine[i]}>${id}`));
   const label = new Map(model.nodes.map((m) => [m.id, m.label]));
   const links = model.edges.map((e) => {
@@ -180,9 +182,15 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     // A box that lists rows keeps its name in a block at the top, the size a plain box is, with any short line
     // above it; under that, each compartment begins with a rule and lists its rows from the left.
     const listed = compartmentsOf(m), over = m.over ? measure.overLine : 0;
-    const nameY = listed.length || over ? t + over + lay.box.h / 2 : b.y;
-    const above = m.over ? `<text class="mv-over" x="${n(b.x)}" y="${n(t + measure.overLine + 4)}">${esc(m.over)}</text>` : '';
-    let down = t + over + lay.box.h;
+    const told = textOf(m, b.w);
+    // What is set from the top of a cylinder starts under its rim, not on it.
+    const rim = m.shape === 'cylinder' && (listed.length || over || told.length) ? form.cap : 0;
+    const nameY = listed.length || over || told.length ? t + rim + over + lay.box.h / 2 : b.y;
+    const above = m.over ? `<text class="mv-over" x="${n(b.x)}" y="${n(t + rim + measure.overLine + 4)}">${esc(m.over)}</text>` : '';
+    let down = t + rim + over + lay.box.h;
+    // What the box says about itself: under its name, in a quieter face, each line in the middle of the box.
+    const sentence = told.length ? `<text class="mv-told">${told.map((line, i) => `<tspan class="mv-told-line" x="${n(b.x)}" y="${n(down + i * measure.textLine + 6)}">${esc(line)}</tspan>`).join('')}</text>` : '';
+    if (told.length) down += told.length * measure.textLine + measure.textPad;
     // An entity is a table: a rule under its name, a row for each attribute with a rule between rows and
     // between columns, and every second row shaded, so a reader can follow one across.
     const table = () => {
@@ -245,7 +253,7 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     // What its author's own style said of its outline: broken, heavy, or both.
     const said = [m.dashed ? 'dashed' : '', m.heavy ? 'heavy' : ''].filter(Boolean).join(' ');
     const outline = said ? ` data-outline="${said}"` : '';
-    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${outline}${role}>${shape}${stripe}${icon}${above}<text>${words}</text>${rows}</g>`;
+    return `<g class="mv-node" data-node="${esc(m.id)}" data-kind="${esc(m.kind)}"${outline}${role}>${shape}${stripe}${icon}${above}<text>${words}</text>${sentence}${rows}</g>`;
   });
   // A group's frame, behind everything, with what the group is called at its top left.
   const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/></g>`);

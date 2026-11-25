@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.3.0 (unreleased)
+
+More kinds of diagram that are boxes and links: requirement, C4, architecture and block diagrams.
+
+- **Requirement diagrams are drawn.** The six kinds of requirement and elements, each saying what it is over its
+  name, its text as a sentence under it, its id, risk and verify method as rows, and all seven relationships,
+  written either way round.
+- **C4 diagrams are drawn.** People, systems, containers and components with what they are, their technology
+  and what they do; databases and queues in their own shapes; what is outside the firm in the design's colour
+  for it; boundaries and deployment nodes as groups, nested; relations with their technology.
+- **Architecture diagrams are drawn.** Services with their icons, groups inside groups, edges with the
+  arrowheads written. The sides an edge leaves by say which way the diagram runs.
+- **Block diagrams that are a flow are drawn.** One whose meaning is in its author's grid (blocks joined to
+  nothing, spans, block arrows) is left as Mermaid, and the command says why and what would change that.
+- **A box can say a sentence about itself**, wrapped under its name, the box as tall as it needs.
+- **Words on a link have the room they need**: a row above a group's name where a link runs into the group,
+  and room above or below the turn where a link with two lines of words turns between two ranks.
+- **The line over a name fits its box**, and a pill taller than a plain box keeps flat sides for its words.
+- **The contrast of a shaded row is checked only where a row is drawn shaded.**
+
 ## 0.2.0 (2026-11-25)
 
 Class diagrams and entity diagrams, and much that Mermaid drew and Merlive did not: people and feet in a

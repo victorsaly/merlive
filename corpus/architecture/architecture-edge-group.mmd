@@ -1,0 +1,10 @@
+architecture-beta
+  group shop(cloud)[Shop]
+  group books(cloud)[Books]
+
+  service api(server)[Orders API] in shop
+  service db(database)[Orders] in shop
+  service erp(server)[ERP] in books
+
+  api:R -- L:db
+  db{group}:R --> L:erp{group}

@@ -36,8 +36,9 @@ A diagram uses one box width (128, 160, 192 or 224 px: the narrowest that fits e
 height. A shape is what its author drew (a rhombus, a hexagon, a cylinder, a subroutine, a side that leans, a
 double circle, a flag), in the same footprint as every other box: a rhombus is as wide and as tall as the boxes
 round it, not a diamond twice their size. Each line runs on to the outline of the shape it meets. No two boxes
-come closer than 16 px. Two boxes are taller than the rest: one that lists rows under its name, and a note, each
-by what it holds. An entity's rows are a table: every column is as wide as its widest cell, what the box has to
+come closer than 16 px. Three boxes are taller than the rest: one that lists rows under its name, one that says a sentence about
+itself, and a note, each by what it holds. The short line over a name is never wrapped: the box is as wide as
+it needs. An entity's rows are a table: every column is as wide as its widest cell, what the box has to
 spare goes to the names, and the whole table has to fit the widest box there is (384 px).
 
 A class and an entity list rows under their name, so their boxes cannot all be one height. They keep one width
@@ -93,6 +94,10 @@ keeps the lines its author broke it into when a width allows, wraps when none do
 - **What to do when it fails:** shorten the label and put the detail in a `%% note`.
 
 ## P7. A link's words sit clear of boxes and of each other
+
+Where a link runs into a group from outside, the room between the two ranks is taller by the words, so they have
+a row of their own above the group's name. Where a link with two lines of words or more turns between two ranks,
+the room is tall enough for the words above or below the turn.
 
 A link's words ("Yes", "No") are tried beside each run of its line, near where it leaves first: the first place
 that sits on no box and no other words wins, and of those, one no line passes through. Long words are wrapped,

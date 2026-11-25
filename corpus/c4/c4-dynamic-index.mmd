@@ -1,0 +1,7 @@
+C4Dynamic
+  Container(web, "Web shop", "React")
+  Container(api, "Order API", "C#")
+  ContainerDb(db, "Orders", "SQL Server")
+  RelIndex(1, web, api, "Sends the order")
+  RelIndex(2, api, db, "Saves it")
+  RelIndex(5, api, web, "Answers with its number")

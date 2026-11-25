@@ -391,3 +391,35 @@ describe('layout: a flow written from the far end', () => {
     assert.match(lay.warnings[0], /^written right to left, drawn top to bottom/);
   });
 });
+
+describe('layout: words on a link that runs into a group', () => {
+  it('have a row of their own above the name of the group, however long the name', () => {
+    const m = parse('flowchart TD\n  App[Order service] -->|Reads and writes over TDS| Db[(Orders)]\n  subgraph cloud["Azure SQL, general purpose tier"]\n    subgraph inner["West Europe, zone one"]\n      Db\n    end\n  end'), lay = layout(m);
+    assert.equal(lay.groups.length, 2);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+    const words = lay.edges['App-Db'].label;
+    assert.ok(words && words.y + words.h / 2 <= lay.groups[0].y, 'the words end above the outer frame');
+  });
+
+  it('leave the room between ranks as it was where no words run into a group', () => {
+    const plain = (/** @type {string} */ label) => layout(parse(`flowchart TD\n  A --> B\n  B ${label} C\n  subgraph g[Group]\n    A\n    B\n    C\n  end`));
+    assert.equal(plain('-->|inside|').height, plain('-->').height);
+  });
+});
+
+describe('layout: what the newer kinds asked of a box', () => {
+  it('makes the box wide enough for the line over its name', () => {
+    const m = parse('flowchart TD\n  A[Orders] --> B[Bus]');
+    /** @type {any} */ (m.nodes[0]).over = '«container database: SQL Server»';
+    const lay = layout(m);
+    assert.ok(m.nodes[0].over.length * measure.overGlyph + 2 * measure.overIn <= lay.box.w, `${lay.box.w}px`);
+    /** @type {any} */ (m.nodes[0]).over = `«${'x'.repeat(80)}»`;
+    const p6 = score(m, layout(m), builtIn).checks.find((c) => c.id === 'P6');
+    assert.match(p6?.detail ?? '', /"Orders" has a line over its name too long for any box/);
+  });
+
+  it('gives words of two lines on a link that turns between two ranks room above or below the turn', () => {
+    const m = parse('flowchart TD\n  Rep[Sales rep] -->|Answers orders in| Portal[Supplier portal]\n  Api[Order API] <-->|Trades orders and answers with| Portal\n  Shop[Web shop] --> Api'), lay = layout(m);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+  });
+});

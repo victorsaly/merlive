@@ -1,0 +1,10 @@
+C4Deployment
+  Node(dc, "Data centre", "Leeds") {
+    Node_L(web, "Web server", "nginx") {
+      Container(site, "Web shop", "React")
+    }
+    Node_R(appsrv, "App server", "IIS") {
+      Container(api, "Order API", "C#")
+    }
+  }
+  Rel(site, api, "Calls", "HTTPS")

@@ -1,0 +1,8 @@
+C4Container
+  Container(web, "Web shop", "React", "Where buyers raise orders")
+  Container(api, "Order API", "C#, ASP.NET", "Checks and saves orders")
+  ContainerDb(db, "Orders", "SQL Server", "Every order and its lines")
+  ContainerQueue(bus, "Order events", "Azure Service Bus", "Tells the rest what happened")
+  Rel(web, api, "Calls")
+  Rel(api, db, "Reads and writes")
+  Rel(api, bus, "Publishes to")

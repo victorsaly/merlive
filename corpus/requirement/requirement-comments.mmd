@@ -1,0 +1,11 @@
+requirementDiagram
+  %% What an order needs
+  requirement approval { %% the first of them
+    %% said of it
+    id: 1
+  }
+  element approval_flow {
+    type: workflow
+  }
+  %% how it is met
+  approval_flow - satisfies -> approval

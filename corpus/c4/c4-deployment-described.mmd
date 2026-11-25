@@ -1,0 +1,8 @@
+C4Deployment
+  Deployment_Node(phone, "Buyer's phone", "iOS or Android", "Whatever the buyer carries") {
+    Container(app, "Ordering app", "React Native", "Raises orders on the move")
+  }
+  Deployment_Node(cloud, "Cloud", "Azure") {
+    Container(api, "Order API", "C#")
+  }
+  Rel(app, api, "Calls", "HTTPS")

@@ -1,0 +1,17 @@
+C4Container
+  title Ordering: who uses it and what it is made of
+  Person(buyer, "Buyer", "Raises and chases purchase orders")
+  Person_Ext(rep, "Sales rep", "Answers for the supplier")
+  System_Boundary(ordering, "Ordering") {
+    Container(web, "Web shop", "React", "Where orders are raised")
+    Container(api, "Order API", "C#, ASP.NET", "Checks and saves orders")
+    ContainerDb(db, "Orders", "SQL Server", "Every order and its lines")
+    ContainerQueue(bus, "Order events", "Azure Service Bus", "What happened, for the rest to hear")
+  }
+  System_Ext(portal, "Supplier portal", "Takes orders from firms")
+  Rel(buyer, web, "Raises orders in", "HTTPS")
+  Rel(web, api, "Calls", "JSON over HTTPS")
+  Rel(api, db, "Reads and writes")
+  Rel(api, bus, "Publishes to")
+  BiRel(api, portal, "Trades orders and answers with")
+  Rel(rep, portal, "Answers orders in")

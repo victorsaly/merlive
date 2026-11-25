@@ -4,11 +4,15 @@
 import { iconFor } from './icons.mjs';
 import { stateReader } from './state.mjs';
 import { erReader } from './er.mjs';
+import { c4Reader } from './c4.mjs';
 import { classReader } from './class.mjs';
+import { architectureReader } from './architecture.mjs';
+import { requirementReader } from './requirement.mjs';
+import { blockReader } from './block.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
-/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string,rows?:string[][],table?:string[][],over?:string,emphasis?:{words:string,strong?:boolean,em?:boolean}[]}} Node emphasis: the label again as runs, when a Markdown string made some of it bold or italic; table: an entity's rows again, cell by cell (type, name, keys), to be drawn as a table; rows: what a class or an entity lists under its name, a compartment at a time, each line as it is shown; over: a short line above its name ("«interface»"); dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
+/** @typedef {{id:string,label:string,shape:Shape,kind:string,breaks?:string[],dashed?:boolean,heavy?:boolean,icon?:string,rows?:string[][],table?:string[][],over?:string,text?:string,emphasis?:{words:string,strong?:boolean,em?:boolean}[]}} Node text: a sentence or two about the box, drawn under its name in a quieter face and wrapped, the box as tall as it needs (a requirement's text, what a C4 system does); emphasis: the label again as runs, when a Markdown string made some of it bold or italic; table: an entity's rows again, cell by cell (type, name, keys), to be drawn as a table; rows: what a class or an entity lists under its name, a compartment at a time, each line as it is shown; over: a short line above its name ("«interface»"); dashed, heavy: what its author's own style says of its outline; icon: the name of Merlive's drawing of the icon its author wrote */
 /**
  * @typedef {'none'|'arrow'|'circle'|'cross'|'triangle'|'diamond'|'diamond-open'|'one'|'zero-or-one'|'one-or-many'|'zero-or-many'} Mark
  * what is drawn at an end of a link. A class diagram adds the hollow triangle of "is a", the filled diamond of
@@ -33,6 +37,8 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
  * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
  * @property {string[]} warnings
+ * @property {string} [left] why a diagram of a kind Merlive reads is left as Mermaid all the same, in a sentence that says what to do; its type is then 'unsupported' (a block diagram placed by its author's grid)
+ * @property {import('./block.mjs').Grid} [grid] a block diagram as its author placed it, cell by cell
  */
 
 // Longest opener first, so "([" is not read as "(" and then "[". A shape that leans may close either way: it
@@ -205,6 +211,10 @@ const READERS = /** @type {const} */ ([
   [/^stateDiagram(-v2)?;?$/, stateReader],
   [/^classDiagram(-v2)?;?$/, classReader],
   [/^erDiagram;?$/, erReader],
+  [/^architecture(-beta)?;?$/, architectureReader],
+  [/^requirementDiagram;?$/, requirementReader],
+  [/^C4(Context|Container|Component|Dynamic|Deployment)$/, c4Reader],
+  [/^block(-beta)?;?$/, blockReader],
 ]);
 
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own

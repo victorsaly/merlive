@@ -1,0 +1,10 @@
+C4Dynamic
+  title Raising an order
+  Person(buyer, "Buyer")
+  Container(web, "Web shop", "React")
+  Container(api, "Order API", "C#")
+  ContainerDb(db, "Orders", "SQL Server")
+  Rel(buyer, web, "Fills in the order")
+  Rel(web, api, "Sends it", "HTTPS")
+  Rel(api, db, "Saves it")
+  Rel(api, web, "Answers with its number")

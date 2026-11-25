@@ -1,0 +1,11 @@
+architecture-beta
+  accTitle: Where an order is kept
+  accDescr {
+    The orders API saves each order
+    to the orders database.
+  }
+
+  service api(server)[Orders API]
+  service db(database)[Orders]
+
+  api:R -- L:db

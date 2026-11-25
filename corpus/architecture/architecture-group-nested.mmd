@@ -1,0 +1,10 @@
+architecture-beta
+  group cloud(cloud)[Azure]
+  group net(server)[Private network] in cloud
+
+  service gateway(internet)[Gateway] in cloud
+  service api(server)[Orders API] in net
+  service db(database)[Orders] in net
+
+  gateway:R -- L:api
+  api:R -- L:db

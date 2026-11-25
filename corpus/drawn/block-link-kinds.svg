@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 184 652" width="184" height="652" role="img" aria-label="Links thick and dotted, ending in a circle, a cross, an arrow at both ends, and dotted with words">
+<title>Links thick and dotted, ending in a circle, a cross, an arrow at both ends, and dotted with words</title>
+<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+.mv-node .mv-detail{fill:none}
+[data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
+[data-outline~="heavy"] .mv-shape{stroke-width:2.6}
+.mv-node .mv-rows{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
+.mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
+.mv-band{fill:var(--mv-text);opacity:0.06;stroke:none}
+.mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
+.mv-node .mv-told{font-size:11.5px;font-weight:400}
+.mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
+.mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
+.mv-icon{fill:none;stroke:var(--mv-text);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+.mv-node .mv-strong{font-weight:700}
+.mv-node .mv-em{font-style:italic}
+.mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
+[data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-name{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase;text-anchor:middle;paint-order:stroke;stroke:var(--mv-group);stroke-width:4px;stroke-linejoin:round}</style>
+<rect width="100%" height="100%" fill="var(--mv-bg)"/>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="184" height="652" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge mv-main" data-edge="a-b" data-style="thick"><path class="mv-line" d="M92,72L92,113"/><polygon class="mv-head" points="92,120 96.5,111 87.5,111"/></g><g class="mv-edge mv-main" data-edge="b-c" data-style="dotted"><path class="mv-line" d="M92,164L92,205"/><polygon class="mv-head" points="92,212 96.5,203 87.5,203"/></g><g class="mv-edge mv-main" data-edge="c-d" data-style="solid"><path class="mv-line" d="M92,256L92,297"/><circle class="mv-head" cx="92" cy="299.5" r="3.5"/></g><g class="mv-edge mv-main" data-edge="d-e" data-style="solid"><path class="mv-line" d="M92,348L92,391.5"/><path class="mv-cross" d="M88.5,388L95.5,395M88.5,395L95.5,388"/></g><g class="mv-edge mv-main" data-edge="e-f" data-style="solid"><path class="mv-line" d="M92,447L92,481"/><polygon class="mv-head" points="92,440 87.5,449 96.5,449"/><polygon class="mv-head" points="92,488 96.5,479 87.5,479"/></g><g class="mv-edge mv-main" data-edge="f-g" data-style="dotted"><path class="mv-line" d="M92,532L92,573"/><polygon class="mv-head" points="92,580 96.5,571 87.5,571"/><text class="mv-label"><tspan class="mv-label-line" x="120.5" y="557">later</tspan></text></g></g><g></g><g><g class="mv-node" data-node="a" data-kind="step"><rect class="mv-shape" x="28" y="28" width="128" height="44" rx="8"/><text><tspan x="92" y="54.5">Order</tspan></text></g><g class="mv-node" data-node="b" data-kind="step"><rect class="mv-shape" x="28" y="120" width="128" height="44" rx="8"/><text><tspan x="92" y="146.5">Pick</tspan></text></g><g class="mv-node" data-node="c" data-kind="step"><rect class="mv-shape" x="28" y="212" width="128" height="44" rx="8"/><text><tspan x="92" y="238.5">Pack</tspan></text></g><g class="mv-node" data-node="d" data-kind="step"><rect class="mv-shape" x="28" y="304" width="128" height="44" rx="8"/><text><tspan x="92" y="330.5">Send</tspan></text></g><g class="mv-node" data-node="e" data-kind="step"><rect class="mv-shape" x="28" y="396" width="128" height="44" rx="8"/><text><tspan x="92" y="422.5">Invoice</tspan></text></g><g class="mv-node" data-node="f" data-kind="step"><rect class="mv-shape" x="28" y="488" width="128" height="44" rx="8"/><text><tspan x="92" y="514.5">Paid</tspan></text></g><g class="mv-node" data-node="g" data-kind="step"><rect class="mv-shape" x="28" y="580" width="128" height="44" rx="8"/><text><tspan x="92" y="606.5">Filed</tspan></text></g></g>
+</svg>
