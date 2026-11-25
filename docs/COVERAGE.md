@@ -6,8 +6,8 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 ## In short
 
-- **Flowcharts:** of 70 features, 45 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 3 are only partly read, and 0 are refused.
-- **State diagrams:** of 27 features, 15 are drawn as written, 10 are drawn less something, 2 are only partly read, and 0 are refused.
+- **Flowcharts:** of 70 features, 46 are drawn as written, 22 are drawn less something Merlive leaves out on purpose or does not have yet, 2 are only partly read, and 0 are refused.
+- **State diagrams:** of 27 features, 16 are drawn as written, 10 are drawn less something, 1 are only partly read, and 0 are refused.
 - **Sequence diagrams:** of 42 features, 35 are drawn as written, 5 are drawn less something, 2 are only partly read, and 0 are refused.
 - **Every kind of diagram:** of 32, 2 drawn (flowcharts, state diagrams and sequence diagrams, which have their own lists above), and 30 left as Mermaid and named.
 
@@ -80,7 +80,7 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | A group with an id and a title | Drawn |  | [source](../corpus/flowchart/subgraph-id.mmd) | [picture](../corpus/drawn/subgraph-id.svg) |
 | Links to a group and between groups | Drawn |  | [source](../corpus/flowchart/subgraph-links.mmd) | [picture](../corpus/drawn/subgraph-links.svg) |
 | A group with a direction of its own | Drawn, less something | The group's own direction is read past; it runs the way the rest does | [source](../corpus/flowchart/subgraph-direction.mmd) | [picture](../corpus/drawn/subgraph-direction.svg) |
-| A group inside a group | Partly read | read 1 of 2 groups; line 4: a group inside a group is drawn as part of the outer one | [source](../corpus/flowchart/subgraph-nested.mmd) | [picture](../corpus/drawn/subgraph-nested.svg) |
+| A group inside a group | Drawn |  | [source](../corpus/flowchart/subgraph-nested.mmd) | [picture](../corpus/drawn/subgraph-nested.svg) |
 | A group shown collapsed | Drawn, less something | Drawn open: a picture cannot be opened and closed | [source](../corpus/flowchart/subgraph-collapsed.mmd) | [picture](../corpus/drawn/subgraph-collapsed.svg) |
 | A box styled on its own | Drawn, less something | Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's | [source](../corpus/flowchart/style-node.mmd) | [picture](../corpus/drawn/style-node.svg) |
 | Links styled by their number | Drawn, less something | The link is heavy and red as written, in the design's own red; a default for every link is read past | [source](../corpus/flowchart/style-link.mmd) | [picture](../corpus/drawn/style-link.svg) |
@@ -110,7 +110,7 @@ rules. Held to the same measure as the flowcharts above.
 | Where it starts and where it ends | Drawn, less something | Where it starts and where it ends are pills that say so, not dots | [source](../corpus/state/state-start-end.mmd) | [picture](../corpus/drawn/state-start-end.svg) |
 | A composite state | Drawn, less something | A transition to a composite state is drawn to where it starts inside, and one from it from where it ends | [source](../corpus/state/state-composite.mmd) | [picture](../corpus/drawn/state-composite.svg) |
 | A composite state named on a line of its own | Drawn, less something | A transition to a composite state is drawn to where it starts inside, and one from it from where it ends | [source](../corpus/state/state-composite-named.mmd) | [picture](../corpus/drawn/state-composite-named.svg) |
-| A composite state inside another | Partly read | read 1 of 2 groups; line 5: a group inside a group is drawn as part of the outer one | [source](../corpus/state/state-composite-nested.mmd) | [picture](../corpus/drawn/state-composite-nested.svg) |
+| A composite state inside another | Drawn |  | [source](../corpus/state/state-composite-nested.mmd) | [picture](../corpus/drawn/state-composite-nested.svg) |
 | Transitions between composite states | Drawn, less something | A transition to a composite state is drawn to where it starts inside, and one from it from where it ends | [source](../corpus/state/state-composite-links.mmd) | [picture](../corpus/drawn/state-composite-links.svg) |
 | A choice | Drawn, less something | A choice is a decision the size of every box, with its name in it; Mermaid draws a small diamond with none | [source](../corpus/state/state-choice.mmd) | [picture](../corpus/drawn/state-choice.svg) |
 | A fork and a join | Drawn, less something | A fork and a join are boxes with their names in them, not bars | [source](../corpus/state/state-fork-join.mmd) | [picture](../corpus/drawn/state-fork-join.svg) |

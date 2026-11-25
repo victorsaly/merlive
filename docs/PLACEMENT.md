@@ -96,8 +96,10 @@ inside the picture: everything moves over to give them the margin the boxes have
 ## Groups
 
 A group the author made (`subgraph`) gets a frame round its boxes, with what it is called along the top (P8). A
-link to a group is a link from the end of one to the start of the next. A frame that would take in a box that is
-not in the group, or run into another frame, would say something untrue: it is left out, and the script says so.
+link to a group is a link from the end of one to the start of the next. A group inside a group has a frame of its
+own inside the outer one, and where such frames begin or end at the same rank, the gap before that rank is wider,
+so each frame and its name has room. A frame that would take in a box that is not in the group, or run into a
+frame it is neither inside nor round, would say something untrue: it is left out, and the script says so.
 
 ## P8. A group's name can be read
 

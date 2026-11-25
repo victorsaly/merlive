@@ -118,13 +118,13 @@ describe('state: composite states', () => {
     assert.equal(state('state "In review" as Review {\n  a --> b\n}').groups[0].title, 'In review');
   });
 
-  it('draws a composite state inside another as part of the outer one, says so, and still joins what leads to it', () => {
+  it('reads a composite state inside another as a group inside a group, and joins what leads to it', () => {
     const m = state('[*] --> Outer\nstate Outer {\n  [*] --> Inner\n  state Inner {\n    [*] --> deep\n    deep --> [*]\n  }\n  Inner --> last\n}');
-    assert.deepEqual(m.groups.map((g) => g.id), ['Outer']);
-    assert.match(m.warnings[0], /^line 5: a group inside a group is drawn as part of the outer one/);
+    assert.deepEqual(m.groups.map((g) => [g.id, g.parent ?? '']), [['Outer', ''], ['Inner', 'Outer']]);
+    assert.deepEqual(m.warnings, []);
     assert.ok(!m.nodes.some((n) => n.id === 'Inner'));
     assert.deepEqual(links(m).map(([id]) => id), ['start-Outer_start', 'Outer_start-Inner_start', 'Inner_start-deep', 'deep-Inner_end', 'Inner_end-last']);
-    assert.deepEqual(m.groups[0].members, ['Outer_start', 'Inner_start', 'deep', 'Inner_end', 'last']);
+    assert.deepEqual(m.groups.map((g) => g.members), [['Outer_start', 'Inner_start', 'deep', 'Inner_end', 'last'], ['Inner_start', 'deep', 'Inner_end']]);
   });
 
   it('says so when a composite state is closed that was never opened, or never closed', () => {

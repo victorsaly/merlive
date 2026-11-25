@@ -23,7 +23,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Step[]} steps
  * @property {{main?:string[],side?:'left'|'right',turn?:boolean}} hints turn: false keeps a wide left-to-right flow as it was written
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
- * @property {{id:string,title:string,members:string[]}[]} groups the author's subgraphs: what each is called and the boxes in it
+ * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
  * @property {string[]} warnings
  */
 
@@ -208,14 +208,13 @@ export function parse(src) {
   const byId = new Map();
   const seenEdge = new Map();
   let header = false;
-  // The groups that are open at this line, outermost first. A group inside a group is drawn as part of the
-  // outer one, so every box belongs to the outermost.
+  // The groups that are open at this line, outermost first. A box used inside a group that is inside another
+  // is in both: the inner one is its own, and the outer one holds everything the inner one does.
   /** @type {string[]} */
   const open = [];
   /** @type {Map<string,string>} */
   const groupOf = new Map();
   const shaped = new Set();
-  let warnedNested = false;
   // The line being read, for what is said from deep inside it.
   let reading = 0;
   // Every link in the order Mermaid numbers them; one that is not drawn keeps its number and has nothing.
@@ -244,8 +243,8 @@ export function parse(src) {
     }
     // A box is in the group where it is used, wherever it was first named.
     if (open.length && !groupOf.has(id)) {
-      groupOf.set(id, open[0]);
-      model.groups.find((g) => g.id === open[0])?.members.push(id);
+      groupOf.set(id, open[open.length - 1]);
+      for (const g of model.groups) if (open.includes(g.id)) g.members.push(id);
     }
     return n;
   };
@@ -341,12 +340,8 @@ export function parse(src) {
 
   /** Opens a group. One opened inside another is drawn as part of the outer one, and said once. */
   const frame = (/** @type {string} */ id, /** @type {string} */ title, /** @type {number} */ line) => {
-    if (open.length && !warnedNested) {
-      warn(line, 'a group inside a group is drawn as part of the outer one');
-      warnedNested = true;
-    }
-    if (!open.length) model.groups.push({ id, title, members: [] });
-    open.push(open[0] ?? id);
+    model.groups.push({ id, title, members: [], ...(open.length ? { parent: open[open.length - 1] } : {}) });
+    open.push(id);
   };
 
   /** Reads one box, or several joined by "&" (`A & B`), at pos. */
@@ -371,8 +366,7 @@ export function parse(src) {
       for (const n of model.nodes.splice(had.nodes)) {
         byId.delete(n.id);
         shaped.delete(n.id);
-        const g = model.groups.find((x) => x.id === groupOf.get(n.id));
-        if (g) g.members = g.members.filter((id) => id !== n.id);
+        for (const g of model.groups) g.members = g.members.filter((id) => id !== n.id);
         groupOf.delete(n.id);
       }
       for (const e of model.edges.splice(had.edges)) seenEdge.set(`${e.from}-${e.to}`, (seenEdge.get(`${e.from}-${e.to}`) ?? 1) - 1);
@@ -529,7 +523,8 @@ export function parse(src) {
   // A link to a group ("g1 --> g2") is a link from the end of one to the start of the next: the last box of the
   // first that leads to no other box in it, and the first box of the second that none of its own leads to.
   state?.done();
-  for (const g of model.groups) join(g);
+  // The innermost first, so that by the time a link to an outer group is joined, what is inside it is boxes.
+  for (const g of [...model.groups].reverse()) join(g);
   function join(/** @type {{id:string,title:string,members:string[]}} */ g) {
     if (!byId.has(g.id) || shaped.has(g.id) || g.members.includes(g.id)) return;
     // A link from a box to itself leads nowhere, so it says nothing about where a group ends or starts.

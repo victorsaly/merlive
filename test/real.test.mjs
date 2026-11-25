@@ -284,11 +284,21 @@ describe('more real diagrams: read', () => {
     assert.deepEqual(m.warnings, []);
   });
 
-  it('reads a group named by its title alone, and says so when one is inside another', () => {
+  it('reads a group named by its title alone, and a group inside another as its own, held by the outer one', () => {
     assert.deepEqual(parse('flowchart TD\nsubgraph Back office\nA --> B\nend').groups, [{ id: 'Back office', title: 'Back office', members: ['A', 'B'] }]);
-    const nested = parse('flowchart TD\nsubgraph one\nA --> B\nsubgraph two\nC --> D\nend\nend');
-    assert.deepEqual(nested.groups.map((g) => g.members), [['A', 'B', 'C', 'D']]);
-    assert.match(nested.warnings[0], /a group inside a group is drawn as part of the outer one/);
+    const nested = parse('flowchart TD\nsubgraph one\nA --> B\nsubgraph two\nC --> D\nsubgraph three\nE\nend\nend\nB --> two\nend\nX --> one');
+    assert.deepEqual(nested.groups, [
+      { id: 'one', title: 'one', members: ['A', 'B', 'C', 'D', 'E'] },
+      { id: 'two', title: 'two', members: ['C', 'D', 'E'], parent: 'one' },
+      { id: 'three', title: 'three', members: ['E'], parent: 'two' },
+    ]);
+    assert.deepEqual(nested.edges.map((e) => e.id), ['A-B', 'C-D', 'B-C', 'X-A'], 'a link to a group goes to where it starts, inner or outer');
+    assert.deepEqual(nested.warnings, []);
+  });
+
+  it('leaves nothing in any group of a line inside two groups that it could not read', () => {
+    const m = parse('flowchart TD\nsubgraph one\nsubgraph two\nA --> B\nC ~~> D\nend\nend');
+    assert.deepEqual(m.groups.map((g) => g.members), [['A', 'B'], ['A', 'B']]);
   });
 });
 

@@ -31,8 +31,7 @@ hand, and the colours are yours, read from your site, but checked, for contrast 
 3. **0.3, bigger flowcharts.** A group's own direction (rows inside a column), groups inside groups, pan, zoom and a search
    box for diagrams past about twenty boxes.
 4. **0.4, state diagrams.** Read and drawn already, by the placement flowcharts have. What is left is what a
-   state diagram needs that a flowchart seldom does: a group inside a group, regions
-   side by side in one group, and a link's words kept inside the picture when it goes round the outside.
+   state diagram needs that a flowchart seldom does: regions side by side in one group.
 5. **0.5, more of a sequence.** Played over a flowchart in the same document when the names match; half arrows
    and messages to the middle of a line; symbols for the typed participants; the page's own shell shared with
    a flowchart's instead of copied.
@@ -47,7 +46,7 @@ matter, `&` between boxes, everything written with `@{ … }`, what is at the en
 and words (entity codes, Markdown strings, icons). What is left of flowcharts:
 
 1. **Bottom-to-top and right-to-left** are drawn the other way round, and said.
-2. **A group inside a group** is drawn as part of the outer one, and said. A group's own direction is read past.
+2. **A group's own direction** is read past: it runs the way the rest does.
 3. **Twelve shapes are drawn as themselves; the newer ones are not yet**: a document, a cloud, a person and the
    rest of the `@{ shape }` list are boxes that say what they are in words.
 

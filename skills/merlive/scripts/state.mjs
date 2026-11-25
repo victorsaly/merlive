@@ -47,7 +47,7 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
   /** The composite states open at this line, the innermost last, each with the states used inside it. */
   /** @type {{id:string,line:number,members:string[]}[]} */
   const open = [];
-  /** Composite states closed inside another. They have no frame of their own, but links to them are joined. */
+  /** Composite states closed inside another: links to them are joined before links to the one they are in. */
   /** @type {{id:string,members:string[]}[]} */
   const inner = [];
   /** The words each state was given, a line at a time, and each composite state its title. */

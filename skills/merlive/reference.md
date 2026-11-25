@@ -31,7 +31,7 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A ~~~ B` | An invisible link: its boxes are read, and no link is made. Where boxes go is Merlive's |
 | `A -->\|Yes\| B`, `A -- Yes --> B`, `A -- "two<br/>lines" --> B` | A link with words |
 | `A -. maybe .-> B`, `A == must ==> B`, `A ---> B` | Words in a dotted or thick link; an arrow drawn longer |
-| `subgraph id["Title"]` … `end`, `g1 --> g2` | A group, drawn as a frame with its title; a link between groups joins the end of one to the start of the next |
+| `subgraph id["Title"]` … `end`, `g1 --> g2` | A group, drawn as a frame with its title; a link between groups joins the end of one to the start of the next. A group inside a group has a frame of its own inside the outer one |
 | `A --> B --> C` | A chain |
 | `A --> A`, `A -->\|again\| A` | A link from a box to itself: a small loop beside it. It is not one of the loops `%% step: … \| loop 1` counts |
 | `A & B --> C & D` | Every box before the link, linked to every box after it |
@@ -47,8 +47,7 @@ Where the Mermaid is kept decides how it is found: fenced `mermaid` blocks in Ma
 of a `.mmd` file; and, in any other file (an `.astro` page, a script), a string between backticks that starts as
 a flowchart does. A string put together with `${…}` when the page runs cannot be read.
 
-Not read yet, each named in a `note,` line when met: a group inside a group (drawn as part of the outer one),
-and `BT` and `RL`, which are drawn the other way round.
+Not read yet, each named in a `note,` line when met: `BT` and `RL`, which are drawn the other way round.
 [What is and is not drawn](https://github.com/victorsaly/merlive/blob/main/docs/COVERAGE.md), feature by feature.
 
 ## A state diagram
@@ -70,8 +69,8 @@ this page holds for them: the rules, the design, Merlive's own lines.
 | `classDef`, `class Held, Lost stopped`, `Held:::stopped` | Kinds, as in a flowchart |
 | `%% words` after a line, `hide empty description`, `scale 350 width` | Read past |
 
-Not read yet, each named in a `note,` line when met: a composite state
-inside another (drawn as part of the outer one), and concurrency (`--`), whose regions are drawn as one.
+Not read yet, named in a `note,` line when met: concurrency (`--`), whose regions are drawn as one. A composite
+state inside another is a group inside a group.
 
 ## A sequence diagram
 

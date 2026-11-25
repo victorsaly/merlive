@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 171 samples, Merlive draws 134 whole and 7 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>171</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>97</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>37</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>7</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>30</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 171 samples, Merlive draws 136 whole and 5 in part; Mermaid itself could not draw 4. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>171</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>99</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>37</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>5</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>30</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -688,10 +688,10 @@ flowchart LR
   D --&gt; E[Ship]
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>A group inside a group</h3>
-<p class="result"><b>Partly read</b> <span class="why">read 1 of 2 groups; line 4: a group inside a group is drawn as part of the outer one</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-nested.png" width="222" height="482" style="--w:222" alt="A group inside a group, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-nested.svg" width="196" height="388" style="--w:196" alt="A group inside a group, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-nested.png" width="222" height="482" style="--w:222" alt="A group inside a group, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-nested.svg" width="218" height="388" style="--w:218" alt="A group inside a group, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart TB
   subgraph site [Site]
     A[Receive]
@@ -919,10 +919,10 @@ flowchart LR
   Draft --&gt; Checks
 </pre></details>
 </article>
-<article class="card" data-result="partly">
+<article class="card" data-result="drawn">
 <h3>A composite state inside another</h3>
-<p class="result"><b>Partly read</b> <span class="why">read 1 of 2 groups; line 5: a group inside a group is drawn as part of the outer one</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-composite-nested.png" width="229" height="753" style="--w:229" alt="A composite state inside another, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-composite-nested.svg" width="196" height="572" style="--w:196" alt="A composite state inside another, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-composite-nested.png" width="229" height="753" style="--w:229" alt="A composite state inside another, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-composite-nested.svg" width="218" height="572" style="--w:218" alt="A composite state inside another, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>stateDiagram-v2
   [*] --&gt; Order
   state Order {

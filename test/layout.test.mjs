@@ -298,3 +298,34 @@ describe("layout: a group's name", () => {
   });
 });
 
+describe('layout: a group inside a group', () => {
+  const site = 'flowchart TB\n  O[Order] --> A\n  subgraph site [Site]\n    subgraph wh [Warehouse]\n      A[Pick] --> B[Pack]\n    end\n    B --> C[Load]\n  end\n  C --> D[Ship]';
+  const holds = (/** @type {{x:number,y:number,w:number,h:number}} */ outer, /** @type {{x:number,y:number,w:number,h:number}} */ inner, by = 0) =>
+    inner.x >= outer.x + by && inner.y >= outer.y + by && inner.x + inner.w <= outer.x + outer.w - by && inner.y + inner.h <= outer.y + outer.h - by;
+
+  it('has a frame of its own inside the outer frame, each with its name on a line of its own', () => {
+    for (const src of [site, site.replace('TB', 'LR')]) {
+      const lay = layout(parse(src));
+      assert.deepEqual(lay.groups.map((f) => f.id), ['site', 'wh'], lay.warnings.join('; '));
+      const [outer, inner] = lay.groups;
+      assert.ok(holds(outer, inner, 8), 'the inner frame is inside the outer one, with room between');
+      assert.ok(inner.name.y - outer.name.y >= 12, 'the two names do not share a line');
+      assert.deepEqual(lay.warnings, []);
+    }
+  });
+
+  it('makes room along the flow for the frames, so neither takes in the box before it or the box after', () => {
+    const lay = layout(parse(site)), [outer] = lay.groups;
+    const box = (/** @type {string} */ id) => ({ x: lay.nodes[id].x - lay.nodes[id].w / 2, y: lay.nodes[id].y - lay.nodes[id].h / 2, w: lay.nodes[id].w, h: lay.nodes[id].h });
+    assert.ok(box('O').y + box('O').h < outer.y, 'Order is above the outer frame');
+    assert.ok(box('D').y > outer.y + outer.h, 'Ship is below it');
+    assert.ok(holds(outer, box('C')) && holds(lay.groups[1], box('A')) && !holds(lay.groups[1], box('C'), -4));
+  });
+
+  it('leaves the room between ranks as it was where no frames are inside one another', () => {
+    const plain = layout(parse('flowchart TB\nA --> B\nsubgraph g\n B --> C\nend\nC --> D'));
+    const gaps = ['A', 'B', 'C'].map((id, i) => plain.nodes[['B', 'C', 'D'][i]].y - plain.nodes[id].y);
+    assert.equal(new Set(gaps).size, 1);
+  });
+});
+

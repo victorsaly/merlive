@@ -33,6 +33,7 @@ export const measure = {
   labelOff: 5, // px between a link's words and its line
   framePad: 12, // from a group's boxes to its frame
   frameTitle: 14, // more at the top, for what the group is called
+  frameAir: 10, // the least along the flow between two frames, or a frame and a box that is not in it
   nameGlyph: 7.8, // px per character of a group's name: 11px capitals, spaced
   nameLine: 12, // px the name takes from top to bottom
   nameDown: 12, // from the top of a frame to the middle of its name
@@ -237,6 +238,30 @@ function placed(model, dir) {
     lane.set(id, side * l);
     taken.add(`${rank.get(id)}:${side * l}`);
   }
+  // A frame takes room along the flow: its pad at each end, and at its top its name. One frame fits in the room
+  // between two ranks. Frames inside one another that begin or end at the same rank need more, so that rank
+  // sits further on: the grid stays, with one wider gap where the frames are.
+  const parentOf = new Map(model.groups.map((g) => [g.id, g.parent]));
+  const reach = (/** @type {(...v:number[]) => number} */ pick) => new Map(model.groups.map((g) => [g.id, pick(...g.members.filter((id) => rank.has(id)).map((id) => rank.get(id) ?? 0))]));
+  const starts = reach(Math.min), ends = reach(Math.max);
+  /** How many frames, one inside the next, share this group's first or last rank, counting itself. */
+  const stacked = (/** @type {string} */ id, /** @type {Map<string,number>} */ at) => {
+    let n = 1;
+    for (let up = parentOf.get(id); up !== undefined && at.get(up) === at.get(id); up = parentOf.get(up)) n++;
+    return n;
+  };
+  const most = (/** @type {Map<string,number>} */ at, /** @type {number} */ r) => Math.max(0, ...model.groups.filter((g) => g.members.length && at.get(g.id) === r).map((g) => stacked(g.id, at)));
+  // Left to right, a frame's name is along its top, which is across the flow, so along it only the pads count.
+  const atStart = measure.framePad + (dir === 'LR' ? 0 : measure.frameTitle);
+  const ranks = Math.max(0, ...rank.values()) + 1;
+  /** @type {number[]} */
+  const wider = Array.from({ length: ranks + 1 }, (_, r) => {
+    const frames = most(ends, r - 1) + most(starts, r);
+    return frames > 1 ? Math.max(0, measure.framePad * most(ends, r - 1) + atStart * most(starts, r) + measure.frameAir - rankGap) : 0;
+  });
+  /** Where rank r begins along the flow: the grid, moved on by every wider gap before it. */
+  const along = (/** @type {number} */ r) => measure.pad + r * (bh + rankGap) + wider.slice(0, r + 1).reduce((a, b) => a + b, 0);
+
   /**
    * Everything that follows from where the boxes are: their coordinates, each link's route, its port and its
    * track, and what the result costs in lines through boxes, crossings and shared paths. Thorough also tries
@@ -252,7 +277,7 @@ function placed(model, dir) {
       nodes[n.id] = {
         id: n.id, w: bw, h: bh, rank: r, lane: l, spine: onSpine.has(n.id), lines: linesOf(n, box.w),
         x: measure.pad + l * (bw + laneGap) + bw / 2,
-        y: measure.pad + r * (bh + rankGap) + bh / 2,
+        y: along(r) + bh / 2,
       };
     }
     const all = Object.values(nodes);
@@ -266,7 +291,7 @@ function placed(model, dir) {
     const others = (/** @type {Placed} */ s, /** @type {Placed} */ t) => all.filter((n) => n !== s && n !== t);
     const hits = (/** @type {Pt[]} */ pts, /** @type {Placed} */ s, /** @type {Placed} */ t) => segmentsOf(pts).reduce((sum, seg) => sum + others(s, t).filter((n) => hitsBox(seg, n)).length, 0);
     /** The middle of the room after rank g, where a line may run across. */
-    const roomAfter = (/** @type {number} */ g) => measure.pad + g * (bh + rankGap) + bh + rankGap / 2;
+    const roomAfter = (/** @type {number} */ g) => along(g) + bh + (rankGap + (wider[g + 1] ?? 0)) / 2;
     const shapeOf = (/** @type {Route} */ r, /** @type {Pt} */ a, /** @type {Pt} */ b) =>
       r.shape === 'straight' ? [a, b]
         : r.shape === 'HV' ? [a, { x: b.x, y: a.y }, b]
@@ -555,16 +580,35 @@ function placed(model, dir) {
   const groups = [];
   const label = (/** @type {string} */ id) => model.nodes.find((n) => n.id === id)?.label ?? id;
   const meets = (/** @type {Frame} */ f, /** @type {{x:number,y:number,w:number,h:number}} */ r) => r.x + r.w / 2 > f.x && r.x - r.w / 2 < f.x + f.w && r.y + r.h / 2 > f.y && r.y - r.h / 2 < f.y + f.h;
-  for (const g of model.groups) {
+  // The innermost first: an outer frame goes round its own boxes and round the frames inside it.
+  const depth = (/** @type {string|undefined} */ id) => {
+    let n = 0;
+    for (let up = id === undefined ? undefined : parentOf.get(id); up !== undefined; up = parentOf.get(up)) n++;
+    return n;
+  };
+  const within = (/** @type {string} */ inner, /** @type {string} */ outer) => {
+    for (let up = parentOf.get(inner); up !== undefined; up = parentOf.get(up)) if (up === outer) return true;
+    return false;
+  };
+  /** @type {Frame[]} */
+  const made = [];
+  for (const g of [...model.groups].sort((p, q) => depth(q.id) - depth(p.id))) {
     const own = g.members.map((id) => nodes[id]).filter(Boolean);
-    const l = Math.min(...own.map((n) => n.x - n.w / 2)) - measure.framePad, t = Math.min(...own.map((n) => n.y - n.h / 2)) - measure.framePad - measure.frameTitle;
-    const frame = { name: { x: 0, y: 0, w: 0, h: 0, plate: false }, id: g.id, title: g.title, x: l, y: t, w: Math.max(...own.map((n) => n.x + n.w / 2)) + measure.framePad - l, h: Math.max(...own.map((n) => n.y + n.h / 2)) + measure.framePad - t };
+    const inner = made.filter((f) => parentOf.get(f.id) === g.id);
+    const l = Math.min(...own.map((n) => n.x - n.w / 2), ...inner.map((f) => f.x)) - measure.framePad;
+    const t = Math.min(...own.map((n) => n.y - n.h / 2), ...inner.map((f) => f.y)) - measure.framePad - measure.frameTitle;
+    const r = Math.max(...own.map((n) => n.x + n.w / 2), ...inner.map((f) => f.x + f.w)) + measure.framePad;
+    const u = Math.max(...own.map((n) => n.y + n.h / 2), ...inner.map((f) => f.y + f.h)) + measure.framePad;
+    const frame = { name: { x: 0, y: 0, w: 0, h: 0, plate: false }, id: g.id, title: g.title, x: l, y: t, w: r - l, h: u - t };
     const stranger = all.find((n) => !g.members.includes(n.id) && meets(frame, n));
-    const other = groups.find((f) => meets(frame, { x: f.x + f.w / 2, y: f.y + f.h / 2, w: f.w, h: f.h }));
+    // A frame inside this one, or round it, is where it should be; any other it meets is one it has run into.
+    const other = made.find((f) => !within(f.id, g.id) && !within(g.id, f.id) && meets(frame, { x: f.x + f.w / 2, y: f.y + f.h / 2, w: f.w, h: f.h }));
     if (stranger) warnings.push(`the frame of "${g.title}" is left out: "${label(stranger.id)}" is not in it and would fall inside`);
     else if (other) warnings.push(`the frame of "${g.title}" is left out: it would run into the frame of "${other.title}"`);
-    else groups.push(frame);
+    else made.push(frame);
   }
+  // Drawn outer before inner, the order they were written in, so an inner frame lies on the one it is in.
+  groups.push(...model.groups.flatMap((g) => made.filter((f) => f.id === g.id)));
 
   // A group's name goes along the top of its frame, in the first stretch no line runs through: at the left,
   // then at the right, then anywhere between. Where every stretch has a line in it, the name stays at the left

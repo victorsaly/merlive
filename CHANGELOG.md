@@ -70,6 +70,9 @@ The first version. It draws flowcharts and sequence diagrams, and says what it l
 - **An author's own styling is kept as what it means.** `style` and `classDef` give a box a broken outline, a
   heavy one, and a colour; `linkStyle` does the same for a link, by Mermaid's number for it. The colour is named
   for its hue and drawn in the design's own nearest colour, so the colour rules still hold.
+- **A group inside a group has a frame of its own**, inside the outer one, each with its name on a line of its
+  own. Where frames inside one another begin or end at the same rank, that rank sits further on to make room.
+  The same goes for a composite state inside another.
 - **A group's name is never struck through.** It sits where no line runs along the top of its frame, a link's
   words keep off it, and where a line has to pass it passes behind the name. P8 checks it.
 - **A link from a box to itself is drawn**, as a small loop beside its box, in a flowchart and in a state
