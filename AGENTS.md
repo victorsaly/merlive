@@ -7,7 +7,8 @@ For coding agents changing this repository. It follows the same habits as
 
 - `skills/merlive/SKILL.md`: what an agent reads to use Merlive. Short on purpose (the checks hold it under 500
   lines); anything only some diagrams need goes in `reference.md`, linked from SKILL.md and linking nowhere.
-- `skills/merlive/scripts/merlive.mjs`: the command. The only file that reads and writes the disk.
+- `skills/merlive/scripts/merlive.mjs`: the command. The only file that reads and writes the disk, and the only
+  one that goes to the network (setup, reading a site). Everything it decides with is in the pure files.
 - `skills/merlive/scripts/parse.mjs`: Mermaid text to a model, and the Mermaid blocks of a Markdown file. Says
   what it did not read. Pure.
 - `skills/merlive/scripts/layout.mjs`: the model to coordinates, by the rules in `docs/PLACEMENT.md`. Every
@@ -17,6 +18,11 @@ For coding agents changing this repository. It follows the same habits as
 - `skills/merlive/scripts/design.mjs`: Merlive's own look in light and dark, a project's design file laid over
   it, and the colour sums (mixing, contrast, how far apart two colours look to ordinary and colour-blind sight).
   Pure. The colours are the user's: do not add ready-made palettes to choose from.
+- `skills/merlive/scripts/site.mjs`: a site's stylesheets to what they say of its page (colours, face, corner,
+  dark mode), and a design file made from that with nobody choosing a colour. What was found, changed and made
+  is said. Nothing is guessed. Pure.
+- `skills/merlive/scripts/setup.mjs`: the page setup shows. It carries design.mjs's own source, so the page and
+  the command check colours with the same sums. Pure.
 - `skills/merlive/scripts/render.mjs`: a model, a layout and a design to one HTML page or one SVG. Pure.
 - `skills/merlive/scripts/runtime.mjs`: handed to the page as source and run there, so browser globals, not
   Node's, and nothing from outside the function.
@@ -45,6 +51,10 @@ can still look wrong; when it does, the fix is a new rule and a check for it, no
 - Errors say what to do next, in a sentence an agent can act on; exit 1 when a diagram broke a rule, 2 for what is
   missing, 3 for nothing to draw.
 - The Mermaid a person wrote is never changed by a script.
+- Nothing is configured by hand that the script can find out. A new choice gets a default that is right for
+  most projects, a place in the design file and on the setup page, and never a question.
+- What is read from a site is text from a stranger: only colours, a list of faces and a number are kept, each
+  checked for what it is before it reaches a page.
 
 ## Rules
 

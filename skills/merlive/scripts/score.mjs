@@ -2,7 +2,7 @@
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
 import { hitsBox, meet, measure, roomFor, segmentsOf } from './layout.mjs';
-import { apart, contrast, kindFill } from './design.mjs';
+import { colourChecks, looksOf } from './design.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
 
@@ -10,13 +10,7 @@ import { apart, contrast, kindFill } from './design.mjs';
 export const limits = {
   linksPerCrossing: 8, // one crossing is allowed for every eight links; fewer than eight links, none
   mostLines: 3, // of words in a box
-  textContrast: 4.5, // WCAG AA for words
-  lineContrast: 3, // WCAG AA for lines and edges of boxes
   boxGap: 16, // the least room between two boxes
-  // The least two kinds' colours may differ, in CIELAB. The sets made for colour-blind readers (Okabe-Ito, Paul
-  // Tol's bright) keep their closest pair at 16 to 17, so they pass with room; two outlines closer than this
-  // read as one colour with a legend beside them.
-  tellApart: 12,
 };
 
 const overlap = (/** @type {{x:number,y:number,w:number,h:number}} */ a, /** @type {{x:number,y:number,w:number,h:number}} */ b, gap = 0) =>
@@ -92,42 +86,12 @@ export function score(model, lay, design) {
   });
   add('P7', "A link's words sit clear of boxes and of each other", covered, `${labels.length} labels clear`);
 
-  // D1
-  /** @type {string[]} */
-  const faint = [];
+  // D1, D2: the sums are in design.mjs, where the setup page uses them too.
   const kinds = [...new Set(model.nodes.map((n) => n.kind))];
-  for (const [mode, p] of /** @type {[string, import('./design.mjs').Palette|undefined][]} */ ([['light', design.light], ['dark', design.dark]])) {
-    if (!p) continue;
-    const need = (/** @type {string} */ what, /** @type {string} */ a, /** @type {string} */ b, /** @type {number} */ least) => {
-      const c = contrast(a, b);
-      if (c < least) faint.push(`${mode}: ${what} is ${c.toFixed(1)} to 1, and needs ${least}`);
-    };
-    for (const k of kinds) need(`text on a ${k} box`, p.text, kindFill(p, k), limits.textContrast);
-    need('quiet text on the page', p.muted, p.bg, limits.textContrast);
-    need('a line on the page', p.edge, p.bg, limits.lineContrast);
-    need('the accent on the page', p.accent, p.bg, limits.lineContrast);
-    for (const k of kinds) if (p.kinds[k]) need(`the edge of a ${k} box`, p.kinds[k], p.bg, limits.lineContrast);
-  }
-  add('D1', 'Words and lines can be read against what is behind them', faint, `${design.name} passes in ${design.dark ? 'light and dark' : 'its one look'}`);
-
-  // D2
-  /** @type {string[]} */
-  const alike = [];
-  let told = 0;
-  for (const [mode, p] of /** @type {[string, import('./design.mjs').Palette|undefined][]} */ ([['light', design.light], ['dark', design.dark]])) {
-    if (!p) continue;
-    // Only kinds the design gives a colour: the rest share the plain box on purpose.
-    const coloured = kinds.filter((k) => p.kinds[k]);
-    told = coloured.length;
-    coloured.forEach((a, i) => coloured.slice(i + 1).forEach((b) => {
-      const plain = apart(p.kinds[a], p.kinds[b]);
-      const redGreen = Math.min(apart(p.kinds[a], p.kinds[b], 'protan'), apart(p.kinds[a], p.kinds[b], 'deutan'));
-      // Said once for a pair: as everyone sees it if that is already too close, else as red-green sight does.
-      if (plain < limits.tellApart) alike.push(`${mode}: ${a} and ${b} boxes look alike (${Math.round(plain)} apart, and need ${limits.tellApart})`);
-      else if (redGreen < limits.tellApart) alike.push(`${mode}: ${a} and ${b} boxes look alike to someone who does not see red and green apart (${Math.round(redGreen)} apart, and need ${limits.tellApart})`);
-    }));
-  }
-  add('D2', 'Kinds of box can be told apart', alike, `${told} coloured kinds, apart in ordinary and red-green colour-blind sight`);
+  const [d1, d2] = colourChecks(design, kinds);
+  const looks = looksOf(design).map(([mode]) => mode).join(' and ');
+  add('D1', 'Words and lines can be read against what is behind them', d1.broken, `${design.name} passes in ${looks}`);
+  add('D2', 'Kinds of box can be told apart', d2.broken, 'apart in ordinary and red-green colour-blind sight');
 
   return { pass: checks.every((c) => c.ok), checks };
 }

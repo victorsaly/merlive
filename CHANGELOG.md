@@ -16,9 +16,17 @@ The first version. It draws flowcharts and nothing else, and says so.
   walkthrough, `%% note X:` for what a box means, `%% main:` to name the main path, `%% side:` for where loops go.
 - **A reader can pick a box or a line** to see only what it connects to, and walk the steps. Nothing moves until
   they press play, and then one dot follows the path; a loop repeats until paused.
-- **The colours are yours.** A `merlive.design.json` in the project sets them, with the face, the corner and how
-  much may move (`none`, `calm`, `lively`); `light` alone gives one look, `dark` too gives both. Until a project
-  has one, Merlive draws in a look of its own, sea water and coral, in light and dark.
+- **It sets itself up.** `--setup` reads the project's own stylesheet, or the site named in `package.json` or
+  with `--from`, and writes `merlive.design.json` with nobody choosing a colour: the site's page, text and accent
+  colours, its face and corner, a dark mode when the site has one, and the rest a diagram needs made from them.
+  Whatever would break a colour rule is put right and said. It reads hex, `rgb()`, `hsl()`, bare hsl numbers and
+  `oklch()`, and never writes over a design a project already has.
+- **Setup shows a page**, `diagrams/merlive-setup.html`: the project's own diagram in light and dark, what was
+  read and what was made, and every choice there is, with the two colour rules checked as a colour changes.
+- **A project's choices are in its design file**: `modes` (light, dark or both), `motion`, `output.format` (a
+  page, a picture or both), and `output.steps`, `output.legend`, `output.source` for what a page carries.
+  `--format` takes `both`. Until a project has a design, Merlive draws in a look of its own, sea water and
+  coral, in light and dark.
 - **Any palette is held to two rules.** D1: words and lines can be read against what is behind them. D2: every
   two kinds of box a diagram uses can be told apart, as most people see them and with either common form of
   red-green colour blindness. The message names the two colours. Merlive's own kinds were chosen by that measure:

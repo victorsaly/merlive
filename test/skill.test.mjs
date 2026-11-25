@@ -7,6 +7,7 @@ import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout } from '../skills/merlive/scripts/layout.mjs';
 import { builtIn, designFrom } from '../skills/merlive/scripts/design.mjs';
 import { page, picture } from '../skills/merlive/scripts/render.mjs';
+import { setupPage } from '../skills/merlive/scripts/setup.mjs';
 import { runtime } from '../skills/merlive/scripts/runtime.mjs';
 import { run, version } from '../skills/merlive/scripts/merlive.mjs';
 
@@ -54,7 +55,7 @@ describe('SKILL.md', () => {
   });
 
   it('names every option the command has', () => {
-    for (const option of ['--check', '--out', '--only', '--format svg', '--design', '--force']) assert.ok(body.includes(option), option);
+    for (const option of ['--setup', '--from', '--check', '--out', '--only', '--format svg', '--design', '--force']) assert.ok(body.includes(option), option);
   });
 });
 
@@ -119,13 +120,38 @@ describe('what is drawn', () => {
   });
 });
 
+describe('the setup page', () => {
+  const model = parse('flowchart TD\nA([Start]) --> B{Ready?}\nB -->|Yes| C[Go]:::rework');
+  const html = setupPage({ model, lay: layout(model), design: builtIn, said: { found: ['page <#fff>'], changed: [], made: ['lines'] }, sums: read(`${skill}/scripts/design.mjs`), wrote: true });
+
+  it('shows the diagram in light and in dark, with what was read made safe', () => {
+    assert.equal(html.match(/class="mv-look"/g)?.length, 2);
+    assert.equal(html.match(/class="mv-node"/g)?.length, 6);
+    assert.ok(html.includes('page &lt;#fff&gt;'));
+    assert.doesNotMatch(html, /(src|href)="https?:/);
+  });
+
+  it('offers every choice a project has: modes, motion, what is written, what a page carries, corner and colours', () => {
+    for (const name of ['modes', 'motion', 'format']) assert.ok(html.includes(`name="${name}"`), name);
+    for (const id of ['steps', 'legend', 'source', 'radius', 'settings', 'copy']) assert.ok(html.includes(`id="${id}"`), id);
+    assert.ok(html.includes('type="color"'));
+  });
+
+  it("carries the colour rules themselves, so the page and the command say the same", () => {
+    const script = html.slice(html.lastIndexOf('<script>') + 8, html.lastIndexOf('</script>'));
+    assert.ok(script.includes('function colourChecks'));
+    assert.doesNotMatch(script, /^export /m);
+    assert.doesNotThrow(() => new Function(script));
+  });
+});
+
 describe('the examples', () => {
-  it('are what the command draws today from examples/order-approval.md', () => {
+  it('are what the command draws today from examples/order-approval.md', async () => {
     for (const format of ['html', 'svg']) {
       /** @type {string[]} */
       const said = [];
       // --check proves they still pass; the kept files are compared with a fresh drawing below.
-      assert.equal(run(['examples/order-approval.md', '--check', '--format', format], { cwd: root, say: (l) => said.push(l) }), 0);
+      assert.equal(await run(['examples/order-approval.md', '--check', '--format', format], { cwd: root, say: (l) => said.push(l) }), 0);
     }
     const md = read('examples/order-approval.md');
     const block = md.split('```mermaid\n')[1].split('\n```')[0];

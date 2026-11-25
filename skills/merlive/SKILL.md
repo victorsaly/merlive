@@ -1,6 +1,6 @@
 ---
 name: merlive
-description: Turns the Mermaid flowcharts in a Markdown file into well placed, live diagrams, one self-contained HTML page (or a still SVG) each, in the project's own design, with the main path straight, boxes of one size, and steps a reader can walk through. The Mermaid stays the source and is not changed. Use when asked to make a Mermaid diagram live, interactive, better looking or better laid out, to "merlive" a document, to add a walkthrough to a flowchart, or to set the look of a project's diagrams. Load it before planning the diagrams, even when asked not to run anything yet.
+description: Turns the Mermaid flowcharts in a Markdown file into well placed, live diagrams, one self-contained HTML page (or a still SVG) each, in the project's own colours, which it reads from the project's site by itself, with the main path straight, boxes of one size, and steps a reader can walk through. The Mermaid stays the source and is not changed. Use when asked to make a Mermaid diagram live, interactive, better looking or better laid out, to "merlive" a document, to add a walkthrough to a flowchart, or to set the look of a project's diagrams. Load it before planning the diagrams, even when asked not to run anything yet.
 license: MIT
 metadata:
   version: 0.1.0
@@ -21,7 +21,8 @@ Three things hold throughout:
   again. Never change a person's Mermaid block without asking first.
 - **Placement is Merlive's, not yours.** Do not try to position anything. If a diagram breaks a rule, change the
   Mermaid as the message says, or tell the person; do not reach for `--force`.
-- **The design is the project's, chosen once.** Do not invent a look for one diagram.
+- **The design is the project's, and sets itself up.** The script reads the project's colours; nobody is asked
+  for one. Do not invent a look for a diagram, and never ask a person for a colour code.
 
 ## 1. Decide whether to draw at all
 
@@ -79,21 +80,49 @@ renderer ignores them and the file still renders anywhere:
 - `loop 1` is the shortest loop in the graph, `loop 2` the next. The syntax in full is in
   [reference.md](reference.md).
 
-## 5. The design is the project's own
+## 5. The design sets itself up
 
-The colours are the user's to set, once, in `merlive.design.json` in the project's folder. Until there is one,
-the script draws in Merlive's own look, which has a light and a dark.
+The person should not have to configure anything. The first time in a project, before the first diagram, when
+there is no `merlive.design.json` in its folder, run setup yourself, without asking:
 
-- **The first time in a project with no design file**, draw with Merlive's own look, show the result, and ask
-  whether they want their own colours. If they do, ask for what they have (a brand colour, a site's stylesheet, a
-  design system) and write the file from that: `accent` from the brand colour, the rest only as far as they say.
-  Its fields are in [reference.md](reference.md). Do not invent a palette for them.
-- **Run `--check` after writing or changing it.** Two rules hold any palette to account, and the message names
-  the colour to change: D1, words and lines can be read, and D2, the kinds of box can be told apart, also by
-  people who do not see red and green apart. Pass the message on; change a colour only with their agreement.
-- `light` alone gives one look; add `dark` for both. `--design path/to/file.json` draws with a file elsewhere.
-- A design also sets the face, the corner, and how much may move: `none`, `calm` (one dot, when the reader
-  presses play) or `lively` (the path flows too). Leave it at `calm` unless asked.
+```bash
+node ${CLAUDE_SKILL_DIR}/scripts/merlive.mjs --setup
+```
+
+It finds the project's own stylesheet (or the site named in `package.json`), reads its page, text and accent
+colours, its face, its corner and whether it has a dark mode, writes `merlive.design.json`, and writes
+`diagrams/merlive-setup.html`: one of the project's diagrams in those colours, with every choice there is. It
+puts right whatever would break a colour rule and says what it changed. Then draw as usual.
+
+- **Tell the person what it did, in a sentence or two**: where the colours came from, anything it changed (an
+  accent too light for a line, say), and that the setup page is there if they want to look. Do not read them the
+  settings.
+- **The diagrams will be read somewhere else** (a blog, a docs site that is not this folder): when the person has
+  named it, or the README does, give it: `--setup --from https://their.site`.
+- **Setup found no colours**: ask one question, "What site will these diagrams be read on?", and run it again
+  with `--from`. If they have none, Merlive's own look is the answer; say so and carry on.
+- **The script cannot reach the site from here**: fetch the site's stylesheet with your own tools, save it to a
+  scratch file, and pass that path to `--from`.
+- **A project that already has a design** is left alone. `--setup --force` makes it again; ask first.
+- **One diagram in another project's colours**: `--design path/to/merlive.design.json` draws with a file elsewhere.
+
+### When they want something different
+
+They say it in their own words ("dark only", "no steps", "a picture for the wiki as well", "our blue for the
+accent", "square corners"), or paste settings copied from the setup page. Change `merlive.design.json` to match
+(its fields are in [reference.md](reference.md)), then run `--check`:
+
+| They want | Change |
+|---|---|
+| Light only, dark only, or both | `modes` |
+| Nothing moving, or more | `motion`: `none`, `calm`, `lively` |
+| A still picture as well as, or in place of, the page | `output.format`: `html`, `svg`, `both` |
+| No walkthrough, no legend, no Mermaid shown | `output.steps`, `output.legend`, `output.source` |
+| Another colour, face or corner | `light`, `dark`, `font`, `radius` |
+
+Two rules hold any colours to account, and the message names the colour to change: D1, words and lines can be
+read, and D2, the kinds of box can be told apart, also by people who do not see red and green apart. Pass the
+message on in plain words; do not pick a replacement colour for them unless they ask you to.
 
 ## 6. Say what you did
 

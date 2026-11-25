@@ -25,7 +25,8 @@ self-contained page per flowchart, in your own design, that readers can step thr
 npx skills add victorsaly/merlive -g
 ```
 
-Then ask your agent: `Merlive docs/orders.md`.
+Then ask your agent: `Merlive docs/orders.md`. There is nothing to configure: the first time, it reads your
+site's own colours and sets itself up.
 
 Or run it yourself:
 
@@ -33,6 +34,7 @@ Or run it yourself:
 node skills/merlive/scripts/merlive.mjs examples/order-approval.md --check   # what would be drawn
 node skills/merlive/scripts/merlive.mjs examples/order-approval.md           # examples/diagrams/order-approval-1.html
 node skills/merlive/scripts/merlive.mjs examples/order-approval.md --format svg
+node skills/merlive/scripts/merlive.mjs --setup --from https://your.site             # your colours, once
 ```
 
 ## What you get
@@ -47,10 +49,15 @@ node skills/merlive/scripts/merlive.mjs examples/order-approval.md --format svg
   notes are `%%` comments other renderers ignore.
 - **A page readers can use.** Pick a box or a line to see only what it connects to. Walk the steps the author
   wrote. Nothing moves until the reader presses play, and then one dot follows the path.
-- **Your colours, held to account.** A `merlive.design.json` in the project sets colours, face, corner and how
-  much may move, once, and every diagram follows it. Merlive does not choose your palette; it checks it: words
-  can be read, and the kinds of box can be told apart, also by the one man in twelve who does not see red and
-  green apart. Until you set one, it draws in a look of its own, in light and dark.
+- **Your colours, without choosing any.** Once for a project, Merlive reads the site your diagrams will sit on
+  (the project's own stylesheet, or an address you give): its page, text and accent colours, its face, its corner,
+  whether it has a dark mode. It makes the rest a diagram needs from those and writes the settings itself. You
+  never type a colour code.
+- **And held to account.** Any colours, read or set by hand, pass two rules before a diagram is drawn: words can
+  be read, and the kinds of box can be told apart, also by the one man in twelve who does not see red and green
+  apart. What setup reads and would fail, it puts right and tells you.
+- **Every choice already made, and changeable.** Light, dark or both; how much moves; a page, a picture or both;
+  steps, legend and source on or off. Setup shows them on one page; say what you want in your own words.
 - **One file, nothing fetched.** The page works offline and prints with its notes as an appendix. `--format svg`
   gives a still picture for wikis.
 

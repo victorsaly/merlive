@@ -2,7 +2,7 @@
 // with scripts off); the page around it adds picking and steps. Pure: a model, a layout and a design in, a
 // string out.
 
-import { kindFill } from './design.mjs';
+import { kindFill, looksOf } from './design.mjs';
 import { runtime } from './runtime.mjs';
 
 /** @typedef {import('./layout.mjs').Pt} Pt */
@@ -47,19 +47,18 @@ function middleOf(/** @type {Pt[]} */ pts) {
   return pts[pts.length - 1];
 }
 
-const kindName = (/** @type {string} */ k) => (k === 'terminal' ? 'Start or end' : k.charAt(0).toUpperCase() + k.slice(1));
+export const kindName = (/** @type {string} */ k) => (k === 'terminal' ? 'Start or end' : k.charAt(0).toUpperCase() + k.slice(1));
 
 /** The colours as CSS variables, with each kind's edge and fill worked out here, not by the browser. */
-function variables(/** @type {import('./design.mjs').Palette} */ p, /** @type {string[]} */ kinds) {
+export function variables(/** @type {import('./design.mjs').Palette} */ p, /** @type {string[]} */ kinds) {
   const base = ['bg', 'node', 'stroke', 'text', 'muted', 'edge', 'accent'].map((k) => `--mv-${k}:${/** @type {Record<string,string>} */ (/** @type {unknown} */ (p))[k]}`);
   const each = kinds.flatMap((k) => [`--mv-k-${k}:${p.kinds[k] ?? p.stroke}`, `--mv-kf-${k}:${kindFill(p, k)}`]);
   return [...base, ...each].join(';');
 }
 
-function styleOf(/** @type {import('./design.mjs').Design} */ design, /** @type {string[]} */ kinds, /** @type {string} */ root) {
-  const dark = design.dark ? `@media (prefers-color-scheme:dark){${root}{${variables(design.dark, kinds)};color-scheme:dark}}` : '';
-  return `${root}{${variables(design.light, kinds)}}${dark}
-.mv-svg{font-family:${design.font}}
+/** The drawing's own rules, with no colours in them: those come from the variables of whatever it sits in. */
+export function rulesFor(/** @type {import('./design.mjs').Design} */ design, /** @type {string[]} */ kinds) {
+  return `.mv-svg{font-family:${design.font}}
 .mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
 ${kinds.map((k) => `[data-kind="${k}"] .mv-shape{fill:var(--mv-kf-${k});stroke:var(--mv-k-${k})}`).join('\n')}
 .mv-node text{font-size:13px;font-weight:${design.weight};fill:var(--mv-text);text-anchor:middle}
@@ -70,8 +69,16 @@ ${kinds.map((k) => `[data-kind="${k}"] .mv-shape{fill:var(--mv-kf-${k});stroke:v
 .mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}`;
 }
 
-/** The drawing alone: the SVG's insides, the same for a page and for a picture. */
-function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {import('./layout.mjs').Layout} */ lay, /** @type {import('./design.mjs').Design} */ design, /** @type {boolean} */ live) {
+/** The colours of the looks a design is drawn in: one, or light with dark for readers whose system asks for it. */
+function styleOf(/** @type {import('./design.mjs').Design} */ design, /** @type {string[]} */ kinds, /** @type {string} */ root) {
+  const [[first, one], two] = looksOf(design);
+  const scheme = (/** @type {string} */ mode) => (mode === 'dark' ? ';color-scheme:dark' : '');
+  const dark = two ? `@media (prefers-color-scheme:dark){${root}{${variables(two[1], kinds)}${scheme(two[0])}}}` : '';
+  return `${root}{${variables(one, kinds)}${scheme(first)}}${dark}\n${rulesFor(design, kinds)}`;
+}
+
+/** The drawing alone: the SVG's insides, the same for a page, a picture and the setup page. */
+export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {import('./layout.mjs').Layout} */ lay, /** @type {import('./design.mjs').Design} */ design, /** @type {boolean} */ live) {
   const label = new Map(model.nodes.map((m) => [m.id, m.label]));
   const links = model.edges.map((e) => {
     const r = lay.edges[e.id], pts = r.points, end = pts[pts.length - 1], before = pts[pts.length - 2];
@@ -90,7 +97,7 @@ function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {imp
     const c = Math.round(b.h * draw.cut);
     const shape = m.shape === 'decision'
       ? `<polygon class="mv-shape" points="${n(l + c)},${n(t)} ${n(r - c)},${n(t)} ${n(r)},${n(b.y)} ${n(r - c)},${n(u)} ${n(l + c)},${n(u)} ${n(l)},${n(b.y)}"/>`
-      : `<rect class="mv-shape" x="${n(l)}" y="${n(t)}" width="${b.w}" height="${b.h}" rx="${m.shape === 'pill' ? b.h / 2 : Math.min(design.radius, b.h / 2)}"/>`;
+      : `<rect class="mv-shape${m.shape === 'pill' ? ' mv-pill' : ''}" x="${n(l)}" y="${n(t)}" width="${b.w}" height="${b.h}" rx="${m.shape === 'pill' ? b.h / 2 : Math.min(design.radius, b.h / 2)}"/>`;
     const first = b.y - ((b.lines.length - 1) * 16) / 2 + draw.baseline;
     const words = b.lines.map((line, i) => `<tspan x="${n(b.x)}" y="${n(first + i * 16)}">${esc(line)}</tspan>`).join('');
     const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${m.label}, ${kindName(m.kind)}`)}"` : '';
@@ -99,7 +106,7 @@ function inside(/** @type {import('./parse.mjs').Model} */ model, /** @type {imp
   return `<g>${links.join('')}</g><g>${boxes.join('')}</g>`;
 }
 
-const kindsIn = (/** @type {import('./parse.mjs').Model} */ model) => [...new Set(model.nodes.map((m) => m.kind))];
+export const kindsIn = (/** @type {import('./parse.mjs').Model} */ model) => [...new Set(model.nodes.map((m) => m.kind))];
 
 /**
  * A still picture: one SVG file, for wikis and anywhere a page cannot go.
@@ -130,14 +137,14 @@ export function page(model, lay, design, about) {
   const data = {
     nodes: model.nodes.map((m) => ({ id: m.id, label: m.label, kind: m.kind, kindName: kindName(m.kind), note: model.notes[m.id] ?? '' })),
     edges: model.edges.map((e) => ({ id: e.id, from: e.from, to: e.to, label: e.label })),
-    steps: model.steps.map((s) => ({ title: s.title, text: s.text, seq: s.seq, loop: s.loop })),
+    steps: design.output.steps ? model.steps.map((s) => ({ title: s.title, text: s.text, seq: s.seq, loop: s.loop })) : [],
     motion: design.motion,
   };
   // "</" inside the script would end it early, wherever it came from.
   const json = JSON.stringify(data).replace(/</g, '\\u003c');
   const legend = kinds.map((k) => `<span><i style="border-color:var(--mv-k-${k});background:var(--mv-kf-${k})"></i>${esc(kindName(k))}</span>`).join('');
   const noted = model.nodes.filter((m) => model.notes[m.id]);
-  const steps = model.steps.length
+  const steps = data.steps.length
     ? `<section class="mv-card" aria-live="polite">
 <p class="mv-small" id="mv-count"></p>
 <h2 id="mv-step-title"></h2>
@@ -215,7 +222,7 @@ body[data-motion="lively"].mv-playing .mv-on .mv-line{stroke-dasharray:7 6;anima
 ${inside(model, lay, design, true)}
 <g id="mv-dot" style="display:none"><circle r="6"/></g>
 </svg>
-<figcaption class="mv-legend">${legend}</figcaption>
+${design.output.legend ? `<figcaption class="mv-legend">${legend}</figcaption>` : ''}
 </figure>
 <div class="mv-side">
 ${steps}
@@ -231,7 +238,7 @@ ${steps}
 </div>
 </div>
 <section class="mv-notes">${noted.length ? `<h2>Notes</h2><dl>${noted.map((m) => `<dt>${esc(m.label)}</dt><dd>${esc(model.notes[m.id])}</dd>`).join('')}</dl>` : ''}</section>
-<details class="mv-source"><summary>Mermaid source</summary><pre id="mermaid-source">${esc(about.source)}</pre></details>
+${design.output.source ? `<details class="mv-source"><summary>Mermaid source</summary><pre id="mermaid-source">${esc(about.source)}</pre></details>` : ''}
 </main>
 <script>(${runtime.toString()})(${json});</script>
 </body>

@@ -9,7 +9,7 @@ There are three layers, and it matters which one a thing belongs to.
 | Layer | Who decides | What is in it |
 |---|---|---|
 | **Rules** | Merlive | Where boxes go, their size, how lines run. This file. A design cannot switch them off. |
-| **Design** | You, once | Colours, face, corner, how much may move. `merlive.design.json`. Merlive checks it (D1, D2) but does not choose it. |
+| **Design** | Your site, read once by `--setup`; then you, if you want | Colours, face, corner, light and dark, how much may move, what is written. `merlive.design.json`. Merlive checks it (D1, D2) but does not choose it. |
 | **Hints** | The author, per diagram | Which path is the main one, which side loops go. `%%` comments in the Mermaid. |
 
 A hint says what the author means. It never says where a box goes: no coordinates, anywhere.

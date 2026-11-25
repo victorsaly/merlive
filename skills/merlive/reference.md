@@ -40,16 +40,19 @@ A step's path must follow links that exist; one that does not is named in a `not
 
 ## The design file
 
-The colours are the project's own. `merlive.design.json` in the project's folder sets them; everything in it is
-optional, and what is left out comes from Merlive's own look.
+`merlive.design.json` in the project's folder. `--setup` writes it from the project's own site, so most projects
+never write one by hand. Everything in it is optional, and what is left out comes from Merlive's own look.
 
 ```json
 {
   "name": "storm",
+  "from": "src/styles/global.css",
+  "modes": "both",
+  "motion": "calm",
+  "output": { "format": "html", "steps": true, "legend": true, "source": true },
   "font": "\"IBM Plex Sans\", system-ui, sans-serif",
   "weight": 500,
   "radius": 6,
-  "motion": "calm",
   "light": {
     "bg": "#f4f6fa",
     "node": "#ffffff",
@@ -63,6 +66,17 @@ optional, and what is left out comes from Merlive's own look.
   "dark": { "bg": "#11141a", "node": "#1a1f27", "text": "#eceef2" }
 }
 ```
+
+| Choice | What it sets |
+|---|---|
+| `modes` | `light`, `dark` or `both` (follow the reader's system). `dark` and `both` need dark colours |
+| `motion` | `none`: nothing moves. `calm`: one dot follows a path when the reader presses play. `lively`: the path flows too |
+| `output.format` | What is written for each diagram: `html` (a live page), `svg` (a still picture) or `both` |
+| `output.steps` | Whether a page carries the walkthrough, when the diagram has `%% step` lines |
+| `output.legend` | Whether a page carries the legend of kinds of box |
+| `output.source` | Whether a page carries the Mermaid it was drawn from |
+| `font`, `weight`, `radius` | The face (a list of faces), its weight (100 to 900) and a box's corner in px (0 to 40) |
+| `from` | Where setup read the colours. Not used in drawing; it says where to look again |
 
 | Colour | What it is |
 |---|---|
@@ -84,6 +98,27 @@ optional, and what is left out comes from Merlive's own look.
 - `motion`: `none`, `calm` or `lively`.
 - `--check` holds the file to two rules before anything is drawn: D1, words and lines can be read, and D2, the
   kinds can be told apart, also by people who do not see red and green apart. The message names the colour.
+
+## What setup reads
+
+`--setup` looks, in this order, at: the site or stylesheet named with `--from`; the project's own stylesheet with
+the most to say (any `.css` up to five folders down, leaving out what was installed or built); the `homepage` in
+`package.json`, unless it is where the code lives (GitHub and the like). From a site's address it reads the page,
+the stylesheets it links to and the styles written in it.
+
+| It looks for | Where |
+|---|---|
+| Page and text colours | What `body` sets, following `var()`; else tokens named like `--bg`, `--background`, `--paper`, `--text`, `--foreground`, `--ink` |
+| Accent | The colour of links when it is a colour; else a token named like `--accent`, `--primary`, `--brand`, `--mark`; else the strongest colour among the tokens |
+| Dark mode | The same, inside `prefers-color-scheme: dark`, `.dark` or `[data-theme="dark"]` |
+| Face and corner | `body`'s `font-family`; the most common `border-radius` |
+
+Colours are read as hex, `rgb()`, `hsl()`, bare `H S% L%` and `oklch()`. What a diagram needs and a site does not
+have (a box's fill and edge, lines, quiet text, the colours of kinds) is made from the page and text colours and
+held to both colour rules. A site with one look gets diagrams with one look. Nothing found is never guessed: the
+script says so and draws in Merlive's own look.
+
+It does not yet read colours kept only in a Tailwind config, in a component's own `<style>`, or set by script.
 
 ## How it ends
 
