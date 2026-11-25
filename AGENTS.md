@@ -26,6 +26,9 @@ For coding agents changing this repository. It follows the same habits as
 - `skills/merlive/scripts/setup.mjs`: the page setup shows. It carries design.mjs's own source, so the page and
   the command check colours with the same sums. Pure.
 - `skills/merlive/scripts/render.mjs`: a model, a layout and a design to one HTML page or one SVG. Pure.
+- `skills/merlive/scripts/icons.mjs`: Merlive's own line icons, each drawn by hand on a 16px grid, and the names
+  an author may have written for one (Font Awesome's, across its versions). Nothing is fetched and nobody's mark
+  is drawn. What an icon is held to is in `iconMeasure` at the top. Pure.
 - `skills/merlive/scripts/runtime.mjs`: handed to the page as source and run there, so browser globals, not
   Node's, and nothing from outside the function.
 - `docs/PLACEMENT.md`: the rules, each with pass, fail and what to do. `docs/ROADMAP.md`: what comes next and what

@@ -64,6 +64,11 @@ The first version. It draws flowcharts and nothing else, and says so.
 - **An author's own styling is kept as what it means.** `style` and `classDef` give a box a broken outline, a
   heavy one, and a colour; `linkStyle` does the same for a link, by Mermaid's number for it. The colour is named
   for its hue and drawn in the design's own nearest colour, so the colour rules still hold.
+- **An icon in a label is drawn.** `fa:fa-truck Shipped` gets a truck beside its words, and `@{ icon: "fa:user" }`
+  a user. The drawings are Merlive's own: seventy-two line icons of the things flowcharts point at, on a 16px grid
+  in the weight of a box's edge, found by any name Font Awesome has given them across versions 4, 5 and 6.
+  Nothing is fetched, Font Awesome's own drawings are not used, a brand's mark is never drawn, and an icon
+  Merlive has no drawing for is left out and said.
 - **The README opens on one real pair**: the example's Mermaid block as Mermaid draws it, beside what Merlive
   draws of it. `npm run compare` draws Mermaid's half, so it is never made by hand.
 - **Links are drawn with what their author put at each end**: an arrowhead, a circle or a cross, at either end
