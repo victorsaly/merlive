@@ -6,7 +6,7 @@
 // rows and columns. What comes out is what layout.mjs gives, so it is drawn and checked as any diagram is.
 // Pure: a model in, coordinates out.
 
-import { hitsBox, linesOf, measure, meet, roomFor, segmentsOf, wordsFor, wrap } from './layout.mjs';
+import { compartmentsOf, extraHeight, hitsBox, linesOf, measure, meet, roomFor, rowsRoom, segmentsOf, wordsFor, wrap } from './layout.mjs';
 import { inset } from './shapes.mjs';
 
 /** @typedef {import('./parse.mjs').Model} Model */
@@ -35,6 +35,7 @@ import { inset } from './shapes.mjs';
 // round a frame, the step between two ports) is taken from `measure` in layout.mjs, not said again here.
 export const gridMeasure = {
   fine: 2, // px between two widths a column may take in a grid that says its own least: as wide as its words need, to the nearest even px
+  close: 16, // px between two cells when their author says nothing runs between them (a board of cards): the least the rules let two boxes come
   gap: 48, // px between two columns, and between two rows, as between two ranks of a flow: room for three lines a track step apart, each with a stub both ends
   wordsAir: 16, // px a gap is wider (or taller) than the words of a link, so words in a gap touch neither block
   clear: 6, // px a line keeps from a block it passes
@@ -71,7 +72,11 @@ export function placeGrid(model) {
   // A gap has to hold the words of a link that crosses it: across, as wide as the widest words; down, as tall
   // as the tallest. One pair of gaps for the whole diagram, so a grid inside another lines up with it.
   const worded = model.edges.filter((e) => e.label && e.from !== e.to).map((e) => wrap(e.label, measure.labelWrap));
-  const gap = /** @type {Sized} */ (model.grid).gap ?? gridMeasure.gap;
+  // Cells nothing runs between need no room for a line: they sit as close as two boxes may. A grid says so
+  // itself (`close`), and it only holds while the diagram has no link at all. Otherwise a grid may say its own
+  // gap, and one that says nothing has the usual.
+  const asked = /** @type {Sized & {close?:boolean}} */ (model.grid);
+  const gap = asked.close && !model.edges.length ? gridMeasure.close : asked.gap ?? gridMeasure.gap;
   const gapX = Math.max(gap, ...worded.map((lines) => Math.round(Math.max(...lines.map((l) => l.length)) * measure.labelGlyph + 10) + gridMeasure.wordsAir));
   const gapY = Math.max(gap, ...worded.map((lines) => 4 + measure.labelLine * lines.length + gridMeasure.wordsAir));
 
@@ -98,24 +103,31 @@ export function placeGrid(model) {
   // 2. One column width for a grid: the narrowest of the widths a box may have in which every block's words
   // fit as they must in any box, a block that spans columns having the gaps between them too. A block that
   // holds others needs its own grid's width and the room round it, shared over the columns it spans.
+  // What a block lists under its name (a card's ticket, who has it) keeps its one line each, so the block is
+  // wide enough for the longest, in the wider boxes a diagram that lists rows may have.
+  const listed = (/** @type {Node} */ n) => compartmentsOf(n).flat();
   const fitsAt = (/** @type {Node} */ n, /** @type {number} */ w) => {
     const lines = linesOf(n, w);
     // The short line over a name is never wrapped: a block is as wide as it needs, as a box of a flow is.
     const over = n.over ? n.over.length * measure.overGlyph + 2 * measure.overIn : 0;
-    return over <= w && lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0)) && lines.every((l) => l.length <= roomFor(n, w));
+    return over <= w && lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0)) && lines.every((l) => l.length <= roomFor(n, w)) && listed(n).every((row) => row.length <= rowsRoom(w));
   };
+  /** The name a block that holds others goes by: its group's, or, when it holds nothing and so is no group, the one its cell keeps. */
+  const nameOf = (/** @type {Cell} */ cell) => groupOf.get(/** @type {{id:string}} */ (cell).id)?.title ?? /** @type {{title?:string}} */ (cell).title ?? '';
   /** @returns {{cols:number,rows:{cell:Cell,col:number,span:number}[][],colW:number,w:number}} */
   const need = (/** @type {Grid} */ grid) => {
     const { cols, rows } = rowsOf(grid), all = rows.flat();
     const blocks = all.flatMap((p) => (p.cell.is === 'block' || p.cell.is === 'arrow' ? [{ n: /** @type {Node} */ (byId.get(p.cell.id)), span: p.span }] : []));
     const wide = (/** @type {number} */ w, /** @type {number} */ span) => span * w + (span - 1) * gapX;
-    // A grid that says its own least column tries every width from there up to a flow's narrowest, then a flow's.
+    // A grid that says its own least column tries every width from there up to a flow's narrowest, then a flow's,
+    // and the wider ones a box that lists rows may have.
     const least = /** @type {Sized} */ (grid).least ?? measure.widths[0];
-    const widths = [...Array.from({ length: Math.max(0, Math.ceil((measure.widths[0] - least) / gridMeasure.fine)) }, (_, i) => least + i * gridMeasure.fine), ...measure.widths.filter((w) => w >= least)];
-    let colW = widths.find((w) => blocks.every((b) => fitsAt(b.n, wide(w, b.span)))) ?? Math.max(least, measure.widths[measure.widths.length - 1]);
+    const flows = blocks.some((b) => listed(b.n).length) ? [...measure.widths, ...measure.rowWidths] : measure.widths;
+    const widths = [...Array.from({ length: Math.max(0, Math.ceil((measure.widths[0] - least) / gridMeasure.fine)) }, (_, i) => least + i * gridMeasure.fine), ...flows.filter((w) => w >= least)];
+    let colW = widths.find((w) => blocks.every((b) => fitsAt(b.n, wide(w, b.span)))) ?? Math.max(least, flows[flows.length - 1]);
     for (const p of all) {
       if (p.cell.is !== 'group') continue;
-      const name = Math.round((groupOf.get(p.cell.id)?.title ?? '').length * measure.nameGlyph), inner = Math.max(need(p.cell.grid).w, name) + 2 * measure.framePad;
+      const name = Math.round(nameOf(p.cell).length * measure.nameGlyph), inner = Math.max(need(p.cell.grid).w, name) + 2 * measure.framePad;
       colW = Math.max(colW, Math.ceil((inner - (p.span - 1) * gapX) / p.span));
     }
     return { cols, rows, colW, w: cols * colW + (cols - 1) * gapX };
@@ -127,6 +139,10 @@ export function placeGrid(model) {
    * @typedef {{cell:Cell,col:number,span:number,x:number,w:number,h:number,lines:string[],inner:Shaped|null,titled:boolean}} Item
    * @typedef {{colW:number,off:number,w:number,h:number,rows:{y:number,h:number,items:Item[]}[]}} Shaped
    */
+  // A block that lists something under its name has its name in a band at its top, the same for every such
+  // block (the drawing is told one), tall enough for the longest of their names; what it lists comes under it.
+  const lists = (/** @type {Node} */ n) => Boolean(n.over || n.text || n.table || listed(n).length);
+  let band = base, named = 1;
   /** @returns {Shaped} */
   const shape = (/** @type {Grid} */ grid, /** @type {number|undefined} */ width) => {
     const n = need(grid);
@@ -136,13 +152,13 @@ export function placeGrid(model) {
     const rows = n.rows.map((row) => {
       // Where one frame of a row has a name, every frame of that row keeps room for one, so that what they hold
       // starts on one line: a named block beside one with no name, or a timeline's sections.
-      const named = row.some((p) => p.cell.is === 'group' && Boolean(groupOf.get(p.cell.id)?.title));
+      const rowNamed = row.some((p) => p.cell.is === 'group' && Boolean(nameOf(p.cell)));
       const items = row.map((p) => {
         const w = p.span * colW + (p.span - 1) * gapX, x = off + p.col * (colW + gapX);
         /** @type {Item} */
         const item = { ...p, x, w, h: base, lines: [], inner: null, titled: false };
         if (p.cell.is === 'group') {
-          item.titled = named;
+          item.titled = rowNamed;
           item.inner = shape(p.cell.grid, w - 2 * measure.framePad);
           item.h = Math.max(base, item.inner.h) + 2 * measure.framePad + (item.titled ? measure.frameTitle : 0);
         } else if (p.cell.is !== 'space') {
@@ -150,7 +166,11 @@ export function placeGrid(model) {
           item.lines = linesOf(node, w);
           // An arrow that points up or down has its head above or below its words, and is taller by it.
           const heads = node.shape === 'arrow-y' ? 2 : node.shape === 'arrow-up' || node.shape === 'arrow-down' ? 1 : 0;
-          item.h = measure.boxPad + measure.lineHeight * item.lines.length + heads * gridMeasure.arrowTall + (node.over ? measure.overLine : 0);
+          item.h = measure.boxPad + measure.lineHeight * item.lines.length + heads * gridMeasure.arrowTall;
+          if (lists(node)) {
+            named = Math.max(named, item.lines.length);
+            item.h = band + extraHeight(node, { w, h: band });
+          }
         }
         return item;
       });
@@ -179,15 +199,18 @@ export function placeGrid(model) {
         if (cell.is === 'space') continue;
         placed.cells.push({ id: cell.id, col: item.col, row: r, span: item.span, frame: cell.is === 'group' });
         if (cell.is === 'group') {
-          const group = groupOf.get(cell.id);
-          // A block that holds nothing is an empty cell: there is no group to draw a frame for.
-          if (group) frames.push({ id: cell.id, title: group.title, x: l, y: t, w: item.w, h: row.h, name: { x: l, y: t, w: 0, h: 0, plate: false } });
+          // A block that holds nothing is an empty cell: there is no group to draw a frame for. One that
+          // keeps a name of its own (a column of a board with no cards yet) is still drawn, round nothing.
+          if (groupOf.has(cell.id) || nameOf(cell)) frames.push({ id: cell.id, title: nameOf(cell), x: l, y: t, w: item.w, h: row.h, name: { x: l, y: t, w: 0, h: 0, plate: false } });
           else placed.cells.pop();
           commit(/** @type {Shaped} */ (item.inner), l + measure.framePad, t + measure.framePad + (item.titled ? measure.frameTitle : 0));
         } else nodes[cell.id] = { id: cell.id, x: l + item.w / 2, y: t + row.h / 2, w: item.w, h: row.h, rank: r, lane: item.col, spine: false, lines: item.lines };
       }
     });
   };
+  // Shaped once to find the longest name among the blocks that list something, then again with room for it.
+  shape(/** @type {Grid} */ (model.grid), undefined);
+  band = measure.boxPad + measure.lineHeight * named;
   const whole = shape(/** @type {Grid} */ (model.grid), undefined);
   commit(whole, measure.pad, measure.pad);
 
@@ -383,5 +406,5 @@ export function placeGrid(model) {
 
   const width = Math.ceil(Math.max(0, ...all.map((n) => n.x + n.w / 2), ...frames.map((f) => f.x + f.w), ...lines.flat().map((p) => p.x), ...said.map((l) => l.x + l.w / 2)) + measure.pad);
   const height = Math.ceil(Math.max(0, ...all.map((n) => n.y + n.h / 2), ...frames.map((f) => f.y + f.h), ...lines.flat().map((p) => p.y), ...said.map((l) => l.y + l.h / 2)) + measure.pad);
-  return { width, height, direction: 'TD', reversed: false, box: { w: whole.colW, h: base }, nodes, edges, groups: frames, spine: [], warnings, grids };
+  return { width, height, direction: 'TD', reversed: false, box: { w: whole.colW, h: band }, nodes, edges, groups: frames, spine: [], warnings, grids };
 }

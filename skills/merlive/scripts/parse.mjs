@@ -12,6 +12,7 @@ import { packetReader } from './packet.mjs';
 import { blockReader } from './block.mjs';
 import { mindmapReader } from './mindmap.mjs';
 import { timelineReader } from './timeline.mjs';
+import { kanbanReader } from './kanban.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
@@ -224,6 +225,7 @@ const READERS = /** @type {const} */ ([
   [/^mindmap;?$/, mindmapReader],
   [/^timeline(\s|;|$)/, timelineReader],
   [/^packet(-beta)?$/, packetReader],
+  [/^kanban$/, kanbanReader],
 ]);
 
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own

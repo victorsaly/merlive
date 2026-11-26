@@ -366,3 +366,66 @@ describe('grid: a block with a line over its name', () => {
     assert.ok(lineY > top(at.a) && lineY < nameY && nameY < bottom(at.a), `${top(at.a)} < ${lineY} < ${nameY} < ${bottom(at.a)}`);
   });
 });
+
+describe('grid: what a board asked of it', () => {
+  // A kanban board is placed here too (kanban.mjs): cards that list things, columns with nothing in them, and
+  // nothing running between the cells. Each is shown on a block diagram's own grid, so these hold without it.
+  const two = () => parse('block\ncolumns 2\na["One"] b["Two"]\nc["Three"] d["Four"]');
+  const broken = (/** @type {import('../skills/merlive/scripts/parse.mjs').Model} */ m) => score(m, layout(m), builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`);
+
+  it('makes a block that lists rows under its name as tall as they need, and its row with it', () => {
+    const m = two();
+    m.nodes[0].rows = [['ticket: MC-2038', 'assigned: knsv']];
+    const lay = layout(m), at = lay.nodes;
+    assert.equal(at.a.h, lay.box.h + 2 * measure.rowPad + 2 * measure.rowLine);
+    assert.equal(at.b.h, at.a.h, 'the block beside it is as tall as its row');
+    assert.equal(at.c.h, measure.boxPad + measure.lineHeight, 'the row under it is as it was');
+    assert.equal(top(at.c) - bottom(at.a), gridMeasure.gap);
+    assert.deepEqual(broken(m), []);
+  });
+
+  it('makes every column wide enough for the longest row a block lists', () => {
+    const m = two(), row = 'assigned: Somebody With A Long Name';
+    m.nodes[3].rows = [[row]];
+    const lay = layout(m);
+    assert.ok(row.length * measure.rowGlyph + 2 * measure.rowIn <= lay.nodes.d.w, `${lay.nodes.d.w}px`);
+    assert.equal(lay.nodes.a.w, lay.nodes.d.w);
+    assert.deepEqual(broken(m), []);
+    const plain = layout(two());
+    assert.ok(plain.nodes.a.w < lay.nodes.a.w, 'and no wider than its words need when nothing is listed');
+  });
+
+  it('keeps the room for a name that a block which lists rows needs: the longest such name, in lines', () => {
+    const m = two();
+    Object.assign(m.nodes[0], { label: 'Create the documentation for the feature', rows: [['ticket: 1']] });
+    const lay = layout(m), lines = lay.nodes.a.lines.length;
+    assert.ok(lines > 1);
+    assert.equal(lay.box.h, measure.boxPad + measure.lineHeight * lines);
+    assert.equal(lay.nodes.a.h, lay.box.h + 2 * measure.rowPad + measure.rowLine);
+    assert.deepEqual(broken(m), []);
+  });
+
+  it('draws a cell that holds nothing as a frame when it has a name of its own, as tall as its row', () => {
+    const m = parse('block\ncolumns 3\na["One"]\nblock:g\nend\nb["Two"]');
+    /** @type {any} */ (m.grid?.cells[1]).title = 'Waiting';
+    const lay = layout(m);
+    assert.deepEqual(lay.groups.map((f) => [f.id, f.title]), [['g', 'Waiting']]);
+    const f = lay.groups[0];
+    assert.ok(f.x > right(lay.nodes.a) && f.x + f.w < left(lay.nodes.b) && f.y === top(lay.nodes.a) && f.h === lay.nodes.a.h);
+    assert.ok(f.name.w > 0 && f.name.x - f.name.w / 2 >= f.x && f.name.x + f.name.w / 2 <= f.x + f.w);
+    assert.deepEqual(broken(m), []);
+  });
+
+  it('sets cells close when their author says nothing runs between them, and only while nothing does', () => {
+    const m = two();
+    /** @type {any} */ (m.grid).close = true;
+    const lay = layout(m), at = lay.nodes;
+    assert.equal(left(at.b) - right(at.a), gridMeasure.close);
+    assert.equal(top(at.c) - bottom(at.a), gridMeasure.close);
+    assert.deepEqual(broken(m), []);
+    const joined = parse('block\ncolumns 2\na["One"] b["Two"]\nc["Three"] d["Four"]\ne["Five"]\na --> d');
+    assert.equal(joined.placedBy, 'grid');
+    /** @type {any} */ (joined.grid).close = true;
+    assert.equal(left(layout(joined).nodes.b) - right(layout(joined).nodes.a), gridMeasure.gap);
+  });
+});

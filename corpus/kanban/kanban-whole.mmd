@@ -1,0 +1,20 @@
+---
+title: Orders this week
+config:
+  kanban:
+    ticketBaseUrl: 'https://example.com/orders/#TICKET#'
+---
+kanban
+  todo[To do]
+    quote[Ask three suppliers for a quote]
+    raise[Raise the order for the shelving]@{ ticket: PO-1041, assigned: 'Amara', priority: 'High' }
+    file[File last month's delivery notes]@{ priority: 'Very Low' }
+  doing[In hand]
+    chase[Chase the supplier about the short pallets]@{ ticket: PO-1036, assigned: 'Ben', priority: 'Very High' }
+    check[Check the stock]@{ assigned: 'Chidi' }
+  waiting[Waiting on the buyer]
+    approve[Approve the overspend]@{ ticket: PO-1040, assigned: 'Dita' }
+  done[Done]
+    pay[Pay the invoice]@{ ticket: PO-1038, assigned: 'Amara' }
+    book[Book the delivery in]@{ ticket: PO-1038 }
+  dropped[Cannot be done]

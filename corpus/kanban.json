@@ -1,0 +1,407 @@
+[
+  {
+    "file": "kanban/kanban-columns.mmd",
+    "covers": "A kanban board: columns side by side, and the cards of each down it",
+    "boxes": 4,
+    "links": 0,
+    "groups": 3,
+    "placedBy": "grid",
+    "has": [
+      "To do",
+      "Doing",
+      "Done",
+      "Raise the order",
+      "Chase the supplier",
+      "Check the stock",
+      "Pay the invoice"
+    ]
+  },
+  {
+    "file": "kanban/kanban-bare.mmd",
+    "covers": "Columns and cards written with no brackets: each is called by what was written",
+    "boxes": 3,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "has": [
+      "To do",
+      "Done",
+      "Raise the order",
+      "Pay the invoice"
+    ]
+  },
+  {
+    "file": "kanban/kanban-ids.mmd",
+    "covers": "Ids with a hyphen or a dot in them, a card called by its id, and one id written for two cards",
+    "boxes": 4,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "has": [
+      "To do",
+      "done",
+      "Raise the order",
+      "Chase the supplier",
+      "raise",
+      "Pay the invoice"
+    ]
+  },
+  {
+    "file": "kanban/kanban-empty-column.mmd",
+    "covers": "A column with no cards in it yet",
+    "boxes": 3,
+    "links": 0,
+    "groups": 3,
+    "placedBy": "grid",
+    "has": [
+      "To do",
+      "Done",
+      "Raise the order"
+    ]
+  },
+  {
+    "file": "kanban/kanban-assigned.mmd",
+    "covers": "Who has a card: assigned",
+    "boxes": 3,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "rows": [
+      1,
+      1,
+      0
+    ],
+    "has": [
+      "assigned: Amara",
+      "assigned: Ben"
+    ]
+  },
+  {
+    "file": "kanban/kanban-ticket.mmd",
+    "covers": "The ticket a card is for, bare, in quotes or a number",
+    "boxes": 3,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "rows": [
+      1,
+      1,
+      1
+    ],
+    "has": [
+      "ticket: PO-1041",
+      "ticket: PO-1042",
+      "ticket: 77"
+    ]
+  },
+  {
+    "file": "kanban/kanban-priority.mmd",
+    "covers": "How pressing a card is: the four priorities Mermaid draws",
+    "boxes": 4,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "rows": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "has": [
+      "priority: very high",
+      "priority: high",
+      "priority: low",
+      "priority: very low"
+    ],
+    "loses": "A priority is said in words on its card, where Mermaid draws a colour down the side of the card"
+  },
+  {
+    "file": "kanban/kanban-priority-other.mmd",
+    "covers": "A priority Mermaid has no mark for",
+    "boxes": 2,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "rows": [
+      1,
+      1
+    ],
+    "has": [
+      "priority: Medium",
+      "priority: high"
+    ],
+    "says": "is not one Mermaid draws",
+    "loses": "Kept as written and said, where Mermaid draws nothing for it"
+  },
+  {
+    "file": "kanban/kanban-metadata.mmd",
+    "covers": "A ticket, who has it and how pressing it is, all on one card, in any order",
+    "boxes": 3,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "rows": [
+      3,
+      2,
+      3
+    ],
+    "has": [
+      "ticket: PO-1041",
+      "assigned: Amara",
+      "priority: high",
+      "assigned: Ben",
+      "ticket: PO-1042",
+      "priority: low",
+      "ticket: PO-1038",
+      "assigned: Chidi"
+    ],
+    "loses": "A priority is said in words on its card, where Mermaid draws a colour down the side of the card"
+  },
+  {
+    "file": "kanban/kanban-metadata-lines.mmd",
+    "covers": "What is set on a card, written over several lines",
+    "boxes": 2,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "rows": [
+      3,
+      0
+    ],
+    "has": [
+      "ticket: PO-1041",
+      "assigned: Amara",
+      "priority: high",
+      "Chase the supplier"
+    ],
+    "loses": "A priority is said in words on its card, where Mermaid draws a colour down the side of the card"
+  },
+  {
+    "file": "kanban/kanban-metadata-other.mmd",
+    "covers": "Something set on a card that a board has no place for",
+    "boxes": 1,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "rows": [
+      1
+    ],
+    "has": [
+      "ticket: PO-1041"
+    ],
+    "says": "a card keeps its label, ticket, assigned and priority",
+    "loses": "Passed over and said, where Mermaid passes over it and says nothing"
+  },
+  {
+    "file": "kanban/kanban-label.mmd",
+    "covers": "A card's words set as its label",
+    "boxes": 2,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "rows": [
+      1,
+      0
+    ],
+    "has": [
+      "Raise the order",
+      "Chase the supplier",
+      "ticket: PO-1041"
+    ]
+  },
+  {
+    "file": "kanban/kanban-column-metadata.mmd",
+    "covers": "Something set on a column, which neither Mermaid nor Merlive draws",
+    "boxes": 2,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "has": [
+      "To do",
+      "Done"
+    ],
+    "says": "a column keeps only its label",
+    "loses": "Passed over and said, where Mermaid passes over it and says nothing"
+  },
+  {
+    "file": "kanban/kanban-ticket-base-url.mmd",
+    "covers": "Tickets with a place they link to, set in front matter",
+    "boxes": 2,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "rows": [
+      1,
+      1
+    ],
+    "has": [
+      "ticket: PO-1041",
+      "ticket: PO-1038"
+    ],
+    "loses": "A ticket is listed on its card and is not a link out: a picture of Merlive's goes nowhere"
+  },
+  {
+    "file": "kanban/kanban-frontmatter.mmd",
+    "covers": "Front matter with a title",
+    "boxes": 2,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "title": "Orders this week"
+  },
+  {
+    "file": "kanban/kanban-quoted.mmd",
+    "covers": "Words in quotes, with a comma, a bracket and a parenthesis in them",
+    "boxes": 2,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "has": [
+      "To do, this week",
+      "Raise the order [urgent]",
+      "Chase the supplier (again)"
+    ]
+  },
+  {
+    "file": "kanban/kanban-markdown.mmd",
+    "covers": "A Markdown string: bold and italic on a card",
+    "boxes": 2,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "has": [
+      "Raise the order",
+      "Chase the supplier"
+    ]
+  },
+  {
+    "file": "kanban/kanban-line-break.mmd",
+    "covers": "A line its author broke, with <br/> and by going on to the next line inside quotes",
+    "boxes": 3,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "has": [
+      "Raise the order for the warehouse",
+      "Chase the supplier before Friday",
+      "Pay the invoice"
+    ]
+  },
+  {
+    "file": "kanban/kanban-entity.mmd",
+    "covers": "Entity codes in the words of a column and of a card",
+    "boxes": 2,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "has": [
+      "Raise & chase",
+      "Orders > 500",
+      "Say \"late\" to the buyer"
+    ]
+  },
+  {
+    "file": "kanban/kanban-shapes.mmd",
+    "covers": "Every way Mermaid lets the words of a card be written, each drawn as a card",
+    "boxes": 6,
+    "links": 0,
+    "groups": 1,
+    "placedBy": "grid",
+    "shapes": [
+      "box",
+      "box",
+      "box",
+      "box",
+      "box",
+      "box"
+    ],
+    "has": [
+      "To do",
+      "Raise the order",
+      "Chase the supplier",
+      "Check the stock",
+      "File the note",
+      "Tidy the quotes",
+      "Pay the invoice"
+    ]
+  },
+  {
+    "file": "kanban/kanban-comments.mmd",
+    "covers": "Comments, on lines of their own and after a card",
+    "boxes": 3,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "has": [
+      "Raise the order",
+      "Chase the supplier",
+      "Pay the invoice"
+    ]
+  },
+  {
+    "file": "kanban/kanban-deep.mmd",
+    "covers": "Cards written at different depths, and with a tab: anything further in than a column is its card",
+    "boxes": 4,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "has": [
+      "To do",
+      "Done",
+      "Chase the supplier",
+      "Check the stock",
+      "Pay the invoice"
+    ]
+  },
+  {
+    "file": "kanban/kanban-long-words.mmd",
+    "covers": "Long words on a card and in the name of a column",
+    "boxes": 3,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "has": [
+      "Raise the order for the new warehouse shelving",
+      "Done and paid for in full"
+    ]
+  },
+  {
+    "file": "kanban/kanban-note.mmd",
+    "covers": "Merlive's own lines on a board: a note on a card",
+    "boxes": 3,
+    "links": 0,
+    "groups": 2,
+    "placedBy": "grid",
+    "notes": 2
+  },
+  {
+    "file": "kanban/kanban-whole.mmd",
+    "covers": "A whole board: five columns, one of them empty, cards with and without tickets, people and priorities, a title and a place tickets link to",
+    "boxes": 8,
+    "links": 0,
+    "groups": 5,
+    "placedBy": "grid",
+    "rows": [
+      0,
+      3,
+      1,
+      3,
+      1,
+      2,
+      2,
+      1
+    ],
+    "title": "Orders this week",
+    "has": [
+      "To do",
+      "In hand",
+      "Waiting on the buyer",
+      "Done",
+      "Raise the order for the shelving",
+      "ticket: PO-1036",
+      "assigned: Ben",
+      "priority: very high"
+    ],
+    "loses": "A priority is said in words on its card, where Mermaid draws a colour down the side; a ticket is not a link out"
+  }
+]
