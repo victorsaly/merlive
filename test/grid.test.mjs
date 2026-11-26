@@ -280,3 +280,89 @@ describe('grid: the rules', () => {
     }
   });
 });
+
+describe('grid: a grid that says its own measures', () => {
+  // A row of small cells with nothing running between them, as a packet's bits are: a box of a flow's size and
+  // room for three lines between each two would make it many times wider than what it says.
+  const cells = (/** @type {string} */ body, /** @type {{least?:number,gap?:number}} */ says = {}) => {
+    const m = parse(`block\n${body}`);
+    Object.assign(/** @type {object} */ (m.grid), says);
+    const lay = layout(m);
+    return { m, lay, at: lay.nodes, grid: /** @type {NonNullable<typeof lay.grids>} */ (lay.grids)[0], broken: score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`) };
+  };
+  const four = 'columns 4\na["URG"] b["ACK"] c["PSH"] d["RST"]';
+
+  it('is as it always was when it says nothing: a box of a flow\'s size, and room for lines between', () => {
+    const { grid: g } = cells(four);
+    assert.deepEqual([g.colW, g.gapX, g.gapY], [measure.widths[0], gridMeasure.gap, gridMeasure.gap]);
+  });
+
+  it('keeps the gap it says, across and down', () => {
+    const { grid: g, at, broken } = cells(`${four}\ne["Window"]:4`, { gap: 16 });
+    assert.deepEqual([g.gapX, g.gapY], [16, 16]);
+    assert.equal(left(at.b) - right(at.a), 16);
+    assert.equal(top(at.e) - bottom(at.a), 16);
+    assert.deepEqual(broken, []);
+  });
+
+  it('still makes a gap as wide as the words of a link that crosses it', () => {
+    const { grid: g } = cells('columns 3\na["A"] b["B"] c["C"]\na -- "sends every order to" --> b', { gap: 16 });
+    assert.ok(g.gapX > gridMeasure.gap, `${g.gapX}px`);
+  });
+
+  it('takes the narrowest column its words fit, from the least it says up, and not the next of a flow\'s six widths', () => {
+    const { grid: g, at, lay, broken } = cells(four, { least: 24, gap: 16 });
+    // Three letters and the room a box keeps clear of its words.
+    assert.ok(g.colW >= 3 * measure.glyph + 28 && g.colW < 3 * measure.glyph + 28 + gridMeasure.fine, `${g.colW}px`);
+    assert.deepEqual(at.a.lines, ['URG']);
+    assert.equal(at.a.w, g.colW);
+    assert.ok(lay.width < 4 * measure.widths[0]);
+    assert.deepEqual(broken, []);
+  });
+
+  it('is no narrower than the least it says, however short its words', () => {
+    assert.equal(cells('columns 2\na["A"] b["B"]', { least: 90 }).grid.colW, 90);
+  });
+
+  it('gives a block that spans columns the gaps between them too, so a long name over many narrow columns fits', () => {
+    const { grid: g, at, broken } = cells('columns 4\na["A"] b["B"] c["C"] d["D"]\ne["Sequence number"]:4', { least: 24, gap: 16 });
+    assert.ok(g.colW < 60, `${g.colW}px`);
+    assert.deepEqual(at.e.lines, ['Sequence number']);
+    assert.deepEqual(broken, []);
+  });
+
+  it('falls back on the widths a flow has when no narrow column fits', () => {
+    const { grid: g } = cells('columns 2\na["An order that somebody raised"] b["B"]', { least: 24 });
+    assert.ok(measure.widths.includes(g.colW), `${g.colW}px`);
+  });
+});
+
+describe('grid: a block with a line over its name', () => {
+  const over = (/** @type {string} */ line, /** @type {{least?:number,gap?:number}} */ says = {}) => {
+    const m = parse('block\ncolumns 3\na["Kind"] b["Flags"] c["Length"]');
+    Object.assign(/** @type {object} */ (m.grid), says);
+    /** @type {any} */ (m.nodes[0]).over = line;
+    const lay = layout(m);
+    return { m, lay, at: lay.nodes, broken: score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`) };
+  };
+
+  it('is taller by that line, and so is its row', () => {
+    const { at, broken } = over('0–7');
+    assert.equal(at.a.h, measure.boxPad + measure.lineHeight + measure.overLine);
+    assert.equal(at.b.h, at.a.h);
+    assert.deepEqual(broken, []);
+  });
+
+  it('is wide enough for the line, which is never wrapped', () => {
+    const line = '1000000–1000007', { at, broken } = over(line, { least: 24, gap: 16 });
+    assert.ok(at.a.w >= line.length * measure.overGlyph + 2 * measure.overIn, `${at.a.w}px`);
+    assert.deepEqual(broken, []);
+  });
+
+  it('draws the line above the name, inside the box', () => {
+    const { m, lay, at } = over('0–7');
+    const g = /<g class="mv-node" data-node="a".*?<\/g>/s.exec(picture(m, lay, builtIn, { title: 't' }))?.[0] ?? '';
+    const lineY = Number(/class="mv-over" x="[\d.]+" y="([\d.]+)"/.exec(g)?.[1]), nameY = Number(/<text><tspan x="[\d.]+" y="([\d.]+)">Kind/.exec(g)?.[1]);
+    assert.ok(lineY > top(at.a) && lineY < nameY && nameY < bottom(at.a), `${top(at.a)} < ${lineY} < ${nameY} < ${bottom(at.a)}`);
+  });
+});

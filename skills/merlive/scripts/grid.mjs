@@ -18,6 +18,14 @@ import { inset } from './shapes.mjs';
 /** @typedef {import('./layout.mjs').Pt} Pt */
 /** @typedef {import('./layout.mjs').Side} Side */
 /**
+ * A grid may say two things of its own, for when what is in it is not blocks of a flow's size with lines
+ * between them (the bits of a packet, say): `least`, the narrowest a column may be in px, from which a column is
+ * as wide as its words need and not the next of a flow's six widths; and `gap`, the room between two cells,
+ * when nothing but a link's words would ask for more. The gap is the whole diagram's, so the outermost grid
+ * says it.
+ * @typedef {Grid & {least?:number,gap?:number}} Sized
+ */
+/**
  * One grid as it was placed, for the check that a block is exactly its cells: where it starts, how wide its
  * columns are and how tall each row, and which cells each block or frame takes.
  * @typedef {{x:number,y:number,colW:number,gapX:number,gapY:number,rows:{y:number,h:number}[],cells:{id:string,col:number,row:number,span:number,frame:boolean}[]}} PlacedGrid
@@ -26,6 +34,7 @@ import { inset } from './shapes.mjs';
 // What is measured, named once. Whatever is the same thing as in a flow (the widths a box may have, the room
 // round a frame, the step between two ports) is taken from `measure` in layout.mjs, not said again here.
 export const gridMeasure = {
+  fine: 2, // px between two widths a column may take in a grid that says its own least: as wide as its words need, to the nearest even px
   gap: 48, // px between two columns, and between two rows, as between two ranks of a flow: room for three lines a track step apart, each with a stub both ends
   wordsAir: 16, // px a gap is wider (or taller) than the words of a link, so words in a gap touch neither block
   clear: 6, // px a line keeps from a block it passes
@@ -62,8 +71,9 @@ export function placeGrid(model) {
   // A gap has to hold the words of a link that crosses it: across, as wide as the widest words; down, as tall
   // as the tallest. One pair of gaps for the whole diagram, so a grid inside another lines up with it.
   const worded = model.edges.filter((e) => e.label && e.from !== e.to).map((e) => wrap(e.label, measure.labelWrap));
-  const gapX = Math.max(gridMeasure.gap, ...worded.map((lines) => Math.round(Math.max(...lines.map((l) => l.length)) * measure.labelGlyph + 10) + gridMeasure.wordsAir));
-  const gapY = Math.max(gridMeasure.gap, ...worded.map((lines) => 4 + measure.labelLine * lines.length + gridMeasure.wordsAir));
+  const gap = /** @type {Sized} */ (model.grid).gap ?? gridMeasure.gap;
+  const gapX = Math.max(gap, ...worded.map((lines) => Math.round(Math.max(...lines.map((l) => l.length)) * measure.labelGlyph + 10) + gridMeasure.wordsAir));
+  const gapY = Math.max(gap, ...worded.map((lines) => 4 + measure.labelLine * lines.length + gridMeasure.wordsAir));
 
   // 1. Cells, row by row. A cell takes the columns it spans; one that does not fit what is left of a row
   // starts the next. "columns auto" is one row, as long as what was written.
@@ -90,14 +100,19 @@ export function placeGrid(model) {
   // holds others needs its own grid's width and the room round it, shared over the columns it spans.
   const fitsAt = (/** @type {Node} */ n, /** @type {number} */ w) => {
     const lines = linesOf(n, w);
-    return lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0)) && lines.every((l) => l.length <= roomFor(n, w));
+    // The short line over a name is never wrapped: a block is as wide as it needs, as a box of a flow is.
+    const over = n.over ? n.over.length * measure.overGlyph + 2 * measure.overIn : 0;
+    return over <= w && lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0)) && lines.every((l) => l.length <= roomFor(n, w));
   };
   /** @returns {{cols:number,rows:{cell:Cell,col:number,span:number}[][],colW:number,w:number}} */
   const need = (/** @type {Grid} */ grid) => {
     const { cols, rows } = rowsOf(grid), all = rows.flat();
     const blocks = all.flatMap((p) => (p.cell.is === 'block' || p.cell.is === 'arrow' ? [{ n: /** @type {Node} */ (byId.get(p.cell.id)), span: p.span }] : []));
     const wide = (/** @type {number} */ w, /** @type {number} */ span) => span * w + (span - 1) * gapX;
-    let colW = measure.widths.find((w) => blocks.every((b) => fitsAt(b.n, wide(w, b.span)))) ?? measure.widths[measure.widths.length - 1];
+    // A grid that says its own least column tries every width from there up to a flow's narrowest, then a flow's.
+    const least = /** @type {Sized} */ (grid).least ?? measure.widths[0];
+    const widths = [...Array.from({ length: Math.max(0, Math.ceil((measure.widths[0] - least) / gridMeasure.fine)) }, (_, i) => least + i * gridMeasure.fine), ...measure.widths.filter((w) => w >= least)];
+    let colW = widths.find((w) => blocks.every((b) => fitsAt(b.n, wide(w, b.span)))) ?? Math.max(least, measure.widths[measure.widths.length - 1]);
     for (const p of all) {
       if (p.cell.is !== 'group') continue;
       const name = Math.round((groupOf.get(p.cell.id)?.title ?? '').length * measure.nameGlyph), inner = Math.max(need(p.cell.grid).w, name) + 2 * measure.framePad;
@@ -135,7 +150,7 @@ export function placeGrid(model) {
           item.lines = linesOf(node, w);
           // An arrow that points up or down has its head above or below its words, and is taller by it.
           const heads = node.shape === 'arrow-y' ? 2 : node.shape === 'arrow-up' || node.shape === 'arrow-down' ? 1 : 0;
-          item.h = measure.boxPad + measure.lineHeight * item.lines.length + heads * gridMeasure.arrowTall;
+          item.h = measure.boxPad + measure.lineHeight * item.lines.length + heads * gridMeasure.arrowTall + (node.over ? measure.overLine : 0);
         }
         return item;
       });

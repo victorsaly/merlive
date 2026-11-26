@@ -8,6 +8,7 @@ import { c4Reader } from './c4.mjs';
 import { classReader } from './class.mjs';
 import { architectureReader } from './architecture.mjs';
 import { requirementReader } from './requirement.mjs';
+import { packetReader } from './packet.mjs';
 import { blockReader } from './block.mjs';
 import { mindmapReader } from './mindmap.mjs';
 import { timelineReader } from './timeline.mjs';
@@ -222,6 +223,7 @@ const READERS = /** @type {const} */ ([
   [/^block(-beta)?;?$/, blockReader],
   [/^mindmap;?$/, mindmapReader],
   [/^timeline(\s|;|$)/, timelineReader],
+  [/^packet(-beta)?$/, packetReader],
 ]);
 
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own
@@ -302,6 +304,10 @@ export function parse(src) {
   // The reader of a diagram that is not written as a flowchart is (see READERS), reading into this same model.
   /** @type {{read:(text:string, line:number) => boolean, done:() => void}|null} */
   let reader = null;
+  // What Mermaid was told of itself, in front matter and in "%%{init: …}%%": read past here, and lent to a
+  // reader whose diagram a setting changes (how many bits a packet has in a row).
+  /** @type {string[]} */
+  const settings = [];
 
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
 
@@ -517,6 +523,7 @@ export function parse(src) {
     if (side) return void (model.hints.side = /** @type {'left'|'right'} */ (side[1]));
     const turn = /^%%\s*turn\s*:\s*(yes|no)\s*$/.exec(text);
     if (turn) return void (model.hints.turn = turn[1] === 'yes');
+    if (text.startsWith('%%{')) settings.push(text);
     if (text.startsWith('%%')) return;
 
     if (!header) {
@@ -524,7 +531,7 @@ export function parse(src) {
       const h = /^(flowchart|graph)\b\s*(TD|TB|BT|LR|RL)?/.exec(text);
       model.kindOfDiagram = text.split(/\s+/)[0];
       const read = READERS.find(([starts]) => starts.test(text))?.[1];
-      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]), indent: (at) => /^\s*/.exec(src.split(/\r?\n/)[at - 1] ?? '')?.[0].length ?? 0, header: { text, line } }));
+      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, settings, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]), indent: (at) => /^\s*/.exec(src.split(/\r?\n/)[at - 1] ?? '')?.[0].length ?? 0, header: { text, line } }));
       if (!h) {
         model.type = 'unsupported';
         return;
@@ -585,6 +592,7 @@ export function parse(src) {
       const title = /^title\s*:\s*(.*?)\s*$/.exec(raw);
       if (title) model.title = model.heading = title[1].replace(/^(["'])(.*)\1$/, '$2');
       if (text === '---') front = 'after';
+      else settings.push(text);
       return;
     }
     // An "@{" left open carries on down the lines to its "}", and is read as one line from where it began.
