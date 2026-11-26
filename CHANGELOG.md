@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0 (unreleased)
+
+More kinds that the two placements there are can draw: mindmaps, kanban boards, timelines and packets.
+
 ## 0.4.0 (2026-11-26)
 
 What a real project's documents showed: diagrams hidden behind the panel, words adrift from their lines or
