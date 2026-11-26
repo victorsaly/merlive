@@ -168,7 +168,7 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
   // A class diagram, an entity diagram, a requirement diagram, an architecture diagram and a C4 diagram are of
   // things, not of a flow: no path through one is the way a reader goes, so none is drawn heavier. A C4 dynamic
   // diagram is the one that is read in order.
-  const things = /^(classDiagram|erDiagram|requirementDiagram|architecture|C4(?!Dynamic))/.test(model.kindOfDiagram);
+  const things = /^(classDiagram|erDiagram|requirementDiagram|architecture|mindmap|C4(?!Dynamic))/.test(model.kindOfDiagram);
   const main = new Set(things ? [] : lay.spine.slice(1).map((id, i) => `${lay.spine[i]}>${id}`));
   const label = new Map(model.nodes.map((m) => [m.id, m.label]));
   const links = model.edges.map((e) => {

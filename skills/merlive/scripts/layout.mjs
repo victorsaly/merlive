@@ -320,7 +320,25 @@ function placed(model, dir, reversed = false) {
   const taken = new Set(spine.map((id) => `${rank.get(id)}:0`));
   /** @type {Map<string, 1|-1>} */
   const sideOf = new Map();
-  const rest = ids.filter((id) => !onSpine.has(id)).sort((a, b) => (rank.get(a) ?? 0) - (rank.get(b) ?? 0) || (order.get(a) ?? 0) - (order.get(b) ?? 0));
+  // A tree (every box led to by one box at most, and nothing leading back) is placed as a tree: what a box leads
+  // to keeps together, in lanes of its own, and the box is in line with the first of them. Its lines then never
+  // cross, however many branches it has, and the main path is still the straight one.
+  const ledTo = new Map(ids.map((id) => [id, forward.filter((e) => e.to === id).length]));
+  const tree = ids.length > 1 && forward.length === model.edges.length && forward.length === ids.length - 1 && ids.every((id) => (ledTo.get(id) ?? 0) <= 1) && forward.every((e) => e.from !== e.to);
+  if (tree) {
+    let next = 0;
+    const leadsTo = (/** @type {string} */ id) => forward.filter((e) => e.from === id).map((e) => e.to)
+      .sort((a, b) => Number(onSpine.has(b)) - Number(onSpine.has(a)) || (order.get(a) ?? 0) - (order.get(b) ?? 0));
+    const walk = (/** @type {string} */ id) => {
+      const under = leadsTo(id);
+      for (const child of under) walk(child);
+      lane.set(id, under.length ? lane.get(under[0]) ?? 0 : next++);
+      if (!onSpine.has(id)) sideOf.set(id, 1);
+      taken.add(`${rank.get(id)}:${lane.get(id)}`);
+    };
+    walk(ids.find((id) => !ledTo.get(id)) ?? ids[0]);
+  }
+  const rest = tree ? [] : ids.filter((id) => !onSpine.has(id)).sort((a, b) => (rank.get(a) ?? 0) - (rank.get(b) ?? 0) || (order.get(a) ?? 0) - (order.get(b) ?? 0));
   for (const id of rest) {
     const before = forward.filter((e) => e.to === id).map((e) => e.from);
     // It goes where the box that led to it went; with only the spine behind it, it leaves; with nothing, it feeds.
@@ -818,7 +836,7 @@ function placed(model, dir, reversed = false) {
   const xs = [...all.map((n) => n.x + n.w / 2), ...groups.map((f) => f.x + f.w), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.x), ...[e.label, e.near, e.far].flatMap((l) => (l ? [l.x + l.w / 2] : []))])];
   const ys = [...all.map((n) => n.y + n.h / 2), ...groups.map((f) => f.y + f.h), ...Object.values(edges).flatMap((e) => [...e.points.map((p) => p.y), ...[e.label, e.near, e.far].flatMap((l) => (l ? [l.y + l.h / 2] : []))])];
   const width = Math.ceil(Math.max(0, ...xs) + measure.pad), height = Math.ceil(Math.max(0, ...ys) + measure.pad);
-  if (dir === 'LR' && width > measure.wide && model.hints.turn === false) warnings.push(`left to right, this flow is ${width}px wide and will scroll on most screens; "flowchart TD" would read better`);
+  if (dir === 'LR' && width > measure.wide && model.hints.turn === false) warnings.push(`left to right, this ${/^(flowchart|graph)/.test(model.kindOfDiagram) ? 'flow' : 'diagram'} is ${width}px wide and will scroll on most screens${/^(flowchart|graph)/.test(model.kindOfDiagram) ? '; "flowchart TD" would read better' : ''}`);
   return { width, height, direction: dir, reversed, box, nodes, edges, groups, spine, warnings };
 }
 

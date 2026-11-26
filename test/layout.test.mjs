@@ -423,3 +423,31 @@ describe('layout: what the newer kinds asked of a box', () => {
     assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
   });
 });
+
+describe('layout: a tree', () => {
+  const bushy = 'flowchart LR\n  R --> A\n  R --> B\n  R --> C\n  A --> A1\n  A --> A2\n  A --> A3\n  A --> A4\n  B --> B1\n  B --> B2\n  B --> B3\n  C --> C1\n  C --> C2\n  C --> C3';
+
+  it('keeps what a box leads to together, so no line crosses another', () => {
+    const m = parse(bushy), lay = layout(m);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+    assert.match(score(m, lay, builtIn).checks.find((c) => c.id === 'P4')?.detail ?? '', /^no (line crosses|crossings)|^0 /i);
+    // Across the flow, every box B leads to lies between what A leads to and what C leads to.
+    const across = (/** @type {string} */ id) => lay.nodes[id].y;
+    const span = (/** @type {string[]} */ ids) => [Math.min(...ids.map(across)), Math.max(...ids.map(across))];
+    const [, aEnd] = span(['A1', 'A2', 'A3', 'A4']), [bStart, bEnd] = span(['B1', 'B2', 'B3']), [cStart] = span(['C1', 'C2', 'C3']);
+    assert.ok(aEnd < bStart && bEnd < cStart);
+  });
+
+  it('puts a box in line with the first box it leads to, and the main path still straight', () => {
+    const m = parse(bushy), lay = layout(m);
+    assert.equal(lay.nodes.R.y, lay.nodes.A.y);
+    assert.equal(lay.nodes.A.y, lay.nodes.A1.y);
+    assert.equal(lay.nodes.B.y, lay.nodes.B1.y);
+    assert.equal(lay.nodes.C.y, lay.nodes.C1.y);
+  });
+
+  it('leaves a flow that is not a tree placed as it was', () => {
+    const m = parse('flowchart TD\n  A --> B\n  A --> C\n  B --> D\n  C --> D'), lay = layout(m);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
+  });
+});

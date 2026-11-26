@@ -303,7 +303,7 @@ describe('mindmap: the corpus', () => {
   // and two lines cross. Until placement keeps a box clear of what is under the box before it, such a tree is
   // refused by the rule named here. When that is mended this list is empty, and this test says so.
   /** @type {Record<string, string>} */
-  const refused = { 'mindmap/mindmap-bushy.mmd': 'P4' };
+  const refused = /** @type {Record<string,string>} */ ({});
 
   it('is drawn without breaking a rule, every sample of it but a tree of many leaves', () => {
     for (const s of list) {
