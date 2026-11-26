@@ -384,7 +384,7 @@ never write one by hand. Everything in it is optional, and what is left out come
 | `output.legend` | Whether a page carries the legend of kinds of box |
 | `output.source` | Whether a page carries the Mermaid it was drawn from |
 | `font`, `weight`, `radius` | The face (a list of faces), its weight (100 to 900) and a box's corner in px (0 to 40) |
-| `mono` | The face for code (a list of faces): the Mermaid a page shows, and the rows a class or an entity lists |
+| `mono` | The face for code (a list of faces): the Mermaid a page shows, and the rows a class lists. An entity's table keeps the page's face, which its columns are measured for |
 | `from` | Where setup read the colours. Not used in drawing; it says where to look again |
 
 | Colour | What it is |

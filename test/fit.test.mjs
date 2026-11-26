@@ -6,6 +6,8 @@ import { builtIn, designFrom } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { draw, page } from '../skills/merlive/scripts/render.mjs';
 import { designOf, readingOf } from '../skills/merlive/scripts/site.mjs';
+import { layoutSequence } from '../skills/merlive/scripts/sequence.mjs';
+import { sequencePage } from '../skills/merlive/scripts/sequence-render.mjs';
 
 // Diagrams somebody really wrote: docs/index.md and docs/running-the-app.md of a business analyst demo, drawn
 // in that project's own design (a narrow hand-lettered face). What they showed was wrong is held here.
@@ -169,5 +171,33 @@ code { font-family: var(--typed); }`;
 
   it('is held to what a list of faces can hold', () => {
     assert.throws(() => designFrom({ mono: 'x;}body{color:red' }), /mono must be a list of faces/);
+  });
+});
+
+describe('what review of 0.4.0 found', () => {
+  it('names a kind whose name has a hyphen, as the entity, requirement and block readers allow', () => {
+    const m = parse('erDiagram\n  ORDER {\n    int number\n  }\n  class ORDER read-only\n  %% kind read-only: Read-only data');
+    assert.equal(m.nodes[0].kind, 'read-only');
+    assert.deepEqual(m.meanings, { 'read-only': 'Read-only data' });
+    assert.deepEqual(m.warnings, []);
+    assert.match(page(m, layout(m), builtIn, about('x')), /<\/i>Read-only data<\/span>/);
+  });
+
+  it('keeps the two-column page to the screen, so a page printed wide is one column', () => {
+    const m = parse('flowchart TD\n  A --> B'), html = page(m, layout(m), builtIn, about('x'));
+    assert.match(html, /@media screen and \(min-width:880px\)\{\.mv-layout:not\(\.mv-wide\)/);
+    assert.doesNotMatch(html, /@media \(min-width:880px\)/);
+    assert.match(html, /@media print\{[^}]*\}[^@]*\.mv-layout\{grid-template-columns:1fr\}/);
+    const seq = parse('sequenceDiagram\n  A->>B: Order');
+    assert.match(sequencePage(/** @type {any} */ (seq), layoutSequence(/** @type {any} */ (seq)), builtIn, about('x')), /@media screen and \(min-width:880px\)/);
+  });
+
+  it("sets what a class lists in the face for code, and leaves an entity's table in the page's face", () => {
+    const design = designFrom({ font: '"Inter", sans-serif', mono: '"Courier Prime", monospace' });
+    const cls = parse('classDiagram\n  class Order{\n    +String number\n  }'), er = parse('erDiagram\n  ORDER {\n    int number\n    date placed\n  }');
+    const css = (/** @type {any} */ m) => page(m, layout(m), design, about('x'));
+    assert.match(css(cls), /\.mv-node \.mv-rows\{font-family:"Courier Prime", monospace/);
+    // A table's columns are measured for the page's own face: a wider one would run its words out of their cells.
+    assert.doesNotMatch(css(er), /\.mv-cell\{[^}]*font-family/);
   });
 });
