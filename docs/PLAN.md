@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 26 November 2026, with 0.4.0 released, 0.5.0 in a pull request, and the strategy below.
+Last brought up to date: 26 November 2026, with 0.4.0 released, 0.5.0 in a pull request, 0.5.1 on the branch `wild`, and the strategy below.
 
 ## The strategy, agreed 26 November 2026
 
@@ -30,15 +30,31 @@ checked, in the project's own design) only holds if real documents come out righ
 
 What the first measure showed (135 blocks of Victor's own, 26 November): 76% drawn, 7% refused, 16% left. His
 documents are seven parts in ten flowcharts, and the kinds he uses that Merlive does not draw are pie (11) and
-gantt (6): when kinds are taken up again, those two come first, not Mermaid's list. What the first four of the
-twelve showed on being looked at:
+gantt (6): when kinds are taken up again, those two come first, not Mermaid's list.
 
-- `<small>` and other HTML in a label is printed as written (`flow-small`); Mermaid reads it.
-- Two long group names run into each other and off their frames (`flow-middle`); P8 does not catch it.
-- An author's fill (`style X fill:#f44336`) is hard to see in the still picture (`flow-thirteen`).
-- A `%%{init: … }%%` directive written over several lines is not read as one, and each of its lines is said
-  to be not read (`sequence-directive`).
-- A mindmap of forty boxes is refused for crossings though a tree should have none (`refused-mindmap`).
+What the twelve showed first, all mended in 0.5.1 (the branch `wild`): an author's colours were not drawn at all
+in the built-in look; HTML in a label was printed as written; two long group names ran into each other; a
+directive over several lines was said, line by line, to be not read; a mindmap of forty boxes was refused for
+crossings a tree should not have.
+
+What they show next, in the order worth doing:
+
+1. **Place a group as a unit.** `refused-crossing` and `refused-shared-path` (and, by their look, most of the
+   nine flowcharts the measure refused) have one cause: boxes are given lanes one by one, so the chain inside a
+   group is not kept together, the groups' frames are left out, and the links between them cross or share a
+   path. Mermaid draws these as clean bands. Each chain in a group in a lane of its own, the groups ordered so
+   the links between them cross least.
+2. **A box with more lines on a side than it has ports for** (more than eleven top to bottom) is refused under
+   P5: grow the box, or let its lines share a trunk.
+3. **The built-in light red is a dark maroon**, so an author's red is a dusty rose in the built-in light look
+   (dark is clear). A lighter built-in `risk`, or the author's own colour first when there is no design file:
+   Victor's call.
+4. **`<small>` under a name is the box's sentence only top to bottom**, in a box or a cylinder; left to right
+   those lines stay in the label. Bold and italic are plain in a sequence diagram.
+5. **`refused-long-words`**: five lines of words in one box. P6 is right to refuse it; "Title<br/><br/>details"
+   could be read as a name and its sentence.
+6. **Victor's verdicts**: none of the twelve has one yet (`wild/index.json`). When all are fine, take the next
+   twenty from the measure.
 
 ## Released
 
@@ -183,7 +199,8 @@ Each of these was a choice somebody could reopen. The reason is here so that nob
 - **Placement is by rules that are checked, and a diagram that breaks one is not written.** A picture that passes
   and still looks wrong gets a new rule and its check.
 - **Colours are the project's, read from its site, never chosen from palettes.** An author's own colour
-  (`style B stroke:#c00`) is drawn in the design's nearest colour and named for its hue, so the contrast and
+  (`style B fill:#F44336`) always survives as a colour: the design's own of that hue, else the author's own,
+  filled as they filled it and named for its hue, so the contrast and
   colour-blind checks stay true. Victor was told and did not ask for the exact hex.
 - **A shape is what its author drew, in the one footprint every box shares.** Victor asked for this after seeing
   rhombuses drawn as cut-corner boxes; a rhombus is as wide and as tall as its neighbours, not twice their size.

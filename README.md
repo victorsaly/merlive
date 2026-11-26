@@ -26,12 +26,12 @@ self-contained page per flowchart, in your own design, that readers can step thr
 
 <p align="center">
   <a href="https://skills.sh"><img src="https://img.shields.io/badge/Agent_Skill-Claude_Code_%C2%B7_Codex_%C2%B7_Cursor_%C2%B7_OpenCode-000000?style=flat-square" alt="An Agent Skill, for Claude Code, Codex, Cursor and OpenCode" /></a>
-  <img src="https://img.shields.io/badge/version-0.5.0-000000?style=flat-square" alt="Version 0.5.0" />
+  <img src="https://img.shields.io/badge/version-0.5.1-000000?style=flat-square" alt="Version 0.5.1" />
   <a href="https://github.com/victorsaly/merlive/actions/workflows/check.yml"><img src="https://img.shields.io/github/actions/workflow/status/victorsaly/merlive/check.yml?branch=main&style=flat-square&label=check&color=000000" alt="Checks on main" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-000000?style=flat-square" alt="MIT licence" /></a>
 </p>
 
-> **0.5.0, not released yet.** It draws flowcharts and state, class, entity, requirement, C4, architecture, block and sequence diagrams, mindmaps, kanban boards, timelines and packets. Gantt, pie and
+> **0.5.1, not released yet.** It draws flowcharts and state, class, entity, requirement, C4, architecture, block and sequence diagrams, mindmaps, kanban boards, timelines and packets. Gantt, pie and
 > the other diagram kinds are left as Mermaid and named. [What it draws of Mermaid today](docs/COVERAGE.md), feature by feature. [What comes next](docs/ROADMAP.md).
 
 <a id="start"></a>

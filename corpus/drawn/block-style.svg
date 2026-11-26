@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 384 100" width="384" height="100" role="img" aria-label="A block styled on its own: a heavy outline, a broken one">
 <title>A block styled on its own: a heavy outline, a broken one</title>
-<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-grey:#2c7d4f;--mv-kf-grey:#e4eee8;--mv-k-red:#7a1f12;--mv-kf-red:#eee2e0;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-grey:#0072b2;--mv-kf-grey:#0b3341;--mv-k-red:#d55e00;--mv-kf-red:#27312a;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-pink:#a8327a;--mv-kf-pink:#d8a3c3;--mv-k-blue:#0a84c4;--mv-kf-blue:#91c8e4;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-pink:#cc79a7;--mv-kf-pink:#634e66;--mv-k-blue:#56b4e9;--mv-kf-blue:#2e6883;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
 .mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
 .mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
 .mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
-[data-kind="grey"] .mv-shape{fill:var(--mv-kf-grey);stroke:var(--mv-k-grey)}
-[data-kind="red"] .mv-shape{fill:var(--mv-kf-red);stroke:var(--mv-k-red)}
+[data-kind="pink"] .mv-shape{fill:var(--mv-kf-pink);stroke:var(--mv-k-pink)}
+[data-kind="blue"] .mv-shape{fill:var(--mv-kf-blue);stroke:var(--mv-k-blue)}
 .mv-node .mv-detail{fill:none}
 [data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
 [data-outline~="heavy"] .mv-shape{stroke-width:2.6}
@@ -25,8 +25,8 @@
 .mv-node .mv-strong{font-weight:700}
 .mv-node .mv-em{font-style:italic}
 .mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
-[data-kind="grey"] .mv-stripe{fill:var(--mv-k-grey)}
-[data-kind="red"] .mv-stripe{fill:var(--mv-k-red)}
+[data-kind="pink"] .mv-stripe{fill:var(--mv-k-pink)}
+[data-kind="blue"] .mv-stripe{fill:var(--mv-k-blue)}
 [data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
 [data-style="thick"] .mv-line{stroke-width:2.8}
 .mv-head{fill:var(--mv-edge)}
@@ -35,5 +35,5 @@
 .mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
 .mv-name{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase;text-anchor:middle;paint-order:stroke;stroke:var(--mv-group);stroke-width:4px;stroke-linejoin:round}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
-<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="384" height="100" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge mv-main" data-edge="start-stop" data-style="solid"><path class="mv-line" d="M156,50L221,50"/><polygon class="mv-head" points="228,50 219,45.5 219,54.5"/></g></g><g></g><g><g class="mv-node" data-node="start" data-kind="grey" data-outline="heavy"><rect class="mv-shape" x="28" y="28" width="128" height="44" rx="8"/><rect class="mv-stripe" x="29" y="36" width="4" height="28"/><text><tspan x="92" y="54.5">Start</tspan></text></g><g class="mv-node" data-node="stop" data-kind="red" data-outline="dashed"><rect class="mv-shape" x="228" y="28" width="128" height="44" rx="8"/><rect class="mv-stripe" x="229" y="36" width="4" height="28"/><text><tspan x="292" y="54.5">Stop</tspan></text></g></g>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="384" height="100" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge mv-main" data-edge="start-stop" data-style="solid"><path class="mv-line" d="M156,50L221,50"/><polygon class="mv-head" points="228,50 219,45.5 219,54.5"/></g></g><g></g><g><g class="mv-node" data-node="start" data-kind="pink" data-outline="heavy"><rect class="mv-shape" x="28" y="28" width="128" height="44" rx="8"/><rect class="mv-stripe" x="29" y="36" width="4" height="28"/><text><tspan x="92" y="54.5">Start</tspan></text></g><g class="mv-node" data-node="stop" data-kind="blue" data-outline="dashed"><rect class="mv-shape" x="228" y="28" width="128" height="44" rx="8"/><rect class="mv-stripe" x="229" y="36" width="4" height="28"/><text><tspan x="292" y="54.5">Stop</tspan></text></g></g>
 </svg>

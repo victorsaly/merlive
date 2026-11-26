@@ -92,7 +92,7 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | A group with a direction of its own | Drawn, less something | The group's own direction is read past; it runs the way the rest does | [source](../corpus/flowchart/subgraph-direction.mmd) | [picture](../corpus/drawn/subgraph-direction.svg) |
 | A group inside a group | Drawn |  | [source](../corpus/flowchart/subgraph-nested.mmd) | [picture](../corpus/drawn/subgraph-nested.svg) |
 | A group shown collapsed | Drawn, less something | Drawn open: a picture cannot be opened and closed | [source](../corpus/flowchart/subgraph-collapsed.mmd) | [picture](../corpus/drawn/subgraph-collapsed.svg) |
-| A box styled on its own | Drawn, less something | Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's | [source](../corpus/flowchart/style-node.mmd) | [picture](../corpus/drawn/style-node.svg) |
+| A box styled on its own | Drawn, less something | Its outline is broken, heavy and red as written, and its fill a wash of that red, in the design's own red | [source](../corpus/flowchart/style-node.mmd) | [picture](../corpus/drawn/style-node.svg) |
 | Links styled by their number | Drawn, less something | The link is heavy and red as written, in the design's own red; a default for every link is read past | [source](../corpus/flowchart/style-link.mmd) | [picture](../corpus/drawn/style-link.svg) |
 | A class made and given to boxes | Drawn |  | [source](../corpus/flowchart/class-def.mmd) | [picture](../corpus/drawn/class-def.svg) |
 | A class given with ::: | Drawn |  | [source](../corpus/flowchart/class-inline.mmd) | [picture](../corpus/drawn/class-inline.svg) |
@@ -172,7 +172,7 @@ the rows each box lists and what each link ends in.
 | A class that opens a link or calls a function when clicked | Drawn, less something | The clicks are left out: a page of Merlive opens no links and runs no code of yours | [source](../corpus/class/class-interaction.mmd) | [picture](../corpus/drawn/class-interaction.svg) |
 | A note for a class | Drawn |  | [source](../corpus/class/class-note-for.mmd) | [picture](../corpus/drawn/class-note-for.svg) |
 | A note for no class in particular | Drawn |  | [source](../corpus/class/class-note-general.mmd) | [picture](../corpus/drawn/class-note-general.svg) |
-| A class styled on its own | Drawn, less something | Each outline is heavy or broken as written, in the design's own nearest colour; the fill is the design's | [source](../corpus/class/class-style.mmd) | [picture](../corpus/drawn/class-style.svg) |
+| A class styled on its own | Drawn, less something | Each is filled with its colour and its outline heavy or broken as written, in the design's own colour of that hue; an edge of another colour than its fill is drawn in the fill's | [source](../corpus/class/class-style.mmd) | [picture](../corpus/drawn/class-style.svg) |
 | A style class made with classDef and given with cssClass | Drawn |  | [source](../corpus/class/class-classdef.mmd) | [picture](../corpus/drawn/class-classdef.svg) |
 | A style class given with ::: | Drawn |  | [source](../corpus/class/class-css-inline.mmd) | [picture](../corpus/drawn/class-css-inline.svg) |
 | A default style class for every class | Drawn, less something | The default class is read past: the look is the design's | [source](../corpus/class/class-default-class.mmd) | [picture](../corpus/drawn/class-default-class.svg) |
@@ -224,7 +224,7 @@ same measure, and to the rows each box lists and what each link ends in.
 | A group inside a group | Drawn |  | [source](../corpus/er/er-subgraph-nested.mmd) | [picture](../corpus/drawn/er-subgraph-nested.svg) |
 | Relationships to and from groups | Drawn, less something | A relationship with a group is drawn to where the group starts, or from where it ends | [source](../corpus/er/er-subgraph-links.mmd) | [picture](../corpus/drawn/er-subgraph-links.svg) |
 | A group with a direction of its own | Drawn, less something | The group's own direction is read past; it runs the way the rest does | [source](../corpus/er/er-subgraph-direction.mmd) | [picture](../corpus/drawn/er-subgraph-direction.svg) |
-| An entity styled on its own | Drawn, less something | Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's | [source](../corpus/er/er-style.mmd) | [picture](../corpus/drawn/er-style.svg) |
+| An entity styled on its own | Drawn, less something | Its outline is broken, heavy and red as written, and its fill a wash of that red, in the design's own red | [source](../corpus/er/er-style.mmd) | [picture](../corpus/drawn/er-style.svg) |
 | Several entities styled in one line | Drawn, less something | Their outlines are heavy and blue as written, in the design's own blue | [source](../corpus/er/er-style-several.mmd) | [picture](../corpus/drawn/er-style-several.svg) |
 | A class made and given to entities | Drawn |  | [source](../corpus/er/er-class-def.mmd) | [picture](../corpus/drawn/er-class-def.svg) |
 | Several classes given at once | Drawn, less something | A box is of one kind: of several classes, the first is the one it is | [source](../corpus/er/er-class-several.mmd) | [picture](../corpus/drawn/er-class-several.svg) |
@@ -279,7 +279,7 @@ verified. Held to the same measure.
 | A class given with ::: to a name alone | Drawn |  | [source](../corpus/requirement/requirement-class-shorthand.mmd) | [picture](../corpus/drawn/requirement-class-shorthand.svg) |
 | Several classes given at once | Drawn, less something | A box is of one kind: of several classes, the first is the one it is | [source](../corpus/requirement/requirement-class-several.mmd) | [picture](../corpus/drawn/requirement-class-several.svg) |
 | A default class for every requirement | Drawn, less something | The default class is read past: the look is the design's | [source](../corpus/requirement/requirement-class-default.mmd) | [picture](../corpus/drawn/requirement-class-default.svg) |
-| A requirement styled on its own | Drawn, less something | Its outline is heavy and red as written, in the design's own red; its fill is the design's | [source](../corpus/requirement/requirement-style.mmd) | [picture](../corpus/drawn/requirement-style.svg) |
+| A requirement styled on its own | Drawn, less something | Its outline is heavy and red as written, and its fill a wash of that red, in the design's own red | [source](../corpus/requirement/requirement-style.mmd) | [picture](../corpus/drawn/requirement-style.svg) |
 | Several styled in one line, one named in quotes | Drawn, less something | Their outlines are broken and red as written, in the design's own red | [source](../corpus/requirement/requirement-style-several.mmd) | [picture](../corpus/drawn/requirement-style-several.svg) |
 | A title in front matter | Drawn |  | [source](../corpus/requirement/requirement-frontmatter.mmd) | [picture](../corpus/drawn/requirement-frontmatter.svg) |
 | A title and a description for readers who cannot see it | Drawn |  | [source](../corpus/requirement/requirement-accessibility.mmd) | [picture](../corpus/drawn/requirement-accessibility.svg) |
@@ -323,7 +323,7 @@ a boundary is a group. Held to the same measure.
 | Arguments given by name | Drawn |  | [source](../corpus/c4/c4-named-arguments.mmd) | [picture](../corpus/drawn/c4-named-arguments.svg) |
 | Tags, links and sprites | Drawn, less something | A link is not followed: a page runs nothing of an author's. Tags and sprites are read past, as Mermaid reads past them | [source](../corpus/c4/c4-tags-links-sprites.mmd) | [picture](../corpus/drawn/c4-tags-links-sprites.svg) |
 | Arguments left empty | Drawn |  | [source](../corpus/c4/c4-empty-arguments.mmd) | [picture](../corpus/drawn/c4-empty-arguments.svg) |
-| An element given colours of its own | Drawn, less something | Its fill is the colour written, as the nearest colour of the design; the colours of its words and its edge are the design's | [source](../corpus/c4/c4-update-element-style.mmd) | [picture](../corpus/drawn/c4-update-element-style.svg) |
+| An element given colours of its own | Drawn, less something | It is filled with the colour written, in the design's own colour of that hue; the colours of its words and its edge are the design's | [source](../corpus/c4/c4-update-element-style.mmd) | [picture](../corpus/drawn/c4-update-element-style.svg) |
 | An element given colours by name | Drawn, less something | A colour given by name is not read: only one written as #rrggbb is | [source](../corpus/c4/c4-update-element-style-named.mmd) | [picture](../corpus/drawn/c4-update-element-style-named.svg) |
 | A relation given colours of its own, and its words moved | Drawn, less something | A link's colour is the design's; where its words sit is Merlive's to place | [source](../corpus/c4/c4-update-rel-style.mmd) | [picture](../corpus/drawn/c4-update-rel-style.svg) |
 | A relation whose words are moved | Drawn |  | [source](../corpus/c4/c4-update-rel-offset.mmd) | [picture](../corpus/drawn/c4-update-rel-offset.svg) |
@@ -403,8 +403,8 @@ placed on that grid, each block in the cell its author gave it.
 | A block that holds others and has no id | Drawn |  | [source](../corpus/block/block-nested-anonymous.mmd) | [picture](../corpus/drawn/block-nested-anonymous.svg) |
 | Blocks that hold others, inside one that holds them | Drawn |  | [source](../corpus/block/block-nested-deep.mmd) | [picture](../corpus/drawn/block-nested-deep.svg) |
 | Links to and from a block that holds others: joined to what is inside it | Drawn |  | [source](../corpus/block/block-nested-link.mmd) | [picture](../corpus/drawn/block-nested-link.svg) |
-| A block styled on its own: a heavy outline, a broken one | Drawn, less something | The colour is drawn in the design's nearest colour | [source](../corpus/block/block-style.mmd) | [picture](../corpus/drawn/block-style.svg) |
-| A class, and the blocks that are of it | Drawn, less something | The colour is drawn in the design's nearest colour | [source](../corpus/block/block-classdef.mmd) | [picture](../corpus/drawn/block-classdef.svg) |
+| A block styled on its own: a heavy outline, a broken one | Drawn, less something | Each is filled with its colour, in the design's own colour of that hue; an edge of another colour than its fill is drawn in the fill's | [source](../corpus/block/block-style.mmd) | [picture](../corpus/drawn/block-style.svg) |
+| A class, and the blocks that are of it | Drawn, less something | The class is filled with its colour, in the design's own colour of that hue | [source](../corpus/block/block-classdef.mmd) | [picture](../corpus/drawn/block-classdef.svg) |
 | Comments on lines of their own | Drawn |  | [source](../corpus/block/block-comments.mmd) | [picture](../corpus/drawn/block-comments.svg) |
 | Front matter with a title | Drawn |  | [source](../corpus/block/block-frontmatter.mmd) | [picture](../corpus/drawn/block-frontmatter.svg) |
 | A grid of blocks with no links: what it says is where each block is | Drawn |  | [source](../corpus/block/block-grid.mmd) | [picture](../corpus/drawn/block-grid.svg) |

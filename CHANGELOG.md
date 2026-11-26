@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.5.1 (unreleased)
+
+What real documents showed. Every Mermaid block of two of Victor's public repositories was run through Merlive
+(135 blocks: 103 drawn, 10 refused, 22 left as Mermaid), twelve are kept in `wild/` to be looked at beside
+Mermaid's own drawings, and what the first of them showed is mended.
+
+- **An author's colours are kept.** A box filled red, green or amber is drawn filled, in the design's own colour
+  of that hue where it has one and the author's own where it has none; a box only edged is drawn edged; a link
+  keeps its colour. A design file's `kinds.red` still wins. Words on every fill are held to D1, and D2 now fails
+  a box its author coloured that would be drawn like a plain one. `fill:#f9f,stroke:#333` is read as pink, not
+  grey. In the built-in look these colours were not drawn at all.
+- **HTML in a label is never printed.** `<b>`, `<strong>`, `<i>` and `<em>` are bold and italic; the `<small>`
+  lines under a name are the sentence the box says about itself; any other tag keeps its words and is said once
+  for the diagram; `<img>` is left out and said. `a < b` and `List<String>` are words, and `&lt;` and `&amp;`
+  are read.
+- **A `%%{init: …}%%` written over several lines is read as one**, in every kind of diagram: its lines are no
+  longer said to be "not read", and one before the first line no longer gives the diagram the wrong kind.
+- **A group's name is wrapped to its frame**, in as many lines as it needs, and the frame keeps room for each.
+  P8 now checks that a name lies inside its frame, inside the picture, and on no other name or box.
+- **The lines of one box never cross each other**, however many there are: a mindmap of forty boxes is drawn
+  where it was refused for ten crossings. A line round the outside takes the side that saves it a lane when
+  neither side crosses anything.
+- **Real documents are the measure** (`wild/`, `docs/WILD.md`, `npm run wild`), with a page to look at each
+  beside Mermaid's and Victor's verdict on each; and `npm run changed` shows every picture a branch changed,
+  before and after.
+
 ## 0.5.0 (unreleased)
 
 More kinds that the two placements there are can draw: mindmaps, kanban boards, timelines and packets.
