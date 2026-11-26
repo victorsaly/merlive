@@ -132,8 +132,9 @@ describe('score: a broken rule is named, with where', () => {
   it("P8 when a line runs through a group's name that is on no plate, and not when it is on one", () => {
     const { model, lay } = check('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [Hub]\n  B --> C[Pack]\n  B --> D[Label]\nend\nC --> E[Ship]');
     assert.equal(score(model, lay, builtIn).checks.find((c) => c.id === 'P8')?.ok, true);
-    const name = lay.groups[0].name, into = lay.edges['A-B'].points;
-    Object.assign(name, { x: into[0].x, y: (into[0].y + into[into.length - 1].y) / 2 });
+    // Onto the first run of a line inside its own frame, between two boxes: in the frame, on no box, and struck.
+    const name = lay.groups[0].name, down = lay.edges['B-C'].points;
+    Object.assign(name, { x: (down[0].x + down[1].x) / 2, y: (down[0].y + down[1].y) / 2 });
     const p8 = score(model, lay, builtIn).checks.find((c) => c.id === 'P8');
     assert.match(p8?.detail ?? '', /a line runs through the name of the group "Hub"/);
     name.plate = true;

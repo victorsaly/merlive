@@ -10,6 +10,7 @@ import { colourChecks, looksOf } from './design.mjs';
 export const limits = {
   linksPerCrossing: 8, // one crossing is allowed for every eight links; fewer than eight links, none but those the diagram forces
   boxGap: 16, // the least room between two boxes
+  slack: 1, // px a name may be reckoned past the edge of its frame before it is said to run out: widths of words are reckoned, not measured
 };
 
 const overlap = (/** @type {{x:number,y:number,w:number,h:number}} */ a, /** @type {{x:number,y:number,w:number,h:number}} */ b, gap = 0) =>
@@ -156,9 +157,25 @@ export function score(model, lay, design) {
   }
   add('P7', "A link's words sit clear of boxes and of each other", covered, `${labels.length} labels clear`);
 
-  // P8: a name on a plate has its line pass behind it, which is drawn so; any other must be clear of every line.
-  const struck = lay.groups.filter((f) => !f.name.plate && edges.some((e) => segmentsOf(e.points).some((seg) => hitsBox(seg, f.name, 0)))).map((f) => `a line runs through the name of the group "${f.title}"`);
-  add('P8', "A group's name can be read", struck, lay.groups.length ? `${lay.groups.length} clear of lines, or on a plate` : 'no groups');
+  // P8: a name lies inside its own frame and inside the picture, on no other name and on no box. One on a plate
+  // has its line pass behind it, which is drawn so; any other must be clear of every line.
+  const named = lay.groups.filter((f) => f.title && f.name.w > 0);
+  const edgeOf = (/** @type {{x:number,y:number,w:number,h:number}} */ r) => ({ l: r.x - r.w / 2, r: r.x + r.w / 2, t: r.y - r.h / 2, u: r.y + r.h / 2 });
+  const lapping = (/** @type {{x:number,y:number,w:number,h:number}} */ a, /** @type {{x:number,y:number,w:number,h:number}} */ b) => overlap(a, b);
+  const unread = named.flatMap((f, i) => {
+    const at = edgeOf(f.name), say = `the name of the group "${f.title}"`;
+    /** @type {string[]} */
+    const why = [];
+    if (at.l < f.x - limits.slack || at.r > f.x + f.w + limits.slack || at.t < f.y - limits.slack || at.u > f.y + f.h + limits.slack) why.push(`${say} runs out of its frame; shorten it, or break its longest word`);
+    else if (at.l < 0 || at.t < 0 || at.r > lay.width || at.u > lay.height) why.push(`${say} runs off the picture`);
+    const other = named.slice(i + 1).find((o) => lapping(f.name, o.name));
+    if (other) why.push(`${say} lies on the name of the group "${other.title}"; shorten one of them`);
+    const box = nodes.find((b) => lapping(f.name, b));
+    if (box) why.push(`${say} lies on the box "${model.nodes.find((x) => x.id === box.id)?.label ?? box.id}"; shorten it`);
+    if (!f.name.plate && edges.some((e) => segmentsOf(e.points).some((seg) => hitsBox(seg, f.name, 0)))) why.push(`a line runs through ${say}`);
+    return why;
+  });
+  add('P8', "A group's name can be read", unread, lay.groups.length ? `${lay.groups.length} inside their frames, apart, clear of boxes, and clear of lines or on a plate` : 'no groups');
 
   // D1, D2: the sums are in design.mjs, where the setup page uses them too.
   const kinds = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])];

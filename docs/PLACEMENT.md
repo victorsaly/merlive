@@ -66,6 +66,15 @@ each have a track of their own.
 One crossing is allowed for every eight links; with fewer than eight links, none. The order in which lines leave
 each side of a box is chosen to keep crossings down.
 
+The lines of one box never cross each other, however many there are. On the left or right of a box a line goes
+out, turns once and runs along the flow, and two such lines cross unless they nest: the one that goes further out
+before it turns keeps further from the way they turn. So the lines that turn back up the flow come first, the
+nearest first, then those that turn down it, the furthest first. This is a rule and not a search, which matters
+for a tree: a box that leads to six others has six lines that would otherwise each cross the rest.
+
+- **Pass:** a mindmap of forty boxes, the widest of them leading to six, with no crossing.
+- **Fail:** `R --> C0` to `R --> C5` drawn with ten crossings, every line from the side of `R` across every other.
+
 A crossing the diagram forces is allowed on top of that, and counted exactly. Two boxes of one rank that are each
 linked to the same two boxes of another (`A & B --> C & D`) have two lines that swap sides, and they cross once
 however the boxes are ordered. One crossing is allowed for each such four, and no more: `A & B & C --> D & E`
@@ -77,10 +86,16 @@ holds three. The check says so: "1 crossing, which this diagram cannot be drawn 
 ## P5. No two lines share a path
 
 Each line has a port of its own on the side of a box it leaves or enters, and lines that go round the outside
-each have a channel of their own, on whichever side crosses less. A straight line keeps the middle of its side.
+each have a channel of their own, on whichever side crosses less; where neither side crosses anything, on the
+side that saves the line a lane or more, so it does not go out past a box it has no need to pass. A straight line
+keeps the middle of its side.
 
 A box and the box under it have their ports at the same places. Where a line leaving the one and a line entering
 the other would lie on each other in the room between them, the line entering steps aside by half a port.
+
+A side has only so much room. Ports keep to the middle three fifths of it, and lines nearer than 3 px read as one
+line. A box leading to more than eleven others top to bottom, or to more than five from a box off the main path
+left to right, can run out of ports, and the check then says which lines run along each other.
 
 - **Fail:** two links into the same box arrive on top of each other, so a reader cannot tell them apart.
 
@@ -120,6 +135,13 @@ own inside the outer one, and where such frames begin or end at the same rank, t
 so each frame and its name has room. A frame that would take in a box that is not in the group, or run into a
 frame it is neither inside nor round, would say something untrue: it is left out, and the script says so.
 
+A name is never wider than its frame. It is wrapped to the frame's width, in as many lines as it needs, and the
+frame keeps room along its top for every one of them: top to bottom the gap before the group's first rank is
+wider by a line of words for each line more than one, and left to right the lanes stand that much further apart,
+since there the top of a frame is across the flow. A word is never broken, so where a diagram has groups its boxes
+are at least as wide as the longest word of any group's name needs, and a group of one box can still say what it
+is called.
+
 ## P8. A group's name can be read
 
 A group's name goes along the top of its frame, in the first stretch no line runs through: at the left, then at
@@ -127,7 +149,15 @@ the right, then anywhere between. A link's words keep off it. Where every stretc
 frame, a long name, a line coming in at the middle), the name stays at the left on a plate of the frame's own
 colour, and the line passes behind it.
 
+The check holds a name to five things: it lies inside its frame, inside the picture, on no other group's name, on
+no box, and under no line unless it is on a plate. What it says names the group and what to do.
+
+- **Pass:** "Traditional Development (20% AI Autonomy)" over a frame one box wide, in three lines, with the first
+  box below the last of them.
 - **Fail:** a line is drawn through the letters of a group's name.
+- **Fail:** a name that runs out past the right of its frame, over the box beside it or off the picture.
+- **What to do when it fails:** shorten the name, or break its longest word; a word longer than any frame is the
+  one thing wrapping cannot mend.
 
 ## On a grid its author placed
 
@@ -204,4 +234,7 @@ lines whatever the design says.
 - A group inside a group: it is drawn as part of the outer one.
 - A long chain is one long column or row. A group's own direction (a row inside a column) is not followed.
 - Tracks in the room between two lanes: two loops up the same side of a box can still lie on each other.
-- A box with more than four lines on one side: the order of its ports is not tried exhaustively.
+- A box with more than four lines on one side: its own lines nest by rule, but the order of its ports against
+  other boxes' lines is not tried exhaustively.
+- A box with more lines on a side than the side has ports for: it is not made taller or wider to hold them, and
+  its lines do not yet share a trunk.

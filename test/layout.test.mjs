@@ -451,3 +451,145 @@ describe('layout: a tree', () => {
     assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`), []);
   });
 });
+
+describe('layout: a group whose name is longer than its frame is wide', () => {
+  const two = 'flowchart TB\n  subgraph one["Traditional Development (20% AI Autonomy)"]\n    A1[Human Requirements] --> A2[Human Design]\n  end\n  subgraph two["AI-Led Development (95% AI Autonomy)"]\n    B1[Strategic Context] --> B2[AI Understanding]\n  end';
+  const inside = (/** @type {import('../skills/merlive/scripts/layout.mjs').Frame} */ f) => f.name.x - f.name.w / 2 >= f.x && f.name.x + f.name.w / 2 <= f.x + f.w && f.name.y - f.name.h / 2 >= f.y && f.name.y + f.name.h / 2 <= f.y + f.h;
+  const broken = (/** @type {import('../skills/merlive/scripts/parse.mjs').Model} */ m, /** @type {import('../skills/merlive/scripts/layout.mjs').Layout} */ lay) => score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`);
+
+  it('wraps the name to the frame, in as many lines as it needs, and keeps room along the top for each', () => {
+    const m = parse(two), lay = layout(m);
+    assert.equal(lay.groups.length, 2);
+    for (const f of lay.groups) {
+      const lines = f.name.lines ?? [];
+      assert.ok(lines.length > 1, `${f.title}: ${lines.length} line`);
+      assert.equal(lines.join(' '), f.title);
+      for (const line of lines) assert.ok(line.length * measure.nameGlyph <= f.w - 2 * measure.nameIn, `${line} in ${f.w}px`);
+      assert.ok(inside(f), `${f.title} lies inside its frame`);
+      // Under the last line of the name there is still the pad a frame keeps round its boxes.
+      const top = Math.min(...['1', '2'].map((n) => lay.nodes[`${f.id === 'one' ? 'A' : 'B'}${n}`]).map((b) => b.y - b.h / 2));
+      assert.ok(top - (f.name.y + f.name.h / 2) >= measure.framePad - measure.nameLine / 2 - 1, `${f.title}: the name is clear of the first box`);
+    }
+    const [a, b] = lay.groups;
+    assert.ok(a.name.x + a.name.w / 2 < b.name.x - b.name.w / 2 || b.name.x + b.name.w / 2 < a.name.x - a.name.w / 2, 'the two names are apart');
+    assert.ok(Math.max(...lay.groups.map((f) => f.name.x + f.name.w / 2)) <= lay.width, 'and inside the picture');
+    assert.deepEqual(broken(m, lay), []);
+  });
+
+  it('leaves a name that fits on one line where it was, with the room it had', () => {
+    const m = parse('flowchart TB\n  subgraph g[Buying]\n    A --> B\n  end'), lay = layout(m), [f] = lay.groups;
+    assert.deepEqual(f.name.lines, ['Buying']);
+    assert.equal(f.y, lay.nodes.A.y - lay.nodes.A.h / 2 - measure.framePad - measure.frameTitle);
+    assert.equal(f.name.h, measure.nameLine);
+  });
+
+  it('makes room between two ranks for every line of a name, so stacked groups stay apart', () => {
+    const m = parse('flowchart TB\n  subgraph one["The requirements that people write down first"]\n    A --> B\n  end\n  subgraph two["The design decisions that follow from every one of them"]\n    C --> D\n  end\n  B --> C'), lay = layout(m);
+    assert.deepEqual(lay.warnings, []);
+    assert.equal(lay.groups.length, 2);
+    const [a, b] = lay.groups;
+    assert.ok(a.y + a.h <= b.y, 'the second frame begins under the first');
+    assert.ok((b.name.lines ?? []).length > 1);
+    assert.deepEqual(broken(m, lay), []);
+  });
+
+  it('does the same left to right, where a name is along the top and the room is between lanes', () => {
+    const m = parse('flowchart LR\n  S --> A\n  S --> C\n  subgraph one["The requirements that people write down first of all"]\n    A\n  end\n  subgraph two["The design decisions that follow from every one of them"]\n    C\n  end'), lay = layout(m);
+    assert.deepEqual(lay.warnings, []);
+    assert.equal(lay.groups.length, 2);
+    for (const f of lay.groups) assert.ok((f.name.lines ?? []).length > 1 && inside(f), f.title);
+    assert.deepEqual(broken(m, lay), []);
+  });
+
+  it('wraps the names of groups one inside another, each to its own frame', () => {
+    const m = parse('flowchart TB\n  subgraph outer["Everything that the buying department is answerable for"]\n    subgraph inner["The part of it that happens before an order is raised"]\n      A --> B\n    end\n  end'), lay = layout(m);
+    assert.equal(lay.groups.length, 2);
+    for (const f of lay.groups) assert.ok(inside(f), f.title);
+    const [outer, inner] = lay.groups;
+    assert.ok(outer.name.y + outer.name.h / 2 <= inner.y, 'the outer name ends above the inner frame');
+    assert.deepEqual(broken(m, lay), []);
+  });
+
+  it('makes a box wide enough that a frame of one lane holds the longest word of its name', () => {
+    const m = parse('flowchart TB\n  subgraph g["Internationalisation-and-localisation work"]\n    A --> B\n  end'), lay = layout(m), [f] = lay.groups;
+    assert.ok(lay.box.w > 128);
+    assert.ok(inside(f));
+    assert.deepEqual(broken(m, lay), []);
+  });
+});
+
+describe('score: P8 checks that a name can be read', () => {
+  const m = parse('flowchart TB\n  subgraph one[Buying]\n    A --> B\n  end\n  subgraph two[Selling]\n    C --> D\n  end');
+  const p8 = (/** @type {(lay: import('../skills/merlive/scripts/layout.mjs').Layout) => void} */ spoil) => {
+    const lay = layout(m);
+    spoil(lay);
+    return score(m, lay, builtIn).checks.find((c) => c.id === 'P8');
+  };
+
+  it('passes names that are inside their frames, apart, and clear of boxes and lines', () => {
+    assert.equal(p8(() => {})?.ok, true);
+  });
+
+  it('fails a name wider than its frame, and says to break it', () => {
+    const c = p8((lay) => { lay.groups[0].name.w = lay.groups[0].w + 40; });
+    assert.equal(c?.ok, false);
+    assert.match(c?.detail ?? '', /the name of the group "Buying" runs out of its frame/);
+  });
+
+  it('fails a name that runs off the picture', () => {
+    const c = p8((lay) => { const f = lay.groups[1]; f.name.x = lay.width + 5; });
+    assert.match(c?.detail ?? '', /the name of the group "Selling" (runs out of its frame|runs off the picture)/);
+  });
+
+  it('fails two names that lie on each other', () => {
+    const c = p8((lay) => { lay.groups[1].name.x = lay.groups[0].name.x; lay.groups[1].name.y = lay.groups[0].name.y; });
+    assert.match(c?.detail ?? '', /lies on the name of the group/);
+  });
+
+  it('fails a name that lies on a box', () => {
+    const c = p8((lay) => { lay.groups[0].name.y = lay.nodes.A.y; lay.groups[0].name.x = lay.nodes.A.x; });
+    assert.match(c?.detail ?? '', /the name of the group "Buying" lies on the box "A"/);
+  });
+
+  it('fails a word too long for any frame, and says what to do', () => {
+    const long = parse(`flowchart TB\n  subgraph g["${'x'.repeat(70)}"]\n    A --> B\n  end`), c = score(long, layout(long), builtIn).checks.find((k) => k.id === 'P8');
+    assert.equal(c?.ok, false);
+    assert.match(c?.detail ?? '', /runs out of its frame; shorten it, or break its longest word/);
+  });
+});
+
+describe('layout: a box that leads to many', () => {
+  const fan = (/** @type {string} */ dir, /** @type {number} */ n, /** @type {string} */ more = '') => parse(`flowchart ${dir}\n${Array.from({ length: n }, (_, i) => `  R --> C${i}`).join('\n')}${more}`);
+  const crossings = (/** @type {import('../skills/merlive/scripts/parse.mjs').Model} */ m) => {
+    const edges = Object.values(layout(m).edges);
+    let sum = 0;
+    for (let i = 0; i < edges.length; i++) for (let j = i + 1; j < edges.length; j++) sum += meet(edges[i].points, edges[j].points).crossings + meet(edges[i].points, edges[j].points).overlaps;
+    return sum;
+  };
+
+  // Trying every order of the lines on a side stops at four. A fan must not need it: its own lines nest by rule.
+  for (const dir of ['TD', 'LR', 'BT', 'RL']) for (const n of [6, 7, 10]) {
+    it(`${n} lines from one box cross nowhere, ${dir}`, () => assert.equal(crossings(fan(dir, n)), 0));
+  }
+
+  it('and neither do the fans of a tree three deep', () => {
+    const m = fan('LR', 6, `\n${Array.from({ length: 5 }, (_, i) => `  C2 --> D${i}\n  C4 --> E${i}\n  E${i} --> F${i}\n  E${i} --> G${i}`).join('\n')}`);
+    assert.equal(crossings(m), 0);
+    assert.equal(score(m, layout(m), builtIn).checks.find((c) => c.id === 'P4')?.ok, true);
+  });
+
+  it('lines to boxes at different ranks from one side nest too', () => {
+    const m = parse(`flowchart TD\n  R --> A\n${Array.from({ length: 6 }, (_, i) => `  R --> C${i}\n  C${i} --> D${i}\n  R --> D${i}`).join('\n')}`);
+    assert.equal(score(m, layout(m), builtIn).checks.find((c) => c.id === 'P4')?.ok, true);
+  });
+});
+
+describe('layout: a line round the outside', () => {
+  it('goes round the side that saves it a lane when neither side crosses anything', () => {
+    // Order to Ship cannot go straight down: round the left it passes nothing, round the right it must pass
+    // Back order too. With the lines into Ship nested, neither way crosses, so only the length tells them apart.
+    const m = parse('flowchart TD\n  A[Order] --> B{In stock?}\n  B -->|Yes| C[Pick]\n  B -->|No| D[Back order]\n  C --> E[Ship]\n  D -.-> E\n  A ==> E'), lay = layout(m);
+    assert.ok(Math.min(...lay.edges['A-E'].points.map((p) => p.x)) < lay.nodes.A.x - lay.nodes.A.w / 2, 'round the left');
+    assert.ok(Math.max(...lay.edges['A-E'].points.map((p) => p.x)) < lay.nodes.D.x, 'and not out past Back order');
+  });
+});
