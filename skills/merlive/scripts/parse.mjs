@@ -10,6 +10,7 @@ import { architectureReader } from './architecture.mjs';
 import { requirementReader } from './requirement.mjs';
 import { blockReader } from './block.mjs';
 import { mindmapReader } from './mindmap.mjs';
+import { timelineReader } from './timeline.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
@@ -220,6 +221,7 @@ const READERS = /** @type {const} */ ([
   [/^C4(Context|Container|Component|Dynamic|Deployment)$/, c4Reader],
   [/^block(-beta)?;?$/, blockReader],
   [/^mindmap;?$/, mindmapReader],
+  [/^timeline(\s|;|$)/, timelineReader],
 ]);
 
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own
@@ -522,7 +524,7 @@ export function parse(src) {
       const h = /^(flowchart|graph)\b\s*(TD|TB|BT|LR|RL)?/.exec(text);
       model.kindOfDiagram = text.split(/\s+/)[0];
       const read = READERS.find(([starts]) => starts.test(text))?.[1];
-      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]), indent: (at) => /^\s*/.exec(src.split(/\r?\n/)[at - 1] ?? '')?.[0].length ?? 0 }));
+      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]), indent: (at) => /^\s*/.exec(src.split(/\r?\n/)[at - 1] ?? '')?.[0].length ?? 0, header: { text, line } }));
       if (!h) {
         model.type = 'unsupported';
         return;

@@ -104,6 +104,17 @@ describe('grid: cells', () => {
 describe('grid: a block that holds others', () => {
   const nested = 'columns 3\ntop["Everything"]:3\nblock:left:2\n  columns 2\n  h["Buy"] i["Pick"] j["Pack"] k["Send"]\nend\ng["Bank"]\nblock:wide:3\n  l["Mon"] m["Tue"] n["Wed"]\nend';
 
+  it('keeps room for a name in every frame of a row when any frame in it has one, so what they hold lines up', () => {
+    const { at, lay, broken } = grid('columns 2\nblock:named["Buying"]\n  a["Raise"]\nend\nblock:bare\n  b["Deliver"]\nend\nblock:alone\n  c["Pay"]\nend');
+    assert.deepEqual(broken, []);
+    assert.equal(at.a.y, at.b.y, 'side by side, the two blocks inside are in one line');
+    const [named, bare, alone] = ['named', 'bare', 'alone'].map((id) => /** @type {typeof lay.groups[0]} */ (lay.groups.find((f) => f.id === id)));
+    assert.deepEqual([named.y, named.h], [bare.y, bare.h]);
+    // A row with no name in it keeps no room for one.
+    assert.equal(top(at.c) - alone.y, measure.framePad);
+    assert.equal(top(at.a) - named.y, measure.framePad + measure.frameTitle);
+  });
+
   it('is a frame over the columns it spans, round a grid of its own', () => {
     const { at, lay, broken } = grid(nested);
     assert.deepEqual(broken, []);

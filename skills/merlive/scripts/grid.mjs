@@ -119,12 +119,15 @@ export function placeGrid(model) {
     const total = n.cols * colW + (n.cols - 1) * gapX, off = width === undefined ? 0 : Math.max(0, Math.floor((width - total) / 2));
     let y = 0;
     const rows = n.rows.map((row) => {
+      // Where one frame of a row has a name, every frame of that row keeps room for one, so that what they hold
+      // starts on one line: a named block beside one with no name, or a timeline's sections.
+      const named = row.some((p) => p.cell.is === 'group' && Boolean(groupOf.get(p.cell.id)?.title));
       const items = row.map((p) => {
         const w = p.span * colW + (p.span - 1) * gapX, x = off + p.col * (colW + gapX);
         /** @type {Item} */
         const item = { ...p, x, w, h: base, lines: [], inner: null, titled: false };
         if (p.cell.is === 'group') {
-          item.titled = Boolean(groupOf.get(p.cell.id)?.title);
+          item.titled = named;
           item.inner = shape(p.cell.grid, w - 2 * measure.framePad);
           item.h = Math.max(base, item.inner.h) + 2 * measure.framePad + (item.titled ? measure.frameTitle : 0);
         } else if (p.cell.is !== 'space') {
