@@ -314,7 +314,7 @@ h1{font-size:20px;font-weight:650;margin:0;text-wrap:balance}
 h2{font-size:16px;font-weight:650;margin:0}
 p{margin:0}
 .mv-layout{display:grid;gap:${draw.gap}px;grid-template-columns:minmax(0,1fr)}
-@media (min-width:880px){.mv-layout:not(.mv-wide){grid-template-columns:minmax(0,1fr) ${draw.panel}px;align-items:start}.mv-layout:not(.mv-wide) .mv-side{position:sticky;top:16px}}
+@media screen and (min-width:880px){.mv-layout:not(.mv-wide){grid-template-columns:minmax(0,1fr) ${draw.panel}px;align-items:start}.mv-layout:not(.mv-wide) .mv-side{position:sticky;top:16px}}
 .mv-wide .mv-side{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start}
 .mv-stage{margin:0;overflow-x:auto}
 /* The drawing may shrink to fit, but only so far: below that the words stop being readable, so it scrolls. */

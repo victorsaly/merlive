@@ -499,7 +499,8 @@ export function parse(src) {
     // Merlive's own lines live in Mermaid comments, so every other Mermaid renderer still reads the block.
     const note = /^%%\s*note\s+(\w+)\s*:\s*(.+)$/.exec(text);
     if (note) return void (model.notes[note[1]] = note[2].trim());
-    const meaning = /^%%\s*kind\s+(\w+)\s*:\s*(.+)$/.exec(text);
+    // A kind's name may have a hyphen in it (read-only), as the readers that take one from a class allow.
+    const meaning = /^%%\s*kind\s+([\w-]+)\s*:\s*(.+)$/.exec(text);
     if (meaning) return void ((model.meanings ??= {})[meaning[1]] = meaning[2].trim());
     const step = /^%%\s*step\s*:\s*(.+)$/.exec(text);
     if (step) {

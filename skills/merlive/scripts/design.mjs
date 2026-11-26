@@ -18,7 +18,7 @@
  * @typedef {object} Design
  * @property {string} name
  * @property {string} font
- * @property {string} mono the face for code: the Mermaid a page shows, and the rows a box lists
+ * @property {string} mono the face for code: the Mermaid a page shows, and the rows a class lists (an entity's table keeps the page's face)
  * @property {number} weight
  * @property {number} radius a box's corner, in px
  * @property {'none'|'calm'|'lively'} motion none: nothing moves. calm: one dot, when asked. lively: the path flows too.
