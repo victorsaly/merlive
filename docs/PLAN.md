@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 25 November 2026, with 0.3.0 released and 0.4.0 in hand.
+Last brought up to date: 26 November 2026, as 0.4.0 was released.
 
 ## Released
 
@@ -64,27 +64,27 @@ What 0.3.0 left, in the order worth doing:
    box's sentence is dropped; the page's side panel does not show a box's sentence.
 4. **Look, sample by sample**, at the requirement samples on `corpus/compare.html`: the C4, architecture and
    block samples were looked through on contact sheets, the requirement ones only by their rules passing.
-## In hand: 0.4.0, what a real project's documents showed
-
-On the branch `fit-the-page-and-ask`. Found by drawing the diagrams of a business analyst demo (its
+**0.4.0** (26 November 2026), what a real project's documents showed. Found by drawing the diagrams of a business analyst demo (its
 `docs/index.md` and `docs/running-the-app.md`, held in `test/fit.test.mjs` and `test/real.test.mjs`) in that
-project's own hand-lettered design. Done: the panel above a drawing too wide for the column beside it
+project's own hand-lettered design: the panel above a drawing too wide for the column beside it
 (`draw.column` in render.mjs); words beside a line that runs along the flow drawn from the side next to it
 (`Words.align`); room for words across a left-to-right rank gap, and a P7 check for words squeezed into a
 column; `%% kind name: meaning` (`model.meanings`) and a note for a kind named for its colour; the site's face
 for code (`mono`); the choices offered once after setup (SKILL.md, section 5, and the rule in AGENTS.md).
 
-Left: the setup page shows `mono` in the settings it copies, but has no control for it; a state diagram's reader
+What 0.4.0 left: `classDef` with a hyphen in its name (`classDef read-only …`) is not read, though a kind may
+have one; the setup page shows `mono` in the settings it copies, but has no control for it; a state diagram's reader
 does not read `%% kind` yet; the main path is still the longest one, which in a flow with a fallback (Groq,
 then OpenAI when its limit is reached) puts the fallback on the straight line. `%% main:` fixes it by hand;
 picking the path that takes no decision's exception would fix it by rule.
 
 ## Waiting on Victor
 
-- **The tags.** No session so far could push a tag. In a clone, `v0.1.0` first:
-  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0" && git push origin v0.1.0`. Then `v0.2.0` at the last commit that was only 0.2.0:
-  `git tag -a v0.2.0 faa35cd -m "Merlive 0.2.0" && git push origin v0.2.0`. Then, once the pull request from
-  `class-er` is merged, `v0.3.0` on the merge commit.
+- **The tags.** No session so far could push a tag: the push is refused where the sessions run. None exists
+  yet. In a clone:
+  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0"`, `git tag -a v0.2.0 faa35cd -m "Merlive 0.2.0"`,
+  `git tag -a v0.3.0 cf1fee7 -m "Merlive 0.3.0"`, `v0.4.0` on the commit that merges its release, then
+  `git push origin v0.1.0 v0.2.0 v0.3.0 v0.4.0`.
 - **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11) takes "not released
   yet" off Merlive's page; merge it after the tag. Then, in the skills repository: `npm install`,
   `npm run build` (the Merlive page has never been built: it could not be, where it was written),

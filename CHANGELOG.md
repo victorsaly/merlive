@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0 (unreleased)
+## 0.4.0 (2026-11-26)
 
 What a real project's documents showed: diagrams hidden behind the panel, words adrift from their lines or
 squeezed into a column, a legend that said "Red", and code in a face the site does not use.
