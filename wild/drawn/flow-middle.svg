@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 452 680" width="452" height="680" role="img" aria-label="flow-middle.mmd">
+<title>flow-middle.mmd</title>
+<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-red:#b3cbc7;--mv-kf-red:#ffffff;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-k-green:#b3cbc7;--mv-kf-green:#ffffff;--mv-k-blue:#b3cbc7;--mv-kf-blue:#ffffff;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-red:#2b5560;--mv-kf-red:#0d2a30;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-k-green:#2b5560;--mv-kf-green:#0d2a30;--mv-k-blue:#2b5560;--mv-kf-blue:#0d2a30;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
+[data-kind="red"] .mv-shape{fill:var(--mv-kf-red);stroke:var(--mv-k-red)}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+[data-kind="green"] .mv-shape{fill:var(--mv-kf-green);stroke:var(--mv-k-green)}
+[data-kind="blue"] .mv-shape{fill:var(--mv-kf-blue);stroke:var(--mv-k-blue)}
+.mv-node .mv-detail{fill:none}
+[data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
+[data-outline~="heavy"] .mv-shape{stroke-width:2.6}
+.mv-node .mv-rows{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
+.mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
+.mv-band{fill:var(--mv-text);opacity:0.06;stroke:none}
+.mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
+.mv-node .mv-told{font-size:11.5px;font-weight:400}
+.mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
+.mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
+.mv-icon{fill:none;stroke:var(--mv-text);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+.mv-node .mv-point{fill:var(--mv-edge);stroke:var(--mv-edge)}
+.mv-node .mv-strong{font-weight:700}
+.mv-node .mv-em{font-style:italic}
+.mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
+[data-kind="red"] .mv-stripe{fill:var(--mv-k-red)}
+[data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
+[data-kind="green"] .mv-stripe{fill:var(--mv-k-green)}
+[data-kind="blue"] .mv-stripe{fill:var(--mv-k-blue)}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-name{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase;text-anchor:middle;paint-order:stroke;stroke:var(--mv-group);stroke-width:4px;stroke-linejoin:round}</style>
+<rect width="100%" height="100%" fill="var(--mv-bg)"/>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="452" height="680" fill="url(#mv-dots)"/><g><g class="mv-group"><rect x="16" y="14" width="184" height="530" rx="8"/></g><g class="mv-group"><rect x="240" y="14" width="184" height="638" rx="8"/></g></g><g><g class="mv-edge" data-edge="A1-A2" data-style="solid"><path class="mv-line" d="M108,100L108,141"/><polygon class="mv-head" points="108,148 112.5,139 103.5,139"/></g><g class="mv-edge" data-edge="A2-A3" data-style="solid"><path class="mv-line" d="M108,208L108,249"/><polygon class="mv-head" points="108,256 112.5,247 103.5,247"/></g><g class="mv-edge" data-edge="A3-A4" data-style="solid"><path class="mv-line" d="M108,316L108,357"/><polygon class="mv-head" points="108,364 112.5,355 103.5,355"/></g><g class="mv-edge" data-edge="A4-A5" data-style="solid"><path class="mv-line" d="M108,424L108,465"/><polygon class="mv-head" points="108,472 112.5,463 103.5,463"/></g><g class="mv-edge mv-main" data-edge="B1-B2" data-style="solid"><path class="mv-line" d="M332,100L332,141"/><polygon class="mv-head" points="332,148 336.5,139 327.5,139"/></g><g class="mv-edge mv-main" data-edge="B2-B3" data-style="solid"><path class="mv-line" d="M332,208L332,249"/><polygon class="mv-head" points="332,256 336.5,247 327.5,247"/></g><g class="mv-edge mv-main" data-edge="B3-B4" data-style="solid"><path class="mv-line" d="M332,316L332,357"/><polygon class="mv-head" points="332,364 336.5,355 327.5,355"/></g><g class="mv-edge mv-main" data-edge="B4-B5" data-style="solid"><path class="mv-line" d="M332,424L332,465"/><polygon class="mv-head" points="332,472 336.5,463 327.5,463"/></g><g class="mv-edge mv-main" data-edge="B5-B6" data-style="solid"><path class="mv-line" d="M332,532L332,573"/><polygon class="mv-head" points="332,580 336.5,571 327.5,571"/></g></g><g><text class="mv-name" x="186" y="30">Traditional Development (20% AI Autonomy)</text><text class="mv-name" x="390.5" y="30">AI-Led Development (95% AI Autonomy)</text></g><g><g class="mv-node" data-node="A1" data-kind="red"><rect class="mv-shape" x="28" y="40" width="160" height="60" rx="8"/><rect class="mv-stripe" x="29" y="48" width="4" height="44"/><text><tspan x="108" y="74.5">Human Requirements</tspan></text></g><g class="mv-node" data-node="A2" data-kind="red"><rect class="mv-shape" x="28" y="148" width="160" height="60" rx="8"/><rect class="mv-stripe" x="29" y="156" width="4" height="44"/><text><tspan x="108" y="182.5">Human Design</tspan></text></g><g class="mv-node" data-node="A3" data-kind="step"><rect class="mv-shape" x="28" y="256" width="160" height="60" rx="8"/><text><tspan x="108" y="290.5">AI Code Generation</tspan></text></g><g class="mv-node" data-node="A4" data-kind="red"><rect class="mv-shape" x="28" y="364" width="160" height="60" rx="8"/><rect class="mv-stripe" x="29" y="372" width="4" height="44"/><text><tspan x="108" y="398.5">Human Review &amp; Fix</tspan></text></g><g class="mv-node" data-node="A5" data-kind="red"><rect class="mv-shape" x="28" y="472" width="160" height="60" rx="8"/><rect class="mv-stripe" x="29" y="480" width="4" height="44"/><text><tspan x="108" y="506.5">Human Integration</tspan></text></g><g class="mv-node" data-node="B1" data-kind="green"><rect class="mv-shape" x="252" y="40" width="160" height="60" rx="8"/><rect class="mv-stripe" x="253" y="48" width="4" height="44"/><text><tspan x="332" y="74.5">Strategic Context</tspan></text></g><g class="mv-node" data-node="B2" data-kind="blue"><rect class="mv-shape" x="252" y="148" width="160" height="60" rx="8"/><rect class="mv-stripe" x="253" y="156" width="4" height="44"/><text><tspan x="332" y="182.5">AI Understanding</tspan></text></g><g class="mv-node" data-node="B3" data-kind="blue"><rect class="mv-shape" x="252" y="256" width="160" height="60" rx="8"/><rect class="mv-stripe" x="253" y="264" width="4" height="44"/><text><tspan x="332" y="282.5">AI Design</tspan><tspan x="332" y="298.5">Decisions</tspan></text></g><g class="mv-node" data-node="B4" data-kind="blue"><rect class="mv-shape" x="252" y="364" width="160" height="60" rx="8"/><rect class="mv-stripe" x="253" y="372" width="4" height="44"/><text><tspan x="332" y="398.5">AI Implementation</tspan></text></g><g class="mv-node" data-node="B5" data-kind="blue"><rect class="mv-shape" x="252" y="472" width="160" height="60" rx="8"/><rect class="mv-stripe" x="253" y="480" width="4" height="44"/><text><tspan x="332" y="498.5">AI Quality</tspan><tspan x="332" y="514.5">Assurance</tspan></text></g><g class="mv-node" data-node="B6" data-kind="green"><rect class="mv-shape" x="252" y="580" width="160" height="60" rx="8"/><rect class="mv-stripe" x="253" y="588" width="4" height="44"/><text><tspan x="332" y="606.5">Human Strategic</tspan><tspan x="332" y="622.5">Review</tspan></text></g></g>
+</svg>

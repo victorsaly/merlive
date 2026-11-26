@@ -5,7 +5,40 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 26 November 2026, with 0.4.0 released and 0.5.0 in hand.
+Last brought up to date: 26 November 2026, with 0.4.0 released, 0.5.0 in a pull request, and the strategy below.
+
+## The strategy, agreed 26 November 2026
+
+Merlive was built wide and fast: fourteen kinds in two days, every sample passing its rules, few of them looked
+at by a person, none written by one. The one claim nobody else makes (the same Mermaid, placed by rule and
+checked, in the project's own design) only holds if real documents come out right. So, in this order:
+
+1. **No more kinds after 0.5.0**, until what is drawn is solid. Two tiers, said plainly wherever Merlive says
+   what it draws: flowcharts, sequence, state, class and entity diagrams are supported; the rest are
+   experimental.
+2. **Real documents are the measure** ([WILD.md](WILD.md), `wild/`, `npm run wild`). Start small, so each can
+   be looked at: twelve real blocks are held there. Mend what they show, by rule; when Victor is happy with
+   those, take the next twenty from the same measure, then other people's documents.
+3. **A picture changed is a picture seen**: each pull request shows every picture it changed, before and after.
+4. **The engine stays small on purpose.** A diagram it cannot place well is refused and left as Mermaid, which
+   is honest and already works. It is not a general engine and will not chase one.
+5. **One pull request at a time into `main`.** Two were stranded on 25 and 26 November by merging a pull request
+   into a branch seconds after that branch had gone to `main`.
+6. **Then ship and listen**: the tags, the site, a page to paste Mermaid into and see both drawings (the code is
+   pure and has no dependencies, so it should run in a browser as it is; not yet tried), five to ten people.
+7. **Later**: a build step for docs sites, which reaches more people than a skill alone.
+
+What the first measure showed (135 blocks of Victor's own, 26 November): 76% drawn, 7% refused, 16% left. His
+documents are seven parts in ten flowcharts, and the kinds he uses that Merlive does not draw are pie (11) and
+gantt (6): when kinds are taken up again, those two come first, not Mermaid's list. What the first four of the
+twelve showed on being looked at:
+
+- `<small>` and other HTML in a label is printed as written (`flow-small`); Mermaid reads it.
+- Two long group names run into each other and off their frames (`flow-middle`); P8 does not catch it.
+- An author's fill (`style X fill:#f44336`) is hard to see in the still picture (`flow-thirteen`).
+- A `%%{init: … }%%` directive written over several lines is not read as one, and each of its lines is said
+  to be not read (`sequence-directive`).
+- A mindmap of forty boxes is refused for crossings though a tree should have none (`refused-mindmap`).
 
 ## Released
 

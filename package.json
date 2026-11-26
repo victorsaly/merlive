@@ -12,6 +12,7 @@
     "examples": "node skills/merlive/scripts/merlive.mjs examples/order-approval.md && node skills/merlive/scripts/merlive.mjs examples/order-approval.md --format svg",
     "coverage": "node scripts/coverage.mjs && node scripts/compare.mjs --page",
     "compare": "node scripts/compare.mjs",
-    "check": "npm run test:coverage"
+    "check": "npm run test:coverage",
+    "wild": "node scripts/wild.mjs"
   }
 }

@@ -1,0 +1,45 @@
+sequenceDiagram
+    participant U as Student User
+    participant A as Application
+    participant C as Cost Monitor
+    participant Az as Azure Cost API
+    participant ML as ML Forecaster
+    participant E as Emergency Handler
+    
+    U->>+A: Request AI Feature
+    A->>+C: Check Current Costs
+    C->>+Az: Get Real-Time Usage
+    Az->>-C: Return Cost Data (GBP)
+    C->>+ML: Request Cost Forecast
+    ML->>-C: Return Prediction
+    
+    alt Cost Under Threshold (£0.08/day)
+        C->>A: Approved
+        A->>-U: Full AI Features
+    else Cost Near Threshold (80% alert)
+        C->>A: Warning
+        A->>-U: Reduced AI Features + Warning
+    else Cost Over Threshold
+        C->>+E: Emergency Protocol
+        E->>A: Fallback Mode
+        A->>-U: Alternative Learning Activities
+        E->>-C: Protocol Complete
+    end
+    
+    Note over A,ML: All operations <300ms for seamless UX
+    Note over U,E: Educational continuity maintained
+    
+    %% Enhanced styling for participants
+    %%{init: {'theme':'base', 'themeVariables': {
+        'actorBkg': '#e3f2fd',
+        'actorBorder': '#1565c0',
+        'actorTextColor': '#000000',
+        'activationBkgColor': '#e8f5e8',
+        'activationBorderColor': '#2e7d32',
+        'sequenceNumberColor': '#ffffff',
+        'sectionBkgColor': '#f5f5f5',
+        'altBkgColor': '#fff3e0',
+        'optBkgColor': '#fce4ec',
+        'noteBkgColor': '#fffde7',
+        'noteBorderColor': '#f57f17'
+    }}}%%

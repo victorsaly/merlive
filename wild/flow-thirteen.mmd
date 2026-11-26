@@ -1,0 +1,23 @@
+flowchart TD
+    A[AI Generated Content] --> B[Azure Content Moderator]
+    B --> C{Safe?}
+    C -->|No| D[Block Content]
+    C -->|Yes| E[Educational Validator]
+    E --> F{Age Appropriate?}
+    F -->|No| D
+    F -->|Yes| G[Cultural Sensitivity Check]
+    G --> H{Respectful?}
+    H -->|No| D
+    H -->|Yes| I[Content Approved]
+
+    D --> J[Use Safe Fallback]
+    J --> K[Log Incident]
+    K --> L[Improve AI Model]
+
+    I --> M[Display to Child]
+
+    style C fill:#FFC107,stroke:#F57C00
+    style F fill:#FFC107,stroke:#F57C00
+    style H fill:#FFC107,stroke:#F57C00
+    style I fill:#4CAF50,stroke:#388E3C,color:#fff
+    style D fill:#F44336,stroke:#D32F2F,color:#fff

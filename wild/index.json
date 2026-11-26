@@ -1,0 +1,126 @@
+{
+  "about": "Real Mermaid, as its authors wrote it, to hold Merlive to: not samples written to show a feature. Each is one block of a public document. What Merlive makes of each is written to docs/WILD.md by `npm run wild`.",
+  "measured": {
+    "on": "2026-11-26",
+    "version": "0.5.0",
+    "from": [
+      {
+        "repo": "victorsaly/WorldLeadersGame",
+        "commit": "965a4b5"
+      },
+      {
+        "repo": "victorsaly/correlateAI",
+        "commit": "0770bfd"
+      }
+    ],
+    "blocks": 135,
+    "drawn": 103,
+    "refused": 10,
+    "left": 22,
+    "flowcharts": {
+      "blocks": 94,
+      "drawn": 85,
+      "refused": 9
+    },
+    "refusedBy": {
+      "P4": 4,
+      "P5": 3,
+      "P6": 3
+    },
+    "leftKinds": {
+      "pie": 11,
+      "gantt": 6,
+      "quadrantChart": 2,
+      "journey": 1,
+      "xychart-beta": 1,
+      "dashboard": 1
+    },
+    "widerThan1100": 28
+  },
+  "samples": [
+    {
+      "file": "flow-small.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-07-enhancing-security-authentication-educational-game-development.md",
+      "block": 3
+    },
+    {
+      "file": "flow-notes.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_technical/quick-blog-image-generation.md",
+      "block": 1
+    },
+    {
+      "file": "flow-middle.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-10-ai-95-percent-control-educational-game-development.md",
+      "block": 5
+    },
+    {
+      "file": "flow-thirteen.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-06-ai-orchestrated-game-development-first-working-poc.md",
+      "block": 6
+    },
+    {
+      "file": "flow-wide.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-05-territory-management-real-world-integration-complete.md",
+      "block": 1
+    },
+    {
+      "file": "refused-crossing.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-05-territory-management-real-world-integration-complete.md",
+      "block": 2
+    },
+    {
+      "file": "refused-shared-path.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-05-ai-builds-multilingual-learning-platform.md",
+      "block": 2
+    },
+    {
+      "file": "refused-long-words.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-08-zero-downtime-blue-green-deployment-educational-platforms.md",
+      "block": 1
+    },
+    {
+      "file": "refused-mindmap.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-05-ai-builds-multilingual-learning-platform.md",
+      "block": 3
+    },
+    {
+      "file": "sequence-wide.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-04-ai-first-development-workflow-copilot-agents.md",
+      "block": 3
+    },
+    {
+      "file": "sequence-directive.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-08-azure-cost-optimization-educational-platforms-per-user-attribution.md",
+      "block": 2
+    },
+    {
+      "file": "timeline.mmd",
+      "repo": "victorsaly/WorldLeadersGame",
+      "commit": "965a4b5",
+      "path": "docs/_posts/2025-08-05-ai-builds-multilingual-learning-platform.md",
+      "block": 1
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+graph TB
+    subgraph "Educational Speech Architecture"
+        A[Azure Speech Services] --> B[ISpeechRecognitionService]
+        B --> C[Child Safety Validation]
+        C --> D[Educational Assessment Engine]
+        D --> E[Real-time Feedback System]
+    end
+
+    subgraph "Multilingual Educational Framework"
+        F[12 World Languages] --> G[Pronunciation Guides]
+        G --> H[Cultural Context Integration]
+        H --> I[Progressive Challenge System]
+    end
+
+    subgraph "Child Safety Infrastructure"
+        J[COPPA Compliance Framework] --> K[No Audio Storage Policy]
+        K --> L[Real-time Processing Only]
+        L --> M[Educational Threshold Standards]
+    end
+
+    A -.-> F
+    B -.-> J
+    C -.-> G
+    D -.-> H
+    E -.-> I
+
+    style A fill:#e1f5fe
+    style F fill:#f3e5f5
+    style J fill:#fff3e0
