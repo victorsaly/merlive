@@ -244,7 +244,7 @@ const passes = (/** @type {string} */ src, design = builtIn) => {
 describe('more real diagrams: read', () => {
   it('reads the words on a link written between its dashes, in quotes or not, with a line break or not', () => {
     const m = parse(service);
-    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(m.warnings, ['the kind "red" says only its colour, so the legend says "red" too: "%% kind red: what it means" names it there']); // its author named the kind for its colour
     assert.deepEqual(m.edges.map((e) => [e.id, e.label]), [
       ['A-P', ''], ['P-O', 'yes'], ['P-G', 'no'], ['G-O', 'daily limit or credit gone'], ['G-ANS', ''], ['O-ANS', ''], ['G-N', 'no key at all'],
     ]);
@@ -268,7 +268,7 @@ describe('more real diagrams: read', () => {
 
   it('reads groups: what each is called, the boxes in it, and a link between two groups as a link from the end of one to the start of the next', () => {
     const m = parse(steps);
-    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(m.warnings, ['the kind "red" says only its colour, so the legend says "red" too: "%% kind red: what it means" names it there']); // its author named the kind for its colour
     assert.deepEqual(m.groups, [
       { id: 'g1', title: 'Get ready', members: ['S0', 'S1', 'S2'] },
       { id: 'g2', title: 'Build the agent', members: ['S3', 'S4', 'S5', 'S6'] },
@@ -281,7 +281,7 @@ describe('more real diagrams: read', () => {
   it('puts a box named before its group opens in the group that then uses it', () => {
     const m = parse(where);
     assert.deepEqual(m.groups, [{ id: 'app', title: 'Demo app, on your laptop', members: ['BR', 'SV', 'PK'] }]);
-    assert.deepEqual(m.warnings, []);
+    assert.deepEqual(m.warnings, ['the kind "red" says only its colour, so the legend says "red" too: "%% kind red: what it means" names it there']); // its author named the kind for its colour
   });
 
   it('reads a group named by its title alone, and a group inside another as its own, held by the outer one', () => {
@@ -346,6 +346,16 @@ describe('more real diagrams: drawn', () => {
     assert.equal(d.dark?.kinds.red, builtIn.dark?.kinds.risk);
     assert.equal(designWith(builtIn, parse('flowchart TD\nA --> B')), builtIn);
     assert.match(picture(m, layout(m), d, { title: m.title }), /--mv-k-red:#7a1f12/);
+  });
+
+  it('never gives it the colour of a kind that is in the same diagram: the two could not be told apart', () => {
+    // Dark grey is nearest the green a start has. With a start in the diagram, it takes the next nearest.
+    const m = parse('flowchart TD\n  A([Start]) --> B[Work]\n  style B fill:#969,stroke:#333,stroke-width:4px'), d = designWith(builtIn, m);
+    assert.notEqual(d.light.kinds.grey, builtIn.light.kinds.terminal);
+    assert.ok(Object.values(builtIn.light.kinds).includes(d.light.kinds.grey), 'still one of the design\'s own colours');
+    assert.deepEqual(score(m, layout(m), d).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), []);
+    const alone = parse('flowchart TD\n  A[Start] --> B[Work]\n  style B stroke:#333');
+    assert.equal(designWith(builtIn, alone).light.kinds.grey, builtIn.light.kinds.terminal, 'with no start there, the nearest is free');
   });
 
   it("draws a group's frame behind its boxes, with its title, and a link's words in the lines they were wrapped to", () => {

@@ -101,12 +101,16 @@ the room is tall enough for the words above or below the turn.
 
 A link's words ("Yes", "No") are tried beside each run of its line, near where it leaves first: the first place
 that sits on no box and no other words wins, and of those, one no line passes through. Long words are wrapped,
-and wrapped again to fit a short run between two boxes. Words beside a line that goes round the outside stay
+and wrapped again to fit a short run between two boxes, but never into a column: past two lines, and past the
+lines they wrap to anyway, the rule fails. Left to right, the room between two ranks is made as wide as the words
+on a link straight across it, so they keep their lines. Beside a line that runs along the flow, words are drawn
+from the side next to the line, so a face narrower than the one they were measured in does not leave them adrift. Words beside a line that goes round the outside stay
 inside the picture: everything moves over to give them the margin the boxes have. The few words at an end of a
 link ("1", "0..*") sit beside the line just out from its box, the two ends on one side and the link's own words
 on the other, and are held to the same.
 
 - **Fail:** the words of a line round the left side are cut off by the edge of the picture.
+- **Fail:** "every run is saved for Replay" squeezed between two boxes into a column of one or two words a line.
 
 ## Groups
 
@@ -124,6 +128,30 @@ frame, a long name, a line coming in at the middle), the name stays at the left 
 colour, and the line passes behind it.
 
 - **Fail:** a line is drawn through the letters of a group's name.
+
+## On a grid its author placed
+
+A block diagram is the one kind whose author says where each box goes: a grid of columns, filled row by row. Where
+what it says is where each block is (a block joined to nothing, one that spans columns, a space that holds a cell
+open, an arrow drawn as a block), Merlive keeps the grid, and the rules above are held like this:
+
+- **P1** has nothing to hold: a grid has no main path, and no line is drawn heavier.
+- **P2**, one size, is one size of cell. Every column of a grid is as wide as every other (128 to 288 px: the
+  narrowest in which every block's words fit as they must in any box), every row as tall as its tallest block,
+  and gaps of 48 px between, wider where a link's words need it. **A block is exactly its cells**: as wide as the
+  columns it spans and the gaps between them, as tall as its row. A block that holds others is a frame that is
+  exactly its cells too, round a grid of its own that shares the frame's width. The check works this out again
+  from the grid and compares it with every block and frame.
+- **P3** and **P5** are unchanged. Links are routed at right angles in the gaps: straight where two blocks face
+  each other across a gap, else round one corner, or along the gap beside one block and into the other, each
+  line of a gap a track step from the next. A space is free room. A link with no clear way is said, and P3
+  stops the diagram being written with a line through a block.
+- **P4** counts every crossing against the same one in eight. None is forgiven as forced: the author chose where
+  the blocks are, so a crossing is theirs to remove by moving one.
+- **P6**, **P7** and **P8** are unchanged; a block that spans columns has the room of its own width.
+
+- **What to do when it fails:** give a link room with a `space`, or move a block to another cell. To have the
+  diagram placed by rule instead, join every block to another with a link and take out the spans.
 
 ## D1. Words and lines can be read against what is behind them
 

@@ -103,7 +103,7 @@ export function setupPage({ model, lay, design, said, sums, wrote }) {
   const palettes = /** @type {['light'|'dark', import('./design.mjs').Palette][]} */ ([['light', design.light], ['dark', design.dark]]).filter(([, p]) => p);
   const shown = new Set(looksOf(design).map(([mode]) => mode));
   /** @type {Record<string, unknown>} */
-  const state = { name: design.name, modes: design.modes, motion: design.motion, depth: design.depth, ground: design.ground, radius: design.radius, font: design.font, weight: design.weight, output: design.output, light: design.light };
+  const state = { name: design.name, modes: design.modes, motion: design.motion, depth: design.depth, ground: design.ground, radius: design.radius, font: design.font, mono: design.mono, weight: design.weight, output: design.output, light: design.light };
   if (design.from) state.from = design.from;
   if (design.dark) state.dark = design.dark;
 

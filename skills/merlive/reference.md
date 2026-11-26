@@ -233,7 +233,7 @@ flowchart, so everything else on this page holds for it: the rules, the design, 
 | `(logos:aws-lambda)` | An icon from a pack is somebody's mark, which Merlive neither fetches nor draws: it is left out, the words are kept, and it is said once for each such icon. A name from a set Merlive knows (`fa:fa-key`) gets its drawing |
 | `group cloud(cloud)[Azure]`, `group office[Head office]` | A group, drawn as a frame with its title. Its icon is read past |
 | `service api(server)[Orders API] in cloud`, `group net(server)[Network] in cloud` | What is in a group, and a group inside a group, to any depth. A group may be declared after what is in it |
-| `junction split`, `junction split in cloud` | Where edges meet and part: a round box with no words, of the kind `junction` |
+| `junction split`, `junction split in cloud` | Where edges meet and part: a dot, of the kind `junction` |
 | `api:R -- L:db` | An edge: a link with nothing at either end |
 | `shop:R --> L:api`, `api:R <-- L:db`, `api:B <--> T:erp` | An arrowhead on the service it points into: the second, the first, or both |
 | `api:R -[saves to]- L:db`, `api:R <-[reads and writes]-> L:db` | The words on a link |
@@ -254,11 +254,12 @@ its line number and nothing is drawn from it.
 ## A block diagram
 
 `block` and `block-beta` are read into the same boxes and links as a flowchart. But a block diagram is the one
-kind whose author places the boxes, on a grid, and Merlive places boxes by rule and keeps no grid yet. So a block
-diagram is drawn only when it is a flow: every block is joined to another by a link, every block takes one
-column, and a space is only there to make room for a link. Any other is **left as Mermaid**, and the command says
-which line made it so and what to change. It is never guessed at: a grid of blocks drawn as a row of boxes would
-say something its author did not.
+kind whose author places the boxes, on a grid. So it is placed in one of two ways. Where it is a flow (every
+block is joined to another by a link, every block takes one column, and a space is only there to make room for a
+link), it is placed by rule, as a flowchart is. Where what it says is where each block is, it is placed **on the
+grid its author wrote**: every block in its cell, exactly as wide as the columns it spans, with the links drawn
+at right angles in the gaps between cells. It is never guessed at: a grid of blocks drawn as a row of boxes
+would say something its author did not.
 
 | Written | Read as |
 |---|---|
@@ -271,19 +272,24 @@ say something its author did not.
 | `block:back` … `end`, `block` … `end` | A block that holds others: a group. One inside another is a group inside a group |
 | `block:back["Back office"]` | The same, called by its words. Mermaid 11 draws no name for it; Merlive draws the one its author wrote |
 | `shop --> back`, `back --> bank` | A link to or from a block that holds others, joined to where the blocks inside it start or end, as a link to a group is |
-| `columns 3`, `columns auto` | How many columns the grid has. It says which way a flow runs: blocks that fit one row run left to right, any others top to bottom. Nothing else of the grid is kept |
+| `columns 3`, `columns auto` in a flow | Which way the flow runs: blocks that fit one row run left to right, any others top to bottom |
 | `a space b` with `a --> b`, `space:3` between two joined blocks | Room for the link, which is how Mermaid's own guide says to draw one. Read past |
 | `style a fill:#636,stroke-width:4px`, `classDef late fill:#fde`, `class a,b late` | Kinds and outlines, as in a flowchart. A style is for one block |
 | `%% words` on a line of its own, `title:` in front matter | As in a flowchart |
 
-Left as Mermaid, with the first three reasons said and the rest counted:
+Placed on its author's grid, when any of these is written:
 
-| Written | Why it is left |
+| Written | What it says, and how it is drawn |
 |---|---|
-| A block no link joins to another (a grid of blocks, one block on its own, a block inside another that only the outer one is linked for) | Where it is drawn is all that says what it belongs with |
-| `wh["Warehouse"]:3`, `block:left:2` | A block that spans columns says it lies under or beside several others. Every box Merlive draws is one size |
-| `space` that is not between two joined blocks: at the start or the end of a row, a whole empty row, beside a block it pushes along | It holds a cell open so a block comes where its author wanted it |
-| `to<["orders"]>(right)`, and `left`, `up`, `down`, `x`, `y`, `x, down` | A block arrow is an arrow between two cells, drawn as a block. It joins what is beside it only by being there |
+| A block no link joins to another (a grid of blocks, one block on its own, a block inside another that only the outer one is linked for) | Where it is drawn is all that says what it belongs with. Each block is in the cell it was written in, the cells filled row by row |
+| `columns 3`, `columns auto` | How many columns the grid has: every column as wide as every other, every row as tall as its tallest block. `auto` is one row |
+| `wh["Warehouse"]:3`, `block:left:2` | A block that spans columns lies under or beside several others: it is as wide as those columns and the gaps between them. One that does not fit what is left of a row starts the next |
+| `space`, `space:3` | A cell, or several, left empty, so a block comes where its author wanted it. A line may run through it |
+| `block:left` … `end` with `columns` of its own | A frame over the cells it spans, round a grid of its own, with room for its name only when it has one |
+| `to<["orders"]>(right)`, and `left`, `up`, `down`, `x`, `y` | A block arrow: an arrow drawn as a block, in its cell, pointing the way written. `x` points both ways across and `y` both ways up and down |
+| `to<["orders"]>(x, down)` | An arrow along two lines at once is drawn along the first (both ways across), and said: Merlive draws an arrow along one line |
+| `to<["&nbsp;"]>(down)` | An arrow with no words is drawn with none |
+| `a --> b` on a grid | A link at right angles: straight across a gap where two blocks face each other, else round the blocks between them and never through one. A link with no way round is said, and the diagram is not written until it has one |
 
 Not read, each named in a `note,` line when met, and the rest of the line still read:
 
@@ -330,6 +336,7 @@ All are Mermaid comments, anywhere in the block.
 | `%% step: Title \| - \| words` | A step with nothing lit, for an opening or closing remark |
 | `%% main: A>B>C>D` | The path that gets the straight line. Without it, the longest path does |
 | `%% side: left` | Branches and loops go to the left of the main path (above it, left to right). Default `right` |
+| `%% kind red: Read-only data` | What a kind of box means. The legend, and a picked box, say this instead of the kind's own name. A kind its author named for a colour (`classDef red …`) with no such line is named in a `note,` line |
 | `%% turn: no` | A flow written left to right that would be wider than a screen (1,100 px) is drawn top to bottom, and the command says so. This keeps it as written |
 
 A step's path must follow links that exist; one that does not is named in a `note,` line and that part is left out.
@@ -349,6 +356,7 @@ never write one by hand. Everything in it is optional, and what is left out come
   "ground": "dots",
   "output": { "format": "html", "steps": true, "legend": true, "source": true },
   "font": "\"IBM Plex Sans\", system-ui, sans-serif",
+  "mono": "\"IBM Plex Mono\", ui-monospace, monospace",
   "weight": 500,
   "radius": 6,
   "light": {
@@ -376,6 +384,7 @@ never write one by hand. Everything in it is optional, and what is left out come
 | `output.legend` | Whether a page carries the legend of kinds of box |
 | `output.source` | Whether a page carries the Mermaid it was drawn from |
 | `font`, `weight`, `radius` | The face (a list of faces), its weight (100 to 900) and a box's corner in px (0 to 40) |
+| `mono` | The face for code (a list of faces): the Mermaid a page shows, and the rows a class or an entity lists |
 | `from` | Where setup read the colours. Not used in drawing; it says where to look again |
 
 | Colour | What it is |
@@ -413,6 +422,7 @@ the stylesheets it links to and the styles written in it.
 | Accent | The colour of links when it is a colour; else a token named like `--accent`, `--primary`, `--brand`, `--mark`; else the strongest colour among the tokens |
 | Dark mode | The same, inside `prefers-color-scheme: dark`, `.dark` or `[data-theme="dark"]` |
 | Face, corner and shadows | `body`'s `font-family`; the most common `border-radius`; whether anything has a `box-shadow` |
+| The face for code | The `font-family` of `code`, `pre`, `kbd` or `samp`, following `var()`; it is made to end in `monospace` |
 
 Colours are read as hex, `rgb()`, `hsl()`, bare `H S% L%` and `oklch()`. What a diagram needs and a site does not
 have (a box's fill and edge, lines, quiet text, the colours of kinds) is made from the page and text colours and

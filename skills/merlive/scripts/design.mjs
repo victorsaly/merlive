@@ -18,6 +18,7 @@
  * @typedef {object} Design
  * @property {string} name
  * @property {string} font
+ * @property {string} mono the face for code: the Mermaid a page shows, and the rows a box lists
  * @property {number} weight
  * @property {number} radius a box's corner, in px
  * @property {'none'|'calm'|'lively'} motion none: nothing moves. calm: one dot, when asked. lively: the path flows too.
@@ -39,7 +40,7 @@
  * @type {Design}
  */
 export const builtIn = {
-  name: 'merlive', font: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', weight: 500, radius: 8, motion: 'calm', depth: 'soft', ground: 'dots',
+  name: 'merlive', font: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif', mono: 'ui-monospace,SFMono-Regular,Menlo,Consolas,monospace', weight: 500, radius: 8, motion: 'calm', depth: 'soft', ground: 'dots',
   modes: 'both', output: { format: 'html', steps: true, legend: true, source: true },
   light: { bg: '#eff6f5', node: '#ffffff', stroke: '#b3cbc7', text: '#0f2f2d', muted: '#48615e', edge: '#5e827e', accent: '#d6452b',
     kinds: { decision: '#b87a00', terminal: '#2c7d4f', rework: '#a8327a', external: '#5a4fcf', data: '#0a84c4', risk: '#7a1f12' } },
@@ -122,8 +123,16 @@ export const kindFill = (/** @type {Palette} */ p, /** @type {string} */ kind) =
 export function designWith(design, model) {
   const strangers = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])].filter((k) => !design.light.kinds[k] && HEX.test(model.classes[k] ?? ''));
   if (!strangers.length) return design;
+  const present = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])];
   const more = (/** @type {Palette} */ p) => {
-    const nearest = (/** @type {string} */ c) => Object.values(p.kinds).reduce((a, b) => (apart(b, c) < apart(a, c) ? b : a));
+    // A colour one of the design's own kinds has in this diagram would make two kinds one to the eye, so the
+    // nearest of the rest is taken; only when every colour is taken is one shared. Two colours an author chose
+    // may still come to the same one: they chose them alike.
+    const taken = new Set(present.flatMap((k) => (p.kinds[k] ? [p.kinds[k]] : [])));
+    const nearest = (/** @type {string} */ c) => {
+      const all = Object.values(p.kinds), free = all.filter((x) => !taken.has(x));
+      return (free.length ? free : all).reduce((a, b) => (apart(b, c) < apart(a, c) ? b : a));
+    };
     return { ...p, kinds: { ...p.kinds, ...Object.fromEntries(strangers.map((k) => [k, nearest(model.classes[k])])) } };
   };
   return { ...design, light: more(design.light), ...(design.dark ? { dark: more(design.dark) } : {}) };
@@ -211,6 +220,7 @@ export function designFrom(file) {
   if (!['plain', 'dots'].includes(d.ground)) throw say('ground must be plain or dots.');
   // The face is written into the page's styles as it is, so it may hold only what a list of faces holds.
   if (typeof d.font !== 'string' || !/^[\w\s,'"-]+$/.test(d.font)) throw say('font must be a list of faces, like "Inter", system-ui, sans-serif.');
+  if (typeof d.mono !== 'string' || !/^[\w\s,'"-]+$/.test(d.mono)) throw say('mono must be a list of faces, like "Courier Prime", ui-monospace, monospace.');
   if (typeof d.radius !== 'number' || d.radius < 0 || d.radius > 40) throw say('radius must be a number of pixels from 0 to 40.');
   if (typeof d.weight !== 'number' || d.weight < 100 || d.weight > 900) throw say('weight must be a number from 100 to 900.');
   if (given.modes === undefined) d.modes = d.dark ? 'both' : 'light';

@@ -170,7 +170,7 @@ export function architectureReader({ model, node, say, connect, frame, unframe, 
       close();
       if (d.what === 'junction') {
         // Where lines meet and nothing else: a small round box with no words, of a kind of its own.
-        Object.assign(n, { label: '', shape: 'pill', kind: 'junction' });
+        Object.assign(n, { label: '', shape: 'point', kind: 'junction' });
         continue;
       }
       say(n, d.title === undefined || !wordsOf(d.title).length ? d.id : d.title);

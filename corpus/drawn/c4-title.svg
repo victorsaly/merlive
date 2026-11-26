@@ -20,6 +20,7 @@
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
 .mv-stripe{stroke:none}
+.mv-node .mv-point{fill:var(--mv-edge);stroke:var(--mv-edge)}
 .mv-node .mv-strong{font-weight:700}
 .mv-node .mv-em{font-style:italic}
 .mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
@@ -34,6 +35,6 @@
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
 <text class="mv-title"><tspan class="mv-title-line" x="92" y="33">Containers of the</tspan><tspan class="mv-title-line" x="92" y="53">ordering system</tspan></text>
 <g transform="translate(0,58)">
-<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="184" height="220" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge" data-edge="web-api" data-style="solid"><path class="mv-line" d="M92,86L92,127"/><polygon class="mv-head" points="92,134 96.5,125 87.5,125"/><text class="mv-label"><tspan class="mv-label-line" x="120.5" y="111">Calls</tspan></text></g></g><g></g><g><g class="mv-node" data-node="web" data-kind="step"><rect class="mv-shape" x="28" y="28" width="128" height="58" rx="8"/><text class="mv-over" x="92" y="46">«container: React»</text><text><tspan x="92" y="68.5">Web shop</tspan></text></g><g class="mv-node" data-node="api" data-kind="step"><rect class="mv-shape" x="28" y="134" width="128" height="58" rx="8"/><text class="mv-over" x="92" y="152">«container: C#»</text><text><tspan x="92" y="174.5">Order API</tspan></text></g></g>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="184" height="220" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge" data-edge="web-api" data-style="solid"><path class="mv-line" d="M92,86L92,127"/><polygon class="mv-head" points="92,134 96.5,125 87.5,125"/><text class="mv-label" style="text-anchor:start"><tspan class="mv-label-line" x="99" y="111">Calls</tspan></text></g></g><g></g><g><g class="mv-node" data-node="web" data-kind="step"><rect class="mv-shape" x="28" y="28" width="128" height="58" rx="8"/><text class="mv-over" x="92" y="46">«container: React»</text><text><tspan x="92" y="68.5">Web shop</tspan></text></g><g class="mv-node" data-node="api" data-kind="step"><rect class="mv-shape" x="28" y="134" width="128" height="58" rx="8"/><text class="mv-over" x="92" y="152">«container: C#»</text><text><tspan x="92" y="174.5">Order API</tspan></text></g></g>
 </g>
 </svg>

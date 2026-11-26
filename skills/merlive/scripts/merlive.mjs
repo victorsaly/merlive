@@ -17,7 +17,7 @@ import { sequencePage, sequencePicture } from './sequence-render.mjs';
 import { designOf, readingOf, stylesheetsOf } from './site.mjs';
 import { sample, setupPage } from './setup.mjs';
 
-export const version = '0.3.0';
+export const version = '0.4.0';
 export const here = dirname(fileURLToPath(import.meta.url));
 
 // What each way of ending means, so an agent can act on the number alone.

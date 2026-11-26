@@ -6,7 +6,7 @@
 import { builtIn, colourChecks, colourLimits, contrast, designFrom, mix, strength } from './design.mjs';
 
 /** @typedef {{bg?:string,text?:string,accent?:string}} Found */
-/** @typedef {{light?:Found,dark?:Found,font?:string,radius?:number,shadows?:boolean}} Reading */
+/** @typedef {{light?:Found,dark?:Found,font?:string,mono?:string,radius?:number,shadows?:boolean}} Reading */
 
 // What is looked for, and how sure it has to be.
 const reads = {
@@ -118,6 +118,7 @@ export function readingOf(sheets) {
   /** @type {Record<'light'|'dark', {bg?:string,text?:string,link?:string}>} */
   const set = { light: {}, dark: {} };
   let face = '';
+  let code = '';
   /** @type {string[]} */
   const corners = [];
   let shadowed = false;
@@ -131,6 +132,8 @@ export function readingOf(sheets) {
       else if (page && (name === 'background' || name === 'background-color')) set[mode].bg = value;
       else if (page && name === 'color') set[mode].text = value;
       else if (page && name === 'font-family') face = value;
+      // The face its code is set in: what the Mermaid a page shows, and the rows a box lists, are set in.
+      else if (name === 'font-family' && !code && parts.some((s) => /^(?:code|pre|kbd|samp)$/.test(s))) code = value;
       else if (name === 'color' && parts.some((s) => s === 'a' || s === 'a:link')) set[mode].link = value;
       else if (name === 'border-radius') corners.push(value);
       else if (name === 'box-shadow' && !/^(none|unset|initial|inherit|0)$/i.test(value)) shadowed = true;
@@ -173,6 +176,7 @@ export function readingOf(sheets) {
   const dark = hasDark ? look('dark') : undefined;
   if (dark && dark.bg && dark.bg !== light?.bg) reading.dark = dark;
   if (face) reading.font = filled(face, 'light');
+  if (code && filled(code, 'light')) reading.mono = filled(code, 'light');
   const px = corners.map((c) => /^(\d*\.?\d+)(px|rem|em)$/.exec(filled(c, 'light'))).filter((m) => m !== null).map((m) => parseFloat(m[1]) * (m[2] === 'px' ? 1 : reads.rem)).filter((v) => v < reads.pill);
   if (reading.light || reading.dark) reading.shadows = shadowed;
   if (px.length) reading.radius = [...new Set(px)].sort((a, b) => px.filter((v) => v === b).length - px.filter((v) => v === a).length || a - b)[0];
@@ -254,8 +258,10 @@ export function designOf(reading, about) {
 
   const faces = (reading.font ?? '').split(',').map((f) => f.trim()).filter((f) => /^(['"]?)[\w -]+\1$/.test(f));
   if (faces.length && !generic.includes(faces[faces.length - 1])) faces.push('system-ui', 'sans-serif');
+  const codes = (reading.mono ?? '').split(',').map((f) => f.trim()).filter((f) => /^(['"]?)[\w -]+\1$/.test(f));
+  if (codes.length && !['monospace', 'ui-monospace'].includes(codes[codes.length - 1])) codes.push('ui-monospace', 'monospace');
   const one = `page ${reading.light.bg ?? 'not set'}, text ${reading.light.text ?? 'not set'}, accent ${reading.light.accent ?? 'not set'}`;
-  said.found.push(`${one}${faces.length ? `, face ${faces[0]}` : ''}, ${reading.dark ? 'in light and dark' : 'one look'}`);
+  said.found.push(`${one}${faces.length ? `, face ${faces[0]}` : ''}${codes.length ? `, code in ${codes[0]}` : ''}, ${reading.dark ? 'in light and dark' : 'one look'}`);
   said.made.push('a box\'s fill and edge, lines and quiet text, from your page and text colours', 'the colours for kinds of box (decision, rework and the rest) are Merlive\'s, held to your page');
 
   // A diagram on somebody's site keeps that site's manners: a shadow only where the site has shadows, and the
@@ -263,6 +269,7 @@ export function designOf(reading, about) {
   Object.assign(file, { modes: reading.dark ? 'both' : 'light', motion: builtIn.motion, depth: reading.shadows ? 'soft' : 'flat', ground: 'plain', output: { ...builtIn.output }, light: look(reading.light, 'light') });
   if (reading.dark) file.dark = look(reading.dark, 'dark');
   if (faces.length) file.font = faces.join(', ');
+  if (codes.length) file.mono = codes.join(', ');
   if (reading.radius !== undefined) file.radius = Math.min(reads.mostCorner, Math.round(reading.radius));
   // What was made is held to the same rules as anything else, and what is left over is said, not hidden.
   for (const c of colourChecks(designFrom(file), Object.keys(builtIn.light.kinds))) for (const line of c.broken) said.changed.push(`still to settle: ${line}`);

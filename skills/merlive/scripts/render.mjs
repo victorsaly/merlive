@@ -29,7 +29,14 @@ export const draw = {
   frame: 0.035, // how much of the text colour fills a group's frame
   stripe: 4, // px across the stripe that marks a box of a kind
   leastScale: 0.8, // the smallest a drawing is shown before it scrolls sideways instead
+  page: 1080, // px the widest a page is: a laptop's reading column
+  pagePad: 16, // px each side of the page
+  panel: 340, // px the panel of steps and picking takes beside the drawing
+  gap: 16, // px between the drawing and the panel
 };
+// What is left for the drawing beside the panel. A drawing that does not fit it even shrunk as far as it may be
+// has the panel put above it instead, so no box sits behind the panel or needs scrolling sideways to find.
+draw.column = draw.page - 2 * draw.pagePad - draw.panel - draw.gap;
 
 const esc = (/** @type {unknown} */ s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const n = (/** @type {number} */ v) => String(Math.round(v * 10) / 10);
@@ -63,6 +70,8 @@ function middleOf(/** @type {Pt[]} */ pts) {
 }
 
 export const kindName = (/** @type {string} */ k) => (k === 'terminal' ? 'Start or end' : k.charAt(0).toUpperCase() + k.slice(1));
+/** A kind's name for a reader: what its author said it means, else its own name. */
+const meaningOf = (/** @type {import('./parse.mjs').Model} */ model, /** @type {string} */ k) => model.meanings?.[k] ?? kindName(k);
 
 /** The colours as CSS variables, with each kind's edge and fill worked out here, not by the browser. */
 export function variables(/** @type {import('./design.mjs').Palette} */ p, /** @type {string[]} */ kinds) {
@@ -83,7 +92,7 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 .mv-node .mv-detail{fill:none}
 [data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
 [data-outline~="heavy"] .mv-shape{stroke-width:2.6}
-.mv-node .mv-rows{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
+.mv-node .mv-rows{font-family:${design.mono};font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
 .mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
 .mv-band{fill:var(--mv-text);opacity:${rowShade};stroke:none}
 .mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
@@ -95,6 +104,7 @@ ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shad
 .mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
 .mv-main .mv-line{stroke-width:2.4}
 .mv-stripe{stroke:none}
+.mv-node .mv-point{fill:var(--mv-edge);stroke:var(--mv-edge)}
 .mv-node .mv-strong{font-weight:${Math.min(900, Math.max(700, design.weight + 200))}}
 .mv-node .mv-em{font-style:italic}
 .mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
@@ -167,7 +177,9 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     // The line stops short of each tip, so a thick stroke does not show past what is drawn there.
     const line = [toward(pts[0], pts[1], tail.inset), ...pts.slice(1, -1), toward(pts[pts.length - 1], pts[pts.length - 2], head.inset)];
     const l = r.label;
-    const words = l ? `<text class="mv-label">${l.lines.map((line, i) => `<tspan class="mv-label-line" x="${n(l.x)}" y="${n(l.y - ((l.lines.length - 1) * 14) / 2 + 4 + i * 14)}">${esc(line)}</tspan>`).join('')}</text>` : '';
+    // Words held at one side are drawn from that side, so they stay by their line in any face.
+    const from = l?.align === 'end' ? l.x + l.w / 2 : l?.align === 'start' ? l.x - l.w / 2 : l?.x ?? 0;
+    const words = l ? `<text class="mv-label"${l.align ? ` style="text-anchor:${l.align}"` : ''}>${l.lines.map((line, i) => `<tspan class="mv-label-line" x="${n(from)}" y="${n(l.y - ((l.lines.length - 1) * 14) / 2 + 4 + i * 14)}">${esc(line)}</tspan>`).join('')}</text>` : '';
     const ends = [r.near, r.far].map((l) => (l ? `<text class="mv-label mv-end" x="${n(l.x)}" y="${n(l.y + 4)}">${esc(l.text)}</text>` : '')).join('');
     const mid = middleOf(pts);
     const extras = live ? `<path class="mv-hit" d="${pathOf(pts)}"/><g class="mv-seq" transform="translate(${at(mid)})"><circle r="8"/><text y="3.5"></text></g>` : '';
@@ -244,7 +256,7 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
       return runs.map(([l, text]) => (l ? `<tspan class="${l}">${esc(text)}</tspan>` : esc(text))).join('');
     };
     const words = b.lines.map((line, i) => `<tspan x="${n(b.x + at.dx + aside)}" y="${n(first + i * 16)}">${looks.length ? stressed(line) : esc(line)}</tspan>`).join('');
-    const role = live ? ` tabindex="0" role="button" aria-label="${esc(`${m.label}, ${kindName(m.kind)}`)}"` : '';
+    const role = live ? ` tabindex="0" role="button" aria-label="${esc(m.label ? `${m.label}, ${meaningOf(model, m.kind)}` : meaningOf(model, m.kind))}"` : '';
     // A box of a kind that means something carries a stripe of its colour down its near edge. Any other shape
     // already says what it is by its outline, and a plain step has nothing to say.
     const round = Math.min(design.radius, b.h / 2);
@@ -314,7 +326,7 @@ ${title.band ? `${title.svg}\n<g transform="translate(0,${title.band})">\n${insi
 export function page(model, lay, design, about) {
   const kinds = kindsIn(model);
   const data = {
-    nodes: model.nodes.map((m) => ({ id: m.id, label: m.label, kind: m.kind, kindName: kindName(m.kind), note: model.notes[m.id] ?? '' })),
+    nodes: model.nodes.map((m) => ({ id: m.id, label: m.label, kind: m.kind, kindName: meaningOf(model, m.kind), note: model.notes[m.id] ?? '' })),
     edges: model.edges.map((e) => ({ id: e.id, from: e.from, to: e.to, label: e.label })),
     steps: design.output.steps ? model.steps.map((s) => ({ title: s.title, text: s.text, seq: s.seq, loop: s.loop })) : [],
     motion: design.motion,
@@ -322,7 +334,7 @@ export function page(model, lay, design, about) {
   // "</" inside the script would end it early, wherever it came from.
   const json = JSON.stringify(data).replace(/</g, '\\u003c');
   // The legend is of boxes: a line's colour is its author's, and nobody said what it means.
-  const legend = [...new Set(model.nodes.map((m) => m.kind))].map((k) => `<span><i style="border-color:var(--mv-k-${k});background:var(--mv-kf-${k})"></i>${esc(kindName(k))}</span>`).join('');
+  const legend = [...new Set(model.nodes.map((m) => m.kind))].map((k) => `<span><i style="border-color:var(--mv-k-${k});background:var(--mv-kf-${k})"></i>${esc(meaningOf(model, k))}</span>`).join('');
   const noted = model.nodes.filter((m) => model.notes[m.id]);
   const steps = data.steps.length
     ? `<section class="mv-card" aria-live="polite">
@@ -333,6 +345,28 @@ export function page(model, lay, design, about) {
 <div class="mv-row"><button type="button" id="mv-prev">Previous</button><button type="button" id="mv-play">Play this path</button><button type="button" id="mv-next" class="mv-main">Next</button></div>
 </section>`
     : '';
+  const wide = lay.width * draw.leastScale > draw.column;
+  const figure = `<figure class="mv-stage">
+<svg class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" role="group" aria-label="${esc(about.title)}">${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
+${inside(model, lay, design, true)}
+<g id="mv-dot" style="display:none"><circle r="6"/></g>
+</svg>
+${design.output.legend ? `<figcaption class="mv-legend">${legend}</figcaption>` : ''}
+</figure>
+`;
+  const side = `<div class="mv-side">
+${steps}
+<section class="mv-card" aria-live="polite">
+<p class="mv-small" id="mv-none">Pick a box or a line to see only what it connects to.</p>
+<div id="mv-picked" hidden>
+<h2 id="mv-title"></h2>
+<p id="mv-note"></p>
+<dl id="mv-facts"></dl>
+<div class="mv-row"><button type="button" id="mv-clear">Show everything</button></div>
+</div>
+</section>
+</div>
+`;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -344,12 +378,13 @@ export function page(model, lay, design, about) {
 ${styleOf(design, kinds, ':root', lineKindsIn(model))}
 *{box-sizing:border-box}
 body{margin:0;background:var(--mv-bg);color:var(--mv-text);font:15px/1.5 ${design.font}}
-main{max-width:1080px;margin:0 auto;padding:20px 16px 40px;display:grid;gap:16px}
+main{max-width:${draw.page}px;margin:0 auto;padding:20px ${draw.pagePad}px 40px;display:grid;gap:16px}
 h1{font-size:20px;font-weight:650;margin:0;text-wrap:balance}
 h2{font-size:16px;font-weight:650;margin:0}
 p{margin:0}
-.mv-layout{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
-@media (min-width:880px){.mv-layout{grid-template-columns:minmax(0,1fr) 340px;align-items:start}}
+.mv-layout{display:grid;gap:${draw.gap}px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:880px){.mv-layout:not(.mv-wide){grid-template-columns:minmax(0,1fr) ${draw.panel}px;align-items:start}}
+.mv-wide .mv-side{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start}
 .mv-stage{margin:0;overflow-x:auto}
 /* The drawing may shrink to fit, but only so far: below that the words stop being readable, so it scrolls. */
 .mv-svg{display:block;width:clamp(${Math.round(lay.width * draw.leastScale)}px,100%,${lay.width}px);height:auto;margin:0 auto}
@@ -370,7 +405,7 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--mv-accent);ou
 dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
 dt{color:var(--mv-muted)}
 dd{margin:0}
-pre{margin:8px 0 0;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-x:auto;border:1px solid var(--mv-stroke);border-radius:8px;padding:10px}
+pre{margin:8px 0 0;font:12px/1.55 ${design.mono};overflow-x:auto;border:1px solid var(--mv-stroke);border-radius:8px;padding:10px}
 summary{cursor:pointer;color:var(--mv-muted);font-size:13px}
 .mv-notes{display:none}
 .mv-node,.mv-edge{cursor:pointer;transition:opacity .2s}
@@ -400,27 +435,8 @@ body[data-motion="lively"].mv-playing .mv-on .mv-line{stroke-dasharray:7 6;anima
 <body data-motion="${design.motion}">
 <main>
 <h1>${esc(about.title)}</h1>
-<div class="mv-layout">
-<figure class="mv-stage">
-<svg class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height}" role="group" aria-label="${esc(about.title)}">${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
-${inside(model, lay, design, true)}
-<g id="mv-dot" style="display:none"><circle r="6"/></g>
-</svg>
-${design.output.legend ? `<figcaption class="mv-legend">${legend}</figcaption>` : ''}
-</figure>
-<div class="mv-side">
-${steps}
-<section class="mv-card" aria-live="polite">
-<p class="mv-small" id="mv-none">Pick a box or a line to see only what it connects to.</p>
-<div id="mv-picked" hidden>
-<h2 id="mv-title"></h2>
-<p id="mv-note"></p>
-<dl id="mv-facts"></dl>
-<div class="mv-row"><button type="button" id="mv-clear">Show everything</button></div>
-</div>
-</section>
-</div>
-</div>
+<div class="mv-layout${wide ? ' mv-wide' : ''}">
+${wide ? side + figure : figure + side}</div>
 <section class="mv-notes">${noted.length ? `<h2>Notes</h2><dl>${noted.map((m) => `<dt>${esc(m.label)}</dt><dd>${esc(model.notes[m.id])}</dd>`).join('')}</dl>` : ''}</section>
 ${design.output.source ? `<details class="mv-source"><summary>Mermaid source</summary><pre id="mermaid-source">${esc(about.source)}</pre></details>` : ''}
 </main>
