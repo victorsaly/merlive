@@ -84,17 +84,79 @@ const LINKS = /** @type {const} */ ([
 /** @type {Record<string, Mark>} */
 const MARKS = { '<': 'arrow', '>': 'arrow', o: 'circle', x: 'cross' };
 
+// What a line ends with when the ; after it ends an entity code and not a statement: Mermaid's own ("#gt;",
+// "#9829;") or HTML's, by number or by a name Merlive knows ("&#60;", "&lt;"). "A --> B & C;" is neither.
+const CODE = /(?:#\w+|&#x?[0-9a-f]+|&(?:quot|amp|lt|gt|apos|nbsp))$/i;
+
 // The characters Mermaid's entity codes stand for ("#quot;", "#9829;"). A browser knows two thousand names;
 // these are the ones a diagram's words use. A code not here is left as it was typed.
 const NAMED = { quot: '"', amp: '&', lt: '<', gt: '>', apos: "'", nbsp: ' ', hearts: '♥', copy: '©', reg: '®', trade: '™', hellip: '…', mdash: '—', ndash: '–', larr: '←', rarr: '→', uarr: '↑', darr: '↓', harr: '↔', deg: '°', times: '×', divide: '÷', plusmn: '±', euro: '€', pound: '£', yen: '¥', cent: '¢', check: '✓', cross: '✗', bull: '•', middot: '·', laquo: '«', raquo: '»', lsquo: '‘', rsquo: '’', ldquo: '“', rdquo: '”', micro: 'µ', para: '¶', sect: '§', infin: '∞', ne: '≠', le: '≤', ge: '≥' };
 
-// Where a Markdown string's bold and italic begin and end, kept in the words while they are read as four
-// characters nobody types (from Unicode's private use area), so that everything done to the words is done once.
-const STRESS = { strongOn: '\uE000', strongOff: '\uE001', emOn: '\uE002', emOff: '\uE003' };
-const stressless = (/** @type {string} */ words) => words.replace(/[\uE000-\uE003]/g, '');
+// Where bold, italic and small words begin and end, kept in the words while they are read as six characters
+// nobody types (from Unicode's private use area), so that everything done to the words is done once. A Markdown
+// string's stars and HTML's own tags leave the same marks, and so give the same runs.
+const STRESS = { strongOn: '', strongOff: '', emOn: '', emOff: '' };
+const QUIET = { on: '', off: '' };
+const stressless = (/** @type {string} */ words) => words.replace(/[-]/g, '');
 
-/** The lines of a label as wordsOf gives them, with where bold and italic begin and end still marked. */
-function stressed(/** @type {string} */ text) {
+// HTML in a label. A tag is never printed: Merlive draws what the tag asks for where it has a drawing for it,
+// and otherwise keeps the words and says which tags it left out. Only these names are tags; anything else
+// between angle brackets ("List<String>", "<<interface>>", "a < b") is words, and stays as written.
+// - a pair of marks: where the words it holds begin and end;
+// - 'line': it makes a block of its own in a browser, so its words are a line of their own here;
+// - 'gone': nothing of it can be drawn, and it holds no words;
+// - 'plain': its words are kept as they are.
+/** @type {Record<string, readonly [string, string]|'line'|'gone'|'plain'>} */
+const TAGS = {
+  b: [STRESS.strongOn, STRESS.strongOff], strong: [STRESS.strongOn, STRESS.strongOff],
+  i: [STRESS.emOn, STRESS.emOff], em: [STRESS.emOn, STRESS.emOff],
+  small: [QUIET.on, QUIET.off],
+  ...Object.fromEntries('p div center ul ol li details summary h1 h2 h3 h4 h5 h6 blockquote pre table tr hr'.split(' ').map((tag) => [tag, 'line'])),
+  img: 'gone',
+  ...Object.fromEntries('u s strike del ins sub sup code kbd samp var span font a mark big tt q cite abbr label td th'.split(' ').map((tag) => [tag, 'plain'])),
+};
+const TAG = /<\/?([a-z][a-z0-9]*)(?:\s[^<>]*)?\/?>/gi;
+
+// The tags left out of the diagram being read, in the order they were met, so that it is said once for the
+// diagram and not once for every label. Nothing is kept when no diagram is being read (wordsOf on its own).
+/** @type {Set<string>|null} */
+let leftOut = null;
+
+/**
+ * Reads a diagram with a note, at the end of what is said of it, of the HTML that was left out of its words.
+ * A diagram read while another is being read (a sequence diagram, from parse) has a note of its own.
+ * @template {{warnings:string[]}} T
+ * @param {() => T} read
+ * @returns {T}
+ */
+export function notingTags(read) {
+  const outer = leftOut;
+  const mine = (leftOut = new Set());
+  try {
+    const made = read();
+    if (mine.size) made.warnings.push(`HTML that Merlive has no drawing for is left out and its words kept as plain words: ${[...mine].map((tag) => `<${tag}>${tag === 'img' ? ' (a picture in a label is not drawn)' : ''}`).join(', ')}`);
+    return made;
+  } finally {
+    leftOut = outer;
+  }
+}
+
+/** An entity code as its character, or as it was typed when it is not one a reader can see or one Merlive knows. */
+const character = (/** @type {string} */ code, /** @type {string} */ name) => {
+  const point = /^\d+$/.test(name) ? Number(name) : /^x[0-9a-f]+$/i.test(name) && code.startsWith('&') ? parseInt(name.slice(1), 16) : NaN;
+  if (Number.isNaN(point)) return (Object.hasOwn(NAMED, name) && NAMED[/** @type {keyof typeof NAMED} */ (name)]) || code;
+  // Not a character a reader can see: a control code, half of a pair, one of Merlive's own marks, or past the
+  // end of Unicode.
+  return point < 32 || (point > 126 && point < 160) || (point > 0xd7ff && point < 0xe006) || point > 0x10ffff ? code : String.fromCodePoint(point);
+};
+
+/**
+ * The lines of a label as wordsOf gives them, with where bold and italic begin and end still marked, and
+ * whether a line is quiet: every word of it written small.
+ * @param {string} text
+ * @returns {{words:string,quiet:boolean}[]}
+ */
+function marked(text) {
   let words = stressless(text).trim().replace(/^"([^]*)"$/, '$1').trim();
   const markdown = /^`[^]*`$/.test(words);
   if (markdown) {
@@ -102,42 +164,59 @@ function stressed(/** @type {string} */ text) {
       .replace(/(\*\*|__)(?=\S)([^]*?\S)\1/g, `${STRESS.strongOn}$2${STRESS.strongOff}`)
       .replace(/(^|[^\w*])([*_])(?=\S)([^*_]*?\S)\2(?!\w)/g, `$1${STRESS.emOn}$3${STRESS.emOff}`);
   }
-  return words
-    .split(markdown ? /<br\s*\/?>|\n/i : /<br\s*\/?>/i)
-    .map((line) => line
-      .replace(ICON, ' ')
-      .replace(/#(\d+|[a-z]+);/gi, (code, /** @type {string} */ name) => {
-        if (!/^\d+$/.test(name)) return NAMED[/** @type {keyof typeof NAMED} */ (name)] ?? code;
-        const point = Number(name);
-        // Not a character a reader can see: a control code, half of a pair, or past the end of Unicode.
-        return point < 32 || (point > 126 && point < 160) || (point > 0xd7ff && point < 0xe000) || point > 0x10ffff ? code : String.fromCodePoint(point);
-      })
-      .replace(/\s+/g, ' ')
-      .trim())
-    .filter((line) => stressless(line));
+  words = words.replace(TAG, (written, /** @type {string} */ name) => {
+    const tag = name.toLowerCase(), as = Object.hasOwn(TAGS, tag) ? TAGS[tag] : undefined;
+    if (!as) return written;
+    if (typeof as !== 'string') return as[written[1] === '/' ? 1 : 0];
+    leftOut?.add(tag);
+    return as === 'line' ? '<br>' : '';
+  });
+  /** @type {{words:string,quiet:boolean}[]} */
+  const lines = [];
+  // How many <small> are open: one may be opened on one line and closed on a later one.
+  let small = 0;
+  for (const line of words.split(markdown ? /<br\s*\/?>|\n/i : /<br\s*\/?>/i)) {
+    let kept = '', loud = false;
+    for (const c of line.replace(ICON, ' ')) {
+      if (c === QUIET.on) small++;
+      else if (c === QUIET.off) small = Math.max(0, small - 1);
+      else {
+        kept += c;
+        loud ||= !small && !/[\s-]/.test(c);
+      }
+    }
+    // An entity code is read after the tags, so one that spells a tag ("&lt;b&gt;") is its words.
+    kept = kept.replace(/(?:#|&#?)(\w+);/g, character).replace(/\s+/g, ' ').trim();
+    if (stressless(kept)) lines.push({ words: kept, quiet: !loud });
+  }
+  return lines;
 }
+const stressed = (/** @type {string} */ text) => marked(text).map((line) => line.words);
 
 /**
  * The words of a label as a reader should see them, in the author's own lines. Quotes come off; a Markdown
- * string keeps its words and its line breaks and loses its stars (emphasisOf says what they stressed); an
- * icon's name comes out of the words (a box draws it beside them, see iconsIn); an entity code becomes its
- * character.
+ * string keeps its words and its line breaks and loses its stars, and HTML loses its tags (emphasisOf says what
+ * they stressed); an icon's name comes out of the words (a box draws it beside them, see iconsIn); an entity
+ * code becomes its character.
  * @param {string} text
  * @returns {string[]}
  */
 export const wordsOf = (text) => stressed(text).map(stressless);
 
 /**
- * What a Markdown string made bold or italic: the label as runs of words, which put end to end are the label.
- * Nothing, when it stressed nothing.
+ * What a Markdown string or HTML made bold or italic: the label as runs of words, which put end to end are the
+ * label. Nothing, when it stressed nothing.
  * @param {string} text
  * @returns {{words:string,strong?:boolean,em?:boolean}[]|undefined}
  */
-export function emphasisOf(text) {
+export const emphasisOf = (text) => runsOf(stressed(text));
+
+/** The same of lines that are already read and still marked. */
+function runsOf(/** @type {string[]} */ lines) {
   /** @type {{words:string,strong?:boolean,em?:boolean}[]} */
   const runs = [];
   let strong = false, em = false;
-  for (const c of stressed(text).join(' ')) {
+  for (const c of lines.join(' ')) {
     if (c === STRESS.strongOn || c === STRESS.strongOff) strong = c === STRESS.strongOn;
     else if (c === STRESS.emOn || c === STRESS.emOff) em = c === STRESS.emOn;
     else {
@@ -271,12 +350,40 @@ export function hueOf(colour) {
 
 
 /**
+ * The lines of a Mermaid block, with a directive that was written over several lines ("%%{init: {" down to
+ * "}}%%") brought on to the line it began on. The lines it ran over are left empty, so every line after it
+ * keeps its number. One that is never closed is left as written, to be said where it is read.
+ * @param {string} src
+ * @returns {string[]}
+ */
+export function linesIn(src) {
+  const lines = src.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    if (!lines[i].trim().startsWith('%%{') || lines[i].includes('}%%')) continue;
+    let end = i + 1;
+    while (end < lines.length && !lines[end].includes('}%%')) end++;
+    if (end === lines.length) continue;
+    lines[i] = lines.slice(i, end + 1).map((line) => line.trim()).filter(Boolean).join(' ');
+    lines.fill('', i + 1, end + 1);
+    i = end;
+  }
+  return lines;
+}
+
+/** What is said of a directive that has no end: everything under it would be read as part of the diagram. */
+export const unclosed = (/** @type {string} */ text) => (text.startsWith('%%{') && !text.includes('}%%') ? 'this directive is never closed; end it with "}%%"' : '');
+
+/**
  * @param {string} src one Mermaid block
  * @returns {Model}
  */
 export function parse(src) {
   // A sequence diagram has a reader, rules and a drawing of its own: sequence.mjs.
   if (isSequence(src)) return /** @type {any} */ (parseSequence(src));
+  return notingTags(() => read(src));
+}
+
+function read(/** @type {string} */ src) {
   /** @type {Model} */
   const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', heading: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, meanings: {}, groups: [], warnings: [] };
   /** @type {Map<string, Node>} */
@@ -339,16 +446,45 @@ export function parse(src) {
     }
   };
 
+  // The boxes whose sentence was read from the small lines of their label, with the label as it would be
+  // without one: where the box cannot hold a sentence it gets those lines back (see settle).
+  /** @type {Map<Node, string[]>} */
+  const told = new Map();
   const say = (/** @type {Node} */ n, /** @type {string} */ words) => {
-    const lines = wordsOf(words);
+    const read = marked(words);
+    // "Name<br/><small>what it does</small>": the small lines under a name are what the box says about itself.
+    const name = read.findLastIndex((line) => !line.quiet) + 1;
+    const lines = (name && name < read.length ? read.slice(0, name) : read).map((line) => line.words);
     mark(n, iconsIn(words));
+    if (told.delete(n)) delete n.text;
+    if (lines.length < read.length) {
+      n.text = read.slice(name).map((line) => stressless(line.words)).join(' ');
+      told.set(n, read.map((line) => line.words));
+    }
+    call(n, lines);
+  };
+  /** A box's name from its lines, still marked: its label, its lines where it has more than one, what is stressed. */
+  const call = (/** @type {Node} */ n, /** @type {string[]} */ written) => {
+    const lines = written.map(stressless);
     // A box that held only an icon has no words left, and takes its id like any box with none.
     n.label = lines.join(' ') || n.id;
     if (lines.length > 1) n.breaks = lines;
     else delete n.breaks;
-    const runs = emphasisOf(words);
+    const runs = runsOf(written);
     if (runs) n.emphasis = runs;
     else delete n.emphasis;
+  };
+  /**
+   * A sentence makes a box taller than the rest, and boxes of different heights are only placed top to bottom.
+   * So in a flow its author ran left to right, and in a shape with no room under its name, the small lines stay
+   * lines of the label: which way a diagram runs is more of what it says than a quieter face is.
+   */
+  const settle = () => {
+    for (const [n, lines] of told) {
+      if (model.direction !== 'LR' && (n.shape === 'box' || n.shape === 'cylinder') && n.text) continue;
+      delete n.text;
+      call(n, lines);
+    }
   };
 
   /** Gives a box its shape. A cylinder is a store of data, and so is of the kind that holds data, like one only named as a store. */
@@ -479,14 +615,14 @@ export function parse(src) {
     }
   };
 
-  /** A line cut at each ; that is not inside quotes and does not end an entity code ("#gt;"). */
+  /** A line cut at each ; that is not inside quotes and does not end an entity code ("#gt;", "&gt;"). */
   const statementsIn = (/** @type {string} */ text) => {
     /** @type {string[]} */
     const out = [''];
     let quoted = false;
     for (const c of text) {
       if (c === '"') quoted = !quoted;
-      if (c === ';' && !quoted && !/#\w+$/.test(out[out.length - 1])) out.push('');
+      if (c === ';' && !quoted && !CODE.test(out[out.length - 1])) out.push('');
       else out[out.length - 1] += c;
     }
     return out.map((x) => x.trim()).filter(Boolean);
@@ -526,6 +662,7 @@ export function parse(src) {
     const turn = /^%%\s*turn\s*:\s*(yes|no)\s*$/.exec(text);
     if (turn) return void (model.hints.turn = turn[1] === 'yes');
     if (text.startsWith('%%{')) settings.push(text);
+    if (unclosed(text)) warn(line, unclosed(text));
     if (text.startsWith('%%')) return;
 
     if (!header) {
@@ -582,7 +719,7 @@ export function parse(src) {
   let front = 'before';
   /** @type {{text:string,line:number}|null} */
   let held = null;
-  src.split(/\r?\n/).forEach((raw, i) => {
+  linesIn(src).forEach((raw, i) => {
     const text = raw.trim();
     if (!text) return;
     if (front === 'before') {
@@ -612,6 +749,7 @@ export function parse(src) {
   // A link to a group ("g1 --> g2") is a link from the end of one to the start of the next: the last box of the
   // first that leads to no other box in it, and the first box of the second that none of its own leads to.
   reader?.done();
+  settle();
   // The innermost first, so that by the time a link to an outer group is joined, what is inside it is boxes.
   for (const g of [...model.groups].reverse()) join(g);
   function join(/** @type {{id:string,title:string,members:string[]}} */ g) {

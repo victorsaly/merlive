@@ -4,7 +4,7 @@
 // sender and off every lifeline, frames that hold exactly what is in them. The rules are in docs/SEQUENCE.md,
 // and each is a check here. Pure: text in, a model out; a model in, coordinates out.
 
-import { wordsOf } from './parse.mjs';
+import { linesIn, notingTags, unclosed, wordsOf } from './parse.mjs';
 import { wrap } from './layout.mjs';
 import { colourChecks, colourLimits, contrast, looksOf, mix } from './design.mjs';
 import { draw } from './render.mjs';
@@ -128,7 +128,7 @@ const COLOURS = new Set('aliceblue antiquewhite aqua aquamarine azure beige bisq
 /** Whether a Mermaid block is a sequence diagram: its first line that says anything, past front matter and comments. */
 export function isSequence(/** @type {string} */ src) {
   let front = 'before';
-  for (const raw of src.split(/\r?\n/)) {
+  for (const raw of linesIn(src)) {
     const text = raw.trim();
     if (!text) continue;
     if (front === 'before') {
@@ -148,7 +148,9 @@ export function isSequence(/** @type {string} */ src) {
  * @param {string} src one Mermaid block that is a sequence diagram
  * @returns {SequenceModel}
  */
-export function parseSequence(src) {
+export const parseSequence = (src) => notingTags(() => read(src));
+
+function read(/** @type {string} */ src) {
   /** @type {SequenceModel} */
   const model = { type: 'sequence', kindOfDiagram: 'sequenceDiagram', title: '', heading: '', describes: '', participants: [], items: [], blocks: [], groups: [], activations: [], mirror: true, warnings: [] };
   /** @type {Map<string, Participant>} */
@@ -311,15 +313,15 @@ export function parseSequence(src) {
     if (!message(s, line)) warn(line, `not read: "${s}"`);
   };
 
-  /** A line cut at each ; that does not end an entity code ("#59;" is how a message holds a semicolon). */
-  const statementsIn = (/** @type {string} */ text) => text.split(/(?<!#\w+);/).map((x) => x.trim()).filter(Boolean);
+  /** A line cut at each ; that does not end an entity code ("#59;" is how a message holds a semicolon, "&lt;" a <). */
+  const statementsIn = (/** @type {string} */ text) => text.split(/(?<!#\w+|&#x?[0-9a-f]+|&(?:quot|amp|lt|gt|apos|nbsp));/i).map((x) => x.trim()).filter(Boolean);
 
   /** @type {'before'|'in'|'after'} */
   let front = 'before';
   let header = false;
   /** @type {string[]|null} */
   let describing = null;
-  src.split(/\r?\n/).forEach((raw, i) => {
+  linesIn(src).forEach((raw, i) => {
     const text = raw.trim(), line = i + 1;
     if (!text) return;
     if (front === 'before') {
@@ -345,6 +347,7 @@ export function parseSequence(src) {
     const acc = /^acc(Title|Descr)\s*(?::\s*(.*)|\{\s*)$/.exec(text);
     if (acc && acc[2] === undefined) return void (describing = []);
     if (acc) return void (acc[1] === 'Title' ? (model.title = acc[2].trim()) : (model.describes = acc[2].trim()));
+    if (unclosed(text)) warn(line, unclosed(text));
     if (text.startsWith('%%')) return;
     if (!header) return void (header = true);
     for (const part of statementsIn(text)) statement(part, line);

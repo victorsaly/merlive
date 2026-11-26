@@ -88,7 +88,7 @@ describe('architecture: a service', () => {
 
   it('keeps a title in quotes with what no bare title may hold, and one a bare title could not be', () => {
     const m = arch('service api(server)["Orders API, v2"]\nservice db(database)[Händler &amp; Lager #9829;]\nservice c(server)[ Spaced  out ]');
-    assert.deepEqual(m.nodes.map((n) => n.label), ['Orders API, v2', 'Händler &amp; Lager ♥', 'Spaced out']);
+    assert.deepEqual(m.nodes.map((n) => n.label), ['Orders API, v2', 'Händler & Lager ♥', 'Spaced out']);
     assert.deepEqual(m.warnings, []);
   });
 

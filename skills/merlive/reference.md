@@ -17,7 +17,14 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A["Text with (brackets)"]` | A quoted label |
 | `A["one line<br/>and another"]` | A label in the author's own lines, up to four |
 | ``A["`**Bold** and *italic*`"]`` | A Markdown string: its words, its own line breaks, and what it makes bold or italic. On a link's words the stars come off and the words are plain |
-| `#quot;`, `#9829;` | An entity code becomes its character |
+| `#quot;`, `#9829;`, `&lt;`, `&amp;`, `&#60;` | An entity code becomes its character, Mermaid's or HTML's. It is read after the tags, so `&lt;b&gt;` is the words `<b>` |
+| `<b>`, `<strong>`, `<i>`, `<em>` in any words | Bold and italic, as a Markdown string makes them. A tag is never printed |
+| `A["Name<br/><small>what it does</small>"]` | The small lines under a name are the sentence the box says about itself: drawn under its name in a quieter face, wrapped, the box as tall as it needs. In a flow written left to right, and in a shape that is not a box or a cylinder, they stay lines of the label. `<small>` anywhere else: its words are kept |
+| `<u>`, `<s>`, `<sub>`, `<sup>`, `<code>`, `<span …>`, `<font …>`, `<a …>` | Its words are kept as plain words and the tag is left out, said once for the diagram with the tags named |
+| `<p>`, `<div>`, `<center>`, `<li>`, a heading | The same, and its words are a line of their own |
+| `<img …>` | Left out, and said: a picture in a label is not drawn |
+| `a < b`, `List<String>`, `<<interface>>` | Not HTML, so words: left as written |
+| `%%{init: {…}}%%`, on one line or over several | What Mermaid is told of itself: read past as one, from `%%{` to `}%%`, and nothing is said of it. What Merlive uses is still found in it (a packet's `bitsPerRow`, a sequence diagram's `mirrorActors`). One with no `}%%` is said |
 | `fa:fa-truck Shipped` | An icon is drawn beside its words. The drawing is Merlive's own (seventy-two of them, found by any name Font Awesome has used): nothing is fetched. One Merlive has no drawing for, or a brand's mark, is left out and named in a `note,` line |
 | `A@{ shape: diam, label: "In stock?" }` | A box written the newer way, on one line or several. Its label is kept. Every shape in the rows above is drawn as itself, by any of Mermaid's names for it; a shape Merlive has no drawing for is a box |
 | `A@{ icon: "fa:user", label: "Buyer" }` | A box with its label, and Merlive's own drawing of the icon beside it |
@@ -485,7 +492,8 @@ A block that starts `sequenceDiagram` is read, placed and checked by rules of it
 | `box Aqua Buying` … `end` | A group of participants, framed, its title inside the frame above them and wrapped to it: the colour is read past |
 | `create participant J`, `destroy J` | A participant that starts at the message that makes it, and ends in a cross |
 | `autonumber`, `autonumber 10 5` | Each message numbered, from a start and by a step |
-| `title: …`, `accTitle`, `accDescr`, front matter, `%%` comments, `<br/>`, `#9829;` | As in a flowchart |
+| `title: …`, `accTitle`, `accDescr`, front matter, `%%` comments, `%%{init: …}%%` over one line or several, `<br/>`, `#9829;` | As in a flowchart |
+| `<b>`, `<i>`, `<small>`, `<u>`, `<span …>` and other HTML in a name, a message or a note | As in a flowchart: a tag is never printed. A participant, a message and a note are drawn in one face, so the words of `<b>`, `<i>` and `<small>` are kept and are plain |
 | `link A: … @ url`, `links A: {…}` | Read past: a page of Merlive opens no links |
 
 A line that is none of these is named in a `note,` line with its number, and nothing is drawn from it. There are
