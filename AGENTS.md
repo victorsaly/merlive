@@ -61,6 +61,10 @@ For coding agents changing this repository. It follows the same habits as
   `scripts/wild.mjs` draws each and writes `docs/WILD.md` and `wild/drawn/`. Written again with `npm run wild`;
   the tests fail while they say something the code no longer does. This, not the corpus, is the measure of
   whether Merlive is good: the corpus says what is read, these say what a person's diagram comes out as.
+  `wild/compare.html` is the page to look at (Mermaid's own drawing beside Merlive's, and Victor's verdict on
+  each, kept in `index.json`); `npm run wild -- --mermaid` has Mermaid draw them again.
+- `scripts/changed.mjs`: every picture a branch draws differently from `main`, each as it was beside as it is,
+  in one page (`npm run changed`). Look at it before a pull request that changes how anything is drawn.
 - `examples/`: a real document and what Merlive draws from it. Drawn again with `npm run examples`.
 - `corpus/`: one sample of every kind of diagram Mermaid documents and of every feature of its flowcharts and its
   state, class, entity and sequence diagrams, with what each should be read as in `index.json`. `scripts/coverage.mjs` runs Merlive over all of it and writes

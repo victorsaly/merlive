@@ -43,84 +43,109 @@
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-07-enhancing-security-authentication-educational-game-development.md",
-      "block": 3
+      "block": 3,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "flow-notes.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_technical/quick-blog-image-generation.md",
-      "block": 1
+      "block": 1,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "flow-middle.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-10-ai-95-percent-control-educational-game-development.md",
-      "block": 5
+      "block": 5,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "flow-thirteen.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-06-ai-orchestrated-game-development-first-working-poc.md",
-      "block": 6
+      "block": 6,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "flow-wide.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-05-territory-management-real-world-integration-complete.md",
-      "block": 1
+      "block": 1,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "refused-crossing.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-05-territory-management-real-world-integration-complete.md",
-      "block": 2
+      "block": 2,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "refused-shared-path.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-05-ai-builds-multilingual-learning-platform.md",
-      "block": 2
+      "block": 2,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "refused-long-words.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-08-zero-downtime-blue-green-deployment-educational-platforms.md",
-      "block": 1
+      "block": 1,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "refused-mindmap.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-05-ai-builds-multilingual-learning-platform.md",
-      "block": 3
+      "block": 3,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "sequence-wide.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-04-ai-first-development-workflow-copilot-agents.md",
-      "block": 3
+      "block": 3,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "sequence-directive.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-08-azure-cost-optimization-educational-platforms-per-user-attribution.md",
-      "block": 2
+      "block": 2,
+      "verdict": "",
+      "note": ""
     },
     {
       "file": "timeline.mmd",
       "repo": "victorsaly/WorldLeadersGame",
       "commit": "965a4b5",
       "path": "docs/_posts/2025-08-05-ai-builds-multilingual-learning-platform.md",
-      "block": 1
+      "block": 1,
+      "verdict": "",
+      "note": ""
     }
-  ]
+  ],
+  "verdicts": "Victor's own word on each picture, once he has looked at it beside Mermaid's: \"\" (not looked at yet), \"fine\", or \"worse\" with a note saying what. When every sample here is fine, the next are taken from the measure."
 }

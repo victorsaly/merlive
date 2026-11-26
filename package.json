@@ -13,6 +13,7 @@
     "coverage": "node scripts/coverage.mjs && node scripts/compare.mjs --page",
     "compare": "node scripts/compare.mjs",
     "check": "npm run test:coverage",
-    "wild": "node scripts/wild.mjs"
+    "wild": "node scripts/wild.mjs",
+    "changed": "node scripts/changed.mjs"
   }
 }
