@@ -22,7 +22,7 @@ Of 94 flowcharts, 85 are drawn and 9 refused. 28 drawings are wider than 1100px.
 
 | Sample | From | Today | What is said |
 |---|---|---|---|
-| [flow-small.mmd](../wild/flow-small.mmd) | [WorldLeadersGame](https://github.com/victorsaly/WorldLeadersGame/blob/965a4b5/docs/_posts/2025-08-07-enhancing-security-authentication-educational-game-development.md), block 3 | Drawn, 344px wide |   |
+| [flow-small.mmd](../wild/flow-small.mmd) | [WorldLeadersGame](https://github.com/victorsaly/WorldLeadersGame/blob/965a4b5/docs/_posts/2025-08-07-enhancing-security-authentication-educational-game-development.md), block 3 | Drawn, 184px wide |   |
 | [flow-notes.mmd](../wild/flow-notes.mmd) | [WorldLeadersGame](https://github.com/victorsaly/WorldLeadersGame/blob/965a4b5/docs/_technical/quick-blog-image-generation.md), block 1 | Drawn, with notes, 184px wide | written left to right, drawn top to bottom: left to right it would be 1584px wide, wider than most screens. "%% turn: no" keeps it as written |
 | [flow-middle.mmd](../wild/flow-middle.mmd) | [WorldLeadersGame](https://github.com/victorsaly/WorldLeadersGame/blob/965a4b5/docs/_posts/2025-08-10-ai-95-percent-control-educational-game-development.md), block 5 | Drawn, 452px wide |   |
 | [flow-thirteen.mmd](../wild/flow-thirteen.mmd) | [WorldLeadersGame](https://github.com/victorsaly/WorldLeadersGame/blob/965a4b5/docs/_posts/2025-08-06-ai-orchestrated-game-development-first-working-poc.md), block 6 | Drawn, 546px wide |   |
