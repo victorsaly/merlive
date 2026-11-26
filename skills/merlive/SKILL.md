@@ -32,9 +32,10 @@ Three things hold throughout:
 - **Flowcharts** (`flowchart` or `graph`), **state diagrams** (`stateDiagram`), **class diagrams**
   (`classDiagram`), **entity diagrams** (`erDiagram`), **requirement diagrams** (`requirementDiagram`), **C4
   diagrams** (`C4Context` and the rest), **architecture diagrams** (`architecture-beta`) and **block diagrams**
-  (`block-beta`, on the grid their author wrote), **and sequence diagrams** (`sequenceDiagram`), which have
-  rules of their own. Timeline, gantt and the rest are left as they are, and the script names each one it
-  leaves. Tell the person which were left.
+  (`block-beta`, on the grid their author wrote), **mindmaps** (`mindmap`, as a tree), **kanban boards**
+  (`kanban`), **timelines** (`timeline`) and **packets** (`packet-beta`), each on the grid it is, **and sequence
+  diagrams** (`sequenceDiagram`), which have rules of their own. Gantt, pie and the rest are left as they are,
+  and the script names each one it leaves. Tell the person which were left.
 
 ## 2. Check first, then draw
 

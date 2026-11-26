@@ -222,7 +222,7 @@ describe('packet: placed and drawn', () => {
 
 describe('packet: the corpus', () => {
   /** @type {{file:string,covers:string,boxes:number,links:number,placedBy?:string,has?:string[],over?:string[],columns?:number,title?:string,says?:string,loses?:string}[]} */
-  const list = JSON.parse(readFileSync(join(root, 'corpus/packet.json'), 'utf8'));
+  const list = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8')).packet;
 
   it('lists every sample that is there, and every sample listed is there', () => {
     assert.deepEqual(list.map((s) => s.file).sort(), readdirSync(join(root, 'corpus/packet')).filter((f) => f.endsWith('.mmd')).map((f) => `packet/${f}`).sort());

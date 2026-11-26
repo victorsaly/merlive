@@ -140,6 +140,10 @@ export const things = [
   ['c4', 'C4 diagrams', 'A person, a system, a container or a component is a box that says what it is and a sentence of what it does;\na boundary is a group. Held to the same measure.'],
   ['architecture', 'Architecture diagrams', 'A service is a box with its icon, a group is a group, and the sides an edge leaves by say which way the\ndiagram runs. Held to the same measure.'],
   ['block', 'Block diagrams', 'Blocks joined by links are read as a flowchart is and placed by rule. One whose meaning is in its grid is\nplaced on that grid, each block in the cell its author gave it.'],
+  ['mindmap', 'Mindmaps', 'A mindmap is a tree: each line a box under the nearest line above that is further left, grown from its root\nto the right. Held to the same measure.'],
+  ['kanban', 'Kanban boards', 'A column is a group and a card a box that lists its ticket, who has it and its priority, on the grid the\nboard is. Held to the same measure.'],
+  ['timeline', 'Timelines', 'A period is a box with its events under it and a section a group round its periods, on the grid a timeline\nis. Held to the same measure.'],
+  ['packet', 'Packets', 'A field is a box as wide as the bits it takes, with its bits over its name, in rows of as many bits as the\npacket says. Held to the same measure.'],
 ];
 export const lists = ['flowchart', 'state', ...things.map(([list]) => list), 'sequence', 'kinds'];
 

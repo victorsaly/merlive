@@ -260,7 +260,7 @@ describe('mindmap: drawn', () => {
 
 describe('mindmap: the corpus', () => {
   /** @type {{file:string,covers:string,boxes:number,links:number,has?:string[],rows:number[],ends:string[][],kinds?:string[],shapes?:string[],direction?:string,title?:string,loses?:string,says?:string}[]} */
-  const list = JSON.parse(readFileSync(join(root, 'corpus/mindmap.json'), 'utf8'));
+  const list = JSON.parse(readFileSync(join(root, 'corpus/index.json'), 'utf8')).mindmap;
 
   it('lists every sample that is there, and every sample listed is there', () => {
     assert.deepEqual(list.map((s) => s.file).sort(), readdirSync(join(root, 'corpus/mindmap')).filter((f) => f.endsWith('.mmd')).map((f) => `mindmap/${f}`).sort());

@@ -4,6 +4,19 @@
 
 More kinds that the two placements there are can draw: mindmaps, kanban boards, timelines and packets.
 
+- **Mindmaps are drawn**, as a tree grown from its root to the right: every shape Mermaid has for a node (a bang
+  and a cloud in the nearest there is, and said), icons, classes, bold and italic.
+- **Kanban boards are drawn**: columns side by side, cards down each, a card's ticket, who has it and its
+  priority listed under its words. An empty column keeps its name.
+- **Timelines are drawn**: periods in a row with their events under them, sections as groups round their
+  periods, an arrow from each period to the next, left to right or top to bottom.
+- **Packets are drawn**: each field as wide as the bits it takes, its bits over its name, in rows of as many
+  bits as the packet says. A field that runs past the end of a row is drawn in parts, and each part says so.
+- **A tree is placed as a tree.** What a box leads to keeps together, in lanes of its own, and the box is in line
+  with the first of them, so no line of a tree crosses another however many branches it has.
+- **A grid may say its own measures**: its narrowest column, the room between its cells, and that nothing runs
+  between them. A block on a grid may list rows and carry a line over its name.
+
 ## 0.4.0 (2026-11-26)
 
 What a real project's documents showed: diagrams hidden behind the panel, words adrift from their lines or

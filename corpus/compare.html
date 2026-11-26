@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 406 samples, Merlive draws 382 whole and 0 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>406</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>288</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>94</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>0</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>24</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 520 samples, Merlive draws 500 whole and 0 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>520</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>393</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>107</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>0</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>20</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -91,7 +91,7 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <article class="card" data-result="less">
 <h3>A title and settings in front matter</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">Mermaid's own settings are read past: the look is the design's</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/frontmatter.png" width="271" height="123" style="--w:271" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/frontmatter.svg" width="384" height="138" style="--w:384" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/frontmatter.png" width="270" height="123" style="--w:270" alt="A title and settings in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/frontmatter.svg" width="384" height="138" style="--w:384" alt="A title and settings in front matter, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>---
 title: Order to cash
 config:
@@ -3727,7 +3727,7 @@ architecture-beta
 <article class="card" data-result="less">
 <h3>A whole diagram: groups in groups, services, a junction, edges with arrowheads and words</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">A junction is drawn as a round box with no words, the size of every other box, not as the point where lines meet. A link out of a group is drawn from the service its author named. A group's icon is not drawn: a frame is named by its title</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/architecture-whole.png" width="784" height="399" style="--w:784" alt="A whole diagram: groups in groups, services, a junction, edges with arrowheads and words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/architecture-whole.svg" width="1008" height="246" style="--w:1008" alt="A whole diagram: groups in groups, services, a junction, edges with arrowheads and words, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/architecture-whole.png" width="784" height="399" style="--w:784" alt="A whole diagram: groups in groups, services, a junction, edges with arrowheads and words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/architecture-whole.svg" width="1008" height="318" style="--w:1008" alt="A whole diagram: groups in groups, services, a junction, edges with arrowheads and words, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>architecture-beta
   group edge(cloud)[Public]
   group cloud(cloud)[Azure]
@@ -4214,6 +4214,1403 @@ block
   ID --&gt; D
   C --&gt; D
   style B fill:#969,stroke:#333,stroke-width:4px
+</pre></details>
+</article>
+</section>
+<section><h2>Mindmaps, feature by feature</h2>
+<article class="card" data-result="drawn">
+<h3>A mindmap: a root, and what is under it by how far in each line is written</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-tree.png" width="342" height="417" style="--w:342" alt="A mindmap: a root, and what is under it by how far in each line is written, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-tree.svg" width="584" height="352" style="--w:584" alt="A mindmap: a root, and what is under it by how far in each line is written, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    Buying
+      Quotes
+      Orders
+    Paying
+      Invoices
+      Payments
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A root with nothing under it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-root-alone.png" width="123" height="54" style="--w:123" alt="A root with nothing under it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-root-alone.svg" width="184" height="100" style="--w:184" alt="A root with nothing under it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  Ordering
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Five steps in from the root</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-deep.png" width="138" height="491" style="--w:138" alt="Five steps in from the root, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-deep.svg" width="984" height="184" style="--w:984" alt="Five steps in from the root, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  Ordering
+    Buying
+      Orders
+        Lines
+          Quantities
+    Paying
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Lines written unevenly: each is under the nearest line above it that is further left</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-uneven.png" width="304" height="394" style="--w:304" alt="Lines written unevenly: each is under the nearest line above it that is further left, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-uneven.svg" width="584" height="268" style="--w:584" alt="Lines written unevenly: each is under the nearest line above it that is further left, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+    Ordering
+        Buying
+            Quotes
+          Orders
+      Paying
+         Invoices
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Lines set in with tabs</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-tabs.png" width="123" height="316" style="--w:123" alt="Lines set in with tabs, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-tabs.svg" width="584" height="184" style="--w:584" alt="Lines set in with tabs, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+	Ordering
+		Buying
+			Quotes
+		Paying
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A root written at the margin</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-margin.png" width="408" height="54" style="--w:408" alt="A root written at the margin, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-margin.svg" width="384" height="184" style="--w:384" alt="A root written at the margin, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+Ordering
+  Buying
+  Paying
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Empty lines between the lines of a tree</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-blank-lines.png" width="123" height="316" style="--w:123" alt="Empty lines between the lines of a tree, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-blank-lines.svg" width="584" height="184" style="--w:584" alt="Empty lines between the lines of a tree, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  Ordering
+
+    Buying
+
+      Quotes
+
+    Paying
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>The first word with a semicolon after it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-semicolon.png" width="300" height="220" style="--w:300" alt="The first word with a semicolon after it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-semicolon.svg" width="384" height="184" style="--w:384" alt="The first word with a semicolon after it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap;
+  Ordering
+    Buying
+    Paying
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A line of bare words: the shape Mermaid gives when none is written</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-shape-default.png" width="566" height="54" style="--w:566" alt="A line of bare words: the shape Mermaid gives when none is written, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-shape-default.svg" width="384" height="216" style="--w:384" alt="A line of bare words: the shape Mermaid gives when none is written, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  Ordering
+    Three bare words
+    More of them here
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A square</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-shape-square.png" width="408" height="64" style="--w:408" alt="A square, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-shape-square.svg" width="384" height="184" style="--w:384" alt="A square, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root[Ordering]
+    buy[Buying]
+    pay[Paying]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A rounded square</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-shape-rounded.png" width="378" height="74" style="--w:378" alt="A rounded square, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-shape-rounded.svg" width="384" height="184" style="--w:384" alt="A rounded square, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root(Ordering)
+    buy(Buying)
+    pay(Paying)
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A circle</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-shape-circle.png" width="348" height="103" style="--w:348" alt="A circle, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-shape-circle.svg" width="384" height="184" style="--w:384" alt="A circle, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    buy((Buying))
+    pay((Paying))
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A hexagon</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-shape-hexagon.png" width="414" height="64" style="--w:414" alt="A hexagon, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-shape-hexagon.svg" width="384" height="184" style="--w:384" alt="A hexagon, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root{{Ordering}}
+    buy{{Buying}}
+    pay{{Paying}}
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A bang</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A bang is a box with a heavy outline, not a burst</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-shape-bang.png" width="462" height="258" style="--w:462" alt="A bang, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-shape-bang.svg" width="384" height="268" style="--w:384" alt="A bang, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  Ordering
+    late))Late orders((
+    lost))Lost invoices((
+    Paying
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A cloud</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A cloud is a round-ended box with a dashed outline, not a cloud</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-shape-cloud.png" width="431" height="275" style="--w:431" alt="A cloud, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-shape-cloud.svg" width="384" height="316" style="--w:384" alt="A cloud, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  Ordering
+    idea)A supplier portal(
+    wish)Orders by voice(
+    Paying
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A circle, a hexagon, a square and bare words in one tree</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-shapes.png" width="288" height="474" style="--w:288" alt="A circle, a hexagon, a square and bare words in one tree, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-shapes.svg" width="584" height="268" style="--w:584" alt="A circle, a hexagon, a square and bare words in one tree, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    buy{{Buying}}
+      quote[Quotes]
+      Orders
+    pay{{Paying}}
+      inv[Invoices]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A square and a rounded square in one tree</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A square and a rounded square are the same box: its corners are the design's</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-shapes-alike.png" width="378" height="103" style="--w:378" alt="A square and a rounded square in one tree, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-shapes-alike.svg" width="384" height="184" style="--w:384" alt="A square and a rounded square in one tree, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    buy[Buying]
+    pay(Paying)
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An id apart from its words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-id-label.png" width="184" height="395" style="--w:184" alt="An id apart from its words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-id-label.svg" width="584" height="216" style="--w:584" alt="An id apart from its words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    buy[Buying things]
+      q1[Asking for quotes]
+    pay[Paying for them]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An id of several words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-id-words.png" width="388" height="103" style="--w:388" alt="An id of several words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-id-words.svg" width="384" height="184" style="--w:384" alt="An id of several words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    the buying side[Buying]
+    the paying side[Paying]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A shape with no id before it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-no-id.png" width="390" height="103" style="--w:390" alt="A shape with no id before it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-no-id.svg" width="384" height="184" style="--w:384" alt="A shape with no id before it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  ((Ordering))
+    [Buying]
+    {{Paying}}
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Bare words with a bracket in them: what is before it is the id</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-bare-brackets.png" width="409" height="74" style="--w:409" alt="Bare words with a bracket in them: what is before it is the id, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-bare-brackets.svg" width="384" height="184" style="--w:384" alt="Bare words with a bracket in them: what is before it is the id, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  Ordering
+    Costs (each month)
+    Orders (open)
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Words in quotes, with a colon and brackets in them</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-quoted.png" width="544" height="103" style="--w:544" alt="Words in quotes, with a colon and brackets in them, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-quoted.svg" width="384" height="216" style="--w:384" alt="Words in quotes, with a colon and brackets in them, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    a[&quot;Paid: in full (or in part)&quot;]
+    b[&quot;Sent [by post]&quot;]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Two lines of the same words: two boxes</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-same-words.png" width="160" height="404" style="--w:160" alt="Two lines of the same words: two boxes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-same-words.svg" width="584" height="184" style="--w:584" alt="Two lines of the same words: two boxes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  Ordering
+    Approval
+      By a manager
+    Approval
+      By finance
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>An icon, on the line under its box</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-icon.png" width="290" height="278" style="--w:290" alt="An icon, on the line under its box, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-icon.svg" width="384" height="268" style="--w:384" alt="An icon, on the line under its box, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    Catalogue
+    ::icon(fa fa-book)
+    Delivery
+    ::icon(fa fa-truck)
+    Paying
+      ::icon(fa fa-credit-card)
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>An icon Merlive has no drawing for</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">The icon is left out</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-icon-unknown.png" width="407" height="103" style="--w:407" alt="An icon Merlive has no drawing for, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-icon-unknown.svg" width="384" height="184" style="--w:384" alt="An icon Merlive has no drawing for, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    Write-offs
+    ::icon(mdi mdi-skull-outline)
+    Paying
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A class, on the line under its box</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A class has no colour of its own: Mermaid takes one from the page it is on</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-class.png" width="462" height="103" style="--w:462" alt="A class, on the line under its box, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-class.svg" width="384" height="216" style="--w:384" alt="A class, on the line under its box, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    Overdue invoices
+    :::urgent large
+    Paying
+    %% kind urgent: Needs doing today
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A class for the root</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-class-root.png" width="388" height="103" style="--w:388" alt="A class for the root, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-class-root.svg" width="384" height="184" style="--w:384" alt="A class for the root, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+  :::company
+    Buying
+    Paying
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A Markdown string: bold and italic</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-markdown.png" width="622" height="123" style="--w:622" alt="A Markdown string: bold and italic, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-markdown.svg" width="384" height="216" style="--w:384" alt="A Markdown string: bold and italic, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  id1[&quot;`**Ordering** at the firm`&quot;]
+    id2[&quot;`Orders *over* the limit`&quot;]
+    id3[&quot;`Paid ***on the day***`&quot;]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A Markdown string of several lines</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-markdown-lines.png" width="465" height="112" style="--w:465" alt="A Markdown string of several lines, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-markdown-lines.svg" width="384" height="248" style="--w:384" alt="A Markdown string of several lines, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  id1[&quot;`**Ordering**
+from quote
+to payment`&quot;]
+    id2[&quot;`Approved by
+a manager`&quot;]
+    Paying
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Bold and italic with no Markdown string round them</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-markdown-plain.png" width="507" height="108" style="--w:507" alt="Bold and italic with no Markdown string round them, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-markdown-plain.svg" width="384" height="216" style="--w:384" alt="Bold and italic with no Markdown string round them, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((**Ordering**))
+    buy[*Buying* things]
+    **Paying** for them
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A line broken with &lt;br/&gt;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-line-break.png" width="462" height="103" style="--w:462" alt="A line broken with &lt;br/&gt;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-line-break.svg" width="384" height="216" style="--w:384" alt="A line broken with &lt;br/&gt;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    Approved&lt;br/&gt;by a manager
+    b[Paid&lt;br/&gt;on the day]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Words long enough to be wrapped</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-long-words.png" width="690" height="117" style="--w:690" alt="Words long enough to be wrapped, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-long-words.svg" width="576" height="216" style="--w:576" alt="Words long enough to be wrapped, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    Orders over the limit are approved by a manager first
+    b[Invoices are matched to the order and the delivery note]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Words in other scripts, and an emoji</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-unicode.png" width="350" height="301" style="--w:350" alt="Words in other scripts, and an emoji, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-unicode.svg" width="384" height="316" style="--w:384" alt="Words in other scripts, and an emoji, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Zamówienia))
+    Wycena 🧾
+    支払い
+    Paiement à 30 jours
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A comment on a line of its own, and %% after words, which Mermaid keeps as words</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-comments.png" width="236" height="365" style="--w:236" alt="A comment on a line of its own, and %% after words, which Mermaid keeps as words, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-comments.svg" width="584" height="216" style="--w:584" alt="A comment on a line of its own, and %% after words, which Mermaid keeps as words, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    %% the buying side
+    Buying
+      %% and what comes of it
+      Orders
+    Paid 100 %% of the time
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title in front matter</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-frontmatter.png" width="388" height="103" style="--w:388" alt="A title in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-frontmatter.svg" width="384" height="222" style="--w:384" alt="A title in front matter, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: Ordering, from quote to payment
+---
+mindmap
+  root((Ordering))
+    Buying
+    Paying
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Merlive's own lines: a note on a box, by its id</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-notes.png" width="388" height="103" style="--w:388" alt="Merlive's own lines: a note on a box, by its id, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-notes.svg" width="384" height="184" style="--w:384" alt="Merlive's own lines: a note on a box, by its id, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    buy[Buying]
+    pay[Paying]
+  %% note buy: Starts with a quote from the supplier
+  %% note pay: Thirty days after the invoice
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A tree of many leaves</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-bushy.png" width="691" height="429" style="--w:691" alt="A tree of many leaves, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-bushy.svg" width="584" height="856" style="--w:584" alt="A tree of many leaves, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>mindmap
+  root((Ordering))
+    Buying
+      Quotes
+      Orders
+      Approvals
+      Suppliers
+    Receiving
+      Deliveries
+      Returns
+      Stock
+    Paying
+      Invoices
+      Payments
+      Credit notes
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A whole mindmap: shapes, icons, a class, bold and broken lines</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap-whole.png" width="704" height="439" style="--w:704" alt="A whole mindmap: shapes, icons, a class, bold and broken lines, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap-whole.svg" width="784" height="654" style="--w:784" alt="A whole mindmap: shapes, icons, a class, bold and broken lines, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: How ordering works
+---
+mindmap
+  root((Ordering))
+    Buying
+    ::icon(fa fa-shopping-cart)
+      quote[Ask for **quotes**]
+      order[Raise the order]
+        Approved by&lt;br/&gt;a manager
+        :::control
+    Receiving
+    ::icon(fa fa-truck)
+      Check the delivery
+      ret{{Returns}}
+    Paying
+    ::icon(fa fa-credit-card)
+      inv[Match the invoice]
+      :::control
+      Pay in *thirty* days
+  %% kind control: A check before money moves
+</pre></details>
+</article>
+</section>
+<section><h2>Kanban boards, feature by feature</h2>
+<article class="card" data-result="drawn">
+<h3>A kanban board: columns side by side, and the cards of each down it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-columns.png" width="630" height="148" style="--w:630" alt="A kanban board: columns side by side, and the cards of each down it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-columns.svg" width="544" height="230" style="--w:544" alt="A kanban board: columns side by side, and the cards of each down it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]
+    chase[Chase the supplier]
+  doing[Doing]
+    check[Check the stock]
+  done[Done]
+    pay[Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Columns and cards written with no brackets: each is called by what was written</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-bare.png" width="425" height="148" style="--w:425" alt="Columns and cards written with no brackets: each is called by what was written, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-bare.svg" width="376" height="230" style="--w:376" alt="Columns and cards written with no brackets: each is called by what was written, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  To do
+    Raise the order
+    Chase the supplier
+  Done
+    Pay the invoice
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Ids with a hyphen or a dot in them, a card called by its id, and one id written for two cards</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-ids.png" width="425" height="197" style="--w:425" alt="Ids with a hyphen or a dot in them, a card called by its id, and one id written for two cards, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-ids.svg" width="376" height="290" style="--w:376" alt="Ids with a hyphen or a dot in them, a card called by its id, and one id written for two cards, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  to-do[To do]
+    t.1[Raise the order]
+    2nd[Chase the supplier]
+    raise
+  done
+    t.1[Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A column with no cards in it yet</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-empty-column.png" width="630" height="148" style="--w:630" alt="A column with no cards in it yet, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-empty-column.svg" width="544" height="230" style="--w:544" alt="A column with no cards in it yet, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]
+    chase[Chase the supplier]
+  doing[Doing]
+  done[Done]
+    pay[Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Who has a card: assigned</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-assigned.png" width="425" height="172" style="--w:425" alt="Who has a card: assigned, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-assigned.svg" width="376" height="286" style="--w:376" alt="Who has a card: assigned, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]@{ assigned: 'Amara' }
+    chase[Chase the supplier]@{ assigned: Ben }
+  done[Done]
+    pay[Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>The ticket a card is for, bare, in quotes or a number</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-ticket.png" width="425" height="172" style="--w:425" alt="The ticket a card is for, bare, in quotes or a number, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-ticket.svg" width="376" height="286" style="--w:376" alt="The ticket a card is for, bare, in quotes or a number, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]@{ ticket: PO-1041 }
+    chase[Chase the supplier]@{ ticket: &quot;PO-1042&quot; }
+  done[Done]
+    pay[Pay the invoice]@{ ticket: 77 }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>How pressing a card is: the four priorities Mermaid draws</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A priority is said in words on its card, where Mermaid draws a colour down the side of the card</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-priority.png" width="220" height="246" style="--w:220" alt="How pressing a card is: the four priorities Mermaid draws, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-priority.svg" width="240" height="494" style="--w:240" alt="How pressing a card is: the four priorities Mermaid draws, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]@{ priority: 'Very High' }
+    chase[Chase the supplier]@{ priority: 'High' }
+    file[File the delivery note]@{ priority: 'Low' }
+    tidy[Tidy the old quotes]@{ priority: 'Very Low' }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A priority Mermaid has no mark for</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Kept as written and said, where Mermaid draws nothing for it</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-priority-other.png" width="220" height="148" style="--w:220" alt="A priority Mermaid has no mark for, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-priority-other.svg" width="240" height="254" style="--w:240" alt="A priority Mermaid has no mark for, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]@{ priority: 'Medium' }
+    chase[Chase the supplier]@{ priority: 'High' }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A ticket, who has it and how pressing it is, all on one card, in any order</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A priority is said in words on its card, where Mermaid draws a colour down the side of the card</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-metadata.png" width="425" height="172" style="--w:425" alt="A ticket, who has it and how pressing it is, all on one card, in any order, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-metadata.svg" width="376" height="334" style="--w:376" alt="A ticket, who has it and how pressing it is, all on one card, in any order, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]@{ ticket: PO-1041, assigned: 'Amara', priority: 'High' }
+    chase[Chase the supplier]@{ assigned: 'Ben', ticket: PO-1042 }
+  done[Done]
+    pay[Pay the invoice]@{ priority: 'Low', ticket: PO-1038, assigned: 'Chidi' }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>What is set on a card, written over several lines</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A priority is said in words on its card, where Mermaid draws a colour down the side of the card</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-metadata-lines.png" width="220" height="160" style="--w:220" alt="What is set on a card, written over several lines, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-metadata-lines.svg" width="208" height="290" style="--w:208" alt="What is set on a card, written over several lines, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]@{
+      ticket: PO-1041
+      assigned: &quot;Amara&quot;
+      priority: &quot;High&quot;
+    }
+    chase[Chase the supplier]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Something set on a card that a board has no place for</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Passed over and said, where Mermaid passes over it and says nothing</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-metadata-other.png" width="220" height="111" style="--w:220" alt="Something set on a card that a board has no place for, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-metadata-other.svg" width="208" height="182" style="--w:208" alt="Something set on a card that a board has no place for, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]@{ ticket: PO-1041, due: Friday, icon: &quot;truck&quot; }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A card's words set as its label</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-label.png" width="220" height="160" style="--w:220" alt="A card's words set as its label, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-label.svg" width="208" height="258" style="--w:208" alt="A card's words set as its label, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise]@{ label: &quot;Raise the order&quot;, ticket: PO-1041 }
+    chase@{ label: &quot;Chase the supplier&quot; }
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Something set on a column, which neither Mermaid nor Merlive draws</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">Passed over and said, where Mermaid passes over it and says nothing</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-column-metadata.png" width="425" height="99" style="--w:425" alt="Something set on a column, which neither Mermaid nor Merlive draws, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-column-metadata.svg" width="376" height="154" style="--w:376" alt="Something set on a column, which neither Mermaid nor Merlive draws, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]@{ assigned: 'Amara' }
+    raise[Raise the order]
+  done[Done]
+    pay[Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>Tickets with a place they link to, set in front matter</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A ticket is listed on its card and is not a link out: a picture of Merlive's goes nowhere</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-ticket-base-url.png" width="425" height="111" style="--w:425" alt="Tickets with a place they link to, set in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-ticket-base-url.svg" width="376" height="182" style="--w:376" alt="Tickets with a place they link to, set in front matter, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+config:
+  kanban:
+    ticketBaseUrl: &quot;https://example.com/orders/#TICKET#&quot;
+---
+kanban
+  todo[To do]
+    raise[Raise the order]@{ ticket: PO-1041 }
+  done[Done]
+    pay[Pay the invoice]@{ ticket: PO-1038 }
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Front matter with a title</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-frontmatter.png" width="425" height="99" style="--w:425" alt="Front matter with a title, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-frontmatter.svg" width="376" height="192" style="--w:376" alt="Front matter with a title, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: Orders this week
+---
+kanban
+  todo[To do]
+    raise[Raise the order]
+  done[Done]
+    pay[Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Words in quotes, with a comma, a bracket and a parenthesis in them</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-quoted.png" width="220" height="172" style="--w:220" alt="Words in quotes, with a comma, a bracket and a parenthesis in them, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-quoted.svg" width="240" height="230" style="--w:240" alt="Words in quotes, with a comma, a bracket and a parenthesis in them, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[&quot;To do, this week&quot;]
+    raise[&quot;Raise the order [urgent]&quot;]
+    chase[&quot;Chase the supplier (again)&quot;]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A Markdown string: bold and italic on a card</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-markdown.png" width="220" height="148" style="--w:220" alt="A Markdown string: bold and italic on a card, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-markdown.svg" width="208" height="230" style="--w:208" alt="A Markdown string: bold and italic on a card, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[&quot;`**Raise** the order`&quot;]
+    chase[&quot;`Chase the *supplier*`&quot;]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A line its author broke, with &lt;br/&gt; and by going on to the next line inside quotes</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-line-break.png" width="220" height="245" style="--w:220" alt="A line its author broke, with &lt;br/&gt; and by going on to the next line inside quotes, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-line-break.svg" width="240" height="290" style="--w:240" alt="A line its author broke, with &lt;br/&gt; and by going on to the next line inside quotes, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order&lt;br/&gt;for the warehouse]
+    chase[&quot;Chase the supplier
+before Friday&quot;]
+    pay[Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Entity codes in the words of a column and of a card</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-entity.png" width="220" height="148" style="--w:220" alt="Entity codes in the words of a column and of a card, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-entity.svg" width="208" height="214" style="--w:208" alt="Entity codes in the words of a column and of a card, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[Raise #amp; chase]
+    raise[Orders #gt; 500]
+    chase[Say #quot;late#quot; to the buyer]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Every way Mermaid lets the words of a card be written, each drawn as a card</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-shapes.png" width="220" height="344" style="--w:220" alt="Every way Mermaid lets the words of a card be written, each drawn as a card, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-shapes.svg" width="208" height="518" style="--w:208" alt="Every way Mermaid lets the words of a card be written, each drawn as a card, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo(To do)
+    raise(Raise the order)
+    chase((Chase the supplier))
+    check{{Check the stock}}
+    file))File the note((
+    tidy)Tidy the quotes(
+    [Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Comments, on lines of their own and after a card</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-comments.png" width="425" height="148" style="--w:425" alt="Comments, on lines of their own and after a card, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-comments.svg" width="376" height="230" style="--w:376" alt="Comments, on lines of their own and after a card, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  %% what is still to do
+  todo[To do]
+    raise[Raise the order] %% this week
+    chase[Chase the supplier]
+  %% and what is not
+  done[Done]
+    pay[Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Cards written at different depths, and with a tab: anything further in than a column is its card</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-deep.png" width="425" height="197" style="--w:425" alt="Cards written at different depths, and with a tab: anything further in than a column is its card, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-deep.svg" width="376" height="306" style="--w:376" alt="Cards written at different depths, and with a tab: anything further in than a column is its card, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+todo[To do]
+  raise[Raise the order]
+      chase[Chase the supplier]
+   check[Check the stock]
+done[Done]
+	pay[Pay the invoice]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Long words on a card and in the name of a column</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-long-words.png" width="425" height="244" style="--w:425" alt="Long words on a card and in the name of a column, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-long-words.svg" width="696" height="230" style="--w:696" alt="Long words on a card and in the name of a column, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order for the new warehouse shelving]
+    chase[Chase the supplier about the pallets that were short last month]
+  done[Done and paid for in full]
+    pay[Pay]
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Merlive's own lines on a board: a note on a card</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-note.png" width="425" height="148" style="--w:425" alt="Merlive's own lines on a board: a note on a card, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-note.svg" width="376" height="230" style="--w:376" alt="Merlive's own lines on a board: a note on a card, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>kanban
+  todo[To do]
+    raise[Raise the order]
+    chase[Chase the supplier]
+  done[Done]
+    pay[Pay the invoice]
+  %% note chase: Third time of asking: the pallets were short again
+  %% note pay: Paid on the last day of the month
+</pre></details>
+</article>
+<article class="card" data-result="less">
+<h3>A whole board: five columns, one of them empty, cards with and without tickets, people and priorities, a title and a place tickets link to</h3>
+<p class="result"><b>Drawn, less something</b> <span class="why">A priority is said in words on its card, where Mermaid draws a colour down the side; a ticket is not a link out</span></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban-whole.png" width="784" height="212" style="--w:784" alt="A whole board: five columns, one of them empty, cards with and without tickets, people and priorities, a title and a place tickets link to, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban-whole.svg" width="1200" height="432" style="--w:1200" alt="A whole board: five columns, one of them empty, cards with and without tickets, people and priorities, a title and a place tickets link to, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: Orders this week
+config:
+  kanban:
+    ticketBaseUrl: 'https://example.com/orders/#TICKET#'
+---
+kanban
+  todo[To do]
+    quote[Ask three suppliers for a quote]
+    raise[Raise the order for the shelving]@{ ticket: PO-1041, assigned: 'Amara', priority: 'High' }
+    file[File last month's delivery notes]@{ priority: 'Very Low' }
+  doing[In hand]
+    chase[Chase the supplier about the short pallets]@{ ticket: PO-1036, assigned: 'Ben', priority: 'Very High' }
+    check[Check the stock]@{ assigned: 'Chidi' }
+  waiting[Waiting on the buyer]
+    approve[Approve the overspend]@{ ticket: PO-1040, assigned: 'Dita' }
+  done[Done]
+    pay[Pay the invoice]@{ ticket: PO-1038, assigned: 'Amara' }
+    book[Book the delivery in]@{ ticket: PO-1038 }
+  dropped[Cannot be done]
+</pre></details>
+</article>
+</section>
+<section><h2>Timelines, feature by feature</h2>
+<article class="card" data-result="drawn">
+<h3>Periods, each with one event: a period is a box, its event a box under it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-periods.png" width="784" height="326" style="--w:784" alt="Periods, each with one event: a period is a box, its event a box under it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-periods.svg" width="536" height="192" style="--w:536" alt="Periods, each with one event: a period is a box, its event a box under it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised
+  Tuesday : Approved
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title, drawn above the picture</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-title.png" width="784" height="372" style="--w:784" alt="A title, drawn above the picture, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-title.svg" width="536" height="230" style="--w:536" alt="A title, drawn above the picture, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  title The order's week
+  Monday : Raised
+  Tuesday : Approved
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Several events of one period on its line</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-events-same-line.png" width="784" height="415" style="--w:784" alt="Several events of one period on its line, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-events-same-line.svg" width="536" height="392" style="--w:536" alt="Several events of one period on its line, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised
+  Tuesday : Approved : Sent to the supplier
+  Friday : Delivered : Checked : Invoiced
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Events on the lines after their period, each line a colon and what happened</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-events-following-lines.png" width="784" height="415" style="--w:784" alt="Events on the lines after their period, each line a colon and what happened, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-events-following-lines.svg" width="536" height="392" style="--w:536" alt="Events on the lines after their period, each line a colon and what happened, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised
+  Tuesday : Approved
+          : Sent to the supplier
+  Friday : Delivered
+         : Checked : Invoiced
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Periods in which nothing is said to have happened</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-period-alone.png" width="784" height="272" style="--w:784" alt="Periods in which nothing is said to have happened, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-period-alone.svg" width="712" height="192" style="--w:712" alt="Periods in which nothing is said to have happened, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised
+  Tuesday
+  Wednesday
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>No space before a colon</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-no-spaces.png" width="784" height="371" style="--w:784" alt="No space before a colon, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-no-spaces.svg" width="536" height="284" style="--w:536" alt="No space before a colon, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday: Raised
+  Tuesday: Approved: Sent
+  Friday: Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A colon with no space after it is part of the words (09:30)</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-colon-in-event.png" width="784" height="482" style="--w:784" alt="A colon with no space after it is part of the words (09:30), as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-colon-in-event.svg" width="360" height="300" style="--w:360" alt="A colon with no space after it is part of the words (09:30), as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised at 09:30
+  Tuesday : Approved:by the manager : Sent
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>The code for a colon in a period (#colon;)</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-colon-code.png" width="784" height="409" style="--w:784" alt="The code for a colon in a period (#colon;), as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-colon-code.svg" width="360" height="208" style="--w:360" alt="The code for a colon in a period (#colon;), as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Week 1 #colon; buying : Raised
+  Week 2 #colon; delivery : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Periods that are words, not dates</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-words-not-dates.png" width="784" height="371" style="--w:784" alt="Periods that are words, not dates, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-words-not-dates.svg" width="536" height="316" style="--w:536" alt="Periods that are words, not dates, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Before the order : A need is spotted
+  While it is open : Raised : Approved
+  After it is closed : Paid
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A line break in a period and in an event (&lt;br&gt;)</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-line-break.png" width="784" height="426" style="--w:784" alt="A line break in a period and in an event (&lt;br&gt;), as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-line-break.svg" width="360" height="224" style="--w:360" alt="A line break in a period and in an event (&lt;br&gt;), as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised &lt;br&gt;by the buyer
+  Tuesday&lt;br&gt;morning : Approved
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Events too long for one line, wrapped in their box</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-long-text.png" width="784" height="382" style="--w:784" alt="Events too long for one line, wrapped in their box, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-long-text.svg" width="1016" height="224" style="--w:1016" alt="Events too long for one line, wrapped in their box, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : The buyer raises an order for everything the department needs for the quarter ahead
+  Tuesday : Approved
+  Friday : Delivered to the warehouse and checked against the order line by line
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Sections: each a group round the periods after it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-sections.png" width="784" height="507" style="--w:784" alt="Sections: each a group round the periods after it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-sections.svg" width="608" height="360" style="--w:608" alt="Sections: each a group round the periods after it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  title From order to invoice
+  section Buying
+    Monday : Raised
+    Tuesday : Approved
+  section Delivery
+    Friday : Delivered : Invoiced
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Sections of one period and of several, with events of different numbers</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-sections-uneven.png" width="784" height="361" style="--w:784" alt="Sections of one period and of several, with events of different numbers, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-sections-uneven.svg" width="1008" height="414" style="--w:1008" alt="Sections of one period and of several, with events of different numbers, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  section Buying
+    Monday : Raised : Checked : Approved
+  section Waiting
+    Tuesday
+    Wednesday
+    Thursday : Chased
+  section Delivery
+    Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A section with a long name</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-section-long-name.png" width="784" height="559" style="--w:784" alt="A section with a long name, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-section-long-name.svg" width="1042" height="230" style="--w:1042" alt="A section with a long name, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  section Everything the buyer does before the supplier hears of it
+    Monday : Raised
+  section Delivery
+    Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Left to right, said (timeline LR)</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-direction-lr.png" width="784" height="371" style="--w:784" alt="Left to right, said (timeline LR), as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-direction-lr.svg" width="536" height="284" style="--w:536" alt="Left to right, said (timeline LR), as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline LR
+  Monday : Raised
+  Tuesday : Approved : Sent
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Top to bottom (timeline TD): periods one under another, events beside each</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-direction-td.png" width="745" height="423" style="--w:745" alt="Top to bottom (timeline TD): periods one under another, events beside each, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-direction-td.svg" width="360" height="414" style="--w:360" alt="Top to bottom (timeline TD): periods one under another, events beside each, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline TD
+  title The order's week
+  Monday : Raised
+  Tuesday : Approved : Sent
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Top to bottom with sections, one under another</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-direction-td-sections.png" width="745" height="505" style="--w:745" alt="Top to bottom with sections, one under another, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-direction-td-sections.svg" width="384" height="582" style="--w:384" alt="Top to bottom with sections, one under another, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline TD
+  title From order to invoice
+  section Buying
+    Monday : Raised
+           : Checked
+    Tuesday : Approved
+  section Delivery
+    Friday : Delivered : Invoiced
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title in front matter</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-frontmatter.png" width="784" height="326" style="--w:784" alt="A title in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-frontmatter.svg" width="536" height="230" style="--w:536" alt="A title in front matter, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: The order's week
+---
+timeline
+  Monday : Raised
+  Tuesday : Approved
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>One colour for every period (disableMulticolor), read past: the colours are the design's</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-one-colour.png" width="784" height="326" style="--w:784" alt="One colour for every period (disableMulticolor), read past: the colours are the design's, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-one-colour.svg" width="536" height="192" style="--w:536" alt="One colour for every period (disableMulticolor), read past: the colours are the design's, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+config:
+  timeline:
+    disableMulticolor: true
+---
+timeline
+  Monday : Raised
+  Tuesday : Approved
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A theme and its colours in front matter, read past: the colours are the design's</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-theme.png" width="784" height="409" style="--w:784" alt="A theme and its colours in front matter, read past: the colours are the design's, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-theme.svg" width="360" height="192" style="--w:360" alt="A theme and its colours in front matter, read past: the colours are the design's, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+config:
+  theme: forest
+  themeVariables:
+    cScale0: &quot;#ff0000&quot;
+    cScaleLabel0: &quot;#ffffff&quot;
+---
+timeline
+  Monday : Raised
+  Tuesday : Approved
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Comments on lines of their own</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-comments.png" width="784" height="326" style="--w:784" alt="Comments on lines of their own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-comments.svg" width="536" height="192" style="--w:536" alt="Comments on lines of their own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  %% the week an order takes
+  Monday : Raised
+  %% nothing happens on Wednesday
+  Tuesday : Approved
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>What the picture is called and shows, for one who cannot see it</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-accessible.png" width="784" height="326" style="--w:784" alt="What the picture is called and shows, for one who cannot see it, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-accessible.svg" width="536" height="192" style="--w:536" alt="What the picture is called and shows, for one who cannot see it, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  accTitle: The week an order takes
+  accDescr: Raised on Monday, approved on Tuesday, delivered on Friday
+  Monday : Raised
+  Tuesday : Approved
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A description over several lines (accDescr { })</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-accessible-lines.png" width="784" height="409" style="--w:784" alt="A description over several lines (accDescr { }), as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-accessible-lines.svg" width="360" height="192" style="--w:360" alt="A description over several lines (accDescr { }), as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  accDescr {
+    Raised on Monday,
+    delivered on Friday
+  }
+  Monday : Raised
+  Friday : Delivered
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Merlive's own lines: a note for a period and for an event, and what a kind means</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-notes.png" width="784" height="371" style="--w:784" alt="Merlive's own lines: a note for a period and for an event, and what a kind means, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-notes.svg" width="536" height="284" style="--w:536" alt="Merlive's own lines: a note for a period and for an event, and what a kind means, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised
+  Tuesday : Approved : Sent
+  Friday : Delivered
+  %% note period2: The busy day
+  %% note event2_2: By courier, to the supplier's own address
+  %% kind period: Day
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Two periods of one name: each is its own</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-same-names.png" width="784" height="326" style="--w:784" alt="Two periods of one name: each is its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-same-names.svg" width="536" height="192" style="--w:536" alt="Two periods of one name: each is its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised
+  Monday : Raised again
+  Tuesday : Approved
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Nine periods: a timeline as long as it was written</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-many-periods.png" width="784" height="169" style="--w:784" alt="Nine periods: a timeline as long as it was written, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-many-periods.svg" width="1592" height="230" style="--w:1592" alt="Nine periods: a timeline as long as it was written, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  title A year of orders
+  January : Budget set
+  February : Raised
+  March : Approved
+  April : Sent
+  May : Chased
+  June : Delivered
+  July : Checked
+  August : Invoiced
+  September : Paid
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Six events in one period</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-many-events.png" width="784" height="686" style="--w:784" alt="Six events in one period, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-many-events.svg" width="360" height="652" style="--w:360" alt="Six events in one period, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised : Checked : Costed : Sent up : Approved : Sent out
+  Tuesday : Confirmed
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A single period</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-one-period.png" width="590" height="412" style="--w:590" alt="A single period, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-one-period.svg" width="184" height="192" style="--w:184" alt="A single period, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  Monday : Raised
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A whole timeline: a title, three sections, periods with none, one and two events, a line break</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline-whole.png" width="784" height="383" style="--w:784" alt="A whole timeline: a title, three sections, periods with none, one and two events, a line break, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline-whole.svg" width="1108" height="392" style="--w:1108" alt="A whole timeline: a title, three sections, periods with none, one and two events, a line break, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>timeline
+  title From order to invoice
+  section Buying
+    Monday : Raised &lt;br&gt;by the buyer
+           : Checked against the budget
+    Tuesday : Approved : Sent to the supplier
+  section Waiting
+    Wednesday
+  section Delivery
+    Friday : Delivered to the warehouse
+    Next Monday : Invoiced : Paid
+</pre></details>
+</article>
+</section>
+<section><h2>Packets, feature by feature</h2>
+<article class="card" data-result="drawn">
+<h3>Fields by the bits they take, first to last</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-fields.png" width="784" height="120" style="--w:784" alt="Fields by the bits they take, first to last, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-fields.svg" width="584" height="262" style="--w:584" alt="Fields by the bits they take, first to last, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0-15: &quot;Source Port&quot;
+16-31: &quot;Destination Port&quot;
+32-47: &quot;Length&quot;
+48-63: &quot;Checksum&quot;
+64-95: &quot;Data&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A packet that opens &quot;packet&quot;, not &quot;packet-beta&quot;</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-keyword.png" width="784" height="84" style="--w:784" alt="A packet that opens &quot;packet&quot;, not &quot;packet-beta&quot;, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-keyword.svg" width="568" height="188" style="--w:568" alt="A packet that opens &quot;packet&quot;, not &quot;packet-beta&quot;, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet
+0-15: &quot;Order number&quot;
+16-23: &quot;Lines&quot;
+24-31: &quot;Status&quot;
+32-63: &quot;Total, in pence&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title on a line of its own</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-title.png" width="784" height="108" style="--w:784" alt="A title on a line of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-title.svg" width="568" height="226" style="--w:568" alt="A title on a line of its own, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+title An order, as it is sent
+0-15: &quot;Order number&quot;
+16-23: &quot;Lines&quot;
+24-31: &quot;Status&quot;
+32-63: &quot;Total, in pence&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title in front matter</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-title-frontmatter.png" width="784" height="72" style="--w:784" alt="A title in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-title-frontmatter.svg" width="584" height="152" style="--w:584" alt="A title in front matter, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+title: An order, as it is sent
+---
+packet-beta
+0-15: &quot;Order number&quot;
+16-31: &quot;Supplier&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Fields of one bit, among wider ones</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-bit.png" width="784" height="48" style="--w:784" alt="Fields of one bit, among wider ones, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-bit.svg" width="2408" height="114" style="--w:2408" alt="Fields of one bit, among wider ones, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0-7: &quot;Kind&quot;
+8: &quot;New&quot;
+9: &quot;Paid&quot;
+10: &quot;Held&quot;
+11: &quot;Sent&quot;
+12-15: &quot;Spare&quot;
+16-31: &quot;Order number&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Fields by how many bits each takes (+16), each starting where the last ended</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-lengths.png" width="784" height="84" style="--w:784" alt="Fields by how many bits each takes (+16), each starting where the last ended, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-lengths.svg" width="568" height="188" style="--w:568" alt="Fields by how many bits each takes (+16), each starting where the last ended, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
++16: &quot;Order number&quot;
++8: &quot;Lines&quot;
++8: &quot;Status&quot;
++32: &quot;Total, in pence&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Fields by their bits and by their length, mixed</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-lengths-mixed.png" width="784" height="84" style="--w:784" alt="Fields by their bits and by their length, mixed, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-lengths-mixed.svg" width="568" height="188" style="--w:568" alt="Fields by their bits and by their length, mixed, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0-15: &quot;Order number&quot;
++8: &quot;Lines&quot;
+24-31: &quot;Status&quot;
++16: &quot;Supplier&quot;
++16: &quot;Buyer&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A field that runs past the end of a row: drawn on both rows, each part with its own bits</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-split.png" width="784" height="84" style="--w:784" alt="A field that runs past the end of a row: drawn on both rows, each part with its own bits, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-split.svg" width="584" height="188" style="--w:584" alt="A field that runs past the end of a row: drawn on both rows, each part with its own bits, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0-15: &quot;Order number&quot;
+16-47: &quot;Total, in pence&quot;
+48-63: &quot;Supplier&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A field of several whole rows</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-split-rows.png" width="784" height="192" style="--w:784" alt="A field of several whole rows, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-split-rows.svg" width="584" height="410" style="--w:584" alt="A field of several whole rows, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0-15: &quot;Order number&quot;
+16-31: &quot;Lines&quot;
+32-127: &quot;The lines themselves&quot;
+128-143: &quot;Check&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Sixteen bits to a row, said in front matter</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-bits-per-row.png" width="514" height="156" style="--w:514" alt="Sixteen bits to a row, said in front matter, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-bits-per-row.svg" width="584" height="262" style="--w:584" alt="Sixteen bits to a row, said in front matter, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+config:
+  packet:
+    bitsPerRow: 16
+---
+packet-beta
+0-7: &quot;Kind&quot;
+8-15: &quot;Status&quot;
+16-31: &quot;Order number&quot;
+32-39: &quot;Lines&quot;
+40-47: &quot;Spare&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Eight bits to a row, said in a directive</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-bits-per-row-directive.png" width="258" height="109" style="--w:258" alt="Eight bits to a row, said in a directive, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-bits-per-row-directive.svg" width="584" height="188" style="--w:584" alt="Eight bits to a row, said in a directive, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>%%{init: {&quot;packet&quot;: {&quot;bitsPerRow&quot;: 8}}}%%
+packet-beta
+0-3: &quot;Kind&quot;
+4-7: &quot;Status&quot;
+8-15: &quot;Lines&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Sixty-four bits to a row</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-bits-per-row-wide.png" width="784" height="42" style="--w:784" alt="Sixty-four bits to a row, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-bits-per-row-wide.svg" width="584" height="188" style="--w:584" alt="Sixty-four bits to a row, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+config:
+  packet:
+    bitsPerRow: 64
+---
+packet-beta
+0-31: &quot;Order number&quot;
+32-63: &quot;Supplier&quot;
+64-127: &quot;Total, in pence&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>The bits left off the picture (showBits: false)</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-show-bits.png" width="784" height="33" style="--w:784" alt="The bits left off the picture (showBits: false), as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-show-bits.svg" width="568" height="100" style="--w:568" alt="The bits left off the picture (showBits: false), as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+config:
+  packet:
+    showBits: false
+---
+packet-beta
+0-15: &quot;Order number&quot;
+16-23: &quot;Lines&quot;
+24-31: &quot;Status&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Mermaid's own sizes for a packet (bitWidth, rowHeight, padding), read past</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-settings.png" width="642" height="84" style="--w:642" alt="Mermaid's own sizes for a packet (bitWidth, rowHeight, padding), read past, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-settings.svg" width="568" height="114" style="--w:568" alt="Mermaid's own sizes for a packet (bitWidth, rowHeight, padding), read past, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>---
+config:
+  packet:
+    bitWidth: 20
+    rowHeight: 48
+    paddingX: 8
+    paddingY: 8
+---
+packet-beta
+0-15: &quot;Order number&quot;
+16-23: &quot;Lines&quot;
+24-31: &quot;Status&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Comments on lines of their own and after a field</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-comments.png" width="784" height="48" style="--w:784" alt="Comments on lines of their own and after a field, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-comments.svg" width="568" height="114" style="--w:568" alt="Comments on lines of their own and after a field, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+%% what every order starts with
+0-15: &quot;Order number&quot; %% unique for a year
+16-23: &quot;Lines&quot;
+%% and how far it has got
+24-31: &quot;Status&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A title and a description for a reader who cannot see the picture</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-accessible.png" width="784" height="48" style="--w:784" alt="A title and a description for a reader who cannot see the picture, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-accessible.svg" width="568" height="114" style="--w:568" alt="A title and a description for a reader who cannot see the picture, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+accTitle: The header of an order
+accDescr: Sixteen bits of order number, eight of lines, eight of status
+0-15: &quot;Order number&quot;
+16-23: &quot;Lines&quot;
+24-31: &quot;Status&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Names in single quotes, with brackets in them, and one with no name</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-names.png" width="784" height="48" style="--w:784" alt="Names in single quotes, with brackets in them, and one with no name, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-names.svg" width="568" height="130" style="--w:568" alt="Names in single quotes, with brackets in them, and one with no name, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0-7: 'Kind'
+8-15: &quot;&quot;
+16-23: &quot;Lines [count]&quot;
+24-31: &quot;Paid? (y/n)&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A last row that is not full</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-short-row.png" width="784" height="84" style="--w:784" alt="A last row that is not full, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-short-row.svg" width="568" height="188" style="--w:568" alt="A last row that is not full, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0-15: &quot;Order number&quot;
+16-31: &quot;Supplier&quot;
+32-39: &quot;Lines&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>One field, a whole row</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-one-field.png" width="784" height="48" style="--w:784" alt="One field, a whole row, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-one-field.svg" width="568" height="114" style="--w:568" alt="One field, a whole row, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0-31: &quot;Order number&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Spaces round the dash and the colon, or none</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-spacing.png" width="784" height="48" style="--w:784" alt="Spaces round the dash and the colon, or none, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-spacing.svg" width="568" height="114" style="--w:568" alt="Spaces round the dash and the colon, or none, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0 - 15 : &quot;Order number&quot;
+16-23:&quot;Lines&quot;
+  24-31:   &quot;Status&quot;
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>Merlive's own notes on fields, by the bit each starts at</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-notes.png" width="784" height="48" style="--w:784" alt="Merlive's own notes on fields, by the bit each starts at, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-notes.svg" width="568" height="114" style="--w:568" alt="Merlive's own notes on fields, by the bit each starts at, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+0-15: &quot;Order number&quot;
+16-23: &quot;Lines&quot;
+24-31: &quot;Status&quot;
+%% note bits0: Counted from one each January
+%% note bits24: Raised, approved, sent or closed
+</pre></details>
+</article>
+<article class="card" data-result="drawn">
+<h3>A whole header: a title, fields from one bit to two rows, thirty-two columns</h3>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet-whole.png" width="784" height="324" style="--w:784" alt="A whole header: a title, fields from one bit to two rows, thirty-two columns, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet-whole.svg" width="2408" height="670" style="--w:2408" alt="A whole header: a title, fields from one bit to two rows, thirty-two columns, as Merlive draws it"></div></figure></div>
+<details><summary>Source</summary><pre>packet-beta
+title TCP Packet
+0-15: &quot;Source Port&quot;
+16-31: &quot;Destination Port&quot;
+32-63: &quot;Sequence Number&quot;
+64-95: &quot;Acknowledgment Number&quot;
+96-99: &quot;Data Offset&quot;
+100-105: &quot;Reserved&quot;
+106: &quot;URG&quot;
+107: &quot;ACK&quot;
+108: &quot;PSH&quot;
+109: &quot;RST&quot;
+110: &quot;SYN&quot;
+111: &quot;FIN&quot;
+112-127: &quot;Window&quot;
+128-143: &quot;Checksum&quot;
+144-159: &quot;Urgent Pointer&quot;
+160-191: &quot;(Options and Padding)&quot;
+192-255: &quot;Data (variable length)&quot;
 </pre></details>
 </article>
 </section>
@@ -4765,10 +6162,10 @@ tf 03 evt OrderPlaced
     Get approval: 4: Buyer, Manager
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Timeline</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline.png" width="784" height="416" style="--w:784" alt="Timeline, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a timeline is not drawn yet</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/timeline.png" width="784" height="416" style="--w:784" alt="Timeline, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/timeline.svg" width="536" height="322" style="--w:536" alt="Timeline, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>timeline
   title The order's week
   Monday : Raised
@@ -4952,10 +6349,10 @@ tf 03 evt OrderPlaced
 </article>
 </section>
 <section><h2>Other kinds: tree</h2>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Mindmap</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap.png" width="342" height="417" style="--w:342" alt="Mindmap, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a mindmap is not drawn yet</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/mindmap.png" width="342" height="417" style="--w:342" alt="Mindmap, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/mindmap.svg" width="584" height="352" style="--w:584" alt="Mindmap, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>mindmap
   root((Ordering))
     Buying
@@ -4993,10 +6390,10 @@ tf 03 evt OrderPlaced
         Missed pick-up
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Kanban board</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban.png" width="630" height="99" style="--w:630" alt="Kanban board, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a kanban is not drawn yet</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/kanban.png" width="630" height="99" style="--w:630" alt="Kanban board, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/kanban.svg" width="544" height="154" style="--w:544" alt="Kanban board, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>kanban
   todo[To do]
     t1[Raise the order]
@@ -5085,10 +6482,10 @@ Approved,Cancelled,6
   min 0
 </pre></details>
 </article>
-<article class="card" data-result="left">
+<article class="card" data-result="drawn">
 <h3>Packet diagram</h3>
-<p class="result"><b>Left as Mermaid</b></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet.png" width="784" height="84" style="--w:784" alt="Packet diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><p class="none">Not drawn: a packet is not drawn yet</p></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/packet.png" width="784" height="84" style="--w:784" alt="Packet diagram, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/packet.svg" width="568" height="188" style="--w:568" alt="Packet diagram, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>packet
 0-15: &quot;Order number&quot;
 16-23: &quot;Lines&quot;

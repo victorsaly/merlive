@@ -300,6 +300,173 @@ Not read, each named in a `note,` line when met, and the rest of the line still 
 - `a & b`, `~~~`, a style for several blocks at once (`style a,b …`), and anything else that is not a block, a
   space, a link or one of the lines above.
 
+## A mindmap
+
+`mindmap` is read into the same boxes and links as a flowchart, so everything else on this page holds for it:
+the rules, the design, Merlive's own lines. Each line is a box, and how far in from the margin it is written
+says which box it is under. Mermaid draws the tree round its root; Merlive draws it from its root to the right,
+each box right of the one it is under. Nothing a mindmap says is lost by that. What is not kept is Mermaid's own
+look: the root in the middle, and a colour for each branch.
+
+| Written | Read as |
+|---|---|
+| The first line under `mindmap` | The root: a box of the kind `root`, so the legend and a reader's screen say which box the tree starts from |
+| A line further in than the one above it | A box under that one, joined to it by a line with nothing at either end |
+| Lines written unevenly | Each is under the nearest line above it that is further left: Mermaid's own rule. Spaces and tabs each count as one step |
+| A line as far left as the root, or further | Mermaid has one root and will not draw this. Drawn as a branch of the root, and said |
+| `Bare words` | A box that says them. Its id, for Merlive's own lines, is its words with `_` for what an id cannot hold: `Bare_words` |
+| `buy[Buying things]` | A box with an id apart from its words: `%% note buy: …` names it by `buy`. An id may be several words (`the buying side[Buying]` is `the_buying_side`) |
+| Two lines of the same words | Two boxes: every line is a box of its own. The second is `Words_2` in Merlive's own lines |
+| `[Square]`, `(Rounded)`, bare words | The design's own box, whose corners are the design's. A mindmap with both a square and a rounded box is told, once, that they are drawn alike |
+| `((Circle))` | A round-ended box |
+| `{{Hexagon}}` | A hexagon |
+| `))Bang((` | A box with a heavy outline: there is no burst here. Said once |
+| `)Cloud(` | A round-ended box with a dashed outline: there is no cloud here. Said once |
+| `((Ordering))`, with no id before it | The same shapes; the id is made from the words |
+| `Costs (each month)` | What Mermaid reads it as: a rounded box with the id `Costs` that says "each month". Words with a bracket in them go in quotes inside a shape: `a["Costs (each month)"]` |
+| `a["Paid: in full (or in part)"]` | Words in quotes, with what a bracket would otherwise end |
+| `**bold**`, `*italic*`, in any label | Kept: Mermaid reads every label of a mindmap as Markdown, in a Markdown string or not |
+| ``a["`**Ordering** from quote`"]``, on one line or several | A Markdown string: its words, its bold and italic, and its own line breaks |
+| `Approved<br/>by a manager` | A line break |
+| `::icon(fa fa-book)` on the line under a box | That box's icon, where Merlive has a drawing for it. One it has not is left out and said once, and the words are kept |
+| `:::urgent large` on the line under a box | That box's kind: the first class, where several are given. A class has no colour here (Mermaid takes one from the page it is on); `%% kind urgent: Needs doing today` says what it means in the legend. A class on the root takes the place of `root` |
+| `%% words` on a line of its own | A comment. After words on the same line `%%` is part of the words, as it is for Mermaid |
+| `title:` in front matter, `%% note`, `%% kind`, `%% step` | As in a flowchart |
+| `accTitle: …`, `accDescr: …` | As in a flowchart. Mermaid's own mindmap takes such a line for a box, so a mindmap that has one is not drawn by Mermaid: give the title in front matter |
+| `classDef …`, `style …`, `direction LR`, and any other line | A box that says those words, as it is for Mermaid: a mindmap has no line that is not a box, an icon or a class |
+
+A mindmap is never turned top to bottom for being wide, as a flowchart is: turned, every leaf would stand beside
+the last and it would be wider still. `%% turn: yes` lets it be turned.
+
+Not read, each named in a `note,` line when met: a bracket that is never closed, or closed with something after
+it (`a[One] two`); a single `{` or `}`, which opens nothing in a mindmap; an icon or a class with no box on a
+line above it. A line that is not read makes no box, and what is written under it goes under the nearest box
+above that is further left.
+
+## A kanban board
+
+`kanban` is read into the boxes and groups a flowchart has, with no links: a column is a group and a card is a
+box. Where a card is says everything a board says (the column is the state its work is in, how far down is its
+turn), so a board is always placed **on the grid its author wrote**, never by rule: the columns side by side in
+the order written, each as wide and as tall as the others, and the cards of each down it. Nothing runs between
+the cards, so they sit close.
+
+What tells a column from a card is how far in its line is, as it is for Mermaid: a line as far in as the first
+is a column, and one further in, however far, is a card of the column above it.
+
+| Written | Read as |
+|---|---|
+| `todo[To do]` as far in as the first line | A column: a group, called by its words. Drawn as a frame with its name, with or without cards |
+| `raise[Raise the order]` further in | A card of the column above: a box, called by its words |
+| `To do`, `Raise the order`, `raise` with no brackets | A column or a card called by what was written |
+| `[Raise the order]` | A card with no id of its own |
+| `raise(…)`, `raise((…))`, `raise{{…}}`, `raise))…((`, `raise)…(` | The same card: a board draws every card as a card, as Mermaid's does |
+| `raise["Raise the order [urgent]"]` | Words in quotes, which may hold a bracket or a comma |
+| ``raise["`**Raise** the order`"]`` | A Markdown string: what it makes bold or italic is drawn so |
+| `<br/>` in the words, or words in quotes that go on to the next line | A line its author broke |
+| `#amp;`, `#gt;`, `#quot;` | The character the code stands for |
+| `@{ ticket: PO-1041 }` on a card | The ticket it is for, listed under the card's words as `ticket: PO-1041` |
+| `@{ assigned: 'Amara' }` | Who has it, listed as `assigned: Amara` |
+| `@{ priority: 'High' }` | How pressing it is, listed as `priority: high`. Mermaid draws a colour down the side of the card for `Very High`, `High`, `Low` and `Very Low`; Merlive says it in words, which print, need no legend and are the same in every design. Any other is kept as written, and said |
+| `@{ ticket: PO-1041, assigned: 'Amara', priority: 'High' }` | All three, always listed in that order. In single quotes, double quotes or none; on one line with commas, or over several lines |
+| `@{ label: "Raise the order" }` | The card's words |
+| `%% note raise: …`, `%% words` on a line of its own, `title:` in front matter | As in a flowchart. A card with a dot, a hyphen or a space in what was written for its id is named with `_` in their place (`t.1` is `t_1`, `Raise the order` is `Raise_the_order`) |
+| A comment after a card (`raise[Raise] %% this week`) | Read past, as Mermaid does. After bare words it is part of the words, as it is for Mermaid |
+| `ticketBaseUrl` under `config: kanban:` in front matter | Read past: a ticket is listed on its card and is not a link out |
+| One id written for two cards | Two cards, as Mermaid draws; the second is named with `_2` |
+
+Not read, each named in a `note,` line when met: anything else set on a card (`due`, `icon`); anything set on a
+column but its `label`; something set with no space after its colon (`assigned:knsv`), which Mermaid passes over
+too; words after a card's brackets that are not `@{ … }` or a comment (`:::urgent`), which Mermaid refuses; a
+column less far in than the first, which Mermaid refuses and Merlive reads as a column. Mermaid draws `accTitle`
+and `accDescr` as columns; Merlive reads them as what they are.
+
+## A timeline
+
+`timeline` is read into the same boxes and links as a flowchart, and placed **on the grid its author wrote**,
+as a block diagram's grid is: a timeline says an order and nothing else, so where each box is drawn is what it
+says. Left to right, the periods are side by side in the order written and each period's events are under it,
+the first events of every period in one row. Top to bottom (`timeline TD`), the periods are one under another
+and each period's events are beside it. An arrow runs from each period to the next, as time does; a dotted line
+runs from a period down its events, as Mermaid's own does.
+
+| Written | Read as |
+|---|---|
+| `Monday : Raised` | A period, and an event in it: a box for each, the event under its period. A period has a heavier outline and its kind's mark; an event is a plain box |
+| `Tuesday : Approved : Sent` | Several events of one period, one under another |
+| `: Sent` on the line after a period | One more event of the period above. A line may carry several |
+| `Wednesday` | A period in which nothing is said to have happened |
+| `Tuesday: Approved` | The same as `Tuesday : Approved`: a colon needs no space before it |
+| `Raised at 09:30`, `Approved:by the manager` | A colon with no space after it is part of the words |
+| `Week 1 #colon; buying` | Mermaid's code for a colon that ends nothing: read as `:` |
+| `Raised <br>by the buyer` | The lines its author broke the words into. Longer words are wrapped in their box |
+| `title The order's week`, `title:` in front matter | What the picture is called: drawn above a still picture and as the heading of a page. The timeline's own wins |
+| `section Buying` | A group round every period after it, up to the next section, and their events. Left to right the sections are side by side; top to bottom, one under another |
+| `timeline LR`, `timeline TD` | Which way it runs. Left to right when nothing is said |
+| `%% note period2: words`, `%% note event2_1: words` | A note for the second period, or for its first event: periods are numbered `period1`, `period2`… in the order written, and a period's events `event2_1`, `event2_2`… |
+| `%% kind step: Milestone`, `%% kind period: Day` | What an event, or a period, is called in the legend and when picked. Unsaid, they are "Event" and "Period" |
+| `%% words` on a line of its own, `accTitle:`, `accDescr:`, `accDescr { … }` | As in a flowchart |
+| `disableMulticolor`, `theme`, `themeVariables` (`cScale0`…) in front matter | Read past: Mermaid's colours for periods are not kept. The colours are the design's |
+
+Read as Mermaid 11 reads it, and named in a `note,` line:
+
+- words after `timeline` on its line that are not `LR` or `TD` (`timeline BT`) are a first period, as Mermaid
+  draws them: a timeline runs one of two ways;
+- `%% words` after a period or an event are drawn as more words, as Mermaid draws them: a comment goes on a line
+  of its own.
+
+Not read, each named in a `note,` line when met, and the rest still read:
+
+- an event before any period (`: Raised` first): write the period first;
+- an event with no words (`Monday : Raised :`): take out the colon with nothing after it;
+- a section with no periods under it: there is nothing to draw it round.
+
+Where Merlive draws more than Mermaid 11 does: a period written before the first section is drawn, outside any
+section (Mermaid leaves it out); two sections of one name are two sections, each with the periods written
+under it (Mermaid gives both every period of that name's sections).
+
+A timeline is as wide as it was written: nine periods are nine columns. It is not wrapped onto a second row.
+
+## A packet
+
+`packet` and `packet-beta` say which bits each field of a message takes. That is a grid its author placed: rows
+of thirty-two bits (or as many as the diagram says), every field as wide as the bits it has. So a packet is not
+placed by rule. A field is a box with its bits over its name, in the cell it was written for, and the rows are
+cut where its author's count of bits says. A column is as many bits as every field is a whole number of, so a
+packet of bytes is drawn in columns of a byte and one with a field of a single bit in columns of a bit; a field
+of sixteen bits is always as wide as two of eight and the gap between them. Nothing joins two fields, so there
+are no links, and the room between fields is the least the rules allow.
+
+| Written | Read as |
+|---|---|
+| `0-15: "Source port"` | A field: a box called by its name, with `0–15` over it. It spans as many columns as it has bits |
+| `106: "URG"`, `34-34: "PSH"` | A field of one bit, with `106` over it |
+| `+16: "Destination port"` | A field of that many bits, starting where the last one ended |
+| `0-15: 'Source port'`, `16-23: ""` | A name in single quotes; a field with no name, drawn with none. A name is taken as it is written: nothing is made of `<br>`, `**` or brackets in it, as Mermaid makes nothing of them |
+| `16-47: "Total"` in rows of 32 | A field that runs past the end of a row: drawn again on the next row, with the same name and the bits it has there (`16–31`, then `32–47`), as Mermaid draws it. Each part says, when picked, which part of which bits it is |
+| `title An order, as it is sent` | The title, drawn above the picture, as it is written (quotes and all). The last one said. `title:` in front matter is one too |
+| `bitsPerRow: 16` under `config:` `packet:` in front matter, or in `%%{init: {"packet": {"bitsPerRow": 16}}}%%` | How many bits a row has: where the rows are cut, and how many columns there are |
+| `showBits: false`, written the same ways | The bits are left off the picture, as asked |
+| `bitWidth`, `rowHeight`, `paddingX`, `paddingY` | Mermaid's own sizes. Read past: a field is as wide as its words need, and no narrower than its share of a row of 512 px |
+| `accTitle: …`, `accDescr: …` | What the picture is called and shows, for a reader who cannot see it |
+| `%% words` on a line of its own or after a field, `%% note bits0: …` | A comment, read past; and Merlive's own lines, as in a flowchart. A field is called `bits` and the bit it starts at (`bits0`, `bits16`), and a part of a field cut at a row the bit that part starts at |
+
+Not read, each named in a `note,` line when met, and the rest still drawn:
+
+| Written | What is said |
+|---|---|
+| `0-7: "Kind"` then `12-15: "Flags"` | Bits 8 to 11 are in no field. Mermaid draws no packet at all with bits left out; Merlive leaves them empty, where they are, and says to start the field at bit 8 or to name the bits between |
+| `4-11: "Overlap"` after `0-7: "Kind"` | Not read: bit 4 is already in a field. A field starts where the last one ended |
+| `15-0: "Backwards"`, `+0: "Nothing"` | Not read: a field ends at or after the bit it starts at, and takes one bit at the least |
+| `0-7: Kind` | Not read: a name goes in quotes |
+| `0-7: "Say "hi""` | Not read: a name ends at the first quote mark like the one it starts with; use the other kind inside it |
+| `0-7: "A"; 8-15: "B"` | Not read: one field to a line |
+| `classDef`, `class`, `style` | Not read: a packet has no classes or styles in Mermaid. Its fields are drawn in the design's colours |
+
+A packet with a field of one bit has a column a bit, thirty-two to a row, each wide enough for that field's
+name: a header with flags of three letters comes out about 2400 px wide, and is scrolled across on a page. A
+shorter name for the narrowest field, or fewer bits to a row, makes it narrower.
+
 ## A sequence diagram
 
 A block that starts `sequenceDiagram` is read, placed and checked by rules of its own (S1 to S7, with D1 and D2).

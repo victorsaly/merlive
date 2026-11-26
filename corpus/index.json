@@ -2602,7 +2602,8 @@
     {
       "file": "kinds/timeline.mmd",
       "covers": "Timeline",
-      "family": "steps in order"
+      "family": "steps in order",
+      "placedBy": "grid"
     },
     {
       "file": "kinds/gantt.mmd",
@@ -2632,7 +2633,8 @@
     {
       "file": "kinds/kanban.mmd",
       "covers": "Kanban board",
-      "family": "tree"
+      "family": "tree",
+      "placedBy": "grid"
     },
     {
       "file": "kinds/treemap.mmd",
@@ -2667,7 +2669,8 @@
     {
       "file": "kinds/packet.mmd",
       "covers": "Packet diagram",
-      "family": "chart"
+      "family": "chart",
+      "placedBy": "grid"
     },
     {
       "file": "kinds/venn.mmd",
@@ -5347,6 +5350,2695 @@
         "DB",
         "A wide one in the middle"
       ]
+    }
+  ],
+  "mindmap": [
+    {
+      "file": "mindmap/mindmap-tree.mmd",
+      "covers": "A mindmap: a root, and what is under it by how far in each line is written",
+      "boxes": 7,
+      "links": 6,
+      "rows": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Quotes",
+        "Orders",
+        "Paying",
+        "Invoices",
+        "Payments"
+      ],
+      "kinds": [
+        "root"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-root-alone.mmd",
+      "covers": "A root with nothing under it",
+      "boxes": 1,
+      "links": 0,
+      "rows": [
+        0
+      ],
+      "ends": [],
+      "direction": "LR",
+      "has": [
+        "Ordering"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-deep.mmd",
+      "covers": "Five steps in from the root",
+      "boxes": 6,
+      "links": 5,
+      "rows": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Orders",
+        "Lines",
+        "Quantities",
+        "Paying"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-uneven.mmd",
+      "covers": "Lines written unevenly: each is under the nearest line above it that is further left",
+      "boxes": 6,
+      "links": 5,
+      "rows": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Quotes",
+        "Orders",
+        "Paying",
+        "Invoices"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-tabs.mmd",
+      "covers": "Lines set in with tabs",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Quotes",
+        "Paying"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-margin.mmd",
+      "covers": "A root written at the margin",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-blank-lines.mmd",
+      "covers": "Empty lines between the lines of a tree",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Quotes",
+        "Paying"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-semicolon.mmd",
+      "covers": "The first word with a semicolon after it",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-shape-default.mmd",
+      "covers": "A line of bare words: the shape Mermaid gives when none is written",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Three bare words",
+        "More of them here"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "box"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-shape-square.mmd",
+      "covers": "A square",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "box"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-shape-rounded.mmd",
+      "covers": "A rounded square",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "box"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-shape-circle.mmd",
+      "covers": "A circle",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ],
+      "shapes": [
+        "pill",
+        "pill",
+        "pill"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-shape-hexagon.mmd",
+      "covers": "A hexagon",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ],
+      "shapes": [
+        "hexagon",
+        "hexagon",
+        "hexagon"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-shape-bang.mmd",
+      "covers": "A bang",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Late orders",
+        "Lost invoices",
+        "Paying"
+      ],
+      "shapes": [
+        "box",
+        "box",
+        "box",
+        "box"
+      ],
+      "says": "a bang (written \"))words((\") has no drawing of its own in Merlive: each is drawn as a box with a heavy outline",
+      "loses": "A bang is a box with a heavy outline, not a burst"
+    },
+    {
+      "file": "mindmap/mindmap-shape-cloud.mmd",
+      "covers": "A cloud",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "A supplier portal",
+        "Orders by voice",
+        "Paying"
+      ],
+      "shapes": [
+        "box",
+        "pill",
+        "pill",
+        "box"
+      ],
+      "says": "a cloud (written \")words(\") has no drawing of its own in Merlive: each is drawn as a round-ended box with a dashed outline",
+      "loses": "A cloud is a round-ended box with a dashed outline, not a cloud"
+    },
+    {
+      "file": "mindmap/mindmap-shapes.mmd",
+      "covers": "A circle, a hexagon, a square and bare words in one tree",
+      "boxes": 6,
+      "links": 5,
+      "rows": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Quotes",
+        "Orders",
+        "Paying",
+        "Invoices"
+      ],
+      "shapes": [
+        "pill",
+        "hexagon",
+        "box",
+        "box",
+        "hexagon",
+        "box"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-shapes-alike.mmd",
+      "covers": "A square and a rounded square in one tree",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ],
+      "shapes": [
+        "pill",
+        "box",
+        "box"
+      ],
+      "says": "a square \"[words]\" and a rounded \"(words)\" are both drawn as the design's own box, whose corners are the design's: they are not told apart",
+      "loses": "A square and a rounded square are the same box: its corners are the design's"
+    },
+    {
+      "file": "mindmap/mindmap-id-label.mmd",
+      "covers": "An id apart from its words",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying things",
+        "Asking for quotes",
+        "Paying for them"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-id-words.mmd",
+      "covers": "An id of several words",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-no-id.mmd",
+      "covers": "A shape with no id before it",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ],
+      "shapes": [
+        "pill",
+        "box",
+        "hexagon"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-bare-brackets.mmd",
+      "covers": "Bare words with a bracket in them: what is before it is the id",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "each month",
+        "open"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-quoted.mmd",
+      "covers": "Words in quotes, with a colon and brackets in them",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Paid: in full (or in part)",
+        "Sent [by post]"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-same-words.mmd",
+      "covers": "Two lines of the same words: two boxes",
+      "boxes": 5,
+      "links": 4,
+      "rows": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Approval",
+        "By a manager",
+        "By finance"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-icon.mmd",
+      "covers": "An icon, on the line under its box",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Catalogue",
+        "Delivery",
+        "Paying"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-icon-unknown.mmd",
+      "covers": "An icon Merlive has no drawing for",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Write-offs",
+        "Paying"
+      ],
+      "says": "the icon \"mdi mdi-skull-outline\" is not one Merlive has a drawing for; it is left out and its words kept",
+      "loses": "The icon is left out"
+    },
+    {
+      "file": "mindmap/mindmap-class.mmd",
+      "covers": "A class, on the line under its box",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Overdue invoices",
+        "Paying"
+      ],
+      "kinds": [
+        "root",
+        "urgent"
+      ],
+      "loses": "A class has no colour of its own: Mermaid takes one from the page it is on"
+    },
+    {
+      "file": "mindmap/mindmap-class-root.mmd",
+      "covers": "A class for the root",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ],
+      "kinds": [
+        "company"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-markdown.mmd",
+      "covers": "A Markdown string: bold and italic",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering at the firm",
+        "Orders over the limit",
+        "Paid on the day"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-markdown-lines.mmd",
+      "covers": "A Markdown string of several lines",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering from quote to payment",
+        "Approved by a manager",
+        "Paying"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-markdown-plain.mmd",
+      "covers": "Bold and italic with no Markdown string round them",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying things",
+        "Paying for them"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-line-break.mmd",
+      "covers": "A line broken with <br/>",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Approved by a manager",
+        "Paid on the day"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-long-words.mmd",
+      "covers": "Words long enough to be wrapped",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Orders over the limit are approved by a manager first",
+        "Invoices are matched to the order and the delivery note"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-unicode.mmd",
+      "covers": "Words in other scripts, and an emoji",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Zamówienia",
+        "Wycena 🧾",
+        "支払い",
+        "Paiement à 30 jours"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-comments.mmd",
+      "covers": "A comment on a line of its own, and %% after words, which Mermaid keeps as words",
+      "boxes": 4,
+      "links": 3,
+      "rows": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Orders",
+        "Paid 100 %% of the time"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-frontmatter.mmd",
+      "covers": "A title in front matter",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ],
+      "title": "Ordering, from quote to payment"
+    },
+    {
+      "file": "mindmap/mindmap-notes.mmd",
+      "covers": "Merlive's own lines: a note on a box, by its id",
+      "boxes": 3,
+      "links": 2,
+      "rows": [
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Paying"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-bushy.mmd",
+      "covers": "A tree of many leaves",
+      "boxes": 14,
+      "links": 13,
+      "rows": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Receiving",
+        "Paying",
+        "Quotes",
+        "Credit notes"
+      ]
+    },
+    {
+      "file": "mindmap/mindmap-whole.mmd",
+      "covers": "A whole mindmap: shapes, icons, a class, bold and broken lines",
+      "boxes": 11,
+      "links": 10,
+      "rows": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ends": [
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ],
+        [
+          "none",
+          "none"
+        ]
+      ],
+      "direction": "LR",
+      "has": [
+        "Ordering",
+        "Buying",
+        "Ask for quotes",
+        "Raise the order",
+        "Approved by a manager",
+        "Receiving",
+        "Check the delivery",
+        "Returns",
+        "Paying",
+        "Match the invoice",
+        "Pay in thirty days"
+      ],
+      "kinds": [
+        "root",
+        "control"
+      ],
+      "title": "How ordering works"
+    }
+  ],
+  "kanban": [
+    {
+      "file": "kanban/kanban-columns.mmd",
+      "covers": "A kanban board: columns side by side, and the cards of each down it",
+      "boxes": 4,
+      "links": 0,
+      "groups": 3,
+      "placedBy": "grid",
+      "has": [
+        "To do",
+        "Doing",
+        "Done",
+        "Raise the order",
+        "Chase the supplier",
+        "Check the stock",
+        "Pay the invoice"
+      ]
+    },
+    {
+      "file": "kanban/kanban-bare.mmd",
+      "covers": "Columns and cards written with no brackets: each is called by what was written",
+      "boxes": 3,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "has": [
+        "To do",
+        "Done",
+        "Raise the order",
+        "Pay the invoice"
+      ]
+    },
+    {
+      "file": "kanban/kanban-ids.mmd",
+      "covers": "Ids with a hyphen or a dot in them, a card called by its id, and one id written for two cards",
+      "boxes": 4,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "has": [
+        "To do",
+        "done",
+        "Raise the order",
+        "Chase the supplier",
+        "raise",
+        "Pay the invoice"
+      ]
+    },
+    {
+      "file": "kanban/kanban-empty-column.mmd",
+      "covers": "A column with no cards in it yet",
+      "boxes": 3,
+      "links": 0,
+      "groups": 3,
+      "placedBy": "grid",
+      "has": [
+        "To do",
+        "Done",
+        "Raise the order"
+      ]
+    },
+    {
+      "file": "kanban/kanban-assigned.mmd",
+      "covers": "Who has a card: assigned",
+      "boxes": 3,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "rows": [
+        1,
+        1,
+        0
+      ],
+      "has": [
+        "assigned: Amara",
+        "assigned: Ben"
+      ]
+    },
+    {
+      "file": "kanban/kanban-ticket.mmd",
+      "covers": "The ticket a card is for, bare, in quotes or a number",
+      "boxes": 3,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "rows": [
+        1,
+        1,
+        1
+      ],
+      "has": [
+        "ticket: PO-1041",
+        "ticket: PO-1042",
+        "ticket: 77"
+      ]
+    },
+    {
+      "file": "kanban/kanban-priority.mmd",
+      "covers": "How pressing a card is: the four priorities Mermaid draws",
+      "boxes": 4,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "rows": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "has": [
+        "priority: very high",
+        "priority: high",
+        "priority: low",
+        "priority: very low"
+      ],
+      "loses": "A priority is said in words on its card, where Mermaid draws a colour down the side of the card"
+    },
+    {
+      "file": "kanban/kanban-priority-other.mmd",
+      "covers": "A priority Mermaid has no mark for",
+      "boxes": 2,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "rows": [
+        1,
+        1
+      ],
+      "has": [
+        "priority: Medium",
+        "priority: high"
+      ],
+      "says": "is not one Mermaid draws",
+      "loses": "Kept as written and said, where Mermaid draws nothing for it"
+    },
+    {
+      "file": "kanban/kanban-metadata.mmd",
+      "covers": "A ticket, who has it and how pressing it is, all on one card, in any order",
+      "boxes": 3,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "rows": [
+        3,
+        2,
+        3
+      ],
+      "has": [
+        "ticket: PO-1041",
+        "assigned: Amara",
+        "priority: high",
+        "assigned: Ben",
+        "ticket: PO-1042",
+        "priority: low",
+        "ticket: PO-1038",
+        "assigned: Chidi"
+      ],
+      "loses": "A priority is said in words on its card, where Mermaid draws a colour down the side of the card"
+    },
+    {
+      "file": "kanban/kanban-metadata-lines.mmd",
+      "covers": "What is set on a card, written over several lines",
+      "boxes": 2,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "rows": [
+        3,
+        0
+      ],
+      "has": [
+        "ticket: PO-1041",
+        "assigned: Amara",
+        "priority: high",
+        "Chase the supplier"
+      ],
+      "loses": "A priority is said in words on its card, where Mermaid draws a colour down the side of the card"
+    },
+    {
+      "file": "kanban/kanban-metadata-other.mmd",
+      "covers": "Something set on a card that a board has no place for",
+      "boxes": 1,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "rows": [
+        1
+      ],
+      "has": [
+        "ticket: PO-1041"
+      ],
+      "says": "a card keeps its label, ticket, assigned and priority",
+      "loses": "Passed over and said, where Mermaid passes over it and says nothing"
+    },
+    {
+      "file": "kanban/kanban-label.mmd",
+      "covers": "A card's words set as its label",
+      "boxes": 2,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "rows": [
+        1,
+        0
+      ],
+      "has": [
+        "Raise the order",
+        "Chase the supplier",
+        "ticket: PO-1041"
+      ]
+    },
+    {
+      "file": "kanban/kanban-column-metadata.mmd",
+      "covers": "Something set on a column, which neither Mermaid nor Merlive draws",
+      "boxes": 2,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "has": [
+        "To do",
+        "Done"
+      ],
+      "says": "a column keeps only its label",
+      "loses": "Passed over and said, where Mermaid passes over it and says nothing"
+    },
+    {
+      "file": "kanban/kanban-ticket-base-url.mmd",
+      "covers": "Tickets with a place they link to, set in front matter",
+      "boxes": 2,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "rows": [
+        1,
+        1
+      ],
+      "has": [
+        "ticket: PO-1041",
+        "ticket: PO-1038"
+      ],
+      "loses": "A ticket is listed on its card and is not a link out: a picture of Merlive's goes nowhere"
+    },
+    {
+      "file": "kanban/kanban-frontmatter.mmd",
+      "covers": "Front matter with a title",
+      "boxes": 2,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "title": "Orders this week"
+    },
+    {
+      "file": "kanban/kanban-quoted.mmd",
+      "covers": "Words in quotes, with a comma, a bracket and a parenthesis in them",
+      "boxes": 2,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "has": [
+        "To do, this week",
+        "Raise the order [urgent]",
+        "Chase the supplier (again)"
+      ]
+    },
+    {
+      "file": "kanban/kanban-markdown.mmd",
+      "covers": "A Markdown string: bold and italic on a card",
+      "boxes": 2,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "has": [
+        "Raise the order",
+        "Chase the supplier"
+      ]
+    },
+    {
+      "file": "kanban/kanban-line-break.mmd",
+      "covers": "A line its author broke, with <br/> and by going on to the next line inside quotes",
+      "boxes": 3,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "has": [
+        "Raise the order for the warehouse",
+        "Chase the supplier before Friday",
+        "Pay the invoice"
+      ]
+    },
+    {
+      "file": "kanban/kanban-entity.mmd",
+      "covers": "Entity codes in the words of a column and of a card",
+      "boxes": 2,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "has": [
+        "Raise & chase",
+        "Orders > 500",
+        "Say \"late\" to the buyer"
+      ]
+    },
+    {
+      "file": "kanban/kanban-shapes.mmd",
+      "covers": "Every way Mermaid lets the words of a card be written, each drawn as a card",
+      "boxes": 6,
+      "links": 0,
+      "groups": 1,
+      "placedBy": "grid",
+      "shapes": [
+        "box",
+        "box",
+        "box",
+        "box",
+        "box",
+        "box"
+      ],
+      "has": [
+        "To do",
+        "Raise the order",
+        "Chase the supplier",
+        "Check the stock",
+        "File the note",
+        "Tidy the quotes",
+        "Pay the invoice"
+      ]
+    },
+    {
+      "file": "kanban/kanban-comments.mmd",
+      "covers": "Comments, on lines of their own and after a card",
+      "boxes": 3,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "has": [
+        "Raise the order",
+        "Chase the supplier",
+        "Pay the invoice"
+      ]
+    },
+    {
+      "file": "kanban/kanban-deep.mmd",
+      "covers": "Cards written at different depths, and with a tab: anything further in than a column is its card",
+      "boxes": 4,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "has": [
+        "To do",
+        "Done",
+        "Chase the supplier",
+        "Check the stock",
+        "Pay the invoice"
+      ]
+    },
+    {
+      "file": "kanban/kanban-long-words.mmd",
+      "covers": "Long words on a card and in the name of a column",
+      "boxes": 3,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "has": [
+        "Raise the order for the new warehouse shelving",
+        "Done and paid for in full"
+      ]
+    },
+    {
+      "file": "kanban/kanban-note.mmd",
+      "covers": "Merlive's own lines on a board: a note on a card",
+      "boxes": 3,
+      "links": 0,
+      "groups": 2,
+      "placedBy": "grid",
+      "notes": 2
+    },
+    {
+      "file": "kanban/kanban-whole.mmd",
+      "covers": "A whole board: five columns, one of them empty, cards with and without tickets, people and priorities, a title and a place tickets link to",
+      "boxes": 8,
+      "links": 0,
+      "groups": 5,
+      "placedBy": "grid",
+      "rows": [
+        0,
+        3,
+        1,
+        3,
+        1,
+        2,
+        2,
+        1
+      ],
+      "title": "Orders this week",
+      "has": [
+        "To do",
+        "In hand",
+        "Waiting on the buyer",
+        "Done",
+        "Raise the order for the shelving",
+        "ticket: PO-1036",
+        "assigned: Ben",
+        "priority: very high"
+      ],
+      "loses": "A priority is said in words on its card, where Mermaid draws a colour down the side; a ticket is not a link out"
+    }
+  ],
+  "timeline": [
+    {
+      "file": "timeline/timeline-periods.mmd",
+      "covers": "Periods, each with one event: a period is a box, its event a box under it",
+      "boxes": 6,
+      "links": 5,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-title.mmd",
+      "covers": "A title, drawn above the picture",
+      "boxes": 6,
+      "links": 5,
+      "placedBy": "grid",
+      "direction": "LR",
+      "title": "The order's week",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-events-same-line.mmd",
+      "covers": "Several events of one period on its line",
+      "boxes": 9,
+      "links": 8,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Sent to the supplier",
+        "Friday",
+        "Delivered",
+        "Checked"
+      ]
+    },
+    {
+      "file": "timeline/timeline-events-following-lines.mmd",
+      "covers": "Events on the lines after their period, each line a colon and what happened",
+      "boxes": 9,
+      "links": 8,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Sent to the supplier",
+        "Friday",
+        "Delivered",
+        "Checked"
+      ]
+    },
+    {
+      "file": "timeline/timeline-period-alone.mmd",
+      "covers": "Periods in which nothing is said to have happened",
+      "boxes": 6,
+      "links": 5,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Wednesday",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-no-spaces.mmd",
+      "covers": "No space before a colon",
+      "boxes": 7,
+      "links": 6,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Sent",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-colon-in-event.mmd",
+      "covers": "A colon with no space after it is part of the words (09:30)",
+      "boxes": 5,
+      "links": 4,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised at 09:30",
+        "Tuesday",
+        "Approved:by the manager",
+        "Sent"
+      ]
+    },
+    {
+      "file": "timeline/timeline-colon-code.mmd",
+      "covers": "The code for a colon in a period (#colon;)",
+      "boxes": 4,
+      "links": 3,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Week 1 : buying",
+        "Raised",
+        "Week 2 : delivery",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-words-not-dates.mmd",
+      "covers": "Periods that are words, not dates",
+      "boxes": 7,
+      "links": 6,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Before the order",
+        "A need is spotted",
+        "While it is open",
+        "Raised",
+        "Approved",
+        "After it is closed",
+        "Paid"
+      ]
+    },
+    {
+      "file": "timeline/timeline-line-break.mmd",
+      "covers": "A line break in a period and in an event (<br>)",
+      "boxes": 4,
+      "links": 3,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised by the buyer",
+        "Tuesday morning",
+        "Approved"
+      ]
+    },
+    {
+      "file": "timeline/timeline-long-text.mmd",
+      "covers": "Events too long for one line, wrapped in their box",
+      "boxes": 6,
+      "links": 5,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "The buyer raises an order for everything the department needs for the quarter ahead",
+        "Tuesday",
+        "Approved",
+        "Friday",
+        "Delivered to the warehouse and checked against the order line by line"
+      ]
+    },
+    {
+      "file": "timeline/timeline-sections.mmd",
+      "covers": "Sections: each a group round the periods after it",
+      "boxes": 7,
+      "links": 6,
+      "groups": 2,
+      "placedBy": "grid",
+      "direction": "LR",
+      "title": "From order to invoice",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Friday",
+        "Delivered",
+        "Invoiced",
+        "Buying"
+      ]
+    },
+    {
+      "file": "timeline/timeline-sections-uneven.mmd",
+      "covers": "Sections of one period and of several, with events of different numbers",
+      "boxes": 10,
+      "links": 9,
+      "groups": 3,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Checked",
+        "Approved",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Chased"
+      ]
+    },
+    {
+      "file": "timeline/timeline-section-long-name.mmd",
+      "covers": "A section with a long name",
+      "boxes": 4,
+      "links": 3,
+      "groups": 2,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Friday",
+        "Delivered",
+        "Everything the buyer does before the supplier hears of it",
+        "Delivery"
+      ]
+    },
+    {
+      "file": "timeline/timeline-direction-lr.mmd",
+      "covers": "Left to right, said (timeline LR)",
+      "boxes": 7,
+      "links": 6,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Sent",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-direction-td.mmd",
+      "covers": "Top to bottom (timeline TD): periods one under another, events beside each",
+      "boxes": 7,
+      "links": 6,
+      "placedBy": "grid",
+      "direction": "TD",
+      "title": "The order's week",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Sent",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-direction-td-sections.mmd",
+      "covers": "Top to bottom with sections, one under another",
+      "boxes": 8,
+      "links": 7,
+      "groups": 2,
+      "placedBy": "grid",
+      "direction": "TD",
+      "title": "From order to invoice",
+      "has": [
+        "Monday",
+        "Raised",
+        "Checked",
+        "Tuesday",
+        "Approved",
+        "Friday",
+        "Delivered",
+        "Invoiced"
+      ]
+    },
+    {
+      "file": "timeline/timeline-frontmatter.mmd",
+      "covers": "A title in front matter",
+      "boxes": 6,
+      "links": 5,
+      "placedBy": "grid",
+      "direction": "LR",
+      "title": "The order's week",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-one-colour.mmd",
+      "covers": "One colour for every period (disableMulticolor), read past: the colours are the design's",
+      "boxes": 6,
+      "links": 5,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-theme.mmd",
+      "covers": "A theme and its colours in front matter, read past: the colours are the design's",
+      "boxes": 4,
+      "links": 3,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved"
+      ]
+    },
+    {
+      "file": "timeline/timeline-comments.mmd",
+      "covers": "Comments on lines of their own",
+      "boxes": 6,
+      "links": 5,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-accessible.mmd",
+      "covers": "What the picture is called and shows, for one who cannot see it",
+      "boxes": 6,
+      "links": 5,
+      "placedBy": "grid",
+      "direction": "LR",
+      "title": "The week an order takes",
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-accessible-lines.mmd",
+      "covers": "A description over several lines (accDescr { })",
+      "boxes": 4,
+      "links": 3,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-notes.mmd",
+      "covers": "Merlive's own lines: a note for a period and for an event, and what a kind means",
+      "boxes": 7,
+      "links": 6,
+      "placedBy": "grid",
+      "direction": "LR",
+      "notes": 2,
+      "has": [
+        "Monday",
+        "Raised",
+        "Tuesday",
+        "Approved",
+        "Sent",
+        "Friday",
+        "Delivered"
+      ]
+    },
+    {
+      "file": "timeline/timeline-same-names.mmd",
+      "covers": "Two periods of one name: each is its own",
+      "boxes": 6,
+      "links": 5,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Raised again",
+        "Tuesday",
+        "Approved"
+      ]
+    },
+    {
+      "file": "timeline/timeline-many-periods.mmd",
+      "covers": "Nine periods: a timeline as long as it was written",
+      "boxes": 18,
+      "links": 17,
+      "placedBy": "grid",
+      "direction": "LR",
+      "title": "A year of orders",
+      "has": [
+        "January",
+        "Budget set",
+        "February",
+        "Raised",
+        "March",
+        "Approved",
+        "April",
+        "Sent"
+      ]
+    },
+    {
+      "file": "timeline/timeline-many-events.mmd",
+      "covers": "Six events in one period",
+      "boxes": 9,
+      "links": 8,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised",
+        "Checked",
+        "Costed",
+        "Sent up",
+        "Approved",
+        "Sent out",
+        "Tuesday"
+      ]
+    },
+    {
+      "file": "timeline/timeline-one-period.mmd",
+      "covers": "A single period",
+      "boxes": 2,
+      "links": 1,
+      "placedBy": "grid",
+      "direction": "LR",
+      "has": [
+        "Monday",
+        "Raised"
+      ]
+    },
+    {
+      "file": "timeline/timeline-whole.mmd",
+      "covers": "A whole timeline: a title, three sections, periods with none, one and two events, a line break",
+      "boxes": 12,
+      "links": 11,
+      "groups": 3,
+      "placedBy": "grid",
+      "direction": "LR",
+      "title": "From order to invoice",
+      "has": [
+        "Monday",
+        "Raised by the buyer",
+        "Checked against the budget",
+        "Tuesday",
+        "Approved",
+        "Sent to the supplier",
+        "Wednesday",
+        "Friday"
+      ]
+    }
+  ],
+  "packet": [
+    {
+      "file": "packet/packet-fields.mmd",
+      "covers": "Fields by the bits they take, first to last",
+      "boxes": 5,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 2,
+      "has": [
+        "Source Port",
+        "Destination Port",
+        "Length",
+        "Checksum",
+        "Data"
+      ],
+      "over": [
+        "0–15",
+        "16–31",
+        "32–47",
+        "48–63",
+        "64–95"
+      ]
+    },
+    {
+      "file": "packet/packet-keyword.mmd",
+      "covers": "A packet that opens \"packet\", not \"packet-beta\"",
+      "boxes": 4,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status",
+        "Total, in pence"
+      ],
+      "over": [
+        "0–15",
+        "16–23",
+        "24–31",
+        "32–63"
+      ]
+    },
+    {
+      "file": "packet/packet-title.mmd",
+      "covers": "A title on a line of its own",
+      "boxes": 4,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status",
+        "Total, in pence"
+      ],
+      "over": [
+        "0–15",
+        "16–23",
+        "24–31",
+        "32–63"
+      ],
+      "title": "An order, as it is sent"
+    },
+    {
+      "file": "packet/packet-title-frontmatter.mmd",
+      "covers": "A title in front matter",
+      "boxes": 2,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 2,
+      "has": [
+        "Order number",
+        "Supplier"
+      ],
+      "over": [
+        "0–15",
+        "16–31"
+      ],
+      "title": "An order, as it is sent"
+    },
+    {
+      "file": "packet/packet-bit.mmd",
+      "covers": "Fields of one bit, among wider ones",
+      "boxes": 7,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 32,
+      "has": [
+        "Kind",
+        "New",
+        "Paid",
+        "Held",
+        "Sent",
+        "Spare",
+        "Order number"
+      ],
+      "over": [
+        "0–7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12–15",
+        "16–31"
+      ]
+    },
+    {
+      "file": "packet/packet-lengths.mmd",
+      "covers": "Fields by how many bits each takes (+16), each starting where the last ended",
+      "boxes": 4,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status",
+        "Total, in pence"
+      ],
+      "over": [
+        "0–15",
+        "16–23",
+        "24–31",
+        "32–63"
+      ]
+    },
+    {
+      "file": "packet/packet-lengths-mixed.mmd",
+      "covers": "Fields by their bits and by their length, mixed",
+      "boxes": 5,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status",
+        "Supplier",
+        "Buyer"
+      ],
+      "over": [
+        "0–15",
+        "16–23",
+        "24–31",
+        "32–47",
+        "48–63"
+      ]
+    },
+    {
+      "file": "packet/packet-split.mmd",
+      "covers": "A field that runs past the end of a row: drawn on both rows, each part with its own bits",
+      "boxes": 4,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 2,
+      "has": [
+        "Order number",
+        "Total, in pence",
+        "Supplier"
+      ],
+      "over": [
+        "0–15",
+        "16–31",
+        "32–47",
+        "48–63"
+      ]
+    },
+    {
+      "file": "packet/packet-split-rows.mmd",
+      "covers": "A field of several whole rows",
+      "boxes": 6,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 2,
+      "has": [
+        "Order number",
+        "Lines",
+        "The lines themselves",
+        "Check"
+      ],
+      "over": [
+        "0–15",
+        "16–31",
+        "32–63",
+        "64–95",
+        "96–127",
+        "128–143"
+      ]
+    },
+    {
+      "file": "packet/packet-bits-per-row.mmd",
+      "covers": "Sixteen bits to a row, said in front matter",
+      "boxes": 5,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 2,
+      "has": [
+        "Kind",
+        "Status",
+        "Order number",
+        "Lines",
+        "Spare"
+      ],
+      "over": [
+        "0–7",
+        "8–15",
+        "16–31",
+        "32–39",
+        "40–47"
+      ]
+    },
+    {
+      "file": "packet/packet-bits-per-row-directive.mmd",
+      "covers": "Eight bits to a row, said in a directive",
+      "boxes": 3,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 2,
+      "has": [
+        "Kind",
+        "Status",
+        "Lines"
+      ],
+      "over": [
+        "0–3",
+        "4–7",
+        "8–15"
+      ]
+    },
+    {
+      "file": "packet/packet-bits-per-row-wide.mmd",
+      "covers": "Sixty-four bits to a row",
+      "boxes": 3,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 2,
+      "has": [
+        "Order number",
+        "Supplier",
+        "Total, in pence"
+      ],
+      "over": [
+        "0–31",
+        "32–63",
+        "64–127"
+      ]
+    },
+    {
+      "file": "packet/packet-show-bits.mmd",
+      "covers": "The bits left off the picture (showBits: false)",
+      "boxes": 3,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status"
+      ],
+      "over": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "file": "packet/packet-settings.mmd",
+      "covers": "Mermaid's own sizes for a packet (bitWidth, rowHeight, padding), read past",
+      "boxes": 3,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status"
+      ],
+      "over": [
+        "0–15",
+        "16–23",
+        "24–31"
+      ]
+    },
+    {
+      "file": "packet/packet-comments.mmd",
+      "covers": "Comments on lines of their own and after a field",
+      "boxes": 3,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status"
+      ],
+      "over": [
+        "0–15",
+        "16–23",
+        "24–31"
+      ]
+    },
+    {
+      "file": "packet/packet-accessible.mmd",
+      "covers": "A title and a description for a reader who cannot see the picture",
+      "boxes": 3,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status"
+      ],
+      "over": [
+        "0–15",
+        "16–23",
+        "24–31"
+      ]
+    },
+    {
+      "file": "packet/packet-names.mmd",
+      "covers": "Names in single quotes, with brackets in them, and one with no name",
+      "boxes": 4,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Kind",
+        "Lines [count]",
+        "Paid? (y/n)"
+      ],
+      "over": [
+        "0–7",
+        "8–15",
+        "16–23",
+        "24–31"
+      ]
+    },
+    {
+      "file": "packet/packet-short-row.mmd",
+      "covers": "A last row that is not full",
+      "boxes": 3,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Supplier",
+        "Lines"
+      ],
+      "over": [
+        "0–15",
+        "16–31",
+        "32–39"
+      ]
+    },
+    {
+      "file": "packet/packet-one-field.mmd",
+      "covers": "One field, a whole row",
+      "boxes": 1,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 1,
+      "has": [
+        "Order number"
+      ],
+      "over": [
+        "0–31"
+      ]
+    },
+    {
+      "file": "packet/packet-spacing.mmd",
+      "covers": "Spaces round the dash and the colon, or none",
+      "boxes": 3,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status"
+      ],
+      "over": [
+        "0–15",
+        "16–23",
+        "24–31"
+      ]
+    },
+    {
+      "file": "packet/packet-notes.mmd",
+      "covers": "Merlive's own notes on fields, by the bit each starts at",
+      "boxes": 3,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 4,
+      "has": [
+        "Order number",
+        "Lines",
+        "Status"
+      ],
+      "over": [
+        "0–15",
+        "16–23",
+        "24–31"
+      ],
+      "notes": 2
+    },
+    {
+      "file": "packet/packet-whole.mmd",
+      "covers": "A whole header: a title, fields from one bit to two rows, thirty-two columns",
+      "boxes": 18,
+      "links": 0,
+      "placedBy": "grid",
+      "columns": 32,
+      "has": [
+        "Source Port",
+        "Destination Port",
+        "Sequence Number",
+        "Acknowledgment Number",
+        "Data Offset",
+        "Reserved",
+        "URG",
+        "ACK",
+        "PSH",
+        "RST",
+        "SYN",
+        "FIN",
+        "Window",
+        "Checksum",
+        "Urgent Pointer",
+        "(Options and Padding)",
+        "Data (variable length)"
+      ],
+      "over": [
+        "0–15",
+        "16–31",
+        "32–63",
+        "64–95",
+        "96–99",
+        "100–105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "110",
+        "111",
+        "112–127",
+        "128–143",
+        "144–159",
+        "160–191",
+        "192–223",
+        "224–255"
+      ],
+      "title": "TCP Packet"
     }
   ],
   "sequence": [
