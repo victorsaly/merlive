@@ -700,7 +700,7 @@
       "covers": "A box styled on its own",
       "boxes": 2,
       "links": 1,
-      "loses": "Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's",
+      "loses": "Its outline is broken, heavy and red as written, and its fill a wash of that red, in the design's own red",
       "kinds": [
         "red"
       ]
@@ -1474,10 +1474,10 @@
       "boxes": 2,
       "links": 0,
       "kinds": [
-        "grey",
-        "red"
+        "pink",
+        "blue"
       ],
-      "loses": "Each outline is heavy or broken as written, in the design's own nearest colour; the fill is the design's"
+      "loses": "Each is filled with its colour and its outline heavy or broken as written, in the design's own colour of that hue; an edge of another colour than its fill is drawn in the fill's"
     },
     {
       "file": "class/class-classdef.mmd",
@@ -2339,7 +2339,7 @@
       "kinds": [
         "red"
       ],
-      "loses": "Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's"
+      "loses": "Its outline is broken, heavy and red as written, and its fill a wash of that red, in the design's own red"
     },
     {
       "file": "er/er-style-several.mmd",
@@ -3406,7 +3406,7 @@
       "kinds": [
         "red"
       ],
-      "loses": "Its outline is heavy and red as written, in the design's own red; its fill is the design's"
+      "loses": "Its outline is heavy and red as written, and its fill a wash of that red, in the design's own red"
     },
     {
       "file": "requirement/requirement-style-several.mmd",
@@ -4223,7 +4223,7 @@
           "arrow"
         ]
       ],
-      "loses": "Its fill is the colour written, as the nearest colour of the design; the colours of its words and its edge are the design's"
+      "loses": "It is filled with the colour written, in the design's own colour of that hue; the colours of its words and its edge are the design's"
     },
     {
       "file": "c4/c4-update-element-style-named.mmd",
@@ -5172,7 +5172,7 @@
       "covers": "A block styled on its own: a heavy outline, a broken one",
       "boxes": 2,
       "links": 1,
-      "loses": "The colour is drawn in the design's nearest colour"
+      "loses": "Each is filled with its colour, in the design's own colour of that hue; an edge of another colour than its fill is drawn in the fill's"
     },
     {
       "file": "block/block-classdef.mmd",
@@ -5182,7 +5182,7 @@
       "kinds": [
         "back"
       ],
-      "loses": "The colour is drawn in the design's nearest colour"
+      "loses": "The class is filled with its colour, in the design's own colour of that hue"
     },
     {
       "file": "block/block-comments.mmd",

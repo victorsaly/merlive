@@ -262,7 +262,7 @@ describe('c4: what Mermaid is told about the look', () => {
 
   it('says once that a colour given by name is not read', () => {
     const m = c4('Person(buyer, "Buyer")\nSystem(erp, "ERP")\nUpdateElementStyle(buyer, $fontColor="red", $bgColor="grey", $borderColor="red")\nUpdateElementStyle(erp, $bgColor="navy")');
-    assert.deepEqual(told(m), ['UpdateElementStyle gives "buyer" a colour by name ("grey"): only a colour written as #rrggbb is read; it is then drawn as the nearest colour of the design']);
+    assert.deepEqual(told(m), ['UpdateElementStyle gives "buyer" a colour by name ("grey"): only a colour written as #rrggbb is read; it is then kept as a colour, the design\'s own of that hue where it has one']);
     assert.deepEqual(m.nodes.map((n) => n.kind), ['step', 'step']);
   });
 

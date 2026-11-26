@@ -2,6 +2,7 @@
 // diagram is never drawn from a guess. Everything here is pure: text in, a model out.
 
 import { iconFor } from './icons.mjs';
+import { hueOf, strength } from './design.mjs';
 import { stateReader } from './state.mjs';
 import { erReader } from './er.mjs';
 import { c4Reader } from './c4.mjs';
@@ -39,6 +40,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Step[]} steps
  * @property {{main?:string[],side?:'left'|'right',turn?:boolean}} hints turn: false keeps a wide left-to-right flow as it was written
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
+ * @property {string[]} [filled] the kinds whose boxes their author filled with that colour, and did not only edge with it
  * @property {Record<string,string>} [meanings] what a kind of box means, in its author's words (`%% kind red: Read-only data`): the legend's name for it
  * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
  * @property {string[]} warnings
@@ -313,14 +315,22 @@ const PASSED = /^(click|direction)\b/;
 
 /**
  * What an author's own styling says, kept as what it means and not as its numbers: a colour, a broken outline, a
- * heavy one. The colour of its edge says most; else its fill; else its words.
+ * heavy one. The colour is the fill, which is what a reader sees of a box; or its edge, when the fill is so pale
+ * a wash, or no colour at all, that the edge is what says it. The colour of its words is read past: the words are
+ * the design's, held to its contrast, and words alone do not make a box a colour.
  * @param {string} css "fill:#fde,stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5"
  */
 function lookOf(css) {
-  const hex = ['stroke', 'fill', 'color'].map((k) => new RegExp(`(?:^|,)\\s*${k}\\s*:\\s*#([0-9a-f]{6}|[0-9a-f]{3})\\b`, 'i').exec(css)?.[1]).find(Boolean);
+  const [fill, stroke] = ['fill', 'stroke'].map((k) => {
+    const hex = new RegExp(`(?:^|,)\\s*${k}\\s*:\\s*#([0-9a-f]{6}|[0-9a-f]{3})\\b`, 'i').exec(css)?.[1];
+    return hex ? `#${(hex.length === 3 ? [...hex].map((c) => c + c).join('') : hex).toLowerCase()}` : '';
+  });
   const width = Number(/(?:^|,)\s*stroke-width\s*:\s*([\d.]+)/i.exec(css)?.[1] ?? 0);
+  const edged = stroke !== '' && (fill === '' || (strength(fill) < looks.wash && strength(stroke) > strength(fill)));
   return {
-    colour: hex ? `#${(hex.length === 3 ? [...hex].map((c) => c + c).join('') : hex).toLowerCase()}` : '',
+    colour: edged ? stroke : fill || stroke,
+    // Filled, or only edged: a wash with an edge is drawn as that, and a fill as a fill.
+    filled: !edged && fill !== '',
     dashed: /(?:^|,)\s*stroke-dasharray\s*:\s*(?!0\b|none\b)\S/i.test(css),
     heavy: width >= looks.heavy,
   };
@@ -332,22 +342,13 @@ const COLOURS = new Set(['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'pu
 
 const looks = {
   heavy: 3, // px of stroke-width from which an outline or a line is drawn heavy: Mermaid's own thick link is 3.5
-  grey: 0.15, // a colour less saturated than this has no hue to speak of
+  // How strong a colour (in CIELAB, see strength) a fill must be to be the colour of its box. Under it the fill is
+  // a wash (#ffcdd2 is 19, #e1f5fe is 8) and a stronger edge says the colour; over it (#bbf is 36) the fill does.
+  wash: 25,
 };
 
-/**
- * The plain name of a colour's hue. A box its author coloured without saying why ("style B stroke:#c00") is
- * of the kind "red": the design then draws it in its own nearest colour, and a reader is told the same word.
- * @param {string} colour "#cc0000"
- */
-export function hueOf(colour) {
-  const [r, g, b] = [1, 3, 5].map((i) => parseInt(colour.slice(i, i + 2), 16) / 255);
-  const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min, l = (max + min) / 2;
-  if (d === 0 || d / (1 - Math.abs(2 * l - 1)) < looks.grey) return 'grey';
-  const h = 60 * (max === r ? ((g - b) / d + 6) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4);
-  return h < 15 ? 'red' : h < 45 ? 'orange' : h < 70 ? 'yellow' : h < 165 ? 'green' : h < 200 ? 'teal' : h < 260 ? 'blue' : h < 300 ? 'purple' : h < 345 ? 'pink' : 'red';
-}
-
+// The plain name of a colour's hue is one of the colour sums: design.mjs. Kept here too, for those who read it here.
+export { hueOf };
 
 /**
  * The lines of a Mermaid block, with a directive that was written over several lines ("%%{init: {" down to
@@ -385,7 +386,8 @@ export function parse(src) {
 
 function read(/** @type {string} */ src) {
   /** @type {Model} */
-  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', heading: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, meanings: {}, groups: [], warnings: [] };
+  const model = { type: 'flowchart', kindOfDiagram: '', direction: 'TD', title: '', heading: '', describes: '', nodes: [], edges: [], notes: {}, steps: [], hints: {}, classes: {}, filled: [], meanings: {}, groups: [], warnings: [] };
+  const filled = (/** @type {string} */ kind) => void (model.filled?.includes(kind) || model.filled?.push(kind));
   /** @type {Map<string, Node>} */
   const byId = new Map();
   const seenEdge = new Map();
@@ -695,6 +697,7 @@ function read(/** @type {string} */ src) {
       const look = lookOf(classDef[2]);
       for (const name of classDef[1].split(',')) {
         if (look.colour) model.classes[name] = look.colour;
+        if (look.filled) filled(name);
         // A default for every box is a look for the whole diagram, and that is the design's to give.
         if (name !== 'default') ofClass.set(name, look);
       }
@@ -781,14 +784,15 @@ function read(/** @type {string} */ src) {
 
   // An author's own styling, as what it means. A colour makes a box or a link of the kind named for its hue,
   // unless a class already said what kind it is; a broken or a heavy outline is kept as that.
-  const hued = (/** @type {string} */ colour) => {
-    const name = hueOf(colour);
-    model.classes[name] ??= colour;
+  const hued = (/** @type {ReturnType<typeof lookOf>} */ look) => {
+    const name = hueOf(look.colour);
+    model.classes[name] ??= look.colour;
+    if (look.filled) filled(name);
     return name;
   };
   for (const [ids, look] of ofBoxes) {
     for (const n of ids.map((id) => byId.get(id)).filter((x) => x !== undefined)) {
-      if (look.colour && !n.kind) n.kind = hued(look.colour);
+      if (look.colour && !n.kind) n.kind = hued(look);
       if (look.dashed) n.dashed = true;
       if (look.heavy) n.heavy = true;
     }
@@ -800,7 +804,7 @@ function read(/** @type {string} */ src) {
   }
   for (const [numbers, look] of ofLinks) {
     for (const e of numbers.map((i) => numbered[i]).filter((x) => x !== null && x !== undefined)) {
-      if (look.colour) e.kind = hued(look.colour);
+      if (look.colour) e.kind = hued({ ...look, filled: false });
       if (look.heavy) e.style = 'thick';
       else if (look.dashed) e.style = 'dotted';
     }

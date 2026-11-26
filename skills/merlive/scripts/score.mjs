@@ -2,7 +2,7 @@
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
 import { compartmentsOf, hitsBox, meet, measure, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf, wrap } from './layout.mjs';
-import { colourChecks, looksOf } from './design.mjs';
+import { colourChecks, designWith, looksOf } from './design.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
 
@@ -181,7 +181,8 @@ export function score(model, lay, design) {
   const kinds = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])];
   // Only what is drawn shaded is checked: every second row of a table, so a table of one row has none.
   const shaded = [...new Set(model.nodes.filter((n) => (n.table?.length ?? 0) > 1).map((n) => n.kind))];
-  const [d1, d2] = colourChecks(design, kinds, shaded);
+  // What is checked is what is drawn: the design with the colours the diagram's own author gave laid in.
+  const [d1, d2] = colourChecks(designWith(design, model), kinds, shaded);
   const looks = looksOf(design).map(([mode]) => mode).join(' and ');
   add('D1', 'Words and lines can be read against what is behind them', d1.broken, `${design.name} passes in ${looks}`);
   add('D2', 'Kinds of box can be told apart', d2.broken, 'apart in ordinary and red-green colour-blind sight');

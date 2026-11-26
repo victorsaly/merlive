@@ -238,7 +238,7 @@ describe('requirement: classes and styles', () => {
 
   it("keeps what a style says of a thing's outline, for one or for several, whatever their names hold", () => {
     const m = req('requirement a {\n  id: 1\n}\nrequirement "b c" {\n  id: 2\n}\nelement d.e {\n  type: x\n}\nstyle a fill:#f9f,stroke:#333,stroke-width:4px\nstyle "b c",d.e stroke:#c00,stroke-dasharray: 5 5');
-    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind, n.heavy ?? false, n.dashed ?? false]), [['a', 'grey', true, false], ['b_c', 'red', false, true], ['d_e', 'red', false, true]]);
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind, n.heavy ?? false, n.dashed ?? false]), [['a', 'pink', true, false], ['b_c', 'red', false, true], ['d_e', 'red', false, true]]);
     assert.deepEqual(m.warnings, []);
   });
 });

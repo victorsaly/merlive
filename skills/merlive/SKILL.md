@@ -66,7 +66,7 @@ Mermaid, with the person's agreement:
 | S7 a name or words too long (a sequence diagram) | Give the participant a shorter name with `as`; break a message with `<br/>` |
 | P3 a line through a box | Name the main path with `%% main:` so the box in the way moves aside |
 | D1 contrast | Change the colour the message names, in the design file |
-| D2 kinds look alike | Make one of the two colours named lighter or darker, in the design file |
+| D2 kinds look alike, or a coloured box is drawn like a plain one | Make one of the two colours named lighter or darker, in the design file; for a box drawn like a plain one, give its hue a colour there (`kinds.red`) that shows on a box |
 
 `--force` writes the diagram anyway. Use it only when the person has seen the message and asks for it.
 

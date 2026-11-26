@@ -2,7 +2,7 @@
 // with scripts off); the page around it adds picking and steps. Pure: a model, a layout and a design in, a
 // string out.
 
-import { contrast, kindFill, looksOf, mix, rowShade } from './design.mjs';
+import { contrast, designWith, kindFill, looksOf, mix, rowShade } from './design.mjs';
 import { runtime } from './runtime.mjs';
 import { form, outlineOf, wordsAt } from './shapes.mjs';
 import { iconMeasure, icons } from './icons.mjs';
@@ -308,10 +308,12 @@ export function titleOf(heading, width) {
  * A still picture: one SVG file, for wikis and anywhere a page cannot go.
  * @param {import('./parse.mjs').Model} model
  * @param {import('./layout.mjs').Layout} lay
- * @param {import('./design.mjs').Design} design
+ * @param {import('./design.mjs').Design} given the design; the colours the diagram's own author gave are laid over it here
  * @param {{title:string}} about
  */
-export function picture(model, lay, design, about) {
+export function picture(model, lay, given, about) {
+  // The colours the diagram's own author gave are laid in here, so nobody who draws can leave them out.
+  const design = designWith(given, model);
   const title = titleOf(model.heading, lay.width);
   return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height + title.band}" width="${lay.width}" height="${lay.height + title.band}" role="img" aria-label="${esc(about.title)}">
 <title>${esc(about.title)}</title>${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
@@ -326,10 +328,11 @@ ${title.band ? `${title.svg}\n<g transform="translate(0,${title.band})">\n${insi
  * The live page: the same drawing, with picking and steps around it.
  * @param {import('./parse.mjs').Model} model
  * @param {import('./layout.mjs').Layout} lay
- * @param {import('./design.mjs').Design} design
+ * @param {import('./design.mjs').Design} given the design; the colours the diagram's own author gave are laid over it here
  * @param {{title:string,source:string,version:string}} about
  */
-export function page(model, lay, design, about) {
+export function page(model, lay, given, about) {
+  const design = designWith(given, model);
   const kinds = kindsIn(model);
   const data = {
     nodes: model.nodes.map((m) => ({ id: m.id, label: m.label, kind: m.kind, kindName: meaningOf(model, m.kind), note: model.notes[m.id] ?? '' })),

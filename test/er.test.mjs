@@ -247,7 +247,7 @@ describe('er: what a flowchart has too', () => {
 
   it('keeps what a style says of an entity\'s outline, for one or for several, whatever their names hold', () => {
     const m = er('ORDER\nORDER-LINE\n"Delivery address"\nstyle ORDER fill:#f9f,stroke:#333,stroke-width:4px\nstyle ORDER-LINE,"Delivery address" stroke:#c00,stroke-dasharray: 5 5');
-    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind, n.heavy ?? false, n.dashed ?? false]), [['ORDER', 'grey', true, false], ['ORDER_LINE', 'red', false, true], ['Delivery_address', 'red', false, true]]);
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind, n.heavy ?? false, n.dashed ?? false]), [['ORDER', 'pink', true, false], ['ORDER_LINE', 'red', false, true], ['Delivery_address', 'red', false, true]]);
     assert.deepEqual(m.warnings, []);
   });
 

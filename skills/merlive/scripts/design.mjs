@@ -13,6 +13,8 @@
  * @property {string} edge a line
  * @property {string} accent the selected thing and the path being shown
  * @property {Record<string,string>} kinds a colour for each kind of box that means something
+ * @property {string[]} [said] the kinds whose colour the diagram's own author gave (designWith)
+ * @property {string[]} [filled] those of them whose boxes their author filled, and did not only edge: drawn as a fill, not a wash
  */
 /**
  * @typedef {object} Design
@@ -109,31 +111,116 @@ export const rowShade = 0.06;
 /** The fill of a shaded row, over the fill of its box. */
 export const shadedFill = (/** @type {Palette} */ p, /** @type {string} */ fill) => mix(p.text, fill, rowShade);
 
-/** The fill of a box of some kind: its colour, thinned into the box's own fill. */
-export const kindFill = (/** @type {Palette} */ p, /** @type {string} */ kind) => (p.kinds[kind] ? mix(p.kinds[kind], p.node, 0.13) : p.node);
+// How much of a kind's colour is in the fill of its box.
+export const kindShare = {
+  // A kind Merlive read from a box's shape (a decision, a start) is said quietly: its edge and a wash of it.
+  tint: 0.13,
+  // A colour its author filled a box with is the author's point (red for refused, green for passed), and Mermaid
+  // draws it as the whole box. So it is a fill. Found by looking at a red, a green, an amber and a purple box
+  // drawn at 0.25, 0.34, 0.4, 0.5 and 0.6, at the size of a phone: under 0.4 the light page's are pastels a
+  // glance does not sort, and over 0.5 the dark page's shout over the boxes around them.
+  said: 0.45,
+  // The step a fill is thinned by, when the words on it would be too faint at full strength.
+  step: 0.03,
+};
 
 /**
- * A design that also knows the classes a diagram's author made up. A class the design has no colour for takes
- * the design's own colour nearest to the one its author chose (a red they called "red" becomes the design's
- * risk), so what they meant is kept and the palette stays the project's.
+ * The fill of a box of some kind: its colour, thinned into the box's own fill. A colour its author gave is a
+ * fill and not a wash where its author filled the box, thinned only as far as the words on it need to be read.
+ */
+export function kindFill(/** @type {Palette} */ p, /** @type {string} */ kind) {
+  const colour = p.kinds[kind];
+  if (!colour) return p.node;
+  if (!p.filled?.includes(kind)) return mix(colour, p.node, kindShare.tint);
+  let share = kindShare.said;
+  while (share - kindShare.step >= kindShare.tint && contrast(p.text, mix(colour, p.node, share)) < colourLimits.text) share -= kindShare.step;
+  return mix(colour, p.node, share);
+}
+
+// What is measured of a hue.
+const hues = {
+  grey: 0.15, // a colour less saturated than this has no hue to speak of
+  // Degrees round the colour wheel within which two colours are one hue to a reader: an amber and an orange are
+  // (5 apart), a teal and a blue are (14); a red and a vermilion (22) are not, and a red drawn orange is not red.
+  near: 20,
+};
+
+/** Where a colour is round the colour wheel, in degrees from red; not a number for a grey, which is nowhere on it. */
+function hueAt(/** @type {string} */ colour) {
+  const [r, g, b] = rgb(colour).map((v) => v / 255);
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min, l = (max + min) / 2;
+  if (d === 0 || d / (1 - Math.abs(2 * l - 1)) < hues.grey) return NaN;
+  return 60 * (max === r ? ((g - b) / d + 6) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4);
+}
+
+/**
+ * The plain name of a colour's hue. A box its author coloured without saying why ("style B fill:#c00") is of
+ * the kind "red", and a reader is told the same word.
+ * @param {string} colour "#cc0000"
+ */
+export function hueOf(colour) {
+  const h = hueAt(colour);
+  if (Number.isNaN(h)) return 'grey';
+  return h < 15 ? 'red' : h < 45 ? 'orange' : h < 70 ? 'yellow' : h < 165 ? 'green' : h < 200 ? 'teal' : h < 260 ? 'blue' : h < 300 ? 'purple' : h < 345 ? 'pink' : 'red';
+}
+
+/** Whether two colours are one hue to a reader: the same name, or near enough round the wheel. Two greys are. */
+function oneHue(/** @type {string} */ a, /** @type {string} */ b) {
+  const [x, y] = [hueAt(a), hueAt(b)];
+  if (Number.isNaN(x) || Number.isNaN(y)) return Number.isNaN(x) && Number.isNaN(y);
+  return hueOf(a) === hueOf(b) || Math.min(Math.abs(x - y), 360 - Math.abs(x - y)) <= hues.near;
+}
+
+/** Whether two colours can be told apart, by ordinary sight and by sight that does not tell red from green. */
+const told = (/** @type {string} */ a, /** @type {string} */ b) => Math.min(apart(a, b), apart(a, b, 'protan'), apart(a, b, 'deutan')) >= colourLimits.tellApart;
+
+/**
+ * An author's own colour, changed only as far as it must be for its edge and its line to be seen on this page:
+ * darker on a light page, lighter on a dark one, a step at a time, until it is.
+ */
+function onPage(/** @type {string} */ colour, /** @type {Palette} */ p) {
+  const toward = contrast('#000000', p.bg) > contrast('#ffffff', p.bg) ? '#000000' : '#ffffff';
+  let out = colour;
+  for (let share = kindShare.step; contrast(out, p.bg) < colourLimits.line && share <= 1; share += kindShare.step) out = mix(toward, colour, share);
+  return out;
+}
+
+/**
+ * A design that also knows the colours a diagram's own author gave: an author's colour always survives as a
+ * colour. A kind the design has no colour for (a class its author made up, a box they filled red) is given one,
+ * the first of these that there is:
+ *
+ * 1. the design's own colour of that hue, when no other kind in the diagram has it: the diagram fits the site;
+ * 2. the author's own colour, changed only as far as it must be to be seen on the page;
+ * 3. the design's own colour nearest to it that no other kind in the diagram has: at the cost of its hue.
+ *
+ * Each only when it can be told from every colour already in the diagram: two kinds are never made one to the
+ * eye for the sake of a hue. A colour the design names for that kind itself (`kinds.red` in a design file) wins
+ * over all three. Every such kind is marked as said by its author, and as filled where its author filled the
+ * box and did not only edge it: such a box is filled and not washed (kindFill). Given the same diagram twice,
+ * it gives the same design.
  * @param {Design} design
- * @param {{nodes:{kind:string}[],classes:Record<string,string>}} model
+ * @param {{nodes?:{kind:string}[],edges?:{kind?:string}[],classes?:Record<string,string>,filled?:string[]}} model
  * @returns {Design}
  */
 export function designWith(design, model) {
-  const strangers = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])].filter((k) => !design.light.kinds[k] && HEX.test(model.classes[k] ?? ''));
-  if (!strangers.length) return design;
-  const present = [...new Set([...model.nodes.map((n) => n.kind), ...model.edges.flatMap((e) => (e.kind ? [e.kind] : []))])];
+  const present = [...new Set([...(model.nodes ?? []).map((n) => n.kind), ...(model.edges ?? []).flatMap((e) => (e.kind ? [e.kind] : []))])];
+  const said = present.filter((k) => HEX.test(model.classes?.[k] ?? ''));
+  if (!said.length) return design;
   const more = (/** @type {Palette} */ p) => {
-    // A colour one of the design's own kinds has in this diagram would make two kinds one to the eye, so the
-    // nearest of the rest is taken; only when every colour is taken is one shared. Two colours an author chose
-    // may still come to the same one: they chose them alike.
-    const taken = new Set(present.flatMap((k) => (p.kinds[k] ? [p.kinds[k]] : [])));
-    const nearest = (/** @type {string} */ c) => {
-      const all = Object.values(p.kinds), free = all.filter((x) => !taken.has(x));
-      return (free.length ? free : all).reduce((a, b) => (apart(b, c) < apart(a, c) ? b : a));
-    };
-    return { ...p, kinds: { ...p.kinds, ...Object.fromEntries(strangers.map((k) => [k, nearest(model.classes[k])])) } };
+    const kinds = { ...p.kinds };
+    // The colours kinds in this diagram already have. One of them given again would make two kinds one to the eye.
+    const taken = present.flatMap((k) => (p.kinds[k] ? [p.kinds[k]] : []));
+    const nearest = (/** @type {string[]} */ from, /** @type {string} */ c) => from.reduce((a, b) => (apart(b, c) < apart(a, c) ? b : a));
+    for (const k of said.filter((kind) => !p.kinds[kind])) {
+      const own = /** @type {Record<string,string>} */ (model.classes)[k].toLowerCase(), seen = onPage(own, p);
+      const clear = (/** @type {string} */ c) => taken.every((t) => told(c, t));
+      const free = [...new Set(Object.values(p.kinds))].filter((c) => !taken.includes(c)), apartFromAll = free.filter(clear), sameHue = apartFromAll.filter((c) => oneHue(c, own));
+      // When nothing can be told from what is there, the author's own is kept, and D2 says which two are alike.
+      kinds[k] = sameHue.length ? nearest(sameHue, own) : clear(seen) || !apartFromAll.length ? seen : nearest(apartFromAll, own);
+      taken.push(kinds[k]);
+    }
+    return { ...p, kinds, said, filled: said.filter((k) => model.filled?.includes(k)) };
   };
   return { ...design, light: more(design.light), ...(design.dark ? { dark: more(design.dark) } : {}) };
 }
@@ -146,6 +233,10 @@ export const colourLimits = {
   // Tol's bright) keep their closest pair at 16 to 17, so they pass with room; two outlines closer than this
   // read as one colour with a legend beside them.
   tellApart: 12,
+  // The least a box its author coloured may differ from a plain box, in CIELAB: its fill from a plain fill where
+  // they filled it, its edge from a plain edge where they only edged it. Under this the colour is there in the
+  // file and not in the picture.
+  seen: 8,
 };
 
 /** The looks a design is drawn in, each with its name: light, dark or both. */
@@ -186,6 +277,12 @@ export function colourChecks(design, kinds, shaded = []) {
       if (plain < colourLimits.tellApart) alike.push(`${mode}: ${a} and ${b} boxes look alike (${Math.round(plain)} apart, and need ${colourLimits.tellApart})`);
       else if (redGreen < colourLimits.tellApart) alike.push(`${mode}: ${a} and ${b} boxes look alike to someone who does not see red and green apart (${Math.round(redGreen)} apart, and need ${colourLimits.tellApart})`);
     }));
+    // An author's colour always survives as a colour: a box they coloured is not drawn like a plain one.
+    // Filled, its fill is seen beside a plain box's; only edged, its edge is.
+    for (const k of kinds.filter((kind) => p.said?.includes(kind))) {
+      const seen = p.filled?.includes(k) ? apart(kindFill(p, k), p.node) : p.kinds[k] ? apart(p.kinds[k], p.stroke) : 0;
+      if (seen < colourLimits.seen) alike.push(`${mode}: a ${k} box is drawn like a plain one, though its author gave it a colour`);
+    }
   }
   return [{ id: 'D1', broken: faint }, { id: 'D2', broken: alike }];
 }

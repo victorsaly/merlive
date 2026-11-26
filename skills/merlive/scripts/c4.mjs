@@ -204,7 +204,7 @@ export function c4Reader({ model, node, say, connect, frame, unframe, outline, w
     if (!declared.has(id)) return;
     const hex = colours.find((c) => HEX.test(c)), named = colours.find((c) => !HEX.test(c));
     if (hex) outline([id], `fill:${hex}`);
-    else once('named colour', line, `UpdateElementStyle gives "${by.alias}" a colour by name ("${named}"): only a colour written as #rrggbb is read; it is then drawn as the nearest colour of the design`);
+    else once('named colour', line, `UpdateElementStyle gives "${by.alias}" a colour by name ("${named}"): only a colour written as #rrggbb is read; it is then kept as a colour, the design's own of that hue where it has one`);
   };
 
   const statement = (/** @type {string} */ text, /** @type {number} */ line) => {

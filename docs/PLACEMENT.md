@@ -205,6 +205,40 @@ twelve. Checked in light and in dark. Only kinds the design gives a colour are c
 - **And never colour alone:** a decision and a start or end also differ in shape, the legend names every kind,
   and a picked box says its kind in words.
 
+### An author's colour survives as a colour
+
+A box or a link its author coloured (`style D fill:#F44336`, `classDef`, `linkStyle 0 stroke:#c00`) said
+something with it: red for refused, green for passed. It is never drawn like a plain one. Which colour it is
+drawn in is the first of these that there is:
+
+1. the colour the design file names for that hue (`kinds.red`), which always wins;
+2. the design's own colour of that hue, when no other kind in the diagram has it, so the diagram fits the site.
+   One hue is one name (red, orange, yellow, green, teal, blue, purple, pink, grey) or within 20 degrees round
+   the colour wheel: an amber is the design's orange, a red is not its vermilion;
+3. the author's own colour, darkened on a light page or lightened on a dark one only until its edge is 3 to 1
+   against the page, when it can be told (D2) from every colour already in the diagram;
+4. the design's own nearest colour that no other kind in the diagram has: told apart, at the cost of its hue.
+
+How it is drawn is how it was written. A box its author filled is filled: 45 parts in 100 of the colour in the
+box's own fill, and the outline in the colour. A box they only edged, or gave a wash paler than 25 in CIELAB
+with a stronger edge (`fill:#e1f5fe,stroke:#01579b`), has its edge in the colour over a wash of it, 13 in 100,
+as a kind of Merlive's own has. A link is drawn in the colour, line and head. The colour written for a box's
+words (`color:#fff`) is read past: the words are the design's, and D1 holds them.
+
+- **The checks:** D1, on every such fill: where the words would be under 4.5 to 1 the fill is thinned, 3 parts
+  at a time and no further than a wash, until they are read, so a diagram is not failed for its author's colour
+  when a paler fill passes. D2, for every two such colours, and this besides: a filled box's fill is at least 8
+  apart in CIELAB from a plain box's, and an edged box's edge at least 8 from a plain edge. Under that, D2 fails
+  with "a red box is drawn like a plain one, though its author gave it a colour".
+- **Pass:** a red, a green and an amber box, in Merlive's own colours: fills 29 or more from a plain box in
+  light and in dark, words on each at 5.5 to 1 or better.
+- **Fail:** a design file whose `kinds.red` is the colour of its own boxes.
+- **Why 45, and not the author's own fill whole:** found by looking at a red, a green, an amber and a purple at
+  the size of a phone. Under 40 the light page's are pastels a glance does not sort; over 50 the dark page's
+  shout over the boxes round them. Whole, the words on it would need the author's `color:`, which nothing holds
+  to a contrast.
+- **What to do when it fails:** give that hue a colour in the design file (`kinds.red`) that shows on a box.
+
 ## What a diagram looks like says something
 
 Nothing is there for decoration. Each difference a reader can see means one thing:

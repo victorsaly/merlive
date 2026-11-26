@@ -44,9 +44,10 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A & B --> C & D` | Every box before the link, linked to every box after it |
 | `A e1@--> B`, `e1@{ animate: true }` | A link with an id is a link; what Mermaid sets on it (animation, a step, a curve) is read past |
 | `class A,B rework`, `A:::rework` | The kind of a box: its colour comes from the design's `kinds` |
-| `classDef red stroke:#c62828` | The class's colour is read for what it means: a kind the design has no colour for takes the design's own nearest colour (this red becomes `risk`) |
-| `style B stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5` | What the author's own style means is kept: a broken outline, a heavy one, and a colour, named for its hue (`red`) and drawn in the design's own nearest colour. The fill is the design's |
-| `linkStyle 0 stroke:#c00,stroke-width:4px` | The same for a link, by the number Mermaid gives it: heavy, broken, and in the design's nearest colour |
+| `classDef red stroke:#c62828` | The class's colour survives as a colour: a kind the design has no colour for takes the design's own colour of that hue (this red is drawn in `risk`'s), and where the design has none of that hue it keeps its author's own, changed only as far as it must be to be seen on the page |
+| `style B stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5` | What the author's own style means is kept: a broken outline, a heavy one, and a colour, named for its hue (`red`). The colour is the design's own of that hue where it has one and its author's own where it has none; a design file's `kinds.red` wins. Only edged, or a pale wash with a strong edge, it is drawn so: its edge in the colour over a wash of it |
+| `style B fill:#F44336,stroke:#D32F2F,color:#fff` | A box its author filled is drawn filled, strongly enough to tell a red from a green from an amber at a glance, and thinned only as far as its words need to be read (D1). The colour written for its words is read past: the words are the design's |
+| `linkStyle 0 stroke:#c00,stroke-width:4px` | The same for a link, by the number Mermaid gives it: heavy, broken, and in its colour, found as a box's is |
 | `classDef default …`, `linkStyle default …` | Read past: a look for every box or every link is the design's |
 | `click`, `direction` | Read past |
 

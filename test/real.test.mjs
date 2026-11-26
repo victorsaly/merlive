@@ -339,23 +339,29 @@ describe('more real diagrams: placed', () => {
 });
 
 describe('more real diagrams: drawn', () => {
-  it("gives a class the design does not know the design's nearest colour to the one its author chose", () => {
+  it("gives a class the design does not know the design's own colour of that hue, and where it has none the author's", () => {
     const m = parse(answers);
     const d = designWith(builtIn, m);
     assert.equal(d.light.kinds.red, builtIn.light.kinds.risk);
-    assert.equal(d.dark?.kinds.red, builtIn.dark?.kinds.risk);
+    // In dark the design's nearest is a vermilion: an orange, to a reader. So the red is its author's own.
+    assert.equal(d.dark?.kinds.red, '#c62828');
     assert.equal(designWith(builtIn, parse('flowchart TD\nA --> B')), builtIn);
-    assert.match(picture(m, layout(m), d, { title: m.title }), /--mv-k-red:#7a1f12/);
+    // Nobody who draws has to lay the author's colours in: the picture does.
+    assert.match(picture(m, layout(m), builtIn, { title: m.title }), /--mv-k-red:#7a1f12/);
+    assert.equal(picture(m, layout(m), d, { title: m.title }), picture(m, layout(m), builtIn, { title: m.title }));
   });
 
   it('never gives it the colour of a kind that is in the same diagram: the two could not be told apart', () => {
-    // Dark grey is nearest the green a start has. With a start in the diagram, it takes the next nearest.
-    const m = parse('flowchart TD\n  A([Start]) --> B[Work]\n  style B fill:#969,stroke:#333,stroke-width:4px'), d = designWith(builtIn, m);
-    assert.notEqual(d.light.kinds.grey, builtIn.light.kinds.terminal);
-    assert.ok(Object.values(builtIn.light.kinds).includes(d.light.kinds.grey), 'still one of the design\'s own colours');
+    // The design's own green is the one a start has. With a start in the diagram, a green box keeps its author's.
+    const m = parse('flowchart TD\n  A([Start]) --> B[Work]\n  style B fill:#4CAF50,stroke:#388E3C'), d = designWith(builtIn, m);
+    assert.notEqual(d.light.kinds.green, builtIn.light.kinds.terminal);
     assert.deepEqual(score(m, layout(m), d).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), []);
-    const alone = parse('flowchart TD\n  A[Start] --> B[Work]\n  style B stroke:#333');
-    assert.equal(designWith(builtIn, alone).light.kinds.grey, builtIn.light.kinds.terminal, 'with no start there, the nearest is free');
+    const alone = parse('flowchart TD\n  A[Start] --> B[Work]\n  style B fill:#4CAF50,stroke:#388E3C');
+    assert.equal(designWith(builtIn, alone).light.kinds.green, builtIn.light.kinds.terminal, 'with no start there, the design\'s own green is free');
+    // A grey is a grey: it is not handed the design's nearest colour, which would say something its author did not.
+    const grey = parse('flowchart TD\n  A([Start]) --> B[Work]\n  style B stroke:#333,stroke-width:4px');
+    assert.ok(!Object.values(builtIn.light.kinds).includes(designWith(builtIn, grey).light.kinds.grey));
+    assert.deepEqual(score(grey, layout(grey), builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), []);
   });
 
   it("draws a group's frame behind its boxes, with its title, and a link's words in the lines they were wrapped to", () => {
