@@ -469,8 +469,9 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
 
   // 4. A box nothing leads to, off the main path, feeds something further on. It sits one step before what it
   //    feeds, not back at the start with a long line to draw.
+  //    A box at the start of a row stays in its row.
   for (const id of ids) {
-    if (onSpine.has(id) || forward.some((e) => e.to === id)) continue;
+    if (onSpine.has(id) || rowOf.has(id) || forward.some((e) => e.to === id)) continue;
     const fed = forward.filter((e) => e.from === id).map((e) => rank.get(e.to) ?? 0);
     if (fed.length) rank.set(id, Math.max(0, Math.min(...fed) - 1));
   }

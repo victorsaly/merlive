@@ -391,6 +391,15 @@ describe("layout: a group's own direction", () => {
     assert.deepEqual(lay.warnings, []);
   });
 
+  it('keeps a row in one rank when the main path comes into its far end, and its frame round it', () => {
+    const m = parse('flowchart TB\n  N[Notebook] --> P\n  subgraph app [App]\n    direction LR\n    S[Screens] --> V[Server] --> P[Package]\n  end\n  P --> R[Recordings] --> W[Website]'), lay = layout(m), n = lay.nodes;
+    assert.equal(new Set([n.S.y, n.V.y, n.P.y]).size, 1, 'one row');
+    assert.ok(n.S.x < n.V.x && n.V.x < n.P.x, 'in its order');
+    assert.equal(lay.groups.length, 1, 'its frame is drawn');
+    assert.deepEqual(lay.warnings, []);
+    assert.deepEqual(passes(m, lay), []);
+  });
+
   it('runs right to left when it says so, and keeps its order when the branches are drawn to the left', () => {
     const rl = layout(parse(warehouse.replace('direction LR', 'direction RL'))).nodes;
     assert.ok(rl.B.x > rl.C.x && rl.C.x > rl.D.x, 'right to left');
