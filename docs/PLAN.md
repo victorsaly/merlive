@@ -96,17 +96,19 @@ widens a column (`nameAt` in grid.mjs, `Frame.lines`). In a flow placed by rule 
 Left:
 
 1. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
-   colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`.
-2. **Look, sample by sample**, beside Mermaid's. Mindmaps are done (28 November): all 38 looked through. Found
-   and fixed: a hexagon, a circle and a cloud took a flowchart's kinds (Decision, Start or end), colour and all.
-   Found and left for Victor (below): the comb, and a sibling whose line leaves another side. Kanban boards are
-   done too, all 25: a card's ticket, who has it and its priority were in the face for code, and are in the page's
-   face now. Left as decided in the reference: a known priority is listed in small letters (`priority: high`) and
-   any other as written, and a ticket is not a link even where `ticketBaseUrl` says where it would go. Timelines
-   are done, all 29, with nothing found but what was already known: in `timeline-direction-td-sections` the arrow
-   into a section runs just past the end of its name, with its head beside it (the narrow group's name, item 1 of
-   "Next" below), and a theme's colours are left for the design's. Packets are still to look through. A packet of one-bit fields with four-letter names
-   (`packet-bit`) is still 1396px: a column is as wide as its widest one-bit name.
+   colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`. Waits on Victor.
+2. **A packet of one-bit fields with four-letter names** (`packet-bit`) is still 1396px: a column is as wide as its
+   widest one-bit name.
+
+Every sample of the four kinds was looked through beside Mermaid's own on 28 November (114: 38 mindmaps, 25
+boards, 29 timelines, 22 packets). Fixed from it: a mindmap's hexagon, circle and cloud took a flowchart's kinds
+(Decision, Start or end), colour and all; a card's ticket, who has it and its priority were in the face for code.
+Left as the reference decides: a known priority in small letters (`priority: high`) and any other as written; a
+ticket that is not a link even where `ticketBaseUrl` says where it would go; a timeline theme's colours, which
+are the design's. Already known: in `timeline-direction-td-sections` the arrow into a section runs just past the
+end of its name (the narrow group's name, item 1 of "Next" below). A packet's bits are said over its name ("0–15")
+where Mermaid puts the first and last at its corners, and its title is above, as every kind's is. Questions of
+taste are under "Waiting on Victor".
 
 ## Waiting on Victor
 
