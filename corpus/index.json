@@ -677,8 +677,7 @@
       "covers": "A group with a direction of its own",
       "boxes": 5,
       "links": 4,
-      "groups": 1,
-      "loses": "The group's own direction is read past; it runs the way the rest does"
+      "groups": 1
     },
     {
       "file": "flowchart/subgraph-nested.mmd",

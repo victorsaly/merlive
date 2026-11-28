@@ -40,7 +40,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {{main?:string[],side?:'left'|'right',turn?:boolean,wrap?:boolean}} hints turn: false keeps a wide left-to-right flow as it was written; wrap: false keeps a wide timeline in one row
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
  * @property {Record<string,string>} [meanings] what a kind of box means, in its author's words (`%% kind red: Read-only data`): the legend's name for it
- * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
+ * @property {{id:string,title:string,members:string[],parent?:string,direction?:'TD'|'LR'|'BT'|'RL'}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, the group it is inside, and the way it says its own boxes run
  * @property {string[]} warnings
  * @property {string} [left] why a diagram of a kind Merlive reads is left as Mermaid all the same, in a sentence that says what to do; its type is then 'unsupported'
  * @property {'grid'} [placedBy] set when its boxes are placed where its author put them and not by rule: a block diagram whose meaning is in its grid
@@ -244,8 +244,8 @@ const READERS = /** @type {const} */ ([
   [/^kanban$/, kanbanReader, 'Card'],
 ]);
 
-// Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own
-// direction is not followed yet.
+// Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a direction
+// outside any group says nothing the first line did not.
 const PASSED = /^(click|direction)\b/;
 
 /**
@@ -593,6 +593,10 @@ export function parse(src) {
     if (styled) return void ofBoxes.push([styled[1].split(',').filter(Boolean), lookOf(styled[2])]);
     const linkStyled = /^linkStyle\s+(default|\d+(?:\s*,\s*\d+)*)\s+(\S.*)$/.exec(text);
     if (linkStyled) return void (linkStyled[1] === 'default' || ofLinks.push([linkStyled[1].split(',').map(Number), lookOf(linkStyled[2])]));
+    // A group may say the way its own boxes run, across the flow it is in.
+    const runs = /^direction\s+(TB|TD|BT|LR|RL)\s*;?$/.exec(text);
+    const inside = runs && open.length ? model.groups.find((g) => g.id === open[open.length - 1]) : undefined;
+    if (runs && inside) return void (inside.direction = /** @type {'TD'|'LR'|'BT'|'RL'} */ (runs[1] === 'TB' ? 'TD' : runs[1]));
     if (PASSED.test(text) || /^(style|linkStyle)\b/.test(text)) return;
     const cls = /^class\s+([\w,\s]+?)\s+(\w+(?:-\w+)*)\s*;?$/.exec(text);
     if (cls) {

@@ -275,8 +275,8 @@ describe('more real diagrams: read', () => {
     const m = parse(steps);
     assert.deepEqual(m.warnings, ['the kind "red" says only its colour, so the legend says "red" too: "%% kind red: what it means" names it there']); // its author named the kind for its colour
     assert.deepEqual(m.groups, [
-      { id: 'g1', title: 'Get ready', members: ['S0', 'S1', 'S2'] },
-      { id: 'g2', title: 'Build the agent', members: ['S3', 'S4', 'S5', 'S6'] },
+      { id: 'g1', title: 'Get ready', members: ['S0', 'S1', 'S2'], direction: 'LR' },
+      { id: 'g2', title: 'Build the agent', members: ['S3', 'S4', 'S5', 'S6'], direction: 'LR' },
       { id: 'g3', title: 'Show it works', members: ['S7', 'S8'] },
     ]);
     assert.equal(m.nodes.length, 9, 'a group is not a box');
@@ -285,7 +285,7 @@ describe('more real diagrams: read', () => {
 
   it('puts a box named before its group opens in the group that then uses it', () => {
     const m = parse(where);
-    assert.deepEqual(m.groups, [{ id: 'app', title: 'Demo app, on your laptop', members: ['BR', 'SV', 'PK'] }]);
+    assert.deepEqual(m.groups, [{ id: 'app', title: 'Demo app, on your laptop', members: ['BR', 'SV', 'PK'], direction: 'LR' }]);
     assert.deepEqual(m.warnings, ['the kind "red" says only its colour, so the legend says "red" too: "%% kind red: what it means" names it there']); // its author named the kind for its colour
   });
 

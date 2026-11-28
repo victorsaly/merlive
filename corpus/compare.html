@@ -30,7 +30,7 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
 <p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 520 samples, Merlive draws 499 whole and 1 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>520</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>393</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>106</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>1</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>20</b></button></div>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>520</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>394</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>105</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>1</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>20</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -675,10 +675,10 @@ flowchart LR
   D --&gt; E[Close]
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>A group with a direction of its own</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">The group's own direction is read past; it runs the way the rest does</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-direction.png" width="526" height="348" style="--w:526" alt="A group with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-direction.svg" width="196" height="468" style="--w:196" alt="A group with a direction of its own, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/subgraph-direction.png" width="526" height="348" style="--w:526" alt="A group with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/subgraph-direction.svg" width="580" height="284" style="--w:580" alt="A group with a direction of its own, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart TB
   A[Order] --&gt; B
   subgraph wh [Warehouse]
@@ -1960,7 +1960,7 @@ classDiagram
 <article class="card" data-result="less">
 <h3>A group with a direction of its own</h3>
 <p class="result"><b>Drawn, less something</b> <span class="why">The group's own direction is read past; it runs the way the rest does</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-subgraph-direction.png" width="619" height="772" style="--w:619" alt="A group with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-subgraph-direction.svg" width="216" height="296" style="--w:216" alt="A group with a direction of its own, as Merlive draws it"></div></figure></div>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/er-subgraph-direction.png" width="619" height="772" style="--w:619" alt="A group with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/er-subgraph-direction.svg" width="408" height="204" style="--w:408" alt="A group with a direction of its own, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>erDiagram
     subgraph Buying
         direction LR

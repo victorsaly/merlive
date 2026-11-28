@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, as 0.5.5 was begun.
+Last brought up to date: 28 November 2026, as 0.5.6 was begun.
 
 ## Released
 
@@ -152,7 +152,7 @@ taste are under "Waiting on Victor".
   (`linesOf` gives a bar none). The bar keeps every box's footprint (P2), so left to right the arrows either side
   of it are longer than Mermaid's. One corpus picture changed (`state-fork-join`).
 
-**0.5.5** (not released yet), the pull request from the branch `fix-0.5.5`:
+**0.5.5** (28 November 2026), pull request 16 from the branch `fix-0.5.5`:
 - eleven more of the newer shapes drawn as themselves (shapes.mjs): a document and a stack of them (a waved foot,
   `form.wave`, sheets `form.stack` apart), a card, a lined box, a stack of boxes, a divided box, a window pane, a
   sloped box, a delay, a triangle and one turned over; Mermaid's `fork` and `join` are the bar a state diagram's
@@ -164,6 +164,20 @@ taste are under "Waiting on Victor".
   a database) is as tall as a name's box with its name under it (`across.mark`), so the row of participants keeps
   one height, where Mermaid's boxes are taller and its figures bigger; and the legend names the kinds of colour
   there are, three for six types, each drawing saying its own type.
+
+**0.5.6** (not released yet), the pull request from the branch `fix-0.5.6`:
+- a flowchart group's own direction is followed when it runs across the flow (`direction LR` in a flow drawn top
+  to bottom, `TB` in one drawn left to right): its boxes are a row, one rank in the order they are linked, a lane
+  each (`rowOf` in `placedOnce()`). The main path keeps one box of a row, where the flow comes in, and goes on from
+  wherever the row is left; a row is ranked as one, so a link into its middle moves it all on; `RL` and `BT` lay
+  it the other way, as does `%% side: left` turned over. The lane moves leave a row in its order. With a branch
+  inside, a row would have a line run through a box, so the group runs as the flow does and a warning says so.
+- between a frame that ends and one that begins, a line from one lane to another runs across in the middle of the
+  band between their edges, and the band is made wide enough for that (`between` and `forTrack`): the 13 steps'
+  "Get ready" row to "Build the agent" ran along a frame's edge (P5) without it.
+- the business analyst demo's "13 steps" and "What lives where" are drawn as their author wrote them: "Get ready",
+  "Build the agent" and "Demo app, on your laptop" are rows. Two corpus pictures changed
+  (`subgraph-direction`, `er-subgraph-direction`).
 
 ## Waiting on Victor
 
@@ -210,7 +224,7 @@ taste are under "Waiting on Victor".
      is new); an author's highlight colours become the design's tint;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
-   - a group's own direction is read past;
+   - a composite state's own direction is read past (state.mjs keeps it to itself; a flowchart's group follows its own since 0.5.6);
    - of the 53 newer `@{ shape }` names, 32 are drawn as themselves; the 21 that are boxes are mostly drawings
      (a cloud, a bolt, a person, braces, a folder) rather than outlines, and the hourglass, whose words would sit
      in its pinch.

@@ -42,7 +42,8 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `style B stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5` | What the author's own style means is kept: a broken outline, a heavy one, and a colour, named for its hue (`red`) and drawn in the design's own nearest colour. The fill is the design's |
 | `linkStyle 0 stroke:#c00,stroke-width:4px` | The same for a link, by the number Mermaid gives it: heavy, broken, and in the design's nearest colour |
 | `classDef default …`, `linkStyle default …` | Read past: a look for every box or every link is the design's |
-| `click`, `direction` | Read past |
+| `click` | Read past |
+| `direction LR` inside a group | A group whose boxes run across the flow: its boxes in one row, in the order they are linked, the main path through where the flow comes into it; `RL` and `BT` the other way. Only for boxes linked one after another in a line: with a branch inside, the group runs as the flow does, and a `note,` line says so |
 
 Where the Mermaid is kept decides how it is found: fenced `mermaid` blocks in Markdown (`.md`, `.mdx`); the whole
 of a `.mmd` file; and, in any other file (an `.astro` page, a script), a string between backticks that starts as
@@ -128,7 +129,7 @@ its name; a relationship is a link that says, at each end, how many.
 | `subgraph Buying` … `end`, `subgraph "Paying up"`, `subgraph pay ["Paying up"]`, `Buying \|\|--\|\| Paying : …` | A group, one inside another if written so, as in a flowchart; a relationship with a group goes to where it starts or from where it ends |
 | `classDef late stroke:#c62828`, `class ORDER,INVOICE late`, `ORDER:::late` | Kinds, as in a flowchart. A box is of one kind: of several classes (`late,held`), the first |
 | `style ORDER stroke:#c00,stroke-width:4px,stroke-dasharray: 5 5` | What the style says of its outline, as in a flowchart |
-| `direction TB` | The way it runs. An entity diagram is drawn top to bottom for now: any other direction is read past, and said once. A group's own direction is read past |
+| `direction TB` | The way it runs. An entity diagram is drawn top to bottom for now: any other direction is read past, and said once. A group's own direction across it is followed, as in a flowchart |
 | `title:` in front matter, `accTitle`, `accDescr`, `%%` comments | As in a flowchart |
 
 Not read, each named in a `note,` line when met: attributes written on the line that opens them

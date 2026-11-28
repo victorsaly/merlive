@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.5.5 (unreleased)
+## 0.5.6 (unreleased)
+
+- **A group runs the way it says**: `direction LR` in a group of a flow drawn top to bottom (or `TB` in one drawn
+  left to right) puts its boxes in a row across the flow, in the order they are linked, as Mermaid does. `RL` and
+  `BT` run the other way. Only for boxes linked one after another in a line; with a branch inside, the group runs
+  as the flow does, and a note says so.
+- **A line between two frames keeps off their edges**: running across from one lane to another between a frame
+  that ends and one that begins, it takes the middle of the band between them, which is made room for.
+
+## 0.5.5 (2026-11-28)
 
 - **Eleven more of Mermaid's newer shapes are drawn as themselves**: `doc`, `docs`, `notch-rect`, `lin-rect`,
   `st-rect`, `div-rect`, `win-pane`, `sl-rect`, `delay`, `tri` and `flip-tri`, each by any of Mermaid's names
