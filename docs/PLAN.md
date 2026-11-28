@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, as 0.5.6 was begun.
+Last brought up to date: 28 November 2026, as 0.5.7 was begun.
 
 ## Released
 
@@ -165,7 +165,7 @@ taste are under "Waiting on Victor".
   one height, where Mermaid's boxes are taller and its figures bigger; and the legend names the kinds of colour
   there are, three for six types, each drawing saying its own type.
 
-**0.5.6** (not released yet), the pull request from the branch `fix-0.5.6`:
+**0.5.6** (28 November 2026), pull request 17 from the branch `fix-0.5.6`:
 - a flowchart group's own direction is followed when it runs across the flow (`direction LR` in a flow drawn top
   to bottom, `TB` in one drawn left to right): its boxes are a row, one rank in the order they are linked, a lane
   each (`rowOf` in `placedOnce()`). The main path keeps one box of a row, where the flow comes in, and goes on from
@@ -178,6 +178,11 @@ taste are under "Waiting on Victor".
 - the business analyst demo's "13 steps" and "What lives where" are drawn as their author wrote them: "Get ready",
   "Build the agent" and "Demo app, on your laptop" are rows. Two corpus pictures changed
   (`subgraph-direction`, `er-subgraph-direction`).
+
+**0.5.7** (not released yet), the pull request from the branch `fix-0.5.7`:
+- a composite state's own direction, or a region's after `--`, is read onto its group (state.mjs), and layout runs
+  one across the flow as a row, as it does a flowchart's group since 0.5.6. One corpus picture changed
+  (`state-direction-composite`), now as Mermaid draws it: Credit above Stock in a flow that runs left to right.
 
 ## Waiting on Victor
 
@@ -224,7 +229,6 @@ taste are under "Waiting on Victor".
      is new); an author's highlight colours become the design's tint;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
-   - a composite state's own direction is read past (state.mjs keeps it to itself; a flowchart's group follows its own since 0.5.6);
    - of the 53 newer `@{ shape }` names, 32 are drawn as themselves; the 21 that are boxes are mostly drawings
      (a cloud, a bolt, a person, braces, a folder) rather than outlines, and the hourglass, whose words would sit
      in its pinch.

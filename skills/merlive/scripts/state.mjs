@@ -101,8 +101,14 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
 
     const way = LINES.direction.exec(text);
     if (way) {
-      // A composite state's own direction is read past, as a group's is: it runs the way the rest does.
-      if (open.length) return true;
+      // Inside a composite state, the way its own states run, or a region's after "--": layout lays one that runs
+      // across the flow as a row, as it does a flowchart's group.
+      const inside = open[open.length - 1];
+      if (inside) {
+        const id = inside.framed ? `${inside.id}/${inside.region}` : inside.id, g = model.groups.find((x) => x.id === id);
+        if (g) g.direction = /** @type {'TD'|'LR'|'BT'|'RL'} */ (way[1] === 'TB' ? 'TD' : way[1]);
+        return true;
+      }
       model.direction = way[1] === 'LR' || way[1] === 'RL' ? 'LR' : 'TD';
       if (way[1] === 'BT' || way[1] === 'RL') model.reversed = true;
       else delete model.reversed;

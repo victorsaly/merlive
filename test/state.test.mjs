@@ -282,6 +282,26 @@ describe('state: notes', () => {
   });
 });
 
+describe("state: a composite state's own direction", () => {
+  const src = 'direction LR\nDraft --> Checks\nstate Checks {\n  direction TB\n  Credit --> Stock\n}\nChecks --> Sent';
+
+  it('reads the way a composite state says it runs, and a region its own', () => {
+    assert.equal(state(src).groups.find((g) => g.id === 'Checks')?.direction, 'TD');
+    const parted = state('state Both {\n  A --> B\n  --\n  direction LR\n  C --> D\n}');
+    assert.equal(parted.groups.find((g) => g.id === 'Both/2')?.direction, 'LR');
+    assert.equal(parted.groups.find((g) => g.id === 'Both')?.direction, undefined);
+  });
+
+  it('runs a composite state written across the flow across it, as a flowchart group does', () => {
+    const m = state(src), lay = layout(m), n = lay.nodes;
+    assert.equal(lay.direction, 'LR');
+    assert.equal(n.Credit.x, n.Stock.x, 'one column');
+    assert.ok(n.Credit.y < n.Stock.y, 'top to bottom');
+    assert.deepEqual(lay.warnings, []);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), []);
+  });
+});
+
 describe('state: direction, kinds and what Mermaid sets', () => {
   it('follows the direction it is given, the last one said', () => {
     assert.equal(state('direction LR\nA --> B').direction, 'LR');

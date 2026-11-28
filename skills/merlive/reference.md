@@ -66,7 +66,7 @@ this page holds for them: the rules, the design, Merlive's own lines.
 | `state enough <<choice>>` | A decision, with its name or its words in it |
 | `state split <<fork>>`, `state together <<join>>` | A bar across the flow, as Mermaid draws it: flat top to bottom, upright left to right, of the kind Fork or Join. Its name or words are not written on it; a reader hears them, and the side panel shows them |
 | `note right of Draft : words`, `note left of Draft` … `end note` | The note on that box: what a reader sees on picking it |
-| `direction LR`, `direction BT`, `direction RL` | The way the diagram runs. A composite state's own direction is read past |
+| `direction LR`, `direction BT`, `direction RL` | The way the diagram runs. Inside a composite state (or a region of one), the way its own states run: across the flow, they are a row, as a flowchart's group is |
 | `classDef`, `class Held, Lost stopped`, `Held:::stopped` | Kinds, as in a flowchart |
 | `--` inside a composite state | Regions that run side by side: each is a frame with no name inside the composite state, with a start of its own. A link into the composite state goes into every region |
 | `%% words` after a line, `hide empty description`, `scale 350 width` | Read past |

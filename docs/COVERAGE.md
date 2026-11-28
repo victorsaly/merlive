@@ -7,7 +7,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 ## In short
 
 - **Flowcharts:** of 70 features, 49 are drawn as written, 20 are drawn less something Merlive leaves out on purpose or does not have yet, 1 are only partly read, and 0 are refused.
-- **State diagrams:** of 27 features, 18 are drawn as written, 9 are drawn less something, 0 are only partly read, and 0 are refused.
+- **State diagrams:** of 27 features, 19 are drawn as written, 8 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, 0 are refused.
 - **Requirement diagrams:** of 46 features, 37 are drawn as written, 9 are drawn less something, 0 are only partly read, 0 are refused.
@@ -128,7 +128,7 @@ rules. Held to the same measure as the flowcharts above.
 | A note written over several lines | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/state/state-note-block.mmd) | [picture](../corpus/drawn/state-note-block.svg) |
 | Concurrency: regions of a composite state parted by -- | Drawn |  | [source](../corpus/state/state-concurrency.mmd) | [picture](../corpus/drawn/state-concurrency.svg) |
 | The direction of the diagram | Drawn |  | [source](../corpus/state/state-direction.mmd) | [picture](../corpus/drawn/state-direction.svg) |
-| A composite state with a direction of its own | Drawn, less something | The composite state's own direction is read past; it runs the way the rest does | [source](../corpus/state/state-direction-composite.mmd) | [picture](../corpus/drawn/state-direction-composite.svg) |
+| A composite state with a direction of its own | Drawn |  | [source](../corpus/state/state-direction-composite.mmd) | [picture](../corpus/drawn/state-direction-composite.svg) |
 | Comments, on a line of their own and at the end of one | Drawn |  | [source](../corpus/state/state-comments.mmd) | [picture](../corpus/drawn/state-comments.svg) |
 | A class made with classDef and given with class | Drawn |  | [source](../corpus/state/state-class.mmd) | [picture](../corpus/drawn/state-class.svg) |
 | A class given with ::: | Drawn |  | [source](../corpus/state/state-class-inline.mmd) | [picture](../corpus/drawn/state-class-inline.svg) |
