@@ -103,11 +103,16 @@ Left:
    done too, all 25: a card's ticket, who has it and its priority were in the face for code, and are in the page's
    face now. Left as decided in the reference: a known priority is listed in small letters (`priority: high`) and
    any other as written, and a ticket is not a link even where `ticketBaseUrl` says where it would go. Timelines
-   and packets are still to look through. A packet of one-bit fields with four-letter names
+   are done, all 29, with nothing found but what was already known: in `timeline-direction-td-sections` the arrow
+   into a section runs just past the end of its name, with its head beside it (the narrow group's name, item 1 of
+   "Next" below), and a theme's colours are left for the design's. Packets are still to look through. A packet of one-bit fields with four-letter names
    (`packet-bit`) is still 1396px: a column is as wide as its widest one-bit name.
 
 ## Waiting on Victor
 
+- **Bands, and how much past a screen.** `timeline-whole` was 1108px in one row, 8px past the 1,100 a flow is
+  turned at, and is now two bands with a long arrow between them. Should a timeline have some slack before it
+  wraps, or is one limit for every kind right?
 - **How a tree's lines leave a box** (from looking through the mindmaps). A box's lines to its children each leave
   by a port of their own, so four children make a comb of four lines a few pixels apart (`mindmap-bushy`). A tree
   is usually drawn with one trunk the branches leave from, but that is lines sharing a path, which P5 refuses. Is a
