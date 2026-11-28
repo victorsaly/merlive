@@ -114,6 +114,14 @@ describe("parse: an author's own styling", () => {
     assert.deepEqual(m.nodes.map((n) => [n.kind, n.dashed ?? false, n.heavy ?? false]), [['risk', false, true], ['draft', true, false]]);
   });
 
+  it('reads a class with a hyphen in its name, where it is made, given and used', () => {
+    const m = flow('A[Read]:::read-only --> B[Write] --> C[Keep]\nclassDef read-only stroke:#555,stroke-dasharray: 3 3\nclass B,C read-only\n%% kind read-only: Read-only data');
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind, n.dashed ?? false]), [['A', 'read-only', true], ['B', 'read-only', true], ['C', 'read-only', true]]);
+    assert.deepEqual(m.classes, { 'read-only': '#555555' });
+    assert.deepEqual(m.meanings, { 'read-only': 'Read-only data' });
+    assert.deepEqual(m.warnings, []);
+  });
+
   it('styles links by the number Mermaid gives them, counting one that is not drawn', () => {
     const m = flow('A --> B\nB ~~~ C\nC --> C\nC --> D & E\nlinkStyle 0 stroke:#c00,stroke-width:4px\nlinkStyle 3,4 stroke:#00c,stroke-dasharray: 5 5\nlinkStyle 1,2,9 stroke:#0c0');
     assert.deepEqual(m.edges.map((e) => [e.id, e.style, e.kind ?? '']), [['A-B', 'thick', 'red'], ['C-C', 'solid', 'green'], ['C-D', 'dotted', 'blue'], ['C-E', 'dotted', 'blue']]);

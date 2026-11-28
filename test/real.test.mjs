@@ -250,6 +250,11 @@ describe('more real diagrams: read', () => {
     ]);
   });
 
+  it('puts the usual way on the main path, and the fallback beside it', () => {
+    // Groq answers unless its limit is gone: OpenAI after Groq is the longer way, and the exception.
+    assert.deepEqual(layout(parse(service)).spine, ['A', 'P', 'G', 'ANS']);
+  });
+
   it('reads a dotted link with words, a thick one, and arrows drawn longer', () => {
     const m = parse('flowchart TD\nA -. "saved for later" .-> B\nB == "must" ==> C\nC ---> D\nD -..-> E\nE -. maybe .-> F');
     assert.deepEqual(m.warnings, []);

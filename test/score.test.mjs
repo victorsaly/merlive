@@ -93,6 +93,26 @@ describe('score: a broken rule is named, with where', () => {
     assert.match(p1.detail, /"Within budget\?" is off the line/);
   });
 
+  it('P1 when the main path takes an exception where there is the plain way, unless its author named it', () => {
+    const src = 'flowchart TD\nA[Ask] --> G[Groq]\nG -- "limit gone" --> O[OpenAI]\nO --> ANS[Answer]\nG --> ANS';
+    const { model, lay } = check(src);
+    lay.spine = ['A', 'G', 'O', 'ANS'];
+    for (const id of lay.spine) lay.nodes[id].x = lay.nodes.A.x;
+    const p1 = score(model, lay, builtIn).checks[0];
+    assert.equal(p1.ok, false);
+    assert.match(p1.detail, /takes "limit gone" out of "Groq", where a link without words goes on/);
+    const named = check(`${src}\n%% main: A>G>O>ANS`);
+    assert.equal(named.result.checks[0].ok, true);
+  });
+
+  it('P8 when the name of a group in a flow runs past its frame', () => {
+    const { model, lay } = check('flowchart TD\nX[Draft] --> A\nsubgraph C [Checks]\n  A[Credit] --> B[Stock]\nend');
+    lay.groups[0].name.w = lay.groups[0].w + 40;
+    const p8 = /** @type {any} */ (score(model, lay, builtIn).checks.find((c) => c.id === 'P8'));
+    assert.equal(p8.ok, false);
+    assert.match(p8.detail, /the name of the group "Checks" runs past its frame/);
+  });
+
   it('P2 when two boxes are too close', () => {
     const { model, lay } = check(orders);
     lay.nodes.E.y = lay.nodes.G.y;
@@ -273,6 +293,12 @@ describe('design: a project\'s own file', () => {
     assert.equal(designFrom({ light: { bg: '#ffffff' } }).dark, undefined);
     assert.equal(designFrom({ light: { bg: '#ffffff' }, dark: { bg: '#000000' } }).dark?.bg, '#000000');
     assert.equal(designFrom({ dark: { bg: '#000000' } }).light.bg, builtIn.light.bg);
+  });
+
+  it('takes a colour for a kind with a hyphen in its name, as a class may have, and still refuses what is not a name', () => {
+    assert.equal(designFrom({ light: { kinds: { 'read-only': '#445566' } } }).light.kinds['read-only'], '#445566');
+    assert.throws(() => designFrom({ light: { kinds: { 'x}body{': '#445566' } } }), /light\.kinds has "x}body\{"; a kind is named in letters, digits, _ and a hyphen between them only/);
+    assert.throws(() => designFrom({ light: { kinds: { '-x': '#445566' } } }), /a kind is named in letters/);
   });
 
   it('refuses a colour that is not one, a motion that is not one, and a file that is not an object, each with what to do', () => {

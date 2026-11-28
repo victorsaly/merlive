@@ -237,6 +237,13 @@ describe('state: direction, kinds and what Mermaid sets', () => {
     assert.deepEqual(m.warnings, []);
   });
 
+  it('names a kind in its author\'s words, hyphen and all', () => {
+    const m = state('classDef on-hold stroke:#c62828\n[*] --> Draft\nDraft --> Held:::on-hold\n%% kind on-hold: Waiting on the buyer');
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind]), [['start', 'terminal'], ['Draft', 'step'], ['Held', 'on-hold']]);
+    assert.deepEqual(m.meanings, { 'on-hold': 'Waiting on the buyer' });
+    assert.deepEqual(m.warnings, []);
+  });
+
   it('reads past what only sets how Mermaid draws', () => {
     const m = state('hide empty description\nscale 350 width\nA --> B;');
     assert.deepEqual(links(m), [['A-B', '']]);

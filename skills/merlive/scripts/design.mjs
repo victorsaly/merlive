@@ -212,8 +212,9 @@ export function designFrom(file) {
     for (const [key, value] of [...Object.entries(p).filter(([k]) => k !== 'kinds'), ...Object.entries(p.kinds).map(([k, v]) => [`kinds.${k}`, v])]) {
       if (typeof value !== 'string' || !HEX.test(value)) throw say(`${mode}.${key} must be a colour like #1f5fd1, not ${JSON.stringify(value)}.`);
     }
-    // A kind's name becomes part of the page's styles, so it is held to what a class name in Mermaid can be.
-    for (const k of Object.keys(p.kinds)) if (!/^\w+$/.test(k)) throw say(`${mode}.kinds has "${k}"; a kind is named in letters, digits and _ only.`);
+    // A kind's name becomes part of the page's styles, so it is held to what a class name in Mermaid can be,
+    // a hyphen between letters (read-only) and all, as the readers take one.
+    for (const k of Object.keys(p.kinds)) if (!/^\w+(?:-\w+)*$/.test(k)) throw say(`${mode}.kinds has "${k}"; a kind is named in letters, digits, _ and a hyphen between them only.`);
   }
   if (!['none', 'calm', 'lively'].includes(d.motion)) throw say('motion must be none, calm or lively.');
   if (!['flat', 'soft'].includes(d.depth)) throw say('depth must be flat or soft.');

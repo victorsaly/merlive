@@ -36,7 +36,7 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `A --> A`, `A -->\|again\| A` | A link from a box to itself: a small loop beside it. It is not one of the loops `%% step: … \| loop 1` counts |
 | `A & B --> C & D` | Every box before the link, linked to every box after it |
 | `A e1@--> B`, `e1@{ animate: true }` | A link with an id is a link; what Mermaid sets on it (animation, a step, a curve) is read past |
-| `class A,B rework`, `A:::rework` | The kind of a box: its colour comes from the design's `kinds` |
+| `class A,B rework`, `A:::rework` | The kind of a box: its colour comes from the design's `kinds`. Its name may have a hyphen (`read-only`) |
 | `classDef red stroke:#c62828` | The class's colour is read for what it means: a kind the design has no colour for takes the design's own nearest colour (this red becomes `risk`) |
 | `style B stroke:#c00,stroke-width:3px,stroke-dasharray: 5 5` | What the author's own style means is kept: a broken outline, a heavy one, and a colour, named for its hue (`red`) and drawn in the design's own nearest colour. The fill is the design's |
 | `linkStyle 0 stroke:#c00,stroke-width:4px` | The same for a link, by the number Mermaid gives it: heavy, broken, and in the design's nearest colour |
@@ -507,7 +507,7 @@ All are Mermaid comments, anywhere in the block.
 | `%% step: Title \| A>B>C \| words` | A step of the walkthrough along the links A to B to C |
 | `%% step: Title \| loop 1 \| words` | A step along the shortest loop; `loop 2` is the next shortest |
 | `%% step: Title \| - \| words` | A step with nothing lit, for an opening or closing remark |
-| `%% main: A>B>C>D` | The path that gets the straight line. Without it, the longest path does |
+| `%% main: A>B>C>D` | The path that gets the straight line. Without it, the longest path does that takes no exception: not a link with words out of a box that also has one without |
 | `%% side: left` | Branches and loops go to the left of the main path (above it, left to right). Default `right` |
 | `%% kind red: Read-only data` | What a kind of box means. The legend, and a picked box, say this instead of the kind's own name. A kind its author named for a colour (`classDef red …`) with no such line is named in a `note,` line |
 | `%% turn: no` | A flow written left to right that would be wider than a screen (1,100 px) is drawn top to bottom, and the command says so. This keeps it as written |

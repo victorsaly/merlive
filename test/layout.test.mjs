@@ -43,6 +43,22 @@ describe('layout: the spine', () => {
     assert.equal(lay.nodes.E.spine, false);
   });
 
+  it('takes the plain way out of a box, not the one its words make an exception, however long that is', () => {
+    // Groq answers, unless its daily limit is gone, when OpenAI does: the fallback is the longer way, not the usual one.
+    const { lay } = draw('flowchart TD\nA[Ask] --> G[Groq]\nG -- "limit gone" --> O[OpenAI]\nO --> R[Retry]\nR --> ANS[Answer]\nG --> ANS');
+    assert.deepEqual(lay.spine, ['A', 'G', 'ANS']);
+  });
+
+  it('takes the longest way where every link out of a box has words, as a question\'s answers do', () => {
+    const { lay } = draw('flowchart TD\nA{Paid?} -- no --> B[Remind] --> C[Wait] --> D[Ship]\nA -- yes --> D');
+    assert.deepEqual(lay.spine, ['A', 'B', 'C', 'D']);
+  });
+
+  it('breaks a tie for the branch that reaches more of the flow', () => {
+    const { lay } = draw('flowchart TD\nA{Ready?} -- yes --> B[Pack]\nA -- no --> C[Order more]\nB --> D[Ship]\nC --> D\nC --> E[Tell the buyer]');
+    assert.deepEqual(lay.spine, ['A', 'C', 'D']);
+  });
+
   it('follows the path the author names, when it follows the links', () => {
     const named = draw('flowchart TD\nA --> B\nA --> C\nC --> D\nB --> D\n%% main: A>C>D');
     assert.deepEqual(named.lay.spine, ['A', 'C', 'D']);
@@ -291,6 +307,50 @@ describe("layout: a group's name", () => {
     const lay = layout(parse('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [The whole warehouse floor]\n  B --> C[Pack]\nend\nC --> D[Ship]'));
     const [frame] = lay.groups;
     assert.equal(frame.name.plate, true);
+  });
+
+  it('wraps when it is longer than its frame is wide, inside the frame, with room kept above its boxes', () => {
+    for (const src of ['flowchart TD\nX[Draft] --> A\nsubgraph C [Checks before sending]\n  A[Credit] --> B[Stock]\nend', 'flowchart LR\nX[Draft] --> A\nsubgraph C [Checks before the order is sent]\n  A[Credit]\nend']) {
+      const lay = layout(parse(src));
+      const [f] = lay.groups, top = lay.nodes.A.y - lay.nodes.A.h / 2;
+      assert.ok((f.lines?.length ?? 1) > 1, `wrapped: ${src}`);
+      assert.ok(f.name.x - f.name.w / 2 >= f.x && f.name.x + f.name.w / 2 <= f.x + f.w, 'inside its frame');
+      // As far above them as a name of one line is: its frame keeps the room for its other lines.
+      assert.equal(top - (f.name.y + f.name.h / 2), measure.framePad + measure.frameTitle - measure.nameDown - measure.nameLine / 2, 'above its boxes');
+      assert.deepEqual(lay.warnings, []);
+      assert.deepEqual(score(parse(src), lay, builtIn).checks.filter((c) => !c.ok).map((c) => c.detail), []);
+    }
+  });
+
+  it('keeps room beside the frame for a name that wraps, left to right, where its lines go into the lane next to it', () => {
+    for (const side of ['', '\n%% side: left']) {
+      const src = `flowchart LR\nA[Ask] --> B[Pack]\nA --> C[Check]\nsubgraph g [Checks before the order is sent]\n  C\nend${side}`;
+      const m = parse(src), lay = layout(m);
+      assert.equal(lay.groups.length, 1, `the frame is kept${side}`);
+      assert.deepEqual(lay.warnings, []);
+      assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => c.detail), [], side);
+    }
+  });
+
+  it('makes the frame wide enough for a word of its name that is longer than the frame, and keeps clear of the box beside it', () => {
+    for (const src of [
+      'flowchart TD\nA[Ask] --> B[Pack]\nA --> C[Check]\nsubgraph g [Internationalisation]\n  B\nend',
+      'flowchart TD\nA[Ask] --> B[Pack]\nA --> C[Check]\nsubgraph g [Internationalisation]\n  B\nend\n%% side: left',
+      'flowchart LR\nA[Ask] --> B[Pack] --> C[Check]\nsubgraph g [Internationalisation]\n  B\nend',
+      'flowchart RL\nA[Ask] --> B[Pack] --> C[Check]\nsubgraph g [Internationalisation]\n  B\nend',
+    ]) {
+      const m = parse(src), lay = layout(m), [f] = lay.groups;
+      assert.ok(f, `the frame is kept: ${src}`);
+      assert.ok(f.name.x - f.name.w / 2 >= f.x && f.name.x + f.name.w / 2 <= f.x + f.w, `inside its frame: ${src}`);
+      assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => c.detail), [], src);
+    }
+  });
+
+  it('keeps one line where it fits, and the frame as it was', () => {
+    const lay = layout(parse('flowchart TD\nX[Draft] --> A\nsubgraph C [Checks]\n  A[Credit] --> B[Stock]\nend'));
+    const [f] = lay.groups;
+    assert.equal(f.lines, undefined);
+    assert.equal(lay.nodes.A.y - lay.nodes.A.h / 2 - f.y, measure.framePad + measure.frameTitle);
   });
 
   it("keeps a link's words off it", () => {

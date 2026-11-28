@@ -19,8 +19,15 @@ A hint says what the author means. It never says where a box goes: no coordinate
 The path named by `%% main:`, or else the longest path through the flow, runs straight down (or straight across,
 in a left-to-right flow). Everything else sits to one side of it.
 
+The longest path takes no exception. A link with words out of a box that also has a link without words says when
+the flow goes another way ("daily limit gone"): the plain link is the usual case, and the main path takes it, even
+where the exception's way is longer. Where every link out of a box has words, as a question's yes and no do, the
+longest way is the main path. Of two ways as long, the main path takes the one that reaches more of the flow.
+
 - **Pass:** Submit, Validate, Budget?, Approve, Send, Placed all share one centre line.
 - **Fail:** the third box of the main path is pushed sideways to make room for a branch.
+- **Fail:** Groq, then OpenAI "when the daily limit is gone", then the answer, drawn as the main path, where Groq
+  answers by a plain link: the fallback is on the straight line and the usual case beside it.
 - **Why:** a reader finds the normal case first, then the exceptions.
 
 The main path is also drawn heavier than what branches off it, so the eye takes it first.

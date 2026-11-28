@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.5.1 (unreleased)
+
+What 0.4.0 and 0.5.0 left in flowcharts.
+
+- **A class may have a hyphen in its name** (`classDef read-only …`, `class B read-only`, `A:::read-only`), as a
+  kind named with `%% kind read-only: …` already could. A hyphen counts only between letters, so `A:::x-->B` is
+  still a link.
+- **The main path takes the usual way, not the longest.** A link with words out of a box that also has one
+  without ("daily limit gone" beside the plain way on) is the exception, and the main path no longer takes it,
+  however long its way is: Groq, then the answer, is the straight line, and the fallback to OpenAI sits beside it.
+  Of two ways as long, it takes the one that reaches more of the flow, so a note is no longer a class diagram's
+  main path. P1 refuses a main path that takes an exception, unless `%% main:` named it.
+- **A group's name wraps in a flow too**, as it does on a grid: to three lines at the left of its frame, the
+  frame taller by the lines it takes, instead of running past a narrow frame ("Checks before sending", a C4
+  boundary's "Buying [department]", a deployment node's "Buyer's phone [iOS or Android]"). P8 holds every frame's
+  name inside it, in a flow as on a grid. Left to right, the lane beside the frame moves over for the name's
+  lines; a word longer than its frame (`Internationalisation`) makes the frame wider, and what is beside it moves
+  over (review of pull request 12).
+- **A design file may give a colour to a kind with a hyphen in its name** (`"kinds": { "read-only": "#445566" }`).
+
 ## 0.5.0 (2026-11-28)
 
 More kinds that the two placements there are can draw: mindmaps, kanban boards, timelines and packets.
