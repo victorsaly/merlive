@@ -98,6 +98,11 @@ What 0.5.0 left:
    colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`. Waits on Victor.
 2. **A packet of one-bit fields with four-letter names** (`packet-bit`) is still 1396px: a column is as wide as its
    widest one-bit name.
+3. **A flow's group name does not wrap**, so a long one runs past a narrow frame, its line and arrowhead under the
+   letters: `state-composite-named` ("Checks before sending"), `c4-boundary-type`, `c4-deployment-described`.
+   P8 holds a name on a grid to its frame (review of pull request 11); held to it, those three would be refused,
+   so a flow's frames are not held yet. Wrapping a flow group's name as a grid's is (`nameAt` in grid.mjs) and
+   then holding every frame would close it, and the narrow group's name in "Next" with it.
 
 Every sample of the four kinds was looked through beside Mermaid's own on 28 November (114: 38 mindmaps, 25
 boards, 29 timelines, 22 packets). Fixed from it: a mindmap's hexagon, circle and cloud took a flowchart's kinds

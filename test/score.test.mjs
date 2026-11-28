@@ -46,6 +46,36 @@ describe('score: what Merlive places itself passes', () => {
 });
 
 describe('score: a broken rule is named, with where', () => {
+  // A timeline section named in a sentence: a frame on a grid whose name wraps.
+  const named = () => {
+    const m = parse('timeline\nsection Everything the buyer does before the supplier hears of it\nMonday : Raised\nsection Delivery\nFriday : Delivered');
+    return { m, lay: layout(m) };
+  };
+  const p8 = (/** @type {any} */ m, /** @type {any} */ lay) => /** @type {any} */ (score(m, lay, builtIn).checks.find((c) => c.id === 'P8'));
+
+  it('passes a wrapped name that keeps to its frame, its lines, and its place over what the frame holds (P8)', () => {
+    const { m, lay } = named();
+    assert.equal(p8(m, lay).ok, true);
+  });
+
+  it('names a group\'s name of more lines than a name wraps to (P8)', () => {
+    const { m, lay } = named(), f = lay.groups[0];
+    f.lines = ['Everything', 'the buyer', 'does before', 'the supplier hears of it'];
+    assert.match(p8(m, lay).detail, /the name of the group "Everything the buyer does before the supplier hears of it" takes 4 lines; a name wraps to 3 at most/);
+  });
+
+  it('names a group\'s name that runs past its frame (P8)', () => {
+    const { m, lay } = named(), f = lay.groups[1];
+    f.name.x = f.x + f.w;
+    assert.match(p8(m, lay).detail, /the name of the group "Delivery" runs past its frame/);
+  });
+
+  it('names a group\'s name that a box lies on (P8)', () => {
+    const { m, lay } = named(), f = lay.groups[0], monday = lay.nodes.period1;
+    monday.y = f.name.y;
+    assert.match(p8(m, lay).detail, /the name of the group "Everything the buyer[^"]*" lies under "Monday"/);
+  });
+
   it('names a line that runs along the edge of a group (P5)', () => {
     const m = parse('flowchart TD\n  subgraph G [Group]\n    A\n  end\n  B --> A'), lay = layout(m), g = lay.groups[0];
     const e = Object.values(lay.edges)[0];

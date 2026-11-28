@@ -48,6 +48,31 @@ export const gridMeasure = {
   nameLines: 3, // the most lines a frame's name wraps to before its columns are widened for it: a timeline's section may be named in a sentence
 };
 
+/**
+ * A frame's name in lines, in a frame whose contents are `room` px wide: wrapped as a box's words are, to as many
+ * lines as `gridMeasure.nameLines` at most, and only as much wider than the room as its longest word, or three
+ * lines, need. One sentence of a name would otherwise make every column of the grid as wide as itself. The width
+ * is found by halving, not a letter at a time: the lines a name wraps to never grow as it is given more room, and
+ * a long name is wrapped a few times, not once for every letter it widens by.
+ * @param {string} name
+ * @param {number} room
+ * @returns {string[]}
+ */
+export function nameAt(name, room) {
+  if (!name) return [];
+  const longest = Math.max(...name.split(/\s+/).map((w) => w.length));
+  let low = Math.max(1, Math.floor(room / measure.nameGlyph), longest), lines = wrap(name, low);
+  if (lines.length <= gridMeasure.nameLines) return lines;
+  // Too many lines at `low`; one line at the whole name's length. The fewest letters that give few enough lies between.
+  let high = name.length, best = [name];
+  while (high - low > 1) {
+    const mid = Math.floor((low + high) / 2), tried = wrap(name, mid);
+    if (tried.length <= gridMeasure.nameLines) [high, best] = [mid, tried];
+    else low = mid;
+  }
+  return best;
+}
+
 /** The places a line may leave a side by, in port steps from its middle, and the lines of a gap it may take, in track steps: nearest first. */
 const PORTS = [0, 1, -1, 2, -2], TRACKS = [0, 1, -1];
 /** Whether each end's gap is outside the frames round it, as [a, b]: beside both blocks first, as before frames were thought of. */
@@ -114,17 +139,6 @@ export function placeGrid(model) {
     // The short line over a name is never wrapped: a block is as wide as it needs, as a box of a flow is.
     const over = overNeeds(n);
     return over <= w && lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0)) && lines.every((l) => l.length <= roomFor(n, w)) && listed(n).every((row) => row.length <= rowsRoom(w));
-  };
-  /**
-   * A frame's name in lines, in a frame whose contents are `room` px wide: wrapped as a box's words are, to as many
-   * lines as `gridMeasure.nameLines` at most, and only as much wider than the room as its longest word, or three
-   * lines, need. One sentence of a name would otherwise make every column of the grid as wide as itself.
-   */
-  const nameAt = (/** @type {string} */ name, /** @type {number} */ room) => {
-    if (!name) return [];
-    let chars = Math.max(1, Math.floor(room / measure.nameGlyph)), lines = wrap(name, chars);
-    while (lines.length > gridMeasure.nameLines || lines.some((l) => l.length > chars)) lines = wrap(name, ++chars);
-    return lines;
   };
   /** The name a block that holds others goes by: its group's, or, when it holds nothing and so is no group, the one its cell keeps. */
   const nameOf = (/** @type {Cell} */ cell) => groupOf.get(/** @type {{id:string}} */ (cell).id)?.title ?? /** @type {{title?:string}} */ (cell).title ?? '';

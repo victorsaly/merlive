@@ -157,7 +157,8 @@ open, an arrow drawn as a block), Merlive keeps the grid, and the rules above ar
   the blocks are, so a crossing is theirs to remove by moving one.
 - **P8**: a frame's name on a grid wraps, as a box's words do, to the width its frame's contents give it, up to
   three lines, each starting at the left; its columns are widened only for a word, or a name, that will not go in
-  three. Every frame of a row keeps room for the most lines, so what they hold starts on one line.
+  three. Every frame of a row keeps room for the most lines, so what they hold starts on one line. The check holds
+  a name on a grid to that: no more than three lines, inside its frame, and no box on it.
 - **P6** and **P7** are unchanged, and P8 is held as above; a block that spans columns has the room of its own width, and the short
   line over its name is held to that width too, not to one column's.
 
