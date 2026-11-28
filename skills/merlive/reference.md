@@ -435,7 +435,7 @@ placed by rule. A field is a box with its bits over its name, in the cell it was
 cut where its author's count of bits says. A column is as many bits as every field is a whole number of, so a
 packet of bytes is drawn in columns of a byte and one with a field of a single bit in columns of a bit; a field
 of sixteen bits is always as wide as two of eight and the gap between them. Nothing joins two fields, so there
-are no links, and the room between fields is the least the rules allow.
+are no links, and the fields sit 4 px apart.
 
 | Written | Read as |
 |---|---|
@@ -463,9 +463,10 @@ Not read, each named in a `note,` line when met, and the rest still drawn:
 | `0-7: "A"; 8-15: "B"` | Not read: one field to a line |
 | `classDef`, `class`, `style` | Not read: a packet has no classes or styles in Mermaid. Its fields are drawn in the design's colours |
 
-A packet with a field of one bit has a column a bit, thirty-two to a row, each wide enough for that field's
-name: a header with flags of three letters comes out about 2400 px wide, and is scrolled across on a page. A
-shorter name for the narrowest field, or fewer bits to a row, makes it narrower.
+A field is a cell: a box that keeps less room round its words than a box of a flow, 4 px from the next, as
+Mermaid's all but touch. A packet with a field of one bit has a column a bit, thirty-two to a row, each wide
+enough for that field's name and bits: a TCP header, with flags of three letters, comes out about 1140 px wide.
+A shorter name for the narrowest field, or fewer bits to a row, makes it narrower.
 
 ## A sequence diagram
 

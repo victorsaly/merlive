@@ -14,7 +14,8 @@ describe('shapes: every shape Merlive draws', () => {
       const { main, more } = outlineOf(shape, 0, 0, w, h, 8);
       assert.match(main, /^<(rect|polygon|path) class="mv-shape/, shape);
       for (const extra of more) assert.match(extra, /class="mv-shape mv-detail/, shape);
-      if (shape !== 'point') assert.ok(roomIn(shape, w) > 40 && roomIn(shape, w) <= w - 28, `${shape} leaves ${roomIn(shape, w)}px for words`);
+      // A cell keeps more room for words than a plain box on purpose: 'shapes: a cell' holds it.
+      if (shape !== 'point' && shape !== 'cell') assert.ok(roomIn(shape, w) > 40 && roomIn(shape, w) <= w - 28, `${shape} leaves ${roomIn(shape, w)}px for words`);
       const at = wordsAt(shape, h);
       assert.ok(Math.abs(at.dx) <= 8 && Math.abs(at.dy) <= 8, shape);
     }
@@ -109,6 +110,15 @@ describe('shapes: a pill taller than a plain box', () => {
     assert.equal(inset('pill', 'left', 0, 200, 140), 0, 'the middle of a tall side is flat');
     assert.ok(inset('pill', 'left', 68, 200, 140) > 0, 'and the corner is still round');
     assert.equal(outlineOf('pill', 0, 0, 160, 44, 8).main.includes('rx="22"'), true, 'a plain pill is as it was');
+  });
+});
+
+describe('shapes: a cell', () => {
+  it('is a plain box that keeps less room round its words, for a field of a packet a bit or two wide', () => {
+    assert.ok(shapes.includes('cell'));
+    assert.ok(form.cellPad < form.pad);
+    assert.equal(roomIn('cell', 40), 40 - form.cellPad);
+    assert.equal(inset('cell', 'left', 0, 40, 60), inset('box', 'left', 0, 40, 60));
   });
 });
 

@@ -85,18 +85,18 @@ On the branch `kinds-2`. Done: readers for mindmaps, kanban boards, timelines an
 in `skills/merlive/reference.md`; a tree placed as a tree (step 5 of `placed()` in layout.mjs); a grid that says
 its own least column, its gap, and that its cells are close (`grid.mjs`); a plain box named for what it is in
 each kind (the third column of `READERS` in parse.mjs: a card, a class, an entity, an idea, a field, an event),
-and a page with no lines that says nothing of a flow (`linked` in the page's data).
+and a page with no lines that says nothing of a flow (`linked` in the page's data); a packet near Mermaid's width
+(a TCP header 1140px, was 2408): a `cell` shape with less room round its words, fields 4px apart with P2 holding a
+grid with nothing linked to its cells, and P6 holding the line over a name to its block's own width.
 
 Left:
 
-1. **A packet with one-bit fields is very wide** (a TCP header is 2408px). Three things would bring it near
-   Mermaid's 1024: P6 checking a block's words against the block's own width, not a column's (score.mjs); a P2
-   clause for cells that touch, so a grid may have no gap; a `cell` shape that keeps less room round its words.
-2. **A timeline does not wrap** (nine periods are 1592px), and a long section name widens every section.
-3. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
+1. **A timeline does not wrap** (nine periods are 1592px), and a long section name widens every section.
+2. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
    colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`.
-4. **Look, sample by sample**: one screenshot of each kind beside Mermaid's was looked at; the rest pass their
-   rules.
+3. **Look, sample by sample**: one screenshot of each kind beside Mermaid's was looked at; the rest pass their
+   rules. A packet of one-bit fields with four-letter names (`packet-bit`) is still 1396px: a column is as wide as
+   its widest one-bit name.
 
 ## Waiting on Victor
 

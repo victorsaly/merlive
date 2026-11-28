@@ -141,14 +141,17 @@ open, an arrow drawn as a block), Merlive keeps the grid, and the rules above ar
   and gaps of 48 px between, wider where a link's words need it. **A block is exactly its cells**: as wide as the
   columns it spans and the gaps between them, as tall as its row. A block that holds others is a frame that is
   exactly its cells too, round a grid of its own that shares the frame's width. The check works this out again
-  from the grid and compares it with every block and frame.
+  from the grid and compares it with every block and frame. A grid with nothing linked on it may say its own
+  gap (a packet's fields are 4 px apart, as Mermaid's all but touch): its blocks are then held to their cells and
+  to not lying on one another, in place of the 16 px two boxes of a flow keep.
 - **P3** and **P5** are unchanged. Links are routed at right angles in the gaps: straight where two blocks face
   each other across a gap, else round one corner, or along the gap beside one block and into the other, each
   line of a gap a track step from the next. A space is free room. A link with no clear way is said, and P3
   stops the diagram being written with a line through a block.
 - **P4** counts every crossing against the same one in eight. None is forgiven as forced: the author chose where
   the blocks are, so a crossing is theirs to remove by moving one.
-- **P6**, **P7** and **P8** are unchanged; a block that spans columns has the room of its own width.
+- **P6**, **P7** and **P8** are unchanged; a block that spans columns has the room of its own width, and the short
+  line over its name is held to that width too, not to one column's.
 
 - **What to do when it fails:** give a link room with a `space`, or move a block to another cell. To have the
   diagram placed by rule instead, join every block to another with a link and take out the spans.

@@ -2,7 +2,7 @@
 // on a grid by rule: the main path is one straight spine, everything else sits to one side, every box is the
 // same size, and lines turn at right angles and never share a port. Pure: a model in, coordinates out.
 
-import { inset, roomIn } from './shapes.mjs';
+import { form, inset, roomIn } from './shapes.mjs';
 import { placeGrid } from './grid.mjs';
 
 /** @typedef {import('./parse.mjs').Model} Model */
@@ -93,6 +93,10 @@ export const roomFor = (/** @type {{shape:import('./shapes.mjs').Shape,icon?:str
 export const linesOf = (/** @type {import('./parse.mjs').Node} */ n, /** @type {number} */ width) =>
   n.breaks ? n.breaks.flatMap((b) => wrap(b, roomFor(n, width))) : wrap(n.label, roomFor(n, width));
 
+/** How wide a box has to be for the short line over its name, which is never wrapped: a cell keeps less room either side of it, as it does of its words. */
+export const overNeeds = (/** @type {{over?:string,shape:import('./shapes.mjs').Shape}} */ n) =>
+  n.over ? n.over.length * measure.overGlyph + (n.shape === 'cell' ? form.cellPad : 2 * measure.overIn) : 0;
+
 /** How many characters a row may run to in a box of this width. */
 export const rowsRoom = (/** @type {number} */ width) => Math.floor((width - 2 * measure.rowIn) / measure.rowGlyph);
 
@@ -160,7 +164,7 @@ function boxFor(/** @type {Model} */ model) {
   const longest = Math.max(0, ...model.nodes.flatMap((n) => (n.table ? [] : compartmentsOf(n).flat().map((row) => row.length))));
   const widest = Math.max(0, ...model.nodes.map(tableNeeds));
   // The short line over a name says what the box is, and is never wrapped: the box is as wide as it needs.
-  const over = Math.max(0, ...model.nodes.map((n) => (n.over ? n.over.length * measure.overGlyph + 2 * measure.overIn : 0)));
+  const over = Math.max(0, ...model.nodes.map(overNeeds));
   const widths = longest || widest || over > measure.widths[measure.widths.length - 1] || model.nodes.some((n) => n.text) ? [...measure.widths, ...measure.rowWidths] : measure.widths;
   const wide = (/** @type {boolean} */ anyNote) => widths.find((width) => fits(width, anyNote) && rowsRoom(width) >= longest && width >= widest && width >= over);
   // When no width keeps every note and sentence short, the widest that fits the rest gives them the fewest lines.

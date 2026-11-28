@@ -6,7 +6,7 @@
 // rows and columns. What comes out is what layout.mjs gives, so it is drawn and checked as any diagram is.
 // Pure: a model in, coordinates out.
 
-import { compartmentsOf, extraHeight, hitsBox, linesOf, measure, meet, roomFor, rowsRoom, segmentsOf, wordsFor, wrap } from './layout.mjs';
+import { compartmentsOf, extraHeight, hitsBox, linesOf, measure, meet, overNeeds, roomFor, rowsRoom, segmentsOf, wordsFor, wrap } from './layout.mjs';
 import { inset } from './shapes.mjs';
 
 /** @typedef {import('./parse.mjs').Model} Model */
@@ -109,7 +109,7 @@ export function placeGrid(model) {
   const fitsAt = (/** @type {Node} */ n, /** @type {number} */ w) => {
     const lines = linesOf(n, w);
     // The short line over a name is never wrapped: a block is as wide as it needs, as a box of a flow is.
-    const over = n.over ? n.over.length * measure.overGlyph + 2 * measure.overIn : 0;
+    const over = overNeeds(n);
     return over <= w && lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0)) && lines.every((l) => l.length <= roomFor(n, w)) && listed(n).every((row) => row.length <= rowsRoom(w));
   };
   /** The name a block that holds others goes by: its group's, or, when it holds nothing and so is no group, the one its cell keeps. */

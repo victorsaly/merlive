@@ -16,6 +16,11 @@ More kinds that the two placements there are can draw: mindmaps, kanban boards, 
   with the first of them, so no line of a tree crosses another however many branches it has.
 - **A grid may say its own measures**: its narrowest column, the room between its cells, and that nothing runs
   between them. A block on a grid may list rows and carry a line over its name.
+- **A packet is about as wide as Mermaid draws it.** A TCP header was 2408 px across; it is 1140. A field is a
+  cell, which keeps 4 px of room either side of its words where a box of a flow keeps 14, and fields sit 4 px apart
+  as Mermaid's do: P2 holds the blocks of a grid with nothing linked, whose author set its gap, to their cells
+  and to not lying on one another. P6 holds the line of bits over a field's name to the field's own width, so a
+  column of a bit no longer has to be as wide as "192–255".
 - **A box is called what it is.** The legend and a picked box said "Step" on a board, a class diagram, an entity
   diagram, a mindmap and a packet; they now say "Card", "Class", "Entity", "Idea" and "Field" (a timeline's
   "Event" moves to the same place), unless `%% kind step: …` says otherwise. A page with no lines asks only for a

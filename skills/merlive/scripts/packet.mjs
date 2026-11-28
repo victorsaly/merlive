@@ -6,8 +6,6 @@
 // columns of a byte and not in thirty-two of a bit. Nothing is placed by rule and nothing is guessed: bits that
 // are in no field are left empty and said, and a field Mermaid would not draw is said and not drawn. Pure.
 
-import { measure } from './layout.mjs';
-
 /** @typedef {import('./parse.mjs').Model} Model */
 /** @typedef {import('./parse.mjs').Node} Node */
 /** @typedef {import('./block.mjs').Cell} Cell */
@@ -24,7 +22,7 @@ export const packetMeasure = {
   bitsPerRow: 32, // the bits Mermaid puts in a row when it is told nothing
   row: 512, // px a row is wide at the least: 16px a bit at 32 bits a row, half of what Mermaid gives, so a field of a byte holds a word on one line
   column: 24, // px a column is wide at the least, however many there are: narrower, and a field of one could not be picked
-  gap: 16, // px between two fields, and two rows: the least room the rules let two boxes have (P2). Mermaid's fields all but touch; nothing runs between these either
+  gap: 4, // px between two fields, and two rows: Mermaid's all but touch, and nothing runs between them, so P2 holds them to their cells and not to a flow's 16px
 };
 
 const READ = {
@@ -111,8 +109,6 @@ export function packetReader({ model, node, warn, settings }) {
     const unit = written.reduce((u, w) => gcd(gcd(u, w.from), w.to + 1), perRow);
     /** @type {Cell[]} */
     const cells = [];
-    /** @type {string[]} */
-    const said = [];
     for (const w of written) {
       // A field that runs past the end of a row is drawn again on the next, as Mermaid draws it: the same
       // name, each part with the bits it has there.
@@ -124,10 +120,9 @@ export function packetReader({ model, node, warn, settings }) {
         if (w.name === null) return void cells.push({ is: 'space', span, line: w.line });
         const n = node(`bits${part.from}`);
         n.label = w.name;
-        if (showBits) {
-          n.over = bits(part.from, part.to);
-          said.push(n.over);
-        }
+        // A field a bit wide is a few letters across: a cell keeps less room round its words than a box of a flow.
+        n.shape = 'cell';
+        if (showBits) n.over = bits(part.from, part.to);
         // What a picked part says of itself, unless its author has said something of it.
         if (parts.length > 1) model.notes[n.id] ??= `Part ${i + 1} of ${parts.length} of one field, bits ${w.from} to ${w.to}: it runs past the end of a row of ${perRow} bits.`;
         cells.push({ is: 'block', id: n.id, span, line: w.line });
@@ -135,11 +130,10 @@ export function packetReader({ model, node, warn, settings }) {
     }
 
     const columns = perRow / unit;
-    // A column is no narrower than gives a row its least width. And, for now, no narrower than the longest line
-    // of bits: the check that the line over a name fits (P6) measures a column, not the field the line is over.
+    // A column is no narrower than gives a row its least width. Past that, the grid makes it as wide as the field
+    // of fewest columns needs for its name and its bits, each field held to its own width (P6), not to a column.
     const forRow = Math.ceil((packetMeasure.row - (columns - 1) * packetMeasure.gap) / columns);
-    const forBits = Math.ceil(Math.max(0, ...said.map((s) => s.length)) * measure.overGlyph + 2 * measure.overIn);
-    model.grid = /** @type {Model['grid']} */ ({ columns, cells, least: Math.max(packetMeasure.column, forRow, forBits), gap: packetMeasure.gap });
+    model.grid = /** @type {Model['grid']} */ ({ columns, cells, least: Math.max(packetMeasure.column, forRow), gap: packetMeasure.gap });
     model.placedBy = 'grid';
     model.placedWhy = `a packet is rows of ${perRow} bits, and each field is as wide as the bits it takes`;
   };

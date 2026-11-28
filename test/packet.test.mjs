@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout, measure } from '../skills/merlive/scripts/layout.mjs';
-import { score } from '../skills/merlive/scripts/score.mjs';
+import { limits, score } from '../skills/merlive/scripts/score.mjs';
 import { builtIn } from '../skills/merlive/scripts/design.mjs';
 import { picture } from '../skills/merlive/scripts/render.mjs';
 import { packetMeasure } from '../skills/merlive/scripts/packet.mjs';
@@ -221,6 +221,46 @@ describe('packet: placed and drawn', () => {
     const m = packet('0-15: "Kind"\n16-79: "Data"\n80-95: "Check"'), at = layout(m).nodes;
     assert.ok(at.bits16.y === at.bits0.y && at.bits32.y > at.bits16.y && at.bits64.y > at.bits32.y && at.bits80.y === at.bits64.y);
     assert.equal(at.bits32.w, right(at.bits16) - left(at.bits0));
+  });
+});
+
+describe('packet: near the width Mermaid gives it', () => {
+  // Mermaid draws a row of 32 bits 1024px wide; a field of one bit is 32px with its name in it.
+  const rule = (/** @type {Model} */ m, /** @type {any} */ lay, /** @type {string} */ id) => /** @type {any} */ (score(m, lay, builtIn).checks.find((c) => c.id === id));
+
+  it('draws a TCP header no wider than a page shows at once, every flag whole', () => {
+    const m = packet(tcp), lay = layout(m), at = lay.nodes;
+    assert.ok(lay.width <= 1200, `${lay.width}px`);
+    for (const flag of ['bits106', 'bits107', 'bits108', 'bits109', 'bits110', 'bits111']) assert.deepEqual(at[flag].lines.length, 1, flag);
+    assert.ok(at.bits106.w < 40, `a bit is ${at.bits106.w}px`);
+    assert.deepEqual(broken(m), []);
+  });
+
+  it('draws a field as a cell, which keeps less room round its words than a box of a flow', () => {
+    assert.ok(packet(tcp).nodes.every((n) => n.shape === 'cell'));
+  });
+
+  it('sets fields closer than two boxes of a flow, as Mermaid\'s all but touch, and never on each other', () => {
+    const m = packet(udp), at = layout(m).nodes;
+    assert.ok(packetMeasure.gap > 0 && packetMeasure.gap < limits.boxGap, `${packetMeasure.gap}px`);
+    assert.equal(left(at.bits16) - right(at.bits0), packetMeasure.gap);
+    assert.equal(rule(m, layout(m), 'P2').ok, true);
+  });
+
+  it('is still held to its cells: a field moved onto the next breaks P2', () => {
+    const m = packet(udp), lay = layout(m);
+    lay.nodes.bits16.x -= packetMeasure.gap + 4;
+    const p2 = rule(m, lay, 'P2');
+    assert.equal(p2.ok, false);
+    assert.match(p2.detail, /"Source Port" and "Destination Port" overlap/);
+  });
+
+  it('holds the line over a name to the field it is over, not to one column (P6)', () => {
+    const m = packet(tcp), lay = layout(m);
+    assert.ok(lay.box.w < '192–255'.length * measure.overGlyph + 2 * measure.overIn, `a column is ${lay.box.w}px`);
+    assert.equal(rule(m, lay, 'P6').ok, true);
+    lay.nodes.bits106.w = 12;
+    assert.match(rule(m, lay, 'P6').detail, /"URG" has a line over its name too long for a 12px box: "106"/);
   });
 });
 
