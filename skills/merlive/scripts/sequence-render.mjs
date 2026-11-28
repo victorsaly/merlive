@@ -217,7 +217,9 @@ export function sequenceInside(/** @type {SequenceModel} */ model, /** @type {Se
     const nameX = p.shape === 'collections' ? x - across.stack / 2 : p.shape === 'queue' ? x - across.cap / 2 : x;
     const middle = under ? t + across.mark + across.markGap + tall / 2 : p.shape === 'collections' ? y + across.stack / 2 : y;
     const first = middle - ((s.lines.length - 1) * across.headLine) / 2 + show.nameBase;
-    const role = live && !foot ? ` tabindex="0" role="button" aria-label="${esc(`${p.label}, ${roleName(p.role).toLowerCase()}`)}"` : '';
+    // On the page, the foot is the same participant again: a pointer may pick it, and a screen reader hears it
+    // once, at its head. A still picture is one image to a screen reader, its parts not read at all.
+    const role = !live ? '' : foot ? ' aria-hidden="true"' : ` tabindex="0" role="button" aria-label="${esc(`${p.label}, ${roleName(p.role).toLowerCase()}`)}"`;
     return `<g class="mv-node" data-node="${esc(p.id)}" data-kind="${esc(p.kind)}"${under ? ` data-mark="${p.shape}"` : ''}${role}>${drawn[p.shape]()}`
       + `<text>${s.lines.map((text, i) => `<tspan x="${n(nameX)}" y="${n(first + i * across.headLine)}">${esc(text)}</tspan>`).join('')}</text></g>`;
   };

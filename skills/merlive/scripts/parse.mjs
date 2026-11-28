@@ -167,6 +167,19 @@ const SHAPES = {
   trapezoid: ['trap-b', 'priority', 'trapezoid', 'trapezoid-bottom'],
   'trapezoid-alt': ['trap-t', 'inv-trapezoid', 'manual', 'trapezoid-top'],
   flag: ['odd'],
+  document: ['doc', 'document', 'lin-doc', 'lined-document', 'tag-doc', 'tagged-document'],
+  documents: ['docs', 'documents', 'st-doc', 'stacked-document'],
+  card: ['notch-rect', 'card', 'notched-rectangle'],
+  lined: ['lin-rect', 'lin-proc', 'lined-rectangle', 'lined-process', 'shaded-process'],
+  stacked: ['st-rect', 'procs', 'processes', 'stacked-rectangle'],
+  divided: ['div-rect', 'div-proc', 'divided-rectangle', 'divided-process'],
+  window: ['win-pane', 'internal-storage', 'window-pane'],
+  sloped: ['sl-rect', 'manual-input', 'sloped-rectangle'],
+  delay: ['delay', 'half-rounded-rectangle'],
+  triangle: ['tri', 'extract', 'triangle'],
+  'flipped-triangle': ['flip-tri', 'manual-file', 'flipped-triangle'],
+  // Mermaid's fork and join are a filled bar, as a state diagram's are.
+  bar: ['fork', 'join'],
 };
 
 // What "@{ … }" can say of a box. One that says none of these is about a link or a group, and makes no box.

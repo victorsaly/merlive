@@ -20,6 +20,7 @@ What only some diagrams need. SKILL.md has the everyday path.
 | `#quot;`, `#9829;` | An entity code becomes its character |
 | `fa:fa-truck Shipped` | An icon is drawn beside its words. The drawing is Merlive's own (seventy-two of them, found by any name Font Awesome has used): nothing is fetched. One Merlive has no drawing for, or a brand's mark, is left out and named in a `note,` line |
 | `A@{ shape: diam, label: "In stock?" }` | A box written the newer way, on one line or several. Its label is kept. Every shape in the rows above is drawn as itself, by any of Mermaid's names for it; a shape Merlive has no drawing for is a box |
+| `A@{ shape: doc }`, `docs`, `notch-rect`, `lin-rect`, `st-rect`, `div-rect`, `win-pane`, `sl-rect`, `delay`, `tri`, `flip-tri`, `fork`, `join` | Each drawn as itself, by any of Mermaid's names for it: a document with a waved foot, a stack of documents, a card with its corner cut, a box with a rule down its side, a stack of boxes, a box with a rule across its top, a window pane, a box whose top slopes, a delay with a round end, a triangle, one turned over, and a fork or a join as a bar across the flow. Mermaid's drawings (a cloud, a bolt, a person, braces) are boxes |
 | `A@{ icon: "fa:user", label: "Buyer" }` | A box with its label, and Merlive's own drawing of the icon beside it |
 | `A@{ img: "…", label: "…" }` | A box with its label. The image is left out: a page of Merlive fetches nothing |
 | `A@{ row: 1, column: 2 }`, `g@{ view: collapsed }` | Read past: placement is Merlive's, and a group is drawn open |

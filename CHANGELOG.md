@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.5.4 (unreleased)
+## 0.5.5 (unreleased)
+
+- **Eleven more of Mermaid's newer shapes are drawn as themselves**: `doc`, `docs`, `notch-rect`, `lin-rect`,
+  `st-rect`, `div-rect`, `win-pane`, `sl-rect`, `delay`, `tri` and `flip-tri`, each by any of Mermaid's names
+  for it, in the footprint every box shares, with lines meeting its outline. `fork` and `join` are a bar, as a
+  state diagram's are. 32 of the 53 names are drawn as themselves, from 18.
+- **A sequence diagram's foot is read once**: on the page, a participant's box at the foot is hidden from a
+  screen reader, which hears it at its head.
+
+## 0.5.4 (2026-11-28)
 
 - **A state diagram's fork and join are bars**, as Mermaid draws them: a solid bar across the flow, flat top to
   bottom and upright left to right, with the lines running on to it. Its name is not written on it; the page's

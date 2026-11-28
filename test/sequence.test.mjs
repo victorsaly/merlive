@@ -520,6 +520,13 @@ describe('sequence: who a participant is, drawn', () => {
     for (const [name, what] of [['Buyer', 'a person'], ['Shop', 'a boundary'], ['Rules', 'a control'], ['Order', 'an entity'], ['Orders', 'a database'], ['Lines', 'a collection'], ['Jobs', 'a queue'], ['ERP', 'a participant']]) assert.match(page, new RegExp(`aria-label="${name}, ${what}"`));
     // One of the two is what the keyboard reaches; a pointer may pick either.
     assert.equal(page.split('aria-label="Buyer, a person"').length - 1, 1);
+    // The foot is the same participant again: a screen reader hears it once, at its head.
+    for (const p of m.participants) {
+      const drawn = [...page.matchAll(new RegExp(`<g class="mv-node" data-node="${p.id}"[^>]*>`, 'g'))].map(([g]) => g);
+      assert.equal(drawn.length, 2, p.id);
+      assert.doesNotMatch(drawn[0], /aria-hidden/, `${p.id}: its head`);
+      assert.match(drawn[1], /aria-hidden="true"/, `${p.id}: its foot`);
+    }
   });
 
   it('passes its rules with every kind of participant, one made part way down, and a foot on each', () => {
