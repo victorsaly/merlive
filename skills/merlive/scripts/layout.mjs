@@ -514,6 +514,12 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
     }
   };
   for (const id of spine) if (rowOf.has(id)) layRow(id, 0);
+  // A lane is free for a box when nothing on its rank has it; for the first of a row, when no box of the row
+  // would land on one taken, since a row that runs toward the main path would put a box on it.
+  const free = (/** @type {string} */ id, /** @type {number} */ l) => {
+    const r = rowOf.get(id);
+    return (r ? r.row.map((_, i) => l + r.side * (i - r.at)) : [l]).every((at) => !taken.has(`${rank.get(id)}:${at}`));
+  };
   for (const id of rest) {
     if (lane.has(id)) continue;
     const before = forward.filter((e) => e.to === id).map((e) => e.from);
@@ -522,7 +528,7 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
     const side = led ? /** @type {1|-1} */ (sideOf.get(led)) : before.length ? 1 : -1;
     sideOf.set(id, side);
     let l = Math.max(1, ...before.filter((p) => sideOf.has(p) && lane.has(p)).map((p) => Math.abs(lane.get(p) ?? 1)));
-    while (taken.has(`${rank.get(id)}:${side * l}`)) l++;
+    while (!free(id, side * l)) l++;
     lane.set(id, side * l);
     taken.add(`${rank.get(id)}:${side * l}`);
     layRow(id, side * l);

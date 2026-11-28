@@ -123,9 +123,13 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
       parted.set(inside.id, regions);
       if (inside.framed) unframe();
       else if (inside.members.length) {
-        const first = `${inside.id}/1`, at = model.groups.findIndex((g) => g.id === inside.id);
+        const first = `${inside.id}/1`, at = model.groups.findIndex((g) => g.id === inside.id), outer = model.groups[at];
         for (const g of model.groups) if (g.parent === inside.id) g.parent = first;
-        model.groups.splice(at + 1, 0, { id: first, title: '', members: [...inside.members], parent: inside.id });
+        // A direction said before the "--" was said of these lines, so it is the first region's, not the
+        // composite state's round both.
+        const { direction } = outer;
+        delete outer.direction;
+        model.groups.splice(at + 1, 0, { id: first, title: '', members: [...inside.members], parent: inside.id, ...(direction && { direction }) });
         regions.push(first);
       }
       inside.region = Math.max(inside.region, 1) + 1;

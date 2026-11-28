@@ -183,6 +183,9 @@ taste are under "Waiting on Victor".
 - a composite state's own direction, or a region's after `--`, is read onto its group (state.mjs), and layout runs
   one across the flow as a row, as it does a flowchart's group since 0.5.6. One corpus picture changed
   (`state-direction-composite`), now as Mermaid draws it: Credit above Stock in a flow that runs left to right.
+- from review: a direction said before the first `--` moves to the first region when the `--` makes it; and the
+  first box of a row takes a lane from which every box of the row is free (layout.mjs `free`), since a region
+  that fed in from one side and ran toward the other had put a box on the main path.
 
 ## Waiting on Victor
 
