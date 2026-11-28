@@ -330,6 +330,8 @@ export function page(model, lay, design, about) {
     edges: model.edges.map((e) => ({ id: e.id, from: e.from, to: e.to, label: e.label })),
     steps: design.output.steps ? model.steps.map((s) => ({ title: s.title, text: s.text, seq: s.seq, loop: s.loop })) : [],
     motion: design.motion,
+    // A board or a packet has no lines, so a box picked there neither comes from nor goes to anything.
+    linked: model.edges.length > 0,
   };
   // "</" inside the script would end it early, wherever it came from.
   const json = JSON.stringify(data).replace(/</g, '\\u003c');
@@ -357,7 +359,7 @@ ${design.output.legend ? `<figcaption class="mv-legend">${legend}</figcaption>` 
   const side = `<div class="mv-side">
 ${steps}
 <section class="mv-card" aria-live="polite">
-<p class="mv-small" id="mv-none">Pick a box or a line to see only what it connects to.</p>
+<p class="mv-small" id="mv-none">${data.linked ? 'Pick a box or a line to see only what it connects to.' : 'Pick a box to read all it says.'}</p>
 <div id="mv-picked" hidden>
 <h2 id="mv-title"></h2>
 <p id="mv-note"></p>

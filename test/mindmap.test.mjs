@@ -23,6 +23,11 @@ const links = (/** @type {Model} */ m) => m.edges.map((e) => e.id);
 const ordering = '  root((Ordering))\n    Buying\n      Quotes\n      Orders\n    Paying\n      Invoices';
 
 describe('mindmap: what it is taken for', () => {
+  it('calls a plain box an idea on the page, and says nothing of a map of its root alone', () => {
+    assert.equal(map('  root((Plan))\n    Goals').meanings?.step, 'Idea');
+    assert.equal(map('  root((Plan))').meanings?.step, undefined);
+  });
+
   it('is read as boxes and links, into the model a flowchart gives: a tree that grows to the right', () => {
     const m = map(ordering);
     assert.equal(m.type, 'flowchart');
@@ -184,7 +189,7 @@ describe('mindmap: icons and classes', () => {
   it('makes the box on the line above of the kind its class names: the first, where several are given', () => {
     const m = map('  Root\n    A[Overdue]\n    :::urgent large\n    B\n  %% kind urgent: Needs doing today');
     assert.deepEqual(m.nodes.map((n) => n.kind), ['root', 'urgent', 'step']);
-    assert.deepEqual(m.meanings, { urgent: 'Needs doing today' });
+    assert.deepEqual(m.meanings, { step: 'Idea', urgent: 'Needs doing today' });
     assert.deepEqual(m.warnings, []);
   });
 

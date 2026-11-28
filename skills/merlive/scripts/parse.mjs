@@ -214,18 +214,20 @@ function leftOpen(/** @type {string} */ text) {
 
 // A diagram that is boxes and links under another name has a reader of its own, which reads its lines into the
 // model a flowchart gives: how the block starts, and the reader for it. A new kind is one more line here.
+// The third is what a plain box is in that kind of diagram, for the legend and for a box picked on the page: a
+// "Step" is a flowchart's word, and a card on a board is not one. Where it is missing, a plain box is a step.
 const READERS = /** @type {const} */ ([
-  [/^stateDiagram(-v2)?;?$/, stateReader],
-  [/^classDiagram(-v2)?;?$/, classReader],
-  [/^erDiagram;?$/, erReader],
-  [/^architecture(-beta)?;?$/, architectureReader],
-  [/^requirementDiagram;?$/, requirementReader],
-  [/^C4(Context|Container|Component|Dynamic|Deployment)$/, c4Reader],
-  [/^block(-beta)?;?$/, blockReader],
-  [/^mindmap;?$/, mindmapReader],
-  [/^timeline(\s|;|$)/, timelineReader],
-  [/^packet(-beta)?$/, packetReader],
-  [/^kanban$/, kanbanReader],
+  [/^stateDiagram(-v2)?;?$/, stateReader, ''],
+  [/^classDiagram(-v2)?;?$/, classReader, 'Class'],
+  [/^erDiagram;?$/, erReader, 'Entity'],
+  [/^architecture(-beta)?;?$/, architectureReader, ''],
+  [/^requirementDiagram;?$/, requirementReader, ''],
+  [/^C4(Context|Container|Component|Dynamic|Deployment)$/, c4Reader, ''],
+  [/^block(-beta)?;?$/, blockReader, ''],
+  [/^mindmap;?$/, mindmapReader, 'Idea'],
+  [/^timeline(\s|;|$)/, timelineReader, 'Event'],
+  [/^packet(-beta)?$/, packetReader, 'Field'],
+  [/^kanban$/, kanbanReader, 'Card'],
 ]);
 
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own
@@ -306,6 +308,8 @@ export function parse(src) {
   // The reader of a diagram that is not written as a flowchart is (see READERS), reading into this same model.
   /** @type {{read:(text:string, line:number) => boolean, done:() => void}|null} */
   let reader = null;
+  // What a plain box is called in this kind of diagram (see READERS); a flowchart's is a step.
+  let plain = '';
   // What Mermaid was told of itself, in front matter and in "%%{init: …}%%": read past here, and lent to a
   // reader whose diagram a setting changes (how many bits a packet has in a row).
   /** @type {string[]} */
@@ -532,7 +536,9 @@ export function parse(src) {
       header = true;
       const h = /^(flowchart|graph)\b\s*(TD|TB|BT|LR|RL)?/.exec(text);
       model.kindOfDiagram = text.split(/\s+/)[0];
-      const read = READERS.find(([starts]) => starts.test(text))?.[1];
+      const found = READERS.find(([starts]) => starts.test(text));
+      const read = found?.[1];
+      plain = found?.[2] ?? '';
       if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, settings, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]), indent: (at) => /^\s*/.exec(src.split(/\r?\n/)[at - 1] ?? '')?.[0].length ?? 0, header: { text, line } }));
       if (!h) {
         model.type = 'unsupported';
@@ -668,6 +674,8 @@ export function parse(src) {
     }
   }
   for (const n of model.nodes) if (!n.kind) n.kind = n.shape === 'diamond' || n.shape === 'hexagon' ? 'decision' : n.shape === 'pill' || n.shape === 'double-circle' ? 'terminal' : 'step';
+  // Only where a box is plain, so that no legend names a kind nothing is of, and never over its author's own word.
+  if (plain && model.nodes.some((n) => n.kind === 'step')) model.meanings = { step: plain, ...model.meanings };
   for (const id of Object.keys(model.notes)) if (!byId.has(id)) model.warnings.push(`note for ${id}: no such node`);
   // A kind its author named for its colour (classDef red) tells a reader of the legend only what they can see.
   const kinds = new Set(model.nodes.map((n) => n.kind));

@@ -28,6 +28,10 @@ const udp = '0-15: "Source Port"\n16-31: "Destination Port"\n32-47: "Length"\n48
 const tcp = '0-15: "Source Port"\n16-31: "Destination Port"\n32-63: "Sequence Number"\n64-95: "Acknowledgment Number"\n96-99: "Data Offset"\n100-105: "Reserved"\n106: "URG"\n107: "ACK"\n108: "PSH"\n109: "RST"\n110: "SYN"\n111: "FIN"\n112-127: "Window"\n128-143: "Checksum"\n144-159: "Urgent Pointer"\n160-191: "(Options and Padding)"\n192-255: "Data (variable length)"';
 
 describe('packet: fields', () => {
+  it('calls a field a field on the page', () => {
+    assert.equal(packet('0-15: "Source port"\n16-31: "Destination port"').meanings?.step, 'Field');
+  });
+
   it('reads a field as a box, with the bits it takes over its name', () => {
     const m = packet(udp);
     assert.deepEqual(fields(m), [['bits0', 'Source Port', '0–15'], ['bits16', 'Destination Port', '16–31'], ['bits32', 'Length', '32–47'], ['bits48', 'Checksum', '48–63'], ['bits64', 'Data', '64–95']]);

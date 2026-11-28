@@ -15,7 +15,7 @@ import { layout, measure } from '../skills/merlive/scripts/layout.mjs';
 import { gridMeasure } from '../skills/merlive/scripts/grid.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { builtIn } from '../skills/merlive/scripts/design.mjs';
-import { picture } from '../skills/merlive/scripts/render.mjs';
+import { page, picture } from '../skills/merlive/scripts/render.mjs';
 import { priorities } from '../skills/merlive/scripts/kanban.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -308,5 +308,24 @@ describe('kanban: the corpus', () => {
       assert.deepEqual(lay.warnings, [], s.file);
       assert.doesNotThrow(() => picture(m, lay, builtIn, { title: s.file }), s.file);
     }
+  });
+});
+
+describe("kanban: the page's words", () => {
+  const about = { title: 'A board', source: 'x', version: '0' };
+  it('calls a card a card, in the legend and when it is picked, unless its author named it', () => {
+    assert.deepEqual(board(three).meanings, { step: 'Card' });
+    assert.deepEqual(board(`${three}\n%% kind step: Task`).meanings, { step: 'Task' });
+    const m = board(three);
+    assert.match(page(m, layout(m), builtIn, about), /<\/i>Card<\/span>/);
+  });
+
+  it('says nothing of a flow where nothing is linked: no lines to pick, nothing that comes from or goes to', () => {
+    const m = board(three), html = page(m, layout(m), builtIn, about);
+    assert.match(html, /id="mv-none">Pick a box to read all it says\.</);
+    assert.doesNotMatch(html, /Pick a box or a line/);
+    assert.match(html, /"linked":false/);
+    const f = parse('flowchart TD\n  A --> B');
+    assert.match(page(f, layout(f), builtIn, about), /"linked":true/);
   });
 });

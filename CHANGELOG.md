@@ -16,6 +16,10 @@ More kinds that the two placements there are can draw: mindmaps, kanban boards, 
   with the first of them, so no line of a tree crosses another however many branches it has.
 - **A grid may say its own measures**: its narrowest column, the room between its cells, and that nothing runs
   between them. A block on a grid may list rows and carry a line over its name.
+- **A box is called what it is.** The legend and a picked box said "Step" on a board, a class diagram, an entity
+  diagram, a mindmap and a packet; they now say "Card", "Class", "Entity", "Idea" and "Field" (a timeline's
+  "Event" moves to the same place), unless `%% kind step: …` says otherwise. A page with no lines asks only for a
+  box to be picked, and a picked box no longer says the flow starts and ends there.
 
 ## 0.4.0 (2026-11-26)
 

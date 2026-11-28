@@ -19,6 +19,10 @@ const links = (/** @type {Model} */ m) => m.edges.map((e) => [e.id, e.tail, e.he
 const rows = (/** @type {Model} */ m) => Object.fromEntries(m.nodes.filter((n) => n.rows).map((n) => [n.id, n.rows]));
 
 describe('er: what it is taken for', () => {
+  it('calls an entity an entity on the page, unless its author named it', () => {
+    assert.equal(er('SUPPLIER ||--o{ ORDER : receives').meanings?.step, 'Entity');
+  });
+
   it('is read as boxes and links, into the model a flowchart gives', () => {
     const m = er('SUPPLIER ||--o{ ORDER : receives');
     assert.equal(m.type, 'flowchart');

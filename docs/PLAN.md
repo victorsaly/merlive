@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 26 November 2026, with 0.4.0 released and 0.5.0 in hand.
+Last brought up to date: 28 November 2026, with 0.4.0 released and 0.5.0 in hand.
 
 ## Released
 
@@ -25,7 +25,7 @@ What 0.2.0 left, each said by the command when met or named on the comparison pa
 
 - **What is known to be missing**, each said by the command when met: a direction other than top to bottom,
   for either kind (boxes of different heights are only placed top to bottom); attributes written on the line
-  that opens an entity. A picked class is called "Step" on the page, since a class has no kind of its own.
+  that opens an entity.
 - **An attribute's comment is not on the picture.** An entity is drawn as a table of type, name and keys. A
   comment (`string number PK "As printed"`) is Mermaid's fourth column; here it is in the note on the entity,
   since one sentence would make every box of the diagram as wide as itself. To draw it, a comment column needs
@@ -83,7 +83,9 @@ picking the path that takes no decision's exception would fix it by rule.
 On the branch `kinds-2`. Done: readers for mindmaps, kanban boards, timelines and packets (`mindmap.mjs`,
 `kanban.mjs`, `timeline.mjs`, `packet.mjs`), each with its tests, its list in `corpus/index.json` and its section
 in `skills/merlive/reference.md`; a tree placed as a tree (step 5 of `placed()` in layout.mjs); a grid that says
-its own least column, its gap, and that its cells are close (`grid.mjs`).
+its own least column, its gap, and that its cells are close (`grid.mjs`); a plain box named for what it is in
+each kind (the third column of `READERS` in parse.mjs: a card, a class, an entity, an idea, a field, an event),
+and a page with no lines that says nothing of a flow (`linked` in the page's data).
 
 Left:
 
@@ -93,8 +95,7 @@ Left:
 2. **A timeline does not wrap** (nine periods are 1592px), and a long section name widens every section.
 3. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
    colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`.
-4. **The page's words are a flow's** on a board ("Pick a box or a line…", "Step" in the legend).
-5. **Look, sample by sample**: one screenshot of each kind beside Mermaid's was looked at; the rest pass their
+4. **Look, sample by sample**: one screenshot of each kind beside Mermaid's was looked at; the rest pass their
    rules.
 
 ## Waiting on Victor

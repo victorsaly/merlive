@@ -148,9 +148,6 @@ export function timelineReader({ model, node, say, connect, frame, unframe, warn
     for (const s of sections) if (!s.periods.length) warn(s.line, `the section "${s.title}" has no periods, so there is nothing to draw it round; write a period under it, or take it out`);
     model.direction = down ? 'TD' : 'LR';
     if (!periods.length) return;
-    // A plain box is a step in a flowchart; in a timeline it is an event, and is called one in the legend and
-    // when it is picked, unless its author said what it is ("%% kind step: Milestone").
-    if (periods.some((p) => p.events.length)) model.meanings = { step: 'Event', ...model.meanings };
 
     // With no sections, the periods are one grid. With sections, each is a block that holds a grid of its own,
     // as wide as its periods (or, top to bottom, one under another); periods written before the first section

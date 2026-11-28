@@ -198,8 +198,10 @@ body[data-motion="lively"].mv-playing .mv-on .mv-line{stroke-dasharray:7 6;anima
       const to = data.edges.filter((e) => e.from === id).map((e) => name(e.to) + (e.label ? ` (${e.label})` : ''));
       // The kind in words: colour alone must never be the only thing that says it.
       fact('Kind', n?.kindName ?? '');
-      fact('Comes from', from.length ? from.join(', ') : 'Nothing: the flow starts here');
-      fact('Goes to', to.length ? to.join(', ') : 'Nothing: the flow ends here');
+      if (data.linked) {
+        fact('Comes from', from.length ? from.join(', ') : 'Nothing: the flow starts here');
+        fact('Goes to', to.length ? to.join(', ') : 'Nothing: the flow ends here');
+      }
     } else {
       const e = edges.get(picked.id);
       byId('mv-title').textContent = e ? `${name(e.from)} to ${name(e.to)}` : picked.id;
@@ -309,6 +311,6 @@ body[data-motion="lively"].mv-playing .mv-on .mv-line{stroke-dasharray:7 6;anima
     else if (ev.key === 'Escape') pick(null);
   });
   show(0);
-})({"nodes":[{"id":"req","label":"Request supplier","kind":"step","kindName":"Step","note":""},{"id":"chk","label":"Already known?","kind":"decision","kindName":"Decision","note":""},{"id":"use","label":"Use existing","kind":"terminal","kindName":"Start or end","note":""},{"id":"form","label":"Collect details","kind":"step","kindName":"Step","note":""},{"id":"vet","label":"Finance check","kind":"step","kindName":"Step","note":""},{"id":"rej","label":"Rejected","kind":"terminal","kindName":"Start or end","note":""},{"id":"add","label":"Add to ERP","kind":"step","kindName":"Step","note":""}],"edges":[{"id":"req-chk","from":"req","to":"chk","label":""},{"id":"chk-use","from":"chk","to":"use","label":"Yes"},{"id":"chk-form","from":"chk","to":"form","label":"No"},{"id":"form-vet","from":"form","to":"vet","label":""},{"id":"vet-rej","from":"vet","to":"rej","label":"Fails"},{"id":"vet-add","from":"vet","to":"add","label":"Passes"},{"id":"add-use","from":"add","to":"use","label":""}],"steps":[],"motion":"calm"});</script>
+})({"nodes":[{"id":"req","label":"Request supplier","kind":"step","kindName":"Step","note":""},{"id":"chk","label":"Already known?","kind":"decision","kindName":"Decision","note":""},{"id":"use","label":"Use existing","kind":"terminal","kindName":"Start or end","note":""},{"id":"form","label":"Collect details","kind":"step","kindName":"Step","note":""},{"id":"vet","label":"Finance check","kind":"step","kindName":"Step","note":""},{"id":"rej","label":"Rejected","kind":"terminal","kindName":"Start or end","note":""},{"id":"add","label":"Add to ERP","kind":"step","kindName":"Step","note":""}],"edges":[{"id":"req-chk","from":"req","to":"chk","label":""},{"id":"chk-use","from":"chk","to":"use","label":"Yes"},{"id":"chk-form","from":"chk","to":"form","label":"No"},{"id":"form-vet","from":"form","to":"vet","label":""},{"id":"vet-rej","from":"vet","to":"rej","label":"Fails"},{"id":"vet-add","from":"vet","to":"add","label":"Passes"},{"id":"add-use","from":"add","to":"use","label":""}],"steps":[],"motion":"calm","linked":true});</script>
 </body>
 </html>
