@@ -8142,8 +8142,7 @@
       "has": [
         "Buying",
         "Outside the firm"
-      ],
-      "loses": "A group's colour is read past: the look is the design's"
+      ]
     },
     {
       "file": "sequence/seq-message-line.mmd",
@@ -8463,8 +8462,7 @@
       "messages": 5,
       "blocks": 2,
       "notes": 1,
-      "bars": 2,
-      "loses": "The highlight's colour is read past: it is drawn in the design's own tint"
+      "bars": 2
     },
     {
       "file": "sequence/seq-comments.mmd",

@@ -68,7 +68,10 @@ strikes one through.
 - **Fail:** a frame's corner tab reads "OOP" because a lifeline runs through the L.
 
 A `rect` is a frame with no name: a highlight behind its rows, in the design's own tint. One inside another shows
-darker.
+darker. A `rect` its author gave a colour (`rect rgb(191, 223, 255)`) is drawn in the design's own colour nearest
+that hue, thinly, and so is a `box` round participants (`box Aqua Buying`): highlights an author told apart by
+colour stay apart, in the project's colours. Each colour after the first takes the nearest not yet taken, while
+the design has colours to spare. A grey, or a colour with none, keeps the design's tint.
 
 ## S5. A note sits clear of messages and of other notes, and covers a bar wholly or not at all
 
@@ -116,8 +119,10 @@ the design's `external` kind and a database of its `data` kind; every other part
 and the name carry the difference as well as colour: the small drawings are line work in the colour of a line,
 or of their kind when the design gives it one, and both are held to be seen on the page.
 
-One thing is checked that a flowchart has not: the title of a group is quiet text on the group's own fill, which
-is a little off the page's, and it must be readable there, in light and in dark.
+Two things are checked that a flowchart has not: the title of a group is quiet text on the group's own fill, which
+is a little off the page's, and it must be readable there, in light and in dark; and on a highlight or a group
+its author coloured, the words, the quiet words and the title must be readable on the colour it is drawn in, laid
+over any highlight it is inside.
 
 ## What a sequence looks like
 
@@ -144,6 +149,5 @@ message as it is reached. On a phone the card that goes through the messages sta
 ## What is not here yet
 
 - A participant that is ended is not drawn again where it ends, as Mermaid draws it: its line stops at a cross.
-- An author's own colours for a `rect` or a `box`: both are drawn in the design's tint.
 - The menus of links Mermaid hangs on a participant: a page of Merlive opens no links.
 - Playing a sequence over a flowchart in the same document when the names match.

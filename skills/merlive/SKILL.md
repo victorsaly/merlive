@@ -3,7 +3,7 @@ name: merlive
 description: Turns the Mermaid flowcharts and state, class, entity, requirement, C4, architecture, block and sequence diagrams in a Markdown file into well placed, live diagrams, one self-contained HTML page (or a still SVG) each, in the project's own colours, which it reads from the project's site by itself, with the main path straight, boxes of one size, and steps a reader can walk through. The Mermaid stays the source and is not changed. Use when asked to make a Mermaid diagram live, interactive, better looking or better laid out, to "merlive" a document, to add a walkthrough to a flowchart, or to set the look of a project's diagrams. Load it before planning the diagrams, even when asked not to run anything yet.
 license: MIT
 metadata:
-  version: 0.5.8
+  version: 0.5.9
   homepage: https://github.com/victorsaly/merlive
 allowed-tools: Bash(node ${CLAUDE_SKILL_DIR}/scripts/*)
 ---

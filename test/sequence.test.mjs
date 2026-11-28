@@ -6,7 +6,7 @@ import { describe, it } from 'node:test';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { across, isSequence, layoutSequence, parseSequence, scoreSequence } from '../skills/merlive/scripts/sequence.mjs';
 import { sequencePage, sequencePicture } from '../skills/merlive/scripts/sequence-render.mjs';
-import { builtIn, designFrom } from '../skills/merlive/scripts/design.mjs';
+import { builtIn, designFrom, huesFor } from '../skills/merlive/scripts/design.mjs';
 
 const seq = (/** @type {string} */ body) => parseSequence(`sequenceDiagram\n${body}`);
 const order = `participant B as Buyer
@@ -700,5 +700,52 @@ describe('sequence: the title of a group of participants', () => {
     assert.match(d1?.detail ?? '', /the title of a group/);
     const plain = seq(order);
     assert.doesNotMatch(scoreSequence(plain, layoutSequence(plain), faint).checks.find((c) => c.id === 'D1')?.detail ?? '', /the title of a group/);
+  });
+});
+
+describe("sequence: an author's colours for a highlight and a group", () => {
+  const coloured = 'box Aqua Buying\nparticipant B\nend\nbox rgb(33,66,99)\nparticipant W\nend\nbox Outside the firm\nparticipant S\nend\nrect rgb(191, 223, 255)\nB->>W: a\nrect rgb(200, 150, 255)\nW->>S: b\nend\nend\nrect\nB->>S: c\nend';
+
+  it('reads the colour of a rect and of a box, written any way CSS writes one', () => {
+    const m = seq('box Aqua Buying\nparticipant B\nend\nbox rgb(33,66,99)\nparticipant W\nend\nbox Outside the firm\nparticipant S\nend\nrect rgb(191, 223, 255)\nB->>W: a\nend\nrect rgba(0, 0, 255, 0.1)\nB->>W: b\nend\nrect #c00\nB->>W: c\nend\nrect hsl(120, 50%, 50%)\nB->>W: d\nend\nrect\nB->>W: e\nend');
+    assert.deepEqual(m.groups.map((g) => [g.title, g.colour]), [['Buying', '#00ffff'], ['', '#214263'], ['Outside the firm', undefined]]);
+    assert.deepEqual(m.blocks.map((b) => b.colour), ['#bfdfff', '#0000ff', '#cc0000', '#40bf40', undefined]);
+    assert.deepEqual(m.warnings, []);
+  });
+
+  it("gives each the design's own colour nearest in hue, a different one for each colour, and a grey none", () => {
+    const hues = huesFor(builtIn, ['#bfdfff', '#c896ff', '#bfdfff', '#d3d3d3']);
+    assert.equal(hues['#bfdfff'], 'data', 'a pale blue is the design\'s blue');
+    assert.equal(hues['#c896ff'], 'external', 'a pale purple is its blue-violet');
+    assert.equal(hues['#d3d3d3'], undefined, 'a grey has no hue to keep');
+    // Two blues an author told apart stay apart, while the design has colours to spare.
+    const blues = huesFor(builtIn, ['#00ffff', '#214263']);
+    assert.notEqual(blues['#00ffff'], blues['#214263']);
+  });
+
+  it('draws a coloured highlight and group in that colour of the design, thinly, in light and dark, and leaves the legend alone', () => {
+    const m = seq(coloured), l = layoutSequence(m);
+    const svg = sequencePicture(m, l, builtIn, { title: 't' });
+    const hues = huesFor(builtIn, ['#00ffff', '#214263', '#bfdfff', '#c896ff']);
+    assert.match(svg, new RegExp(`<g class="mv-group" data-hue="${hues['#00ffff']}">`));
+    assert.match(svg, new RegExp(`<g class="mv-group" data-hue="${hues['#214263']}">`));
+    assert.match(svg, new RegExp(`<g class="mv-frame" data-kind="rect" data-hue="${hues['#bfdfff']}"`));
+    assert.match(svg, new RegExp(`<g class="mv-frame" data-kind="rect" data-hue="${hues['#c896ff']}"`));
+    assert.equal((svg.match(/<g class="mv-group">/g) ?? []).length, 1, 'a group with no colour is the design\'s');
+    assert.equal((svg.match(/<g class="mv-frame" data-kind="rect"(?! data-hue)/g) ?? []).length, 1, 'a highlight with no colour is the design\'s tint');
+    // Each colour is a variable of the design's, in both looks.
+    for (const k of new Set(Object.values(hues))) assert.equal((svg.match(new RegExp(`--mv-k-${k}:`, 'g')) ?? []).length, 2, k);
+    const page = sequencePage(m, l, builtIn, { title: 't', source: 's', version: '0' });
+    assert.doesNotMatch(page.slice(page.indexOf('mv-legend')), /--mv-k-(data|external|terminal|decision|rework|risk)\)/, 'no kind in the legend for a colour that means nothing');
+    assert.deepEqual(failed(scoreSequence(m, l, builtIn)), []);
+  });
+
+  it('holds the words on a coloured highlight, and the title on a coloured group, to the rule', () => {
+    const m = seq(coloured), l = layoutSequence(m);
+    // Words as light as the rule allows on the page cannot also be read on a coloured highlight over it.
+    const faint = designFrom({ name: 'Faint', light: { ...builtIn.light, text: '#5f7472', muted: '#5f7472' }, dark: builtIn.dark });
+    const d1 = scoreSequence(m, l, faint).checks.find((c) => c.id === 'D1')?.detail ?? '';
+    assert.match(d1, /light: words on a highlight coloured .* are .* to 1, and need 4\.5/);
+    assert.match(d1, /light: the title of a group coloured .* is .* to 1, and needs 4\.5/);
   });
 });

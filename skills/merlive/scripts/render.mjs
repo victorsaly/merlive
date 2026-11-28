@@ -27,6 +27,8 @@ export const draw = {
   dots: 16, // px between the dots of the ground: an eighth of the narrowest box
   dot: 0.12, // how much of the text colour a dot is, over the page: there, and no more
   frame: 0.035, // how much of the text colour fills a group's frame
+  tint: 0.045, // how much of the text colour a sequence's highlight lays over the page; one inside another lays it twice, and shows
+  hue: 0.1, // how much of a kind's colour a sequence's highlight or group lays over the page, when its author coloured it: a hue that shows in light and dark, with words still read on it
   stripe: 4, // px across the stripe that marks a box of a kind
   leastScale: 0.8, // the smallest a drawing is shown before it scrolls sideways instead
   page: 1080, // px the widest a page is: a laptop's reading column

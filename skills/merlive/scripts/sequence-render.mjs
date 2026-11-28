@@ -3,7 +3,7 @@
 // its colours and the look of its boxes and lines from the same rules a flowchart is drawn with (render.mjs),
 // so the two kinds of diagram in one document are one family. Pure.
 
-import { looksOf } from './design.mjs';
+import { huesFor, looksOf } from './design.mjs';
 import { draw, rulesFor, titleOf, variables } from './render.mjs';
 import { across, namedUnder, tabOf } from './sequence.mjs';
 import { sequenceRuntime } from './sequence-runtime.mjs';
@@ -30,7 +30,6 @@ const show = {
   tabTall: 18, // and how tall it is
   nameBase: 4.5, // from the middle of a 13px line of a name down to its baseline
   wordBase: 4.2, // the same for 12px words
-  tint: 0.045, // how much of the text colour a highlight lays over the page; one inside another lays it twice, and shows
   dots: 16, // px between the dots of the ground, as in a flowchart
   leastScale: 0.8, // the smallest a drawing is shown before it scrolls sideways instead
 };
@@ -75,12 +74,22 @@ function endAt(/** @type {import('./sequence.mjs').End} */ end, /** @type {Pt} *
 }
 
 const kindsOf = (/** @type {SequenceModel} */ model) => [...new Set(model.participants.map((p) => p.kind))];
+/**
+ * The design's kind each colour an author gave a group or a highlight is drawn in (groups first, as they are
+ * written above the rows), and the kinds that are.
+ * @param {SequenceModel} model
+ * @param {Design} design
+ */
+export function huedIn(model, design) {
+  const hues = huesFor(design, [...model.groups.flatMap((g) => (g.colour ? [g.colour] : [])), ...model.blocks.flatMap((b) => (b.colour ? [b.colour] : []))]);
+  return { hues, kinds: /** @type {string[]} */ ([...new Set(Object.values(hues).filter(Boolean))]) };
+}
 // What a participant is, in words, for a reader who picks it and for the legend.
 const roleName = (/** @type {string} */ role) => ({ participant: 'A participant', actor: 'A person', database: 'A database', boundary: 'A boundary', control: 'A control', entity: 'An entity', collections: 'A collection', queue: 'A queue' })[role] ?? 'A participant';
 const kindName = (/** @type {string} */ kind) => (kind === 'external' ? 'Person' : kind === 'data' ? 'Database' : 'Participant');
 
 /** The rules for what only a sequence has, over a flowchart's: lifelines, bars, notes, frames, numbers. */
-function sequenceRules(/** @type {Design} */ design, /** @type {string[]} */ kinds) {
+function sequenceRules(/** @type {Design} */ design, /** @type {string[]} */ kinds, /** @type {string[]} */ hued) {
   // A drawing with its name under it is line work, in the colour of a line, which is held to be seen on the
   // page; a kind the design gives a colour keeps that colour, which is held to the same.
   const coloured = kinds.filter((k) => looksOf(design)[0][1].kinds[k]);
@@ -100,18 +109,20 @@ ${coloured.map((k) => `[data-kind="${k}"][data-mark] .mv-shape,[data-kind="${k}"
 .mv-note-fold{fill:none;stroke:var(--mv-stroke);stroke-width:1.2}
 .mv-note text{font-size:12px;fill:var(--mv-text);text-anchor:middle}
 .mv-frame-box{fill:none;stroke:var(--mv-stroke);stroke-width:1.2}
-[data-kind="rect"] .mv-frame-box{fill:var(--mv-text);fill-opacity:${show.tint};stroke:none}
-.mv-frame-tab{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1.2}
+[data-kind="rect"] .mv-frame-box{fill:var(--mv-text);fill-opacity:${draw.tint};stroke:none}
+${hued.map((k) => `.mv-frame[data-hue="${k}"] .mv-frame-box,.mv-group[data-hue="${k}"] rect{fill:var(--mv-k-${k});fill-opacity:${draw.hue}}\n`).join('')}.mv-frame-tab{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1.2}
 .mv-frame-kind{font-size:10.5px;font-weight:700;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}
 .mv-frame-label{font-size:12px;font-weight:600;fill:var(--mv-muted);paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
 .mv-frame-divide{stroke:var(--mv-stroke);stroke-width:1.2;stroke-dasharray:5 4}`;
 }
 
-function styleOf(/** @type {Design} */ design, /** @type {string[]} */ kinds, /** @type {string} */ root) {
+function styleOf(/** @type {Design} */ design, /** @type {string[]} */ kinds, /** @type {string} */ root, /** @type {string[]} */ hued = []) {
   const [[first, one], two] = looksOf(design);
+  // A kind a highlight is coloured in needs its colour as a variable too, and is no kind of participant.
+  const all = [...new Set([...kinds, ...hued])];
   const scheme = (/** @type {string} */ mode) => (mode === 'dark' ? ';color-scheme:dark' : '');
-  const dark = two ? `@media (prefers-color-scheme:dark){${root}{${variables(two[1], kinds)}${scheme(two[0])}}}` : '';
-  return `${root}{${variables(one, kinds)}${scheme(first)}}${dark}\n${sequenceRules(design, kinds)}`;
+  const dark = two ? `@media (prefers-color-scheme:dark){${root}{${variables(two[1], all)}${scheme(two[0])}}}` : '';
+  return `${root}{${variables(one, all)}${scheme(first)}}${dark}\n${sequenceRules(design, kinds, hued)}`;
 }
 
 /** The drawing alone: the SVG's insides, the same for a page and a picture. */
@@ -127,7 +138,8 @@ export function sequenceInside(/** @type {SequenceModel} */ model, /** @type {Se
     saidBy.push(said);
   }
 
-  const groups = lay.groups.map((g) => `<g class="mv-group"><rect x="${n(g.x)}" y="${n(g.y)}" width="${n(g.w)}" height="${n(g.h)}" rx="${Math.min(design.radius, 12)}"/>${g.name ? `<text class="mv-group-name">${g.name.lines.map((text, k) => `<tspan x="${n(g.name?.x ?? 0)}" y="${n((g.name?.y ?? 0) - ((g.name?.lines.length ?? 1) - 1) * across.groupLine / 2 + 4 + k * across.groupLine)}">${esc(text)}</tspan>`).join('')}</text>` : ''}</g>`);
+  const { hues } = huedIn(model, design), hueOf = (/** @type {string|undefined} */ c) => (c && hues[c] ? ` data-hue="${hues[c]}"` : '');
+  const groups = lay.groups.map((g) => `<g class="mv-group"${hueOf(g.colour)}><rect x="${n(g.x)}" y="${n(g.y)}" width="${n(g.w)}" height="${n(g.h)}" rx="${Math.min(design.radius, 12)}"/>${g.name ? `<text class="mv-group-name">${g.name.lines.map((text, k) => `<tspan x="${n(g.name?.x ?? 0)}" y="${n((g.name?.y ?? 0) - ((g.name?.lines.length ?? 1) - 1) * across.groupLine / 2 + 4 + k * across.groupLine)}">${esc(text)}</tspan>`).join('')}</text>` : ''}</g>`);
 
   // A frame is drawn in two layers: its outline under the lifelines, and its name over them, so that a lifeline
   // that passes behind the name does not strike it through.
@@ -135,7 +147,7 @@ export function sequenceInside(/** @type {SequenceModel} */ model, /** @type {Se
     const index = model.blocks.findIndex((b) => b.id === f.id);
     return ` data-first="${(saidBy[model.items.findIndex((i) => i.type === 'open' && i.block === index)] ?? 0) + 1}"`;
   };
-  const frames = lay.frames.map((f) => `<g class="mv-frame" data-kind="${esc(f.kind)}"${firstOf(f)}><rect class="mv-frame-box" x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="4"/>`
+  const frames = lay.frames.map((f) => `<g class="mv-frame" data-kind="${esc(f.kind)}"${hueOf(model.blocks.find((b) => b.id === f.id)?.colour)}${firstOf(f)}><rect class="mv-frame-box" x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="4"/>`
     + `${f.dividers.map((d) => `<line class="mv-frame-divide" x1="${n(f.x)}" y1="${n(d.y)}" x2="${n(f.x + f.w)}" y2="${n(d.y)}"/>`).join('')}</g>`);
   const frameNames = lay.frames.filter((f) => f.kind !== 'rect').map((f) => {
     const tab = tabOf(f.kind);
@@ -244,7 +256,7 @@ export function sequencePicture(model, lay, design, about) {
   const title = titleOf(model.heading, lay.width);
   return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height + title.band}" width="${lay.width}" height="${lay.height + title.band}" role="img" aria-label="${esc(about.title)}">
 <title>${esc(about.title)}</title>${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
-<style>${styleOf(design, kindsOf(model), '.mv-svg')}</style>
+<style>${styleOf(design, kindsOf(model), '.mv-svg', huedIn(model, design).kinds)}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
 ${title.band ? `${title.svg}\n<g transform="translate(0,${title.band})">\n${sequenceInside(model, lay, design, false)}\n</g>` : sequenceInside(model, lay, design, false)}
 </svg>
@@ -308,7 +320,7 @@ ${steps}
 <meta name="generator" content="Merlive ${esc(about.version)}">
 <title>${esc(about.title)}</title>
 <style>
-${styleOf(design, kinds, ':root')}
+${styleOf(design, kinds, ':root', huedIn(model, design).kinds)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--mv-bg);color:var(--mv-text);font:15px/1.5 ${design.font}}
 main{max-width:${draw.page}px;margin:0 auto;padding:20px ${draw.pagePad}px 40px;display:grid;gap:16px}

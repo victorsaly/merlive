@@ -30,7 +30,7 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
 <p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 520 samples, Merlive draws 499 whole and 1 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>520</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>395</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>104</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>1</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>20</b></button></div>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>520</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>397</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>102</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>1</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>20</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -5716,9 +5716,9 @@ title TCP Packet
   ERP--&gt;&gt;Buyer: On its way
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Participants grouped in boxes, with and without a colour and a title</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">A group's colour is read past: the look is the design's</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-box-groups.png" width="784" height="297" style="--w:784" alt="Participants grouped in boxes, with and without a colour and a title, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-box-groups.svg" width="556" height="347" style="--w:556" alt="Participants grouped in boxes, with and without a colour and a title, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   box Aqua Buying
@@ -5991,9 +5991,9 @@ title TCP Packet
   ERP--&gt;Warehouse: Make room
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>Rows highlighted with a coloured background, one inside another</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">The highlight's colour is read past: it is drawn in the design's own tint</span></p>
+<p class="result"><b>Drawn</b></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/seq-rect.png" width="458" height="498" style="--w:458" alt="Rows highlighted with a coloured background, one inside another, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/seq-rect.svg" width="349" height="530" style="--w:349" alt="Rows highlighted with a coloured background, one inside another, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>sequenceDiagram
   participant Buyer
