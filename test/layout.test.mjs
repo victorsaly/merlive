@@ -43,6 +43,22 @@ describe('layout: the spine', () => {
     assert.equal(lay.nodes.E.spine, false);
   });
 
+  it('takes the plain way out of a box, not the one its words make an exception, however long that is', () => {
+    // Groq answers, unless its daily limit is gone, when OpenAI does: the fallback is the longer way, not the usual one.
+    const { lay } = draw('flowchart TD\nA[Ask] --> G[Groq]\nG -- "limit gone" --> O[OpenAI]\nO --> R[Retry]\nR --> ANS[Answer]\nG --> ANS');
+    assert.deepEqual(lay.spine, ['A', 'G', 'ANS']);
+  });
+
+  it('takes the longest way where every link out of a box has words, as a question\'s answers do', () => {
+    const { lay } = draw('flowchart TD\nA{Paid?} -- no --> B[Remind] --> C[Wait] --> D[Ship]\nA -- yes --> D');
+    assert.deepEqual(lay.spine, ['A', 'B', 'C', 'D']);
+  });
+
+  it('breaks a tie for the branch that reaches more of the flow', () => {
+    const { lay } = draw('flowchart TD\nA{Ready?} -- yes --> B[Pack]\nA -- no --> C[Order more]\nB --> D[Ship]\nC --> D\nC --> E[Tell the buyer]');
+    assert.deepEqual(lay.spine, ['A', 'C', 'D']);
+  });
+
   it('follows the path the author names, when it follows the links', () => {
     const named = draw('flowchart TD\nA --> B\nA --> C\nC --> D\nB --> D\n%% main: A>C>D');
     assert.deepEqual(named.lay.spine, ['A', 'C', 'D']);

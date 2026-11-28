@@ -66,7 +66,17 @@ export function score(model, lay, design) {
   const across = lay.direction === 'LR' ? 'y' : 'x';
   const line = lay.spine.length ? lay.nodes[lay.spine[0]][across] : 0;
   // On a grid its author placed there is no main path to hold straight: where each block is, is what was written.
-  add('P1', 'The main path is one straight line', lay.spine.filter((id) => lay.nodes[id][across] !== line).map((id) => `"${label(id)}" is off the line`), lay.grids ? 'a grid its author placed has no main path' : `${lay.spine.length} boxes in line`);
+  // The main path is the usual case: it takes no link whose words make it the exception to a plain one out of the
+  // same box, unless its author named that path with %% main:.
+  const forward = model.edges.filter((e) => !lay.edges[e.id]?.back && e.from !== e.to);
+  const named = model.hints.main?.join('>') === lay.spine.join('>');
+  const exceptions = named ? [] : lay.spine.slice(1).flatMap((to, i) => {
+    const from = lay.spine[i], out = forward.filter((e) => e.from === from);
+    const taken = out.filter((e) => e.to === to);
+    return out.some((e) => !e.label) && taken.length && taken.every((e) => e.label)
+      ? [`the main path takes "${taken[0].label}" out of "${label(from)}", where a link without words goes on: the plain way is the usual case`] : [];
+  });
+  add('P1', 'The main path is one straight line', [...lay.spine.filter((id) => lay.nodes[id][across] !== line).map((id) => `"${label(id)}" is off the line`), ...exceptions], lay.grids ? 'a grid its author placed has no main path' : `${lay.spine.length} boxes in line`);
 
   // P2
   /** @type {string[]} */

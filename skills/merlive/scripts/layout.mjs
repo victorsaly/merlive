@@ -321,12 +321,23 @@ function placed(model, dir, reversed = false) {
     else warnings.push('the "%% main:" path does not follow the links, so the longest path was used instead');
   }
   if (!spine.length && ids.length) {
+    // A link with words out of a box that also has one without says when the flow goes another way: "daily limit
+    // gone" beside the plain way on. That is the exception, and the main path is the usual case, so it is not
+    // taken while there is the plain way, however long the exception's way is. Where every link out has words
+    // (a question's yes and no), none is the usual one, and the longest way is the main path.
+    const plain = new Set(forward.filter((e) => !e.label).map((e) => e.from));
+    const ways = (/** @type {string} */ id) => forward.filter((e) => e.from === id && !(e.label && plain.has(id))).map((e) => e.to);
     const longest = new Map();
-    for (const id of [...sorted].reverse()) longest.set(id, 1 + Math.max(0, ...forward.filter((e) => e.from === id).map((e) => longest.get(e.to) ?? 0)));
-    const pick = (/** @type {string[]} */ from) => from.reduce((a, b) => ((longest.get(b) ?? 0) > (longest.get(a) ?? 0) ? b : a));
+    for (const id of [...sorted].reverse()) longest.set(id, 1 + Math.max(0, ...ways(id).map((to) => longest.get(to) ?? 0)));
+    // Of two as long, the one that reaches more of the flow: the other is more likely the side road.
+    /** @type {Map<string, Set<string>>} */
+    const reach = new Map();
+    for (const id of [...sorted].reverse()) reach.set(id, new Set([id, ...forward.filter((e) => e.from === id).flatMap((e) => [...(reach.get(e.to) ?? [])])]));
+    const worth = (/** @type {string} */ id) => (longest.get(id) ?? 0) * (ids.length + 1) + (reach.get(id)?.size ?? 0);
+    const pick = (/** @type {string[]} */ from) => from.reduce((a, b) => (worth(b) > worth(a) ? b : a));
     let at = pick(ids.filter((id) => (rank.get(id) ?? 0) === 0));
     spine = [at];
-    for (let next = forward.filter((e) => e.from === at).map((e) => e.to); next.length; next = forward.filter((e) => e.from === at).map((e) => e.to)) {
+    for (let next = ways(at); next.length; next = ways(at)) {
       at = pick(next);
       spine.push(at);
     }

@@ -7,6 +7,11 @@ What 0.4.0 and 0.5.0 left in flowcharts.
 - **A class may have a hyphen in its name** (`classDef read-only …`, `class B read-only`, `A:::read-only`), as a
   kind named with `%% kind read-only: …` already could. A hyphen counts only between letters, so `A:::x-->B` is
   still a link.
+- **The main path takes the usual way, not the longest.** A link with words out of a box that also has one
+  without ("daily limit gone" beside the plain way on) is the exception, and the main path no longer takes it,
+  however long its way is: Groq, then the answer, is the straight line, and the fallback to OpenAI sits beside it.
+  Of two ways as long, it takes the one that reaches more of the flow, so a note is no longer a class diagram's
+  main path. P1 refuses a main path that takes an exception, unless `%% main:` named it.
 
 ## 0.5.0 (2026-11-28)
 

@@ -93,6 +93,18 @@ describe('score: a broken rule is named, with where', () => {
     assert.match(p1.detail, /"Within budget\?" is off the line/);
   });
 
+  it('P1 when the main path takes an exception where there is the plain way, unless its author named it', () => {
+    const src = 'flowchart TD\nA[Ask] --> G[Groq]\nG -- "limit gone" --> O[OpenAI]\nO --> ANS[Answer]\nG --> ANS';
+    const { model, lay } = check(src);
+    lay.spine = ['A', 'G', 'O', 'ANS'];
+    for (const id of lay.spine) lay.nodes[id].x = lay.nodes.A.x;
+    const p1 = score(model, lay, builtIn).checks[0];
+    assert.equal(p1.ok, false);
+    assert.match(p1.detail, /takes "limit gone" out of "Groq", where a link without words goes on/);
+    const named = check(`${src}\n%% main: A>G>O>ANS`);
+    assert.equal(named.result.checks[0].ok, true);
+  });
+
   it('P2 when two boxes are too close', () => {
     const { model, lay } = check(orders);
     lay.nodes.E.y = lay.nodes.G.y;
