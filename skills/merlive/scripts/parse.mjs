@@ -397,7 +397,7 @@ export function parse(src) {
       if (OF_A_BOX.some((k) => k in data)) shaped.add(n.id);
       p = end + 1;
     }
-    const cls = /^:::(\w+)/.exec(s.slice(p));
+    const cls = /^:::(\w+(?:-\w+)*)/.exec(s.slice(p));
     if (cls) {
       n.kind = cls[1];
       p += cls[0].length;
@@ -565,7 +565,8 @@ export function parse(src) {
       return frame(id, named ? wordsOf(named[2]).join(' ') || id : id, line);
     }
     if (text === 'end') return void open.pop();
-    const classDef = /^classDef\s+([\w,]+)\s+(.*)$/.exec(text);
+    // A class's name may have a hyphen in it (read-only), but only between letters, so A:::x-->B is still a link.
+    const classDef = /^classDef\s+([\w,-]+)\s+(.*)$/.exec(text);
     if (classDef) {
       const look = lookOf(classDef[2]);
       for (const name of classDef[1].split(',')) {
@@ -580,7 +581,7 @@ export function parse(src) {
     const linkStyled = /^linkStyle\s+(default|\d+(?:\s*,\s*\d+)*)\s+(\S.*)$/.exec(text);
     if (linkStyled) return void (linkStyled[1] === 'default' || ofLinks.push([linkStyled[1].split(',').map(Number), lookOf(linkStyled[2])]));
     if (PASSED.test(text) || /^(style|linkStyle)\b/.test(text)) return;
-    const cls = /^class\s+([\w,\s]+?)\s+(\w+)\s*;?$/.exec(text);
+    const cls = /^class\s+([\w,\s]+?)\s+(\w+(?:-\w+)*)\s*;?$/.exec(text);
     if (cls) {
       for (const id of cls[1].split(',').map((x) => x.trim())) if (byId.has(id)) node(id).kind = cls[2];
       return;

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.1 (unreleased)
+
+What 0.4.0 and 0.5.0 left in flowcharts.
+
+- **A class may have a hyphen in its name** (`classDef read-only …`, `class B read-only`, `A:::read-only`), as a
+  kind named with `%% kind read-only: …` already could. A hyphen counts only between letters, so `A:::x-->B` is
+  still a link.
+
 ## 0.5.0 (2026-11-28)
 
 More kinds that the two placements there are can draw: mindmaps, kanban boards, timelines and packets.

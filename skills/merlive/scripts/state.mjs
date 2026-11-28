@@ -21,7 +21,7 @@
 // A state's name, as Mermaid's own examples write one. The same letters a flowchart's box may be named with,
 // so Merlive's own lines ("%% note Draft: …", "%% main: start>Draft") can name a state.
 const ID = '[A-Za-z_]\\w*';
-const KIND = '(?::::(\\w+))?';
+const KIND = '(?::::(\\w+(?:-\\w+)*))?';
 const END = `(\\[\\*\\]|${ID})${KIND}`;
 
 const LINES = {

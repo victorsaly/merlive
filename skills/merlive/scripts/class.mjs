@@ -136,7 +136,7 @@ export function classReader({ model, node, say, connect, frame, unframe, warn, w
       };
       take(/^~([^\s[{<:]*)~/, 'over');
       take(/^\s*\["([^"]*)"\]/, 'label');
-      take(/^\s*:::(\w+)/, 'kind');
+      take(/^\s*:::(\w+(?:-\w+)*)/, 'kind');
       take(/^\s*<<([^>]+)>>/, 'note');
       take(/^\s*\{(.*)$/, 'block');
     }
