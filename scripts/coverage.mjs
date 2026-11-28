@@ -70,8 +70,9 @@ export function judge(sample, source) {
   if (sample.says !== undefined && !model.warnings.some(told)) why.push(`it is not told: ${sample.says}`);
   if ((sample.placedBy ?? '') !== (model.placedBy ?? '')) why.push(sample.placedBy ? `placed by rule, though the corpus expects it on its author's ${sample.placedBy}` : `placed on its author's ${model.placedBy}, which the corpus does not expect`);
   if (sample.shapes && JSON.stringify(model.nodes.map((n) => n.shape)) !== JSON.stringify(sample.shapes)) why.push(`its shapes are read as ${model.nodes.map((n) => n.shape).join(', ')}`);
-  // That a flow is wide is true of the sample, not a thing Merlive failed to read.
-  why.push(...model.warnings.filter((w) => !told(w)), ...lay.warnings.filter((w) => !w.includes('will scroll on most screens') && !w.startsWith('written left to right, drawn top to bottom')));
+  // That a flow or a timeline is wide is true of the sample, not a thing Merlive failed to read: turned or run
+  // on in bands, it is all there.
+  why.push(...model.warnings.filter((w) => !told(w)), ...lay.warnings.filter((w) => !w.includes('will scroll on most screens') && !w.startsWith('written left to right, drawn top to bottom') && !/^drawn in \d+ bands: /.test(w)));
   const broken = score(model, lay, design).checks.filter((c) => !c.ok);
   const svg = model.nodes.length ? picture(model, lay, design, { title: sample.covers }) : '';
   if (broken.length) return { sample, result: 'refused', why: [...broken.map((c) => `${c.id} ${c.rule}: ${c.detail}`), ...why], svg };
@@ -140,6 +141,10 @@ export const things = [
   ['c4', 'C4 diagrams', 'A person, a system, a container or a component is a box that says what it is and a sentence of what it does;\na boundary is a group. Held to the same measure.'],
   ['architecture', 'Architecture diagrams', 'A service is a box with its icon, a group is a group, and the sides an edge leaves by say which way the\ndiagram runs. Held to the same measure.'],
   ['block', 'Block diagrams', 'Blocks joined by links are read as a flowchart is and placed by rule. One whose meaning is in its grid is\nplaced on that grid, each block in the cell its author gave it.'],
+  ['mindmap', 'Mindmaps', 'A mindmap is a tree: each line a box under the nearest line above that is further left, grown from its root\nto the right. Held to the same measure.'],
+  ['kanban', 'Kanban boards', 'A column is a group and a card a box that lists its ticket, who has it and its priority, on the grid the\nboard is. Held to the same measure.'],
+  ['timeline', 'Timelines', 'A period is a box with its events under it and a section a group round its periods, on the grid a timeline\nis. Held to the same measure.'],
+  ['packet', 'Packets', 'A field is a box as wide as the bits it takes, with its bits over its name, in rows of as many bits as the\npacket says. Held to the same measure.'],
 ];
 export const lists = ['flowchart', 'state', ...things.map(([list]) => list), 'sequence', 'kinds'];
 

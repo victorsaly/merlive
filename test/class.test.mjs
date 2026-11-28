@@ -20,6 +20,11 @@ const ties = (/** @type {Model} */ m) => m.edges.map((e) => [e.id, e.tail, e.hea
 const rows = (/** @type {Model} */ m, /** @type {string} */ id) => m.nodes.find((n) => n.id === id)?.rows;
 
 describe('class: what it is taken for', () => {
+  it('calls a class a class on the page, unless its author named it', () => {
+    assert.equal(cls('Vehicle <|-- Car').meanings?.step, 'Class');
+    assert.equal(cls('Vehicle <|-- Car\n%% kind step: Type').meanings?.step, 'Type');
+  });
+
   it('is read as boxes and links, whichever way it is declared', () => {
     for (const head of ['classDiagram', 'classDiagram-v2']) {
       const m = cls('Vehicle <|-- Car', head);

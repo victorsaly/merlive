@@ -9,7 +9,8 @@
  *   nodes:{id:string,label:string,kind:string,kindName:string,note:string}[],
  *   edges:{id:string,from:string,to:string,label:string}[],
  *   steps:{title:string,text:string,seq:string[],loop:boolean}[],
- *   motion:'none'|'calm'|'lively'
+ *   motion:'none'|'calm'|'lively',
+ *   linked:boolean
  * }} data
  */
 export function runtime(data) {
@@ -78,8 +79,10 @@ export function runtime(data) {
       const to = data.edges.filter((e) => e.from === id).map((e) => name(e.to) + (e.label ? ` (${e.label})` : ''));
       // The kind in words: colour alone must never be the only thing that says it.
       fact('Kind', n?.kindName ?? '');
-      fact('Comes from', from.length ? from.join(', ') : 'Nothing: the flow starts here');
-      fact('Goes to', to.length ? to.join(', ') : 'Nothing: the flow ends here');
+      if (data.linked) {
+        fact('Comes from', from.length ? from.join(', ') : 'Nothing: the flow starts here');
+        fact('Goes to', to.length ? to.join(', ') : 'Nothing: the flow ends here');
+      }
     } else {
       const e = edges.get(picked.id);
       byId('mv-title').textContent = e ? `${name(e.from)} to ${name(e.to)}` : picked.id;

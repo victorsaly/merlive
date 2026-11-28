@@ -1,7 +1,7 @@
 // Why: a rule nobody checks is a wish. Every placement rule in docs/PLACEMENT.md is a check here, so a
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
-import { compartmentsOf, hitsBox, meet, measure, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf, wrap } from './layout.mjs';
+import { compartmentsOf, frameEdge, hitsBox, meet, measure, overNeeds, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf, wrap } from './layout.mjs';
 import { colourChecks, looksOf } from './design.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
@@ -70,7 +70,14 @@ export function score(model, lay, design) {
   // P2
   /** @type {string[]} */
   const close = [];
-  nodes.forEach((a, i) => nodes.slice(i + 1).forEach((b) => overlap(a, b, limits.boxGap) && close.push(`"${label(a.id)}" and "${label(b.id)}" are closer than ${limits.boxGap}px`)));
+  // A grid whose author set its cells closer than two boxes may come (the fields of a packet, which all but touch,
+  // as Mermaid's do) holds its blocks to their cells instead, below, and to not lying on each other. Only while
+  // nothing is linked: a line needs the room.
+  const held = new Set((model.edges.length ? [] : lay.grids ?? []).filter((g) => g.gapX < limits.boxGap || g.gapY < limits.boxGap).flatMap((g) => g.cells.filter((c) => !c.frame).map((c) => c.id)));
+  nodes.forEach((a, i) => nodes.slice(i + 1).forEach((b) => {
+    if (held.has(a.id) && held.has(b.id)) overlap(a, b) && close.push(`"${label(a.id)}" and "${label(b.id)}" overlap`);
+    else if (overlap(a, b, limits.boxGap)) close.push(`"${label(a.id)}" and "${label(b.id)}" are closer than ${limits.boxGap}px`);
+  }));
   // On a grid its author placed, one size means one size of cell: a block is exactly the cells it takes, as
   // wide as the columns it spans and the gaps between them, and as tall as its row. So is a frame.
   const near = (/** @type {number} */ a, /** @type {number} */ b) => Math.abs(a - b) < 1;
@@ -107,6 +114,8 @@ export function score(model, lay, design) {
     if (m.overlaps) along.push(`${a.id} and ${b.id} run along each other`);
   }));
   // Where its author placed the blocks, a crossing is not forced by the graph but chosen with the places: none is forgiven for it.
+  // A frame's edge is a line too: a link that runs along it reads as part of the frame.
+  for (const e of edges) for (const f of lay.groups) if (meet(e.points, frameEdge(f)).overlaps) along.push(`${e.id} runs along the edge of the group "${f.title || f.id}"`);
   const allowed = Math.floor(edges.length / limits.linksPerCrossing), forced = lay.grids ? 0 : forcedCrossings(model, lay);
   const count = crossings === 1 ? '1 crossing' : `${crossings} crossings`;
   const tooMany = forced ? `${count}; ${edges.length} links allow ${allowed}, and the diagram forces ${forced} more` : `${count}, and ${edges.length} links allow ${allowed}`;
@@ -120,12 +129,14 @@ export function score(model, lay, design) {
   for (const n of model.nodes) {
     // A box's own width: on a grid, a block that spans columns has more room than one that does not.
     const lines = lay.nodes[n.id].lines, room = roomFor(n, lay.nodes[n.id].w);
+    // What is never wrapped is held to the box's own width on a grid, where blocks differ; elsewhere every box is one width.
+    const own = lay.grids ? lay.nodes[n.id].w : lay.box.w, box = lay.grids ? `a ${own}px box` : 'any box';
     if (n.shape !== 'note' && lines.length > measure.mostLines) tight.push(`"${n.label}" needs ${lines.length} lines; shorten it or put the detail in a "%% note"`);
     else if (lines.some((l) => l.length > room)) tight.push(`"${n.label}" has a word too long for a ${lay.nodes[n.id].w}px box`);
     // A row keeps its one line: breaking a method's name in two would make two of it.
     const long = n.table ? undefined : compartmentsOf(n).flat().find((row) => row.length > rowsRoom(lay.box.w));
     if (textOf(n, lay.box.w).some((l) => l.length * measure.textGlyph > lay.box.w - 2 * measure.textIn)) tight.push(`"${n.label}" says a word too long for any box; break it or shorten it`);
-    if (n.over && n.over.length * measure.overGlyph + 2 * measure.overIn > lay.box.w) tight.push(`"${n.label}" has a line over its name too long for any box: "${n.over}"; shorten it`);
+    if (overNeeds(n) > own) tight.push(`"${n.label}" has a line over its name too long for ${box}: "${n.over}"; shorten it`);
     // A table's columns are each as wide as their widest cell: all of them together have to fit.
     if (tableNeeds(n) > lay.box.w) tight.push(`"${n.label}" lists a row too wide for any box: it needs ${tableNeeds(n)}px and the widest box is ${lay.box.w}px; shorten its longest type or name`);
     if (long) tight.push(`"${n.label}" lists a line too long for any box: "${long}"; shorten it, or its type`);

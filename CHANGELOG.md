@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.5.0 (unreleased)
+
+More kinds that the two placements there are can draw: mindmaps, kanban boards, timelines and packets.
+
+- **Mindmaps are drawn**, as a tree grown from its root to the right: every shape Mermaid has for a node (a bang
+  and a cloud in the nearest there is, and said), icons, classes, bold and italic.
+- **Kanban boards are drawn**: columns side by side, cards down each, a card's ticket, who has it and its
+  priority listed under its words. An empty column keeps its name.
+- **Timelines are drawn**: periods in a row with their events under them, sections as groups round their
+  periods, an arrow from each period to the next, left to right or top to bottom.
+- **Packets are drawn**: each field as wide as the bits it takes, its bits over its name, in rows of as many
+  bits as the packet says. A field that runs past the end of a row is drawn in parts, and each part says so.
+- **A tree is placed as a tree.** What a box leads to keeps together, in lanes of its own, and the box is in line
+  with the first of them, so no line of a tree crosses another however many branches it has.
+- **A grid may say its own measures**: its narrowest column, the room between its cells, and that nothing runs
+  between them. A block on a grid may list rows and carry a line over its name.
+- **A timeline too wide for a screen runs on in bands.** Nine periods were 1592 px across; they are now five and
+  four in two bands, with time's arrow running round from the end of one into the top of the next. With sections
+  a band is cut only between two. The command says so; `%% wrap: no` keeps one row.
+- **No line runs along the edge of a frame (P5).** A link into a section of the next band ran two pixels inside the
+  top of its frame; links on a grid now take the gap outside the frames round the box they go into.
+- **A packet is about as wide as Mermaid draws it.** A TCP header was 2408 px across; it is 1140. A field is a
+  cell, which keeps 4 px of room either side of its words where a box of a flow keeps 14, and fields sit 4 px apart
+  as Mermaid's do: P2 holds the blocks of a grid with nothing linked, whose author set its gap, to their cells
+  and to not lying on one another. P6 holds the line of bits over a field's name to the field's own width, so a
+  column of a bit no longer has to be as wide as "192–255".
+- **A box is called what it is.** The legend and a picked box said "Step" on a board, a class diagram, an entity
+  diagram, a mindmap and a packet; they now say "Card", "Class", "Entity", "Idea" and "Field" (a timeline's
+  "Event" moves to the same place), unless `%% kind step: …` says otherwise. A page with no lines asks only for a
+  box to be picked, and a picked box no longer says the flow starts and ends there.
+
 ## 0.4.0 (2026-11-26)
 
 What a real project's documents showed: diagrams hidden behind the panel, words adrift from their lines or

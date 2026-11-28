@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 584 856" width="584" height="856" role="img" aria-label="A tree of many leaves">
+<title>A tree of many leaves</title>
+<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-root:#b3cbc7;--mv-kf-root:#ffffff;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-root:#2b5560;--mv-kf-root:#0d2a30;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
+[data-kind="root"] .mv-shape{fill:var(--mv-kf-root);stroke:var(--mv-k-root)}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+.mv-node .mv-detail{fill:none}
+[data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
+[data-outline~="heavy"] .mv-shape{stroke-width:2.6}
+.mv-node .mv-rows{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
+.mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
+.mv-band{fill:var(--mv-text);opacity:0.06;stroke:none}
+.mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
+.mv-node .mv-told{font-size:11.5px;font-weight:400}
+.mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
+.mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
+.mv-icon{fill:none;stroke:var(--mv-text);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+.mv-node .mv-point{fill:var(--mv-edge);stroke:var(--mv-edge)}
+.mv-node .mv-strong{font-weight:700}
+.mv-node .mv-em{font-style:italic}
+.mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
+[data-kind="root"] .mv-stripe{fill:var(--mv-k-root)}
+[data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-name{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase;text-anchor:middle;paint-order:stroke;stroke:var(--mv-group);stroke-width:4px;stroke-linejoin:round}</style>
+<rect width="100%" height="100%" fill="var(--mv-bg)"/>
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="584" height="856" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge" data-edge="root-Buying" data-style="solid"><path class="mv-line" d="M156,50L228,50"/></g><g class="mv-edge" data-edge="Buying-Quotes" data-style="solid"><path class="mv-line" d="M356,50L428,50"/></g><g class="mv-edge" data-edge="Buying-Orders" data-style="solid"><path class="mv-line" d="M312,72L312,126Q312,134 320,134L428,134"/></g><g class="mv-edge" data-edge="Buying-Approvals" data-style="solid"><path class="mv-line" d="M292,72L292,210Q292,218 300,218L428,218"/></g><g class="mv-edge" data-edge="Buying-Suppliers" data-style="solid"><path class="mv-line" d="M272,72L272,294Q272,302 280,302L428,302"/></g><g class="mv-edge" data-edge="root-Receiving" data-style="solid"><path class="mv-line" d="M102,72L102,378Q102,386 110,386L228,386"/></g><g class="mv-edge" data-edge="Receiving-Deliveries" data-style="solid"><path class="mv-line" d="M356,386L428,386"/></g><g class="mv-edge" data-edge="Receiving-Returns" data-style="solid"><path class="mv-line" d="M356,392.8L390,392.8Q398,392.8 398,400.8L398,462Q398,470 406,470L428,470"/></g><g class="mv-edge" data-edge="Receiving-Stock" data-style="solid"><path class="mv-line" d="M356,399.6L378,399.6Q386,399.6 386,407.6L386,546Q386,554 394,554L428,554"/></g><g class="mv-edge" data-edge="root-Paying" data-style="solid"><path class="mv-line" d="M82,72L82,630Q82,638 90,638L228,638"/></g><g class="mv-edge" data-edge="Paying-Invoices" data-style="solid"><path class="mv-line" d="M356,638L428,638"/></g><g class="mv-edge" data-edge="Paying-Payments" data-style="solid"><path class="mv-line" d="M356,644.8L390,644.8Q398,644.8 398,652.8L398,714Q398,722 406,722L428,722"/></g><g class="mv-edge" data-edge="Paying-Credit_notes" data-style="solid"><path class="mv-line" d="M356,651.6L378,651.6Q386,651.6 386,659.6L386,798Q386,806 394,806L428,806"/></g></g><g></g><g><g class="mv-node" data-node="root" data-kind="root"><rect class="mv-shape mv-pill" x="28" y="28" width="128" height="44" rx="22"/><text><tspan x="92" y="54.5">Ordering</tspan></text></g><g class="mv-node" data-node="Buying" data-kind="step"><rect class="mv-shape" x="228" y="28" width="128" height="44" rx="8"/><text><tspan x="292" y="54.5">Buying</tspan></text></g><g class="mv-node" data-node="Quotes" data-kind="step"><rect class="mv-shape" x="428" y="28" width="128" height="44" rx="8"/><text><tspan x="492" y="54.5">Quotes</tspan></text></g><g class="mv-node" data-node="Orders" data-kind="step"><rect class="mv-shape" x="428" y="112" width="128" height="44" rx="8"/><text><tspan x="492" y="138.5">Orders</tspan></text></g><g class="mv-node" data-node="Approvals" data-kind="step"><rect class="mv-shape" x="428" y="196" width="128" height="44" rx="8"/><text><tspan x="492" y="222.5">Approvals</tspan></text></g><g class="mv-node" data-node="Suppliers" data-kind="step"><rect class="mv-shape" x="428" y="280" width="128" height="44" rx="8"/><text><tspan x="492" y="306.5">Suppliers</tspan></text></g><g class="mv-node" data-node="Receiving" data-kind="step"><rect class="mv-shape" x="228" y="364" width="128" height="44" rx="8"/><text><tspan x="292" y="390.5">Receiving</tspan></text></g><g class="mv-node" data-node="Deliveries" data-kind="step"><rect class="mv-shape" x="428" y="364" width="128" height="44" rx="8"/><text><tspan x="492" y="390.5">Deliveries</tspan></text></g><g class="mv-node" data-node="Returns" data-kind="step"><rect class="mv-shape" x="428" y="448" width="128" height="44" rx="8"/><text><tspan x="492" y="474.5">Returns</tspan></text></g><g class="mv-node" data-node="Stock" data-kind="step"><rect class="mv-shape" x="428" y="532" width="128" height="44" rx="8"/><text><tspan x="492" y="558.5">Stock</tspan></text></g><g class="mv-node" data-node="Paying" data-kind="step"><rect class="mv-shape" x="228" y="616" width="128" height="44" rx="8"/><text><tspan x="292" y="642.5">Paying</tspan></text></g><g class="mv-node" data-node="Invoices" data-kind="step"><rect class="mv-shape" x="428" y="616" width="128" height="44" rx="8"/><text><tspan x="492" y="642.5">Invoices</tspan></text></g><g class="mv-node" data-node="Payments" data-kind="step"><rect class="mv-shape" x="428" y="700" width="128" height="44" rx="8"/><text><tspan x="492" y="726.5">Payments</tspan></text></g><g class="mv-node" data-node="Credit_notes" data-kind="step"><rect class="mv-shape" x="428" y="784" width="128" height="44" rx="8"/><text><tspan x="492" y="810.5">Credit notes</tspan></text></g></g>
+</svg>

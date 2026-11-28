@@ -3,7 +3,7 @@ name: merlive
 description: Turns the Mermaid flowcharts and state, class, entity, requirement, C4, architecture, block and sequence diagrams in a Markdown file into well placed, live diagrams, one self-contained HTML page (or a still SVG) each, in the project's own colours, which it reads from the project's site by itself, with the main path straight, boxes of one size, and steps a reader can walk through. The Mermaid stays the source and is not changed. Use when asked to make a Mermaid diagram live, interactive, better looking or better laid out, to "merlive" a document, to add a walkthrough to a flowchart, or to set the look of a project's diagrams. Load it before planning the diagrams, even when asked not to run anything yet.
 license: MIT
 metadata:
-  version: 0.4.0
+  version: 0.5.0
   homepage: https://github.com/victorsaly/merlive
 allowed-tools: Bash(node ${CLAUDE_SKILL_DIR}/scripts/*)
 ---
@@ -32,9 +32,10 @@ Three things hold throughout:
 - **Flowcharts** (`flowchart` or `graph`), **state diagrams** (`stateDiagram`), **class diagrams**
   (`classDiagram`), **entity diagrams** (`erDiagram`), **requirement diagrams** (`requirementDiagram`), **C4
   diagrams** (`C4Context` and the rest), **architecture diagrams** (`architecture-beta`) and **block diagrams**
-  (`block-beta`, on the grid their author wrote), **and sequence diagrams** (`sequenceDiagram`), which have
-  rules of their own. Timeline, gantt and the rest are left as they are, and the script names each one it
-  leaves. Tell the person which were left.
+  (`block-beta`, on the grid their author wrote), **mindmaps** (`mindmap`, as a tree), **kanban boards**
+  (`kanban`), **timelines** (`timeline`) and **packets** (`packet-beta`), each on the grid it is, **and sequence
+  diagrams** (`sequenceDiagram`), which have rules of their own. Gantt, pie and the rest are left as they are,
+  and the script names each one it leaves. Tell the person which were left.
 
 ## 2. Check first, then draw
 

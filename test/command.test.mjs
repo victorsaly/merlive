@@ -98,7 +98,7 @@ describe('the command', () => {
   it('leaves and names a kind of diagram it does not draw', async () => {
     const cwd = temp();
     writeFileSync(join(cwd, 'mixed.md'), '```mermaid\nflowchart TD\nA --> B\n```\n\n```mermaid\npie title Orders\n  "UK" : 46\n```\n');
-    assert.match((await go(['mixed.md', '--check'], cwd)).text, /left as Mermaid: block 2 \(line 6\) is a pie, and Merlive draws flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams for now/);
+    assert.match((await go(['mixed.md', '--check'], cwd)).text, /left as Mermaid: block 2 \(line 6\) is a pie, and Merlive draws flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams, mindmaps, kanban boards, timelines and packets for now/);
   });
 
   it('writes a page that fetches nothing and carries its source', async () => {

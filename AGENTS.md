@@ -21,8 +21,10 @@ For coding agents changing this repository. It follows the same habits as
   placed by rank; one whose meaning is in its author's grid is marked to be placed on that grid
   (`model.placedBy`). Each has its list in `corpus/index.json`, and its line in `things` in `scripts/coverage.mjs`,
   which is all the coverage page and the comparison page need to show a new kind. Pure.
-- `skills/merlive/scripts/grid.mjs`: places a block diagram on the grid its author wrote, and routes its links
-  round the blocks. Gives the same layout layout.mjs does, so it is drawn and checked by the same code. Its
+- `skills/merlive/scripts/mindmap.mjs`, `kanban.mjs`, `timeline.mjs`, `packet.mjs`: four more. A mindmap is a
+  tree placed by rank; a board, a timeline and a packet are grids, placed by grid.mjs. Pure.
+- `skills/merlive/scripts/grid.mjs`: places a diagram on the grid its author wrote (a block diagram, a kanban
+  board, a timeline, a packet), and routes its links round the blocks. Gives the same layout layout.mjs does, so it is drawn and checked by the same code. Its
   measured numbers are in `gridMeasure`. Pure.
 - `skills/merlive/scripts/layout.mjs`: the model to coordinates, by the rules in `docs/PLACEMENT.md`. Every
   measured number is in `measure` at the top, with why. Pure.

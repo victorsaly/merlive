@@ -28,7 +28,7 @@
 /**
  * What its author wrote, cell by cell, in the order written: the grid a block diagram is placed on. A cell is a
  * block, a space, a block arrow, or a block that holds a grid of its own; each takes `span` columns.
- * @typedef {{columns:number|'auto',cells:Cell[]}} Grid
+ * @typedef {{columns:number|'auto',cells:Cell[],bands?:number}} Grid bands: how many bands a grid run on in bands has (see `wraps` on the model)
  * @typedef {{is:'block',id:string,span:number,line:number}|{is:'space',span:number,line:number}|{is:'arrow',id:string,span:number,line:number,points:string[]}|{is:'group',id:string,span:number,line:number,grid:Grid}} Cell
  */
 

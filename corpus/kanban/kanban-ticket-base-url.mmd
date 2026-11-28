@@ -1,0 +1,10 @@
+---
+config:
+  kanban:
+    ticketBaseUrl: "https://example.com/orders/#TICKET#"
+---
+kanban
+  todo[To do]
+    raise[Raise the order]@{ ticket: PO-1041 }
+  done[Done]
+    pay[Pay the invoice]@{ ticket: PO-1038 }

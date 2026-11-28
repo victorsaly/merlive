@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Why: the one command an agent runs. It reads a Markdown file's Mermaid flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams, places each by rule,
+// Why: the one command an agent runs. It reads a Markdown file's Mermaid flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams, mindmaps, kanban boards, timelines and packets, places each by rule,
 // checks the rules, and only then writes a diagram; and, once for a project, it reads the project's own
 // colours and writes the design file, so nobody has to. This file is the only one that touches the disk and
 // the network; everything it decides with is in the pure files beside it.
@@ -17,7 +17,7 @@ import { sequencePage, sequencePicture } from './sequence-render.mjs';
 import { designOf, readingOf, stylesheetsOf } from './site.mjs';
 import { sample, setupPage } from './setup.mjs';
 
-export const version = '0.4.0';
+export const version = '0.5.0';
 export const here = dirname(fileURLToPath(import.meta.url));
 
 // What each way of ending means, so an agent can act on the number alone.
@@ -36,7 +36,7 @@ const looks = {
   notASite: /(^|\.)(github\.com|gitlab\.com|bitbucket\.org|npmjs\.com)$/,
 };
 
-export const help = `Merlive ${version}: Mermaid flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams, placed by rule and made live.
+export const help = `Merlive ${version}: Mermaid flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams, mindmaps, kanban boards, timelines and packets, placed by rule and made live.
 
   node merlive.mjs <file> [options]                   draw a file's flowcharts and sequence diagrams:
                                                       Markdown, a .mmd file, or a page or script that keeps
@@ -262,7 +262,7 @@ export async function run(argv, io = {}) {
     const seq = /** @type {string} */ (model.type) === 'sequence' ? /** @type {import('./sequence.mjs').SequenceModel} */ (/** @type {unknown} */ (model)) : null;
     // A diagram whose reader left it says why itself: a block diagram whose meaning is in its grid, say.
     if (!seq && model.left) return say(`left as Mermaid: block ${number} (line ${block.line}): ${model.left}`);
-    if (!seq && model.type !== 'flowchart') return say(`left as Mermaid: block ${number} (line ${block.line}) is a ${model.kindOfDiagram || 'blank block'}, and Merlive draws flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams for now`);
+    if (!seq && model.type !== 'flowchart') return say(`left as Mermaid: block ${number} (line ${block.line}) is a ${model.kindOfDiagram || 'blank block'}, and Merlive draws flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams, mindmaps, kanban boards, timelines and packets for now`);
     if (seq ? !seq.participants.length : !model.nodes.length) return say(`left as Mermaid: block ${number} (line ${block.line}) has no ${seq ? 'participants' : 'boxes'}`);
 
     const lay = seq ? /** @type {any} */ (layoutSequence(seq)) : layout(model);

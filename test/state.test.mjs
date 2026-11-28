@@ -304,7 +304,7 @@ describe('state: the command', () => {
     const code = await run(['order.md'], { cwd, say: (line) => said.push(line) });
     assert.equal(code, exits.drawn);
     assert.match(said.join('\n'), /drew .*order-1\.html \(4 boxes, 3 links/);
-    assert.match(said.join('\n'), /left as Mermaid: block 2 \(line \d+\) is a pie, and Merlive draws flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams for now/);
+    assert.match(said.join('\n'), /left as Mermaid: block 2 \(line \d+\) is a pie, and Merlive draws flowcharts, state, class, entity, requirement, C4, architecture, block and sequence diagrams, mindmaps, kanban boards, timelines and packets for now/);
     const page = readFileSync(join(cwd, 'diagrams/order-1.html'), 'utf8');
     assert.ok(page.includes('Only its author sees it.') && page.includes('>Start<') && page.includes('>send<'));
     assert.ok(!existsSync(join(cwd, 'diagrams/order-2.html')));

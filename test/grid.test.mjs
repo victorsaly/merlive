@@ -104,6 +104,17 @@ describe('grid: cells', () => {
 describe('grid: a block that holds others', () => {
   const nested = 'columns 3\ntop["Everything"]:3\nblock:left:2\n  columns 2\n  h["Buy"] i["Pick"] j["Pack"] k["Send"]\nend\ng["Bank"]\nblock:wide:3\n  l["Mon"] m["Tue"] n["Wed"]\nend';
 
+  it('keeps room for a name in every frame of a row when any frame in it has one, so what they hold lines up', () => {
+    const { at, lay, broken } = grid('columns 2\nblock:named["Buying"]\n  a["Raise"]\nend\nblock:bare\n  b["Deliver"]\nend\nblock:alone\n  c["Pay"]\nend');
+    assert.deepEqual(broken, []);
+    assert.equal(at.a.y, at.b.y, 'side by side, the two blocks inside are in one line');
+    const [named, bare, alone] = ['named', 'bare', 'alone'].map((id) => /** @type {typeof lay.groups[0]} */ (lay.groups.find((f) => f.id === id)));
+    assert.deepEqual([named.y, named.h], [bare.y, bare.h]);
+    // A row with no name in it keeps no room for one.
+    assert.equal(top(at.c) - alone.y, measure.framePad);
+    assert.equal(top(at.a) - named.y, measure.framePad + measure.frameTitle);
+  });
+
   it('is a frame over the columns it spans, round a grid of its own', () => {
     const { at, lay, broken } = grid(nested);
     assert.deepEqual(broken, []);
@@ -267,5 +278,154 @@ describe('grid: the rules', () => {
       for (const n of Object.values(lay.nodes)) assert.ok(left(n) >= 0 && top(n) >= 0 && right(n) <= lay.width && bottom(n) <= lay.height, `${s.file}: ${n.id}`);
       assert.match(picture(m, lay, builtIn, { title: 't' }), /^<svg /);
     }
+  });
+});
+
+describe('grid: a grid that says its own measures', () => {
+  // A row of small cells with nothing running between them, as a packet's bits are: a box of a flow's size and
+  // room for three lines between each two would make it many times wider than what it says.
+  const cells = (/** @type {string} */ body, /** @type {{least?:number,gap?:number}} */ says = {}) => {
+    const m = parse(`block\n${body}`);
+    Object.assign(/** @type {object} */ (m.grid), says);
+    const lay = layout(m);
+    return { m, lay, at: lay.nodes, grid: /** @type {NonNullable<typeof lay.grids>} */ (lay.grids)[0], broken: score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`) };
+  };
+  const four = 'columns 4\na["URG"] b["ACK"] c["PSH"] d["RST"]';
+
+  it('is as it always was when it says nothing: a box of a flow\'s size, and room for lines between', () => {
+    const { grid: g } = cells(four);
+    assert.deepEqual([g.colW, g.gapX, g.gapY], [measure.widths[0], gridMeasure.gap, gridMeasure.gap]);
+  });
+
+  it('keeps the gap it says, across and down', () => {
+    const { grid: g, at, broken } = cells(`${four}\ne["Window"]:4`, { gap: 16 });
+    assert.deepEqual([g.gapX, g.gapY], [16, 16]);
+    assert.equal(left(at.b) - right(at.a), 16);
+    assert.equal(top(at.e) - bottom(at.a), 16);
+    assert.deepEqual(broken, []);
+  });
+
+  it('still makes a gap as wide as the words of a link that crosses it', () => {
+    const { grid: g } = cells('columns 3\na["A"] b["B"] c["C"]\na -- "sends every order to" --> b', { gap: 16 });
+    assert.ok(g.gapX > gridMeasure.gap, `${g.gapX}px`);
+  });
+
+  it('takes the narrowest column its words fit, from the least it says up, and not the next of a flow\'s six widths', () => {
+    const { grid: g, at, lay, broken } = cells(four, { least: 24, gap: 16 });
+    // Three letters and the room a box keeps clear of its words.
+    assert.ok(g.colW >= 3 * measure.glyph + 28 && g.colW < 3 * measure.glyph + 28 + gridMeasure.fine, `${g.colW}px`);
+    assert.deepEqual(at.a.lines, ['URG']);
+    assert.equal(at.a.w, g.colW);
+    assert.ok(lay.width < 4 * measure.widths[0]);
+    assert.deepEqual(broken, []);
+  });
+
+  it('is no narrower than the least it says, however short its words', () => {
+    assert.equal(cells('columns 2\na["A"] b["B"]', { least: 90 }).grid.colW, 90);
+  });
+
+  it('gives a block that spans columns the gaps between them too, so a long name over many narrow columns fits', () => {
+    const { grid: g, at, broken } = cells('columns 4\na["A"] b["B"] c["C"] d["D"]\ne["Sequence number"]:4', { least: 24, gap: 16 });
+    assert.ok(g.colW < 60, `${g.colW}px`);
+    assert.deepEqual(at.e.lines, ['Sequence number']);
+    assert.deepEqual(broken, []);
+  });
+
+  it('falls back on the widths a flow has when no narrow column fits', () => {
+    const { grid: g } = cells('columns 2\na["An order that somebody raised"] b["B"]', { least: 24 });
+    assert.ok(measure.widths.includes(g.colW), `${g.colW}px`);
+  });
+});
+
+describe('grid: a block with a line over its name', () => {
+  const over = (/** @type {string} */ line, /** @type {{least?:number,gap?:number}} */ says = {}) => {
+    const m = parse('block\ncolumns 3\na["Kind"] b["Flags"] c["Length"]');
+    Object.assign(/** @type {object} */ (m.grid), says);
+    /** @type {any} */ (m.nodes[0]).over = line;
+    const lay = layout(m);
+    return { m, lay, at: lay.nodes, broken: score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`) };
+  };
+
+  it('is taller by that line, and so is its row', () => {
+    const { at, broken } = over('0–7');
+    assert.equal(at.a.h, measure.boxPad + measure.lineHeight + measure.overLine);
+    assert.equal(at.b.h, at.a.h);
+    assert.deepEqual(broken, []);
+  });
+
+  it('is wide enough for the line, which is never wrapped', () => {
+    const line = '1000000–1000007', { at, broken } = over(line, { least: 24, gap: 16 });
+    assert.ok(at.a.w >= line.length * measure.overGlyph + 2 * measure.overIn, `${at.a.w}px`);
+    assert.deepEqual(broken, []);
+  });
+
+  it('draws the line above the name, inside the box', () => {
+    const { m, lay, at } = over('0–7');
+    const g = /<g class="mv-node" data-node="a".*?<\/g>/s.exec(picture(m, lay, builtIn, { title: 't' }))?.[0] ?? '';
+    const lineY = Number(/class="mv-over" x="[\d.]+" y="([\d.]+)"/.exec(g)?.[1]), nameY = Number(/<text><tspan x="[\d.]+" y="([\d.]+)">Kind/.exec(g)?.[1]);
+    assert.ok(lineY > top(at.a) && lineY < nameY && nameY < bottom(at.a), `${top(at.a)} < ${lineY} < ${nameY} < ${bottom(at.a)}`);
+  });
+});
+
+describe('grid: what a board asked of it', () => {
+  // A kanban board is placed here too (kanban.mjs): cards that list things, columns with nothing in them, and
+  // nothing running between the cells. Each is shown on a block diagram's own grid, so these hold without it.
+  const two = () => parse('block\ncolumns 2\na["One"] b["Two"]\nc["Three"] d["Four"]');
+  const broken = (/** @type {import('../skills/merlive/scripts/parse.mjs').Model} */ m) => score(m, layout(m), builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id}: ${c.detail}`);
+
+  it('makes a block that lists rows under its name as tall as they need, and its row with it', () => {
+    const m = two();
+    m.nodes[0].rows = [['ticket: MC-2038', 'assigned: knsv']];
+    const lay = layout(m), at = lay.nodes;
+    assert.equal(at.a.h, lay.box.h + 2 * measure.rowPad + 2 * measure.rowLine);
+    assert.equal(at.b.h, at.a.h, 'the block beside it is as tall as its row');
+    assert.equal(at.c.h, measure.boxPad + measure.lineHeight, 'the row under it is as it was');
+    assert.equal(top(at.c) - bottom(at.a), gridMeasure.gap);
+    assert.deepEqual(broken(m), []);
+  });
+
+  it('makes every column wide enough for the longest row a block lists', () => {
+    const m = two(), row = 'assigned: Somebody With A Long Name';
+    m.nodes[3].rows = [[row]];
+    const lay = layout(m);
+    assert.ok(row.length * measure.rowGlyph + 2 * measure.rowIn <= lay.nodes.d.w, `${lay.nodes.d.w}px`);
+    assert.equal(lay.nodes.a.w, lay.nodes.d.w);
+    assert.deepEqual(broken(m), []);
+    const plain = layout(two());
+    assert.ok(plain.nodes.a.w < lay.nodes.a.w, 'and no wider than its words need when nothing is listed');
+  });
+
+  it('keeps the room for a name that a block which lists rows needs: the longest such name, in lines', () => {
+    const m = two();
+    Object.assign(m.nodes[0], { label: 'Create the documentation for the feature', rows: [['ticket: 1']] });
+    const lay = layout(m), lines = lay.nodes.a.lines.length;
+    assert.ok(lines > 1);
+    assert.equal(lay.box.h, measure.boxPad + measure.lineHeight * lines);
+    assert.equal(lay.nodes.a.h, lay.box.h + 2 * measure.rowPad + measure.rowLine);
+    assert.deepEqual(broken(m), []);
+  });
+
+  it('draws a cell that holds nothing as a frame when it has a name of its own, as tall as its row', () => {
+    const m = parse('block\ncolumns 3\na["One"]\nblock:g\nend\nb["Two"]');
+    /** @type {any} */ (m.grid?.cells[1]).title = 'Waiting';
+    const lay = layout(m);
+    assert.deepEqual(lay.groups.map((f) => [f.id, f.title]), [['g', 'Waiting']]);
+    const f = lay.groups[0];
+    assert.ok(f.x > right(lay.nodes.a) && f.x + f.w < left(lay.nodes.b) && f.y === top(lay.nodes.a) && f.h === lay.nodes.a.h);
+    assert.ok(f.name.w > 0 && f.name.x - f.name.w / 2 >= f.x && f.name.x + f.name.w / 2 <= f.x + f.w);
+    assert.deepEqual(broken(m), []);
+  });
+
+  it('sets cells close when their author says nothing runs between them, and only while nothing does', () => {
+    const m = two();
+    /** @type {any} */ (m.grid).close = true;
+    const lay = layout(m), at = lay.nodes;
+    assert.equal(left(at.b) - right(at.a), gridMeasure.close);
+    assert.equal(top(at.c) - bottom(at.a), gridMeasure.close);
+    assert.deepEqual(broken(m), []);
+    const joined = parse('block\ncolumns 2\na["One"] b["Two"]\nc["Three"] d["Four"]\ne["Five"]\na --> d');
+    assert.equal(joined.placedBy, 'grid');
+    /** @type {any} */ (joined.grid).close = true;
+    assert.equal(left(layout(joined).nodes.b) - right(layout(joined).nodes.a), gridMeasure.gap);
   });
 });

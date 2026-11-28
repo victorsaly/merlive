@@ -14,8 +14,12 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 - **C4 diagrams:** of 41 features, 25 are drawn as written, 16 are drawn less something, 0 are only partly read, 0 are refused.
 - **Architecture diagrams:** of 28 features, 17 are drawn as written, 11 are drawn less something, 0 are only partly read, 0 are refused.
 - **Block diagrams:** of 36 features, 31 are drawn as written, 5 are drawn less something, 0 are only partly read, 0 are refused.
+- **Mindmaps:** of 38 features, 33 are drawn as written, 5 are drawn less something, 0 are only partly read, 0 are refused.
+- **Kanban boards:** of 25 features, 17 are drawn as written, 8 are drawn less something, 0 are only partly read, 0 are refused.
+- **Timelines:** of 29 features, 29 are drawn as written, 0 are drawn less something, 0 are only partly read, 0 are refused.
+- **Packets:** of 22 features, 22 are drawn as written, 0 are drawn less something, 0 are only partly read, 0 are refused.
 - **Sequence diagrams:** of 42 features, 38 are drawn as written, 4 are drawn less something, 0 are only partly read, and 0 are refused.
-- **Every kind of diagram:** of 32, 8 drawn (those with their own lists above), and 24 left as Mermaid and named.
+- **Every kind of diagram:** of 32, 12 drawn (those with their own lists above), and 20 left as Mermaid and named.
 
 ## Flowcharts, feature by feature
 
@@ -414,6 +418,152 @@ placed on that grid, each block in the cell its author gave it.
 | Blocks that hold grids of their own, and span columns of the grid they are in | Drawn |  | [source](../corpus/block/block-nested-columns.mmd) | [picture](../corpus/drawn/block-nested-columns.svg) |
 | A grid with a block arrow, a block that holds others, a space and links (from Mermaid's own guide) | Drawn |  | [source](../corpus/block/block-mixed.mmd) | [picture](../corpus/drawn/block-mixed.svg) |
 
+## Mindmaps, feature by feature
+
+A mindmap is a tree: each line a box under the nearest line above that is further left, grown from its root
+to the right. Held to the same measure.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| A mindmap: a root, and what is under it by how far in each line is written | Drawn |  | [source](../corpus/mindmap/mindmap-tree.mmd) | [picture](../corpus/drawn/mindmap-tree.svg) |
+| A root with nothing under it | Drawn |  | [source](../corpus/mindmap/mindmap-root-alone.mmd) | [picture](../corpus/drawn/mindmap-root-alone.svg) |
+| Five steps in from the root | Drawn |  | [source](../corpus/mindmap/mindmap-deep.mmd) | [picture](../corpus/drawn/mindmap-deep.svg) |
+| Lines written unevenly: each is under the nearest line above it that is further left | Drawn |  | [source](../corpus/mindmap/mindmap-uneven.mmd) | [picture](../corpus/drawn/mindmap-uneven.svg) |
+| Lines set in with tabs | Drawn |  | [source](../corpus/mindmap/mindmap-tabs.mmd) | [picture](../corpus/drawn/mindmap-tabs.svg) |
+| A root written at the margin | Drawn |  | [source](../corpus/mindmap/mindmap-margin.mmd) | [picture](../corpus/drawn/mindmap-margin.svg) |
+| Empty lines between the lines of a tree | Drawn |  | [source](../corpus/mindmap/mindmap-blank-lines.mmd) | [picture](../corpus/drawn/mindmap-blank-lines.svg) |
+| The first word with a semicolon after it | Drawn |  | [source](../corpus/mindmap/mindmap-semicolon.mmd) | [picture](../corpus/drawn/mindmap-semicolon.svg) |
+| A line of bare words: the shape Mermaid gives when none is written | Drawn |  | [source](../corpus/mindmap/mindmap-shape-default.mmd) | [picture](../corpus/drawn/mindmap-shape-default.svg) |
+| A square | Drawn |  | [source](../corpus/mindmap/mindmap-shape-square.mmd) | [picture](../corpus/drawn/mindmap-shape-square.svg) |
+| A rounded square | Drawn |  | [source](../corpus/mindmap/mindmap-shape-rounded.mmd) | [picture](../corpus/drawn/mindmap-shape-rounded.svg) |
+| A circle | Drawn |  | [source](../corpus/mindmap/mindmap-shape-circle.mmd) | [picture](../corpus/drawn/mindmap-shape-circle.svg) |
+| A hexagon | Drawn |  | [source](../corpus/mindmap/mindmap-shape-hexagon.mmd) | [picture](../corpus/drawn/mindmap-shape-hexagon.svg) |
+| A bang | Drawn, less something | A bang is a box with a heavy outline, not a burst | [source](../corpus/mindmap/mindmap-shape-bang.mmd) | [picture](../corpus/drawn/mindmap-shape-bang.svg) |
+| A cloud | Drawn, less something | A cloud is a round-ended box with a dashed outline, not a cloud | [source](../corpus/mindmap/mindmap-shape-cloud.mmd) | [picture](../corpus/drawn/mindmap-shape-cloud.svg) |
+| A circle, a hexagon, a square and bare words in one tree | Drawn |  | [source](../corpus/mindmap/mindmap-shapes.mmd) | [picture](../corpus/drawn/mindmap-shapes.svg) |
+| A square and a rounded square in one tree | Drawn, less something | A square and a rounded square are the same box: its corners are the design's | [source](../corpus/mindmap/mindmap-shapes-alike.mmd) | [picture](../corpus/drawn/mindmap-shapes-alike.svg) |
+| An id apart from its words | Drawn |  | [source](../corpus/mindmap/mindmap-id-label.mmd) | [picture](../corpus/drawn/mindmap-id-label.svg) |
+| An id of several words | Drawn |  | [source](../corpus/mindmap/mindmap-id-words.mmd) | [picture](../corpus/drawn/mindmap-id-words.svg) |
+| A shape with no id before it | Drawn |  | [source](../corpus/mindmap/mindmap-no-id.mmd) | [picture](../corpus/drawn/mindmap-no-id.svg) |
+| Bare words with a bracket in them: what is before it is the id | Drawn |  | [source](../corpus/mindmap/mindmap-bare-brackets.mmd) | [picture](../corpus/drawn/mindmap-bare-brackets.svg) |
+| Words in quotes, with a colon and brackets in them | Drawn |  | [source](../corpus/mindmap/mindmap-quoted.mmd) | [picture](../corpus/drawn/mindmap-quoted.svg) |
+| Two lines of the same words: two boxes | Drawn |  | [source](../corpus/mindmap/mindmap-same-words.mmd) | [picture](../corpus/drawn/mindmap-same-words.svg) |
+| An icon, on the line under its box | Drawn |  | [source](../corpus/mindmap/mindmap-icon.mmd) | [picture](../corpus/drawn/mindmap-icon.svg) |
+| An icon Merlive has no drawing for | Drawn, less something | The icon is left out | [source](../corpus/mindmap/mindmap-icon-unknown.mmd) | [picture](../corpus/drawn/mindmap-icon-unknown.svg) |
+| A class, on the line under its box | Drawn, less something | A class has no colour of its own: Mermaid takes one from the page it is on | [source](../corpus/mindmap/mindmap-class.mmd) | [picture](../corpus/drawn/mindmap-class.svg) |
+| A class for the root | Drawn |  | [source](../corpus/mindmap/mindmap-class-root.mmd) | [picture](../corpus/drawn/mindmap-class-root.svg) |
+| A Markdown string: bold and italic | Drawn |  | [source](../corpus/mindmap/mindmap-markdown.mmd) | [picture](../corpus/drawn/mindmap-markdown.svg) |
+| A Markdown string of several lines | Drawn |  | [source](../corpus/mindmap/mindmap-markdown-lines.mmd) | [picture](../corpus/drawn/mindmap-markdown-lines.svg) |
+| Bold and italic with no Markdown string round them | Drawn |  | [source](../corpus/mindmap/mindmap-markdown-plain.mmd) | [picture](../corpus/drawn/mindmap-markdown-plain.svg) |
+| A line broken with <br/> | Drawn |  | [source](../corpus/mindmap/mindmap-line-break.mmd) | [picture](../corpus/drawn/mindmap-line-break.svg) |
+| Words long enough to be wrapped | Drawn |  | [source](../corpus/mindmap/mindmap-long-words.mmd) | [picture](../corpus/drawn/mindmap-long-words.svg) |
+| Words in other scripts, and an emoji | Drawn |  | [source](../corpus/mindmap/mindmap-unicode.mmd) | [picture](../corpus/drawn/mindmap-unicode.svg) |
+| A comment on a line of its own, and %% after words, which Mermaid keeps as words | Drawn |  | [source](../corpus/mindmap/mindmap-comments.mmd) | [picture](../corpus/drawn/mindmap-comments.svg) |
+| A title in front matter | Drawn |  | [source](../corpus/mindmap/mindmap-frontmatter.mmd) | [picture](../corpus/drawn/mindmap-frontmatter.svg) |
+| Merlive's own lines: a note on a box, by its id | Drawn |  | [source](../corpus/mindmap/mindmap-notes.mmd) | [picture](../corpus/drawn/mindmap-notes.svg) |
+| A tree of many leaves | Drawn |  | [source](../corpus/mindmap/mindmap-bushy.mmd) | [picture](../corpus/drawn/mindmap-bushy.svg) |
+| A whole mindmap: shapes, icons, a class, bold and broken lines | Drawn |  | [source](../corpus/mindmap/mindmap-whole.mmd) | [picture](../corpus/drawn/mindmap-whole.svg) |
+
+## Kanban boards, feature by feature
+
+A column is a group and a card a box that lists its ticket, who has it and its priority, on the grid the
+board is. Held to the same measure.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| A kanban board: columns side by side, and the cards of each down it | Drawn |  | [source](../corpus/kanban/kanban-columns.mmd) | [picture](../corpus/drawn/kanban-columns.svg) |
+| Columns and cards written with no brackets: each is called by what was written | Drawn |  | [source](../corpus/kanban/kanban-bare.mmd) | [picture](../corpus/drawn/kanban-bare.svg) |
+| Ids with a hyphen or a dot in them, a card called by its id, and one id written for two cards | Drawn |  | [source](../corpus/kanban/kanban-ids.mmd) | [picture](../corpus/drawn/kanban-ids.svg) |
+| A column with no cards in it yet | Drawn |  | [source](../corpus/kanban/kanban-empty-column.mmd) | [picture](../corpus/drawn/kanban-empty-column.svg) |
+| Who has a card: assigned | Drawn |  | [source](../corpus/kanban/kanban-assigned.mmd) | [picture](../corpus/drawn/kanban-assigned.svg) |
+| The ticket a card is for, bare, in quotes or a number | Drawn |  | [source](../corpus/kanban/kanban-ticket.mmd) | [picture](../corpus/drawn/kanban-ticket.svg) |
+| How pressing a card is: the four priorities Mermaid draws | Drawn, less something | A priority is said in words on its card, where Mermaid draws a colour down the side of the card | [source](../corpus/kanban/kanban-priority.mmd) | [picture](../corpus/drawn/kanban-priority.svg) |
+| A priority Mermaid has no mark for | Drawn, less something | Kept as written and said, where Mermaid draws nothing for it | [source](../corpus/kanban/kanban-priority-other.mmd) | [picture](../corpus/drawn/kanban-priority-other.svg) |
+| A ticket, who has it and how pressing it is, all on one card, in any order | Drawn, less something | A priority is said in words on its card, where Mermaid draws a colour down the side of the card | [source](../corpus/kanban/kanban-metadata.mmd) | [picture](../corpus/drawn/kanban-metadata.svg) |
+| What is set on a card, written over several lines | Drawn, less something | A priority is said in words on its card, where Mermaid draws a colour down the side of the card | [source](../corpus/kanban/kanban-metadata-lines.mmd) | [picture](../corpus/drawn/kanban-metadata-lines.svg) |
+| Something set on a card that a board has no place for | Drawn, less something | Passed over and said, where Mermaid passes over it and says nothing | [source](../corpus/kanban/kanban-metadata-other.mmd) | [picture](../corpus/drawn/kanban-metadata-other.svg) |
+| A card's words set as its label | Drawn |  | [source](../corpus/kanban/kanban-label.mmd) | [picture](../corpus/drawn/kanban-label.svg) |
+| Something set on a column, which neither Mermaid nor Merlive draws | Drawn, less something | Passed over and said, where Mermaid passes over it and says nothing | [source](../corpus/kanban/kanban-column-metadata.mmd) | [picture](../corpus/drawn/kanban-column-metadata.svg) |
+| Tickets with a place they link to, set in front matter | Drawn, less something | A ticket is listed on its card and is not a link out: a picture of Merlive's goes nowhere | [source](../corpus/kanban/kanban-ticket-base-url.mmd) | [picture](../corpus/drawn/kanban-ticket-base-url.svg) |
+| Front matter with a title | Drawn |  | [source](../corpus/kanban/kanban-frontmatter.mmd) | [picture](../corpus/drawn/kanban-frontmatter.svg) |
+| Words in quotes, with a comma, a bracket and a parenthesis in them | Drawn |  | [source](../corpus/kanban/kanban-quoted.mmd) | [picture](../corpus/drawn/kanban-quoted.svg) |
+| A Markdown string: bold and italic on a card | Drawn |  | [source](../corpus/kanban/kanban-markdown.mmd) | [picture](../corpus/drawn/kanban-markdown.svg) |
+| A line its author broke, with <br/> and by going on to the next line inside quotes | Drawn |  | [source](../corpus/kanban/kanban-line-break.mmd) | [picture](../corpus/drawn/kanban-line-break.svg) |
+| Entity codes in the words of a column and of a card | Drawn |  | [source](../corpus/kanban/kanban-entity.mmd) | [picture](../corpus/drawn/kanban-entity.svg) |
+| Every way Mermaid lets the words of a card be written, each drawn as a card | Drawn |  | [source](../corpus/kanban/kanban-shapes.mmd) | [picture](../corpus/drawn/kanban-shapes.svg) |
+| Comments, on lines of their own and after a card | Drawn |  | [source](../corpus/kanban/kanban-comments.mmd) | [picture](../corpus/drawn/kanban-comments.svg) |
+| Cards written at different depths, and with a tab: anything further in than a column is its card | Drawn |  | [source](../corpus/kanban/kanban-deep.mmd) | [picture](../corpus/drawn/kanban-deep.svg) |
+| Long words on a card and in the name of a column | Drawn |  | [source](../corpus/kanban/kanban-long-words.mmd) | [picture](../corpus/drawn/kanban-long-words.svg) |
+| Merlive's own lines on a board: a note on a card | Drawn |  | [source](../corpus/kanban/kanban-note.mmd) | [picture](../corpus/drawn/kanban-note.svg) |
+| A whole board: five columns, one of them empty, cards with and without tickets, people and priorities, a title and a place tickets link to | Drawn, less something | A priority is said in words on its card, where Mermaid draws a colour down the side; a ticket is not a link out | [source](../corpus/kanban/kanban-whole.mmd) | [picture](../corpus/drawn/kanban-whole.svg) |
+
+## Timelines, feature by feature
+
+A period is a box with its events under it and a section a group round its periods, on the grid a timeline
+is. Held to the same measure.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| Periods, each with one event: a period is a box, its event a box under it | Drawn |  | [source](../corpus/timeline/timeline-periods.mmd) | [picture](../corpus/drawn/timeline-periods.svg) |
+| A title, drawn above the picture | Drawn |  | [source](../corpus/timeline/timeline-title.mmd) | [picture](../corpus/drawn/timeline-title.svg) |
+| Several events of one period on its line | Drawn |  | [source](../corpus/timeline/timeline-events-same-line.mmd) | [picture](../corpus/drawn/timeline-events-same-line.svg) |
+| Events on the lines after their period, each line a colon and what happened | Drawn |  | [source](../corpus/timeline/timeline-events-following-lines.mmd) | [picture](../corpus/drawn/timeline-events-following-lines.svg) |
+| Periods in which nothing is said to have happened | Drawn |  | [source](../corpus/timeline/timeline-period-alone.mmd) | [picture](../corpus/drawn/timeline-period-alone.svg) |
+| No space before a colon | Drawn |  | [source](../corpus/timeline/timeline-no-spaces.mmd) | [picture](../corpus/drawn/timeline-no-spaces.svg) |
+| A colon with no space after it is part of the words (09:30) | Drawn |  | [source](../corpus/timeline/timeline-colon-in-event.mmd) | [picture](../corpus/drawn/timeline-colon-in-event.svg) |
+| The code for a colon in a period (#colon;) | Drawn |  | [source](../corpus/timeline/timeline-colon-code.mmd) | [picture](../corpus/drawn/timeline-colon-code.svg) |
+| Periods that are words, not dates | Drawn |  | [source](../corpus/timeline/timeline-words-not-dates.mmd) | [picture](../corpus/drawn/timeline-words-not-dates.svg) |
+| A line break in a period and in an event (<br>) | Drawn |  | [source](../corpus/timeline/timeline-line-break.mmd) | [picture](../corpus/drawn/timeline-line-break.svg) |
+| Events too long for one line, wrapped in their box | Drawn |  | [source](../corpus/timeline/timeline-long-text.mmd) | [picture](../corpus/drawn/timeline-long-text.svg) |
+| Sections: each a group round the periods after it | Drawn |  | [source](../corpus/timeline/timeline-sections.mmd) | [picture](../corpus/drawn/timeline-sections.svg) |
+| Sections of one period and of several, with events of different numbers | Drawn |  | [source](../corpus/timeline/timeline-sections-uneven.mmd) | [picture](../corpus/drawn/timeline-sections-uneven.svg) |
+| A section with a long name | Drawn |  | [source](../corpus/timeline/timeline-section-long-name.mmd) | [picture](../corpus/drawn/timeline-section-long-name.svg) |
+| Left to right, said (timeline LR) | Drawn |  | [source](../corpus/timeline/timeline-direction-lr.mmd) | [picture](../corpus/drawn/timeline-direction-lr.svg) |
+| Top to bottom (timeline TD): periods one under another, events beside each | Drawn |  | [source](../corpus/timeline/timeline-direction-td.mmd) | [picture](../corpus/drawn/timeline-direction-td.svg) |
+| Top to bottom with sections, one under another | Drawn |  | [source](../corpus/timeline/timeline-direction-td-sections.mmd) | [picture](../corpus/drawn/timeline-direction-td-sections.svg) |
+| A title in front matter | Drawn |  | [source](../corpus/timeline/timeline-frontmatter.mmd) | [picture](../corpus/drawn/timeline-frontmatter.svg) |
+| One colour for every period (disableMulticolor), read past: the colours are the design's | Drawn |  | [source](../corpus/timeline/timeline-one-colour.mmd) | [picture](../corpus/drawn/timeline-one-colour.svg) |
+| A theme and its colours in front matter, read past: the colours are the design's | Drawn |  | [source](../corpus/timeline/timeline-theme.mmd) | [picture](../corpus/drawn/timeline-theme.svg) |
+| Comments on lines of their own | Drawn |  | [source](../corpus/timeline/timeline-comments.mmd) | [picture](../corpus/drawn/timeline-comments.svg) |
+| What the picture is called and shows, for one who cannot see it | Drawn |  | [source](../corpus/timeline/timeline-accessible.mmd) | [picture](../corpus/drawn/timeline-accessible.svg) |
+| A description over several lines (accDescr { }) | Drawn |  | [source](../corpus/timeline/timeline-accessible-lines.mmd) | [picture](../corpus/drawn/timeline-accessible-lines.svg) |
+| Merlive's own lines: a note for a period and for an event, and what a kind means | Drawn |  | [source](../corpus/timeline/timeline-notes.mmd) | [picture](../corpus/drawn/timeline-notes.svg) |
+| Two periods of one name: each is its own | Drawn |  | [source](../corpus/timeline/timeline-same-names.mmd) | [picture](../corpus/drawn/timeline-same-names.svg) |
+| Nine periods: a timeline as long as it was written | Drawn |  | [source](../corpus/timeline/timeline-many-periods.mmd) | [picture](../corpus/drawn/timeline-many-periods.svg) |
+| Six events in one period | Drawn |  | [source](../corpus/timeline/timeline-many-events.mmd) | [picture](../corpus/drawn/timeline-many-events.svg) |
+| A single period | Drawn |  | [source](../corpus/timeline/timeline-one-period.mmd) | [picture](../corpus/drawn/timeline-one-period.svg) |
+| A whole timeline: a title, three sections, periods with none, one and two events, a line break | Drawn |  | [source](../corpus/timeline/timeline-whole.mmd) | [picture](../corpus/drawn/timeline-whole.svg) |
+
+## Packets, feature by feature
+
+A field is a box as wide as the bits it takes, with its bits over its name, in rows of as many bits as the
+packet says. Held to the same measure.
+
+| Feature | Result | What is missing | Sample | Picture |
+|---|---|---|---|---|
+| Fields by the bits they take, first to last | Drawn |  | [source](../corpus/packet/packet-fields.mmd) | [picture](../corpus/drawn/packet-fields.svg) |
+| A packet that opens "packet", not "packet-beta" | Drawn |  | [source](../corpus/packet/packet-keyword.mmd) | [picture](../corpus/drawn/packet-keyword.svg) |
+| A title on a line of its own | Drawn |  | [source](../corpus/packet/packet-title.mmd) | [picture](../corpus/drawn/packet-title.svg) |
+| A title in front matter | Drawn |  | [source](../corpus/packet/packet-title-frontmatter.mmd) | [picture](../corpus/drawn/packet-title-frontmatter.svg) |
+| Fields of one bit, among wider ones | Drawn |  | [source](../corpus/packet/packet-bit.mmd) | [picture](../corpus/drawn/packet-bit.svg) |
+| Fields by how many bits each takes (+16), each starting where the last ended | Drawn |  | [source](../corpus/packet/packet-lengths.mmd) | [picture](../corpus/drawn/packet-lengths.svg) |
+| Fields by their bits and by their length, mixed | Drawn |  | [source](../corpus/packet/packet-lengths-mixed.mmd) | [picture](../corpus/drawn/packet-lengths-mixed.svg) |
+| A field that runs past the end of a row: drawn on both rows, each part with its own bits | Drawn |  | [source](../corpus/packet/packet-split.mmd) | [picture](../corpus/drawn/packet-split.svg) |
+| A field of several whole rows | Drawn |  | [source](../corpus/packet/packet-split-rows.mmd) | [picture](../corpus/drawn/packet-split-rows.svg) |
+| Sixteen bits to a row, said in front matter | Drawn |  | [source](../corpus/packet/packet-bits-per-row.mmd) | [picture](../corpus/drawn/packet-bits-per-row.svg) |
+| Eight bits to a row, said in a directive | Drawn |  | [source](../corpus/packet/packet-bits-per-row-directive.mmd) | [picture](../corpus/drawn/packet-bits-per-row-directive.svg) |
+| Sixty-four bits to a row | Drawn |  | [source](../corpus/packet/packet-bits-per-row-wide.mmd) | [picture](../corpus/drawn/packet-bits-per-row-wide.svg) |
+| The bits left off the picture (showBits: false) | Drawn |  | [source](../corpus/packet/packet-show-bits.mmd) | [picture](../corpus/drawn/packet-show-bits.svg) |
+| Mermaid's own sizes for a packet (bitWidth, rowHeight, padding), read past | Drawn |  | [source](../corpus/packet/packet-settings.mmd) | [picture](../corpus/drawn/packet-settings.svg) |
+| Comments on lines of their own and after a field | Drawn |  | [source](../corpus/packet/packet-comments.mmd) | [picture](../corpus/drawn/packet-comments.svg) |
+| A title and a description for a reader who cannot see the picture | Drawn |  | [source](../corpus/packet/packet-accessible.mmd) | [picture](../corpus/drawn/packet-accessible.svg) |
+| Names in single quotes, with brackets in them, and one with no name | Drawn |  | [source](../corpus/packet/packet-names.mmd) | [picture](../corpus/drawn/packet-names.svg) |
+| A last row that is not full | Drawn |  | [source](../corpus/packet/packet-short-row.mmd) | [picture](../corpus/drawn/packet-short-row.svg) |
+| One field, a whole row | Drawn |  | [source](../corpus/packet/packet-one-field.mmd) | [picture](../corpus/drawn/packet-one-field.svg) |
+| Spaces round the dash and the colon, or none | Drawn |  | [source](../corpus/packet/packet-spacing.mmd) | [picture](../corpus/drawn/packet-spacing.svg) |
+| Merlive's own notes on fields, by the bit each starts at | Drawn |  | [source](../corpus/packet/packet-notes.mmd) | [picture](../corpus/drawn/packet-notes.svg) |
+| A whole header: a title, fields from one bit to two rows, thirty-two columns | Drawn |  | [source](../corpus/packet/packet-whole.mmd) | [picture](../corpus/drawn/packet-whole.svg) |
+
 ## Sequence diagrams, feature by feature
 
 Held to the same measure: every participant, message, note, frame and word the corpus says a sample has is read,
@@ -478,7 +628,7 @@ drawing of their own.
 | ZenUML sequence diagram | Left as Mermaid | [source](../corpus/kinds/zenuml.mmd) |  |
 | Event model | Left as Mermaid | [source](../corpus/kinds/eventmodeling.mmd) |  |
 | User journey | Left as Mermaid | [source](../corpus/kinds/journey.mmd) |  |
-| Timeline | Left as Mermaid | [source](../corpus/kinds/timeline.mmd) |  |
+| Timeline | Drawn | [source](../corpus/kinds/timeline.mmd) | [picture](../corpus/drawn/timeline.svg) |
 | Gantt chart | Left as Mermaid | [source](../corpus/kinds/gantt.mmd) |  |
 | Git graph | Left as Mermaid | [source](../corpus/kinds/gitgraph.mmd) |  |
 
@@ -501,10 +651,10 @@ drawing of their own.
 
 | Kind | Result | Sample | Picture |
 |---|---|---|---|
-| Mindmap | Left as Mermaid | [source](../corpus/kinds/mindmap.mmd) |  |
+| Mindmap | Drawn | [source](../corpus/kinds/mindmap.mmd) | [picture](../corpus/drawn/mindmap.svg) |
 | Tree view | Left as Mermaid | [source](../corpus/kinds/treeview.mmd) |  |
 | Ishikawa (fishbone) diagram | Left as Mermaid | [source](../corpus/kinds/ishikawa.mmd) |  |
-| Kanban board | Left as Mermaid | [source](../corpus/kinds/kanban.mmd) |  |
+| Kanban board | Drawn | [source](../corpus/kinds/kanban.mmd) | [picture](../corpus/drawn/kanban.svg) |
 
 ### Chart
 
@@ -516,7 +666,7 @@ drawing of their own.
 | XY chart | Left as Mermaid | [source](../corpus/kinds/xychart.mmd) |  |
 | Sankey diagram | Left as Mermaid | [source](../corpus/kinds/sankey.mmd) |  |
 | Radar chart | Left as Mermaid | [source](../corpus/kinds/radar.mmd) |  |
-| Packet diagram | Left as Mermaid | [source](../corpus/kinds/packet.mmd) |  |
+| Packet diagram | Drawn | [source](../corpus/kinds/packet.mmd) | [picture](../corpus/drawn/packet.svg) |
 | Venn diagram | Left as Mermaid | [source](../corpus/kinds/venn.mmd) |  |
 | Cynefin framework | Left as Mermaid | [source](../corpus/kinds/cynefin.mmd) |  |
 | Wardley map | Left as Mermaid | [source](../corpus/kinds/wardley.mmd) |  |

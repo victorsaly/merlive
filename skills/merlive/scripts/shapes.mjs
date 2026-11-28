@@ -4,15 +4,16 @@
 // words, and where a line meets it. Layout and drawing both ask here, so a line always ends on the outline.
 // Pure.
 
-/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'|'note'|'point'|'arrow-right'|'arrow-left'|'arrow-up'|'arrow-down'|'arrow-x'|'arrow-y'} Shape */
+/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'|'note'|'point'|'cell'|'arrow-right'|'arrow-left'|'arrow-up'|'arrow-down'|'arrow-x'|'arrow-y'} Shape */
 /** @typedef {'top'|'bottom'|'left'|'right'} Side */
 
 /** @type {Shape[]} */
-export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag', 'note', 'point', 'arrow-right', 'arrow-left', 'arrow-up', 'arrow-down', 'arrow-x', 'arrow-y'];
+export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag', 'note', 'point', 'cell', 'arrow-right', 'arrow-left', 'arrow-up', 'arrow-down', 'arrow-x', 'arrow-y'];
 
 // What is measured, named once.
 export const form = {
   pad: 28, // px a plain box keeps clear of its words, left and right together
+  cellPad: 8, // the same for a cell: a field of a packet a bit wide is a few letters across, as Mermaid's is, and the cells round it say where it ends
   cut: 0.36, // how much of a hexagon's height its corners are cut by
   hexagonPad: 52, // a hexagon's cut corners leave less room for words
   diamondRoom: 0.5, // the share of a rhombus's width that two lines of words can use: half way up, it is half as wide
@@ -99,6 +100,7 @@ export function roomIn(/** @type {Shape} */ shape, /** @type {number} */ w) {
     case 'arrow-x': return w - form.pad - 2 * form.arrowHead;
     // An arrow that points up or down keeps its words in its shaft, which is narrower than its box.
     case 'arrow-up': case 'arrow-down': case 'arrow-y': return Math.min(w, form.arrowBroad) * form.arrowShaft - 12;
+    case 'cell': return w - form.cellPad;
     default: return w - form.pad;
   }
 }

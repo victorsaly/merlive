@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 26 November 2026, as 0.4.0 was released.
+Last brought up to date: 28 November 2026, with 0.4.0 released and 0.5.0 in hand.
 
 ## Released
 
@@ -25,7 +25,7 @@ What 0.2.0 left, each said by the command when met or named on the comparison pa
 
 - **What is known to be missing**, each said by the command when met: a direction other than top to bottom,
   for either kind (boxes of different heights are only placed top to bottom); attributes written on the line
-  that opens an entity. A picked class is called "Step" on the page, since a class has no kind of its own.
+  that opens an entity.
 - **An attribute's comment is not on the picture.** An entity is drawn as a table of type, name and keys. A
   comment (`string number PK "As printed"`) is Mermaid's fourth column; here it is in the note on the entity,
   since one sentence would make every box of the diagram as wide as itself. To draw it, a comment column needs
@@ -78,6 +78,31 @@ does not read `%% kind` yet; the main path is still the longest one, which in a 
 then OpenAI when its limit is reached) puts the fallback on the straight line. `%% main:` fixes it by hand;
 picking the path that takes no decision's exception would fix it by rule.
 
+## In hand: 0.5.0, more kinds the two placements can draw
+
+On the branch `kinds-2`. Done: readers for mindmaps, kanban boards, timelines and packets (`mindmap.mjs`,
+`kanban.mjs`, `timeline.mjs`, `packet.mjs`), each with its tests, its list in `corpus/index.json` and its section
+in `skills/merlive/reference.md`; a tree placed as a tree (step 5 of `placed()` in layout.mjs); a grid that says
+its own least column, its gap, and that its cells are close (`grid.mjs`); a plain box named for what it is in
+each kind (the third column of `READERS` in parse.mjs: a card, a class, an entity, an idea, a field, an event),
+and a page with no lines that says nothing of a flow (`linked` in the page's data); a packet near Mermaid's width
+(a TCP header 1140px, was 2408): a `cell` shape with less room round its words, fields 4px apart with P2 holding a
+grid with nothing linked to its cells, and P6 holding the line over a name to its block's own width.
+A timeline too wide for a screen runs on in bands (`wraps` on the model, the fewest that fit chosen in
+`layout()`; `%% wrap: no` keeps one row), and no line runs along a frame's edge (P5; the grid router takes the gap
+outside the frames round a box, `rim` in grid.mjs).
+
+Left:
+
+1. **A long section name widens every section** of a timeline: a frame's name is never wrapped, and every column
+   of a grid is as wide as every other, so one name of sixty letters makes every column 469px. A frame name that
+   wraps onto a second line, as a box's words do, would fix it.
+2. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
+   colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`.
+3. **Look, sample by sample**: one screenshot of each kind beside Mermaid's was looked at; the rest pass their
+   rules. A packet of one-bit fields with four-letter names (`packet-bit`) is still 1396px: a column is as wide as
+   its widest one-bit name.
+
 ## Waiting on Victor
 
 - **The tags.** No session so far could push a tag: the push is refused where the sessions run. None exists
@@ -114,9 +139,9 @@ picking the path that takes no decision's exception would fix it by rule.
    - the name of a narrow group usually has its line pass behind it, and the arrowhead sits close under it;
    - a group's own direction is read past;
    - of the newer `@{ shape }` list, twelve shapes are drawn and the rest are boxes.
-2. **The other kinds**, picked by what Victor's own repositories use, not by Mermaid's list. Twenty-four are
-   left as Mermaid (the `kinds` list of `corpus/index.json`): time (gantt, timeline, journey), charts (pie,
-   xychart, quadrant), trees (mindmap, gitgraph, kanban) and the rest.
+2. **The other kinds**, picked by what Victor's own repositories use, not by Mermaid's list. Twenty are left
+   as Mermaid (the `kinds` list of `corpus/index.json`): gantt and journey, the charts (pie, xychart, quadrant,
+   sankey, radar, treemap), gitgraph, zenuml and the rest. Each needs a way of drawing of its own.
    A kind of boxes and links (requirement, C4, block, architecture) can use the placement there is; a chart or a
    tree needs a way of drawing of its own, as a sequence diagram did (`sequence.mjs` is the pattern: read, place,
    check, with its rules written down first).

@@ -8,7 +8,11 @@ import { c4Reader } from './c4.mjs';
 import { classReader } from './class.mjs';
 import { architectureReader } from './architecture.mjs';
 import { requirementReader } from './requirement.mjs';
+import { packetReader } from './packet.mjs';
 import { blockReader } from './block.mjs';
+import { mindmapReader } from './mindmap.mjs';
+import { timelineReader } from './timeline.mjs';
+import { kanbanReader } from './kanban.mjs';
 import { isSequence, parseSequence } from './sequence.mjs';
 
 /** @typedef {import('./shapes.mjs').Shape} Shape */
@@ -33,7 +37,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Edge[]} edges
  * @property {Record<string,string>} notes
  * @property {Step[]} steps
- * @property {{main?:string[],side?:'left'|'right',turn?:boolean}} hints turn: false keeps a wide left-to-right flow as it was written
+ * @property {{main?:string[],side?:'left'|'right',turn?:boolean,wrap?:boolean}} hints turn: false keeps a wide left-to-right flow as it was written; wrap: false keeps a wide timeline in one row
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
  * @property {Record<string,string>} [meanings] what a kind of box means, in its author's words (`%% kind red: Read-only data`): the legend's name for it
  * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
@@ -42,6 +46,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {'grid'} [placedBy] set when its boxes are placed where its author put them and not by rule: a block diagram whose meaning is in its grid
  * @property {string} [placedWhy] what in it says so, in a sentence
  * @property {import('./block.mjs').Grid} [grid] a block diagram as its author placed it, cell by cell
+ * @property {import('./block.mjs').Grid[]} [wraps] the same grid run on in bands (each says how many), fewest first, for when it is too wide for a screen in one row (a timeline)
  */
 
 // Longest opener first, so "([" is not read as "(" and then "[". A shape that leans may close either way: it
@@ -210,14 +215,20 @@ function leftOpen(/** @type {string} */ text) {
 
 // A diagram that is boxes and links under another name has a reader of its own, which reads its lines into the
 // model a flowchart gives: how the block starts, and the reader for it. A new kind is one more line here.
+// The third is what a plain box is in that kind of diagram, for the legend and for a box picked on the page: a
+// "Step" is a flowchart's word, and a card on a board is not one. Where it is missing, a plain box is a step.
 const READERS = /** @type {const} */ ([
-  [/^stateDiagram(-v2)?;?$/, stateReader],
-  [/^classDiagram(-v2)?;?$/, classReader],
-  [/^erDiagram;?$/, erReader],
-  [/^architecture(-beta)?;?$/, architectureReader],
-  [/^requirementDiagram;?$/, requirementReader],
-  [/^C4(Context|Container|Component|Dynamic|Deployment)$/, c4Reader],
-  [/^block(-beta)?;?$/, blockReader],
+  [/^stateDiagram(-v2)?;?$/, stateReader, ''],
+  [/^classDiagram(-v2)?;?$/, classReader, 'Class'],
+  [/^erDiagram;?$/, erReader, 'Entity'],
+  [/^architecture(-beta)?;?$/, architectureReader, ''],
+  [/^requirementDiagram;?$/, requirementReader, ''],
+  [/^C4(Context|Container|Component|Dynamic|Deployment)$/, c4Reader, ''],
+  [/^block(-beta)?;?$/, blockReader, ''],
+  [/^mindmap;?$/, mindmapReader, 'Idea'],
+  [/^timeline(\s|;|$)/, timelineReader, 'Event'],
+  [/^packet(-beta)?$/, packetReader, 'Field'],
+  [/^kanban$/, kanbanReader, 'Card'],
 ]);
 
 // Lines that are read past without a warning: a page of Merlive runs no code of an author's, and a group's own
@@ -298,6 +309,15 @@ export function parse(src) {
   // The reader of a diagram that is not written as a flowchart is (see READERS), reading into this same model.
   /** @type {{read:(text:string, line:number) => boolean, done:() => void}|null} */
   let reader = null;
+  // What a plain box is called in this kind of diagram (see READERS); a flowchart's is a step.
+  let plain = '';
+  // The source's lines, split once: a reader that asks how far in a line was written (a mindmap, a board) asks for
+  // every box, and splitting the whole source each time made a big diagram slow by the square of its length.
+  const written = src.split(/\r?\n/);
+  // What Mermaid was told of itself, in front matter and in "%%{init: …}%%": read past here, and lent to a
+  // reader whose diagram a setting changes (how many bits a packet has in a row).
+  /** @type {string[]} */
+  const settings = [];
 
   const warn = (/** @type {number} */ line, /** @type {string} */ what) => model.warnings.push(`line ${line}: ${what}`);
 
@@ -513,14 +533,19 @@ export function parse(src) {
     if (side) return void (model.hints.side = /** @type {'left'|'right'} */ (side[1]));
     const turn = /^%%\s*turn\s*:\s*(yes|no)\s*$/.exec(text);
     if (turn) return void (model.hints.turn = turn[1] === 'yes');
+    const wrap = /^%%\s*wrap\s*:\s*(yes|no)\s*$/.exec(text);
+    if (wrap) return void (model.hints.wrap = wrap[1] === 'yes');
+    if (text.startsWith('%%{')) settings.push(text);
     if (text.startsWith('%%')) return;
 
     if (!header) {
       header = true;
       const h = /^(flowchart|graph)\b\s*(TD|TB|BT|LR|RL)?/.exec(text);
       model.kindOfDiagram = text.split(/\s+/)[0];
-      const read = READERS.find(([starts]) => starts.test(text))?.[1];
-      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]) }));
+      const found = READERS.find(([starts]) => starts.test(text));
+      const read = found?.[1];
+      plain = found?.[2] ?? '';
+      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, settings, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]), indent: (at) => /^\s*/.exec(written[at - 1] ?? '')?.[0].length ?? 0, header: { text, line } }));
       if (!h) {
         model.type = 'unsupported';
         return;
@@ -569,7 +594,7 @@ export function parse(src) {
   let front = 'before';
   /** @type {{text:string,line:number}|null} */
   let held = null;
-  src.split(/\r?\n/).forEach((raw, i) => {
+  written.forEach((raw, i) => {
     const text = raw.trim();
     if (!text) return;
     if (front === 'before') {
@@ -581,6 +606,7 @@ export function parse(src) {
       const title = /^title\s*:\s*(.*?)\s*$/.exec(raw);
       if (title) model.title = model.heading = title[1].replace(/^(["'])(.*)\1$/, '$2');
       if (text === '---') front = 'after';
+      else settings.push(text);
       return;
     }
     // An "@{" left open carries on down the lines to its "}", and is read as one line from where it began.
@@ -654,6 +680,8 @@ export function parse(src) {
     }
   }
   for (const n of model.nodes) if (!n.kind) n.kind = n.shape === 'diamond' || n.shape === 'hexagon' ? 'decision' : n.shape === 'pill' || n.shape === 'double-circle' ? 'terminal' : 'step';
+  // Only where a box is plain, so that no legend names a kind nothing is of, and never over its author's own word.
+  if (plain && model.nodes.some((n) => n.kind === 'step')) model.meanings = { step: plain, ...model.meanings };
   for (const id of Object.keys(model.notes)) if (!byId.has(id)) model.warnings.push(`note for ${id}: no such node`);
   // A kind its author named for its colour (classDef red) tells a reader of the legend only what they can see.
   const kinds = new Set(model.nodes.map((n) => n.kind));

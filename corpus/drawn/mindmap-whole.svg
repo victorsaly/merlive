@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 784 654" width="784" height="654" role="img" aria-label="A whole mindmap: shapes, icons, a class, bold and broken lines">
+<title>A whole mindmap: shapes, icons, a class, bold and broken lines</title>
+<style>.mv-svg{--mv-bg:#eff6f5;--mv-node:#ffffff;--mv-stroke:#b3cbc7;--mv-text:#0f2f2d;--mv-muted:#48615e;--mv-edge:#5e827e;--mv-accent:#d6452b;--mv-k-root:#b3cbc7;--mv-kf-root:#ffffff;--mv-k-step:#b3cbc7;--mv-kf-step:#ffffff;--mv-k-control:#b3cbc7;--mv-kf-control:#ffffff;--mv-k-decision:#b87a00;--mv-kf-decision:#f6eede;--mv-dot:#d4dedd;--mv-group:#e7efee;--mv-shadow:#0f2f2d29}@media (prefers-color-scheme:dark){.mv-svg{--mv-bg:#06191d;--mv-node:#0d2a30;--mv-stroke:#2b5560;--mv-text:#e4f3f0;--mv-muted:#9bbcb7;--mv-edge:#6b9aa1;--mv-accent:#ff8566;--mv-k-root:#2b5560;--mv-kf-root:#0d2a30;--mv-k-step:#2b5560;--mv-kf-step:#0d2a30;--mv-k-control:#2b5560;--mv-kf-control:#0d2a30;--mv-k-decision:#e69f00;--mv-kf-decision:#29392a;--mv-dot:#213336;--mv-group:#0e2124;--mv-shadow:#00000080;color-scheme:dark}}
+.mv-svg{font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif}
+.mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
+.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}
+[data-kind="root"] .mv-shape{fill:var(--mv-kf-root);stroke:var(--mv-k-root)}
+[data-kind="step"] .mv-shape{fill:var(--mv-kf-step);stroke:var(--mv-k-step)}
+[data-kind="control"] .mv-shape{fill:var(--mv-kf-control);stroke:var(--mv-k-control)}
+[data-kind="decision"] .mv-shape{fill:var(--mv-kf-decision);stroke:var(--mv-k-decision)}
+.mv-node .mv-detail{fill:none}
+[data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
+[data-outline~="heavy"] .mv-shape{stroke-width:2.6}
+.mv-node .mv-rows{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
+.mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
+.mv-band{fill:var(--mv-text);opacity:0.06;stroke:none}
+.mv-grid{fill:none;stroke:var(--mv-stroke);stroke-width:1}
+.mv-node .mv-told{font-size:11.5px;font-weight:400}
+.mv-node .mv-over{font-size:11px;font-weight:400;fill:var(--mv-muted)}
+.mv-hollow{fill:var(--mv-bg);stroke:var(--mv-edge);stroke-width:1.4;stroke-linejoin:round}
+.mv-icon{fill:none;stroke:var(--mv-text);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.mv-node text{font-size:13px;font-weight:500;fill:var(--mv-text);text-anchor:middle}
+.mv-line{fill:none;stroke:var(--mv-edge);stroke-width:1.4}
+.mv-main .mv-line{stroke-width:2.4}
+.mv-stripe{stroke:none}
+.mv-node .mv-point{fill:var(--mv-edge);stroke:var(--mv-edge)}
+.mv-node .mv-strong{font-weight:700}
+.mv-node .mv-em{font-style:italic}
+.mv-title{font-size:15px;font-weight:600;fill:var(--mv-text);text-anchor:middle}
+[data-kind="root"] .mv-stripe{fill:var(--mv-k-root)}
+[data-kind="step"] .mv-stripe{fill:var(--mv-k-step)}
+[data-kind="control"] .mv-stripe{fill:var(--mv-k-control)}
+[data-kind="decision"] .mv-stripe{fill:var(--mv-k-decision)}
+[data-style="dotted"] .mv-line{stroke-dasharray:2 5;stroke-linecap:round}
+[data-style="thick"] .mv-line{stroke-width:2.8}
+.mv-head{fill:var(--mv-edge)}
+.mv-cross{fill:none;stroke:var(--mv-edge);stroke-width:1.8;stroke-linecap:round}
+.mv-label{font-size:11px;font-weight:600;fill:var(--mv-muted);text-anchor:middle;paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
+.mv-group rect{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1;stroke-dasharray:5 4}
+.mv-name{font-size:11px;font-weight:600;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase;text-anchor:middle;paint-order:stroke;stroke:var(--mv-group);stroke-width:4px;stroke-linejoin:round}</style>
+<rect width="100%" height="100%" fill="var(--mv-bg)"/>
+<text class="mv-title"><tspan class="mv-title-line" x="392" y="33">How ordering works</tspan></text>
+<g transform="translate(0,38)">
+<defs><pattern id="mv-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1" fill="var(--mv-dot)"/></pattern></defs><rect class="mv-ground" width="784" height="616" fill="url(#mv-dots)"/><g></g><g><g class="mv-edge" data-edge="root-Buying" data-style="solid"><path class="mv-line" d="M156,58L228,58"/></g><g class="mv-edge" data-edge="Buying-quote" data-style="solid"><path class="mv-line" d="M292,88L292,150Q292,158 300,158L428,158"/></g><g class="mv-edge" data-edge="Buying-order" data-style="solid"><path class="mv-line" d="M356,58L428,58"/></g><g class="mv-edge" data-edge="order-Approved_by_a_manager" data-style="solid"><path class="mv-line" d="M556,58L628,58"/></g><g class="mv-edge" data-edge="root-Receiving" data-style="solid"><path class="mv-line" d="M102,88L102,250Q102,258 110,258L228,258"/></g><g class="mv-edge" data-edge="Receiving-Check_the_delivery" data-style="solid"><path class="mv-line" d="M356,258L428,258"/></g><g class="mv-edge" data-edge="Receiving-ret" data-style="solid"><path class="mv-line" d="M356,276.6L384,276.6Q392,276.6 392,284.6L392,350Q392,358 400,358L428,358"/></g><g class="mv-edge" data-edge="root-Paying" data-style="solid"><path class="mv-line" d="M82,88L82,450Q82,458 90,458L228,458"/></g><g class="mv-edge" data-edge="Paying-inv" data-style="solid"><path class="mv-line" d="M356,458L428,458"/></g><g class="mv-edge" data-edge="Paying-Pay_in_thirty_days" data-style="solid"><path class="mv-line" d="M356,476.6L384,476.6Q392,476.6 392,484.6L392,550Q392,558 400,558L428,558"/></g></g><g></g><g><g class="mv-node" data-node="root" data-kind="root"><rect class="mv-shape mv-pill" x="28" y="28" width="128" height="60" rx="30"/><text><tspan x="92" y="62.5">Ordering</tspan></text></g><g class="mv-node" data-node="Buying" data-kind="step"><rect class="mv-shape" x="228" y="28" width="128" height="60" rx="8"/><path class="mv-icon" transform="translate(259.7,50)" d="M1.5 2.5H3.5L5.5 10.5H12.5L14 5H4.2M5.2 13.2A1 1 0 1 0 7.2 13.2A1 1 0 1 0 5.2 13.2M10.8 13.2A1 1 0 1 0 12.8 13.2A1 1 0 1 0 10.8 13.2"/><text><tspan x="303" y="62.5">Buying</tspan></text></g><g class="mv-node" data-node="quote" data-kind="step"><rect class="mv-shape" x="428" y="128" width="128" height="60" rx="8"/><text><tspan x="492" y="154.5">Ask for</tspan><tspan x="492" y="170.5"><tspan class="mv-strong">quotes</tspan></tspan></text></g><g class="mv-node" data-node="order" data-kind="step"><rect class="mv-shape" x="428" y="28" width="128" height="60" rx="8"/><text><tspan x="492" y="54.5">Raise the</tspan><tspan x="492" y="70.5">order</tspan></text></g><g class="mv-node" data-node="Approved_by_a_manager" data-kind="control"><rect class="mv-shape" x="628" y="28" width="128" height="60" rx="8"/><rect class="mv-stripe" x="629" y="36" width="4" height="44"/><text><tspan x="692" y="54.5">Approved by</tspan><tspan x="692" y="70.5">a manager</tspan></text></g><g class="mv-node" data-node="Receiving" data-kind="step"><rect class="mv-shape" x="228" y="228" width="128" height="60" rx="8"/><path class="mv-icon" transform="translate(249.1,250)" d="M1.5 3.8H9.5V10.6H1.5ZM9.5 6.2H12.4L14.5 8.6V10.6H9.5M3 12.3A1.6 1.6 0 1 0 6.2 12.3A1.6 1.6 0 1 0 3 12.3M10 12.3A1.6 1.6 0 1 0 13.2 12.3A1.6 1.6 0 1 0 10 12.3"/><text><tspan x="303" y="262.5">Receiving</tspan></text></g><g class="mv-node" data-node="Check_the_delivery" data-kind="step"><rect class="mv-shape" x="428" y="228" width="128" height="60" rx="8"/><text><tspan x="492" y="254.5">Check the</tspan><tspan x="492" y="270.5">delivery</tspan></text></g><g class="mv-node" data-node="ret" data-kind="decision"><polygon class="mv-shape" points="450,328 534,328 556,358 534,388 450,388 428,358"/><text><tspan x="492" y="362.5">Returns</tspan></text></g><g class="mv-node" data-node="Paying" data-kind="step"><rect class="mv-shape" x="228" y="428" width="128" height="60" rx="8"/><path class="mv-icon" transform="translate(259.7,450)" d="M1.5 3.5H14.5V12.5H1.5ZM1.5 6.6H14.5M4 10H7"/><text><tspan x="303" y="462.5">Paying</tspan></text></g><g class="mv-node" data-node="inv" data-kind="control"><rect class="mv-shape" x="428" y="428" width="128" height="60" rx="8"/><rect class="mv-stripe" x="429" y="436" width="4" height="44"/><text><tspan x="492" y="454.5">Match the</tspan><tspan x="492" y="470.5">invoice</tspan></text></g><g class="mv-node" data-node="Pay_in_thirty_days" data-kind="step"><rect class="mv-shape" x="428" y="528" width="128" height="60" rx="8"/><text><tspan x="492" y="554.5">Pay in <tspan class="mv-em">thirty</tspan></tspan><tspan x="492" y="570.5">days</tspan></text></g></g>
+</g>
+</svg>
