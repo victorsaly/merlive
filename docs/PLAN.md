@@ -88,10 +88,15 @@ each kind (the third column of `READERS` in parse.mjs: a card, a class, an entit
 and a page with no lines that says nothing of a flow (`linked` in the page's data); a packet near Mermaid's width
 (a TCP header 1140px, was 2408): a `cell` shape with less room round its words, fields 4px apart with P2 holding a
 grid with nothing linked to its cells, and P6 holding the line over a name to its block's own width.
+A timeline too wide for a screen runs on in bands (`wraps` on the model, the fewest that fit chosen in
+`layout()`; `%% wrap: no` keeps one row), and no line runs along a frame's edge (P5; the grid router takes the gap
+outside the frames round a box, `rim` in grid.mjs).
 
 Left:
 
-1. **A timeline does not wrap** (nine periods are 1592px), and a long section name widens every section.
+1. **A long section name widens every section** of a timeline: a frame's name is never wrapped, and every column
+   of a grid is as wide as every other, so one name of sixty letters makes every column 469px. A frame name that
+   wraps onto a second line, as a box's words do, would fix it.
 2. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
    colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`.
 3. **Look, sample by sample**: one screenshot of each kind beside Mermaid's was looked at; the rest pass their

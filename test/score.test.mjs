@@ -46,6 +46,15 @@ describe('score: what Merlive places itself passes', () => {
 });
 
 describe('score: a broken rule is named, with where', () => {
+  it('names a line that runs along the edge of a group (P5)', () => {
+    const m = parse('flowchart TD\n  subgraph G [Group]\n    A\n  end\n  B --> A'), lay = layout(m), g = lay.groups[0];
+    const e = Object.values(lay.edges)[0];
+    e.points = [{ x: g.x - 20, y: g.y + 1 }, { x: g.x + g.w / 2, y: g.y + 1 }, { x: g.x + g.w / 2, y: lay.nodes.A.y - lay.nodes.A.h / 2 }];
+    const p5 = /** @type {any} */ (score(m, lay, builtIn).checks.find((c) => c.id === 'P5'));
+    assert.equal(p5.ok, false);
+    assert.match(p5.detail, /runs along the edge of the group "Group"/);
+  });
+
   it('P1 when a box of the main path is off the line', () => {
     const { model, lay } = check(orders);
     lay.nodes.C.x += 40;

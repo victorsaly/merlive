@@ -37,7 +37,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {Edge[]} edges
  * @property {Record<string,string>} notes
  * @property {Step[]} steps
- * @property {{main?:string[],side?:'left'|'right',turn?:boolean}} hints turn: false keeps a wide left-to-right flow as it was written
+ * @property {{main?:string[],side?:'left'|'right',turn?:boolean,wrap?:boolean}} hints turn: false keeps a wide left-to-right flow as it was written; wrap: false keeps a wide timeline in one row
  * @property {Record<string,string>} classes the colour an author gave each class with classDef, to find what it means
  * @property {Record<string,string>} [meanings] what a kind of box means, in its author's words (`%% kind red: Read-only data`): the legend's name for it
  * @property {{id:string,title:string,members:string[],parent?:string}[]} groups the author's subgraphs, outer before inner: what each is called, every box in it, and the group it is inside
@@ -46,6 +46,7 @@ import { isSequence, parseSequence } from './sequence.mjs';
  * @property {'grid'} [placedBy] set when its boxes are placed where its author put them and not by rule: a block diagram whose meaning is in its grid
  * @property {string} [placedWhy] what in it says so, in a sentence
  * @property {import('./block.mjs').Grid} [grid] a block diagram as its author placed it, cell by cell
+ * @property {import('./block.mjs').Grid[]} [wraps] the same grid run on in bands (each says how many), fewest first, for when it is too wide for a screen in one row (a timeline)
  */
 
 // Longest opener first, so "([" is not read as "(" and then "[". A shape that leans may close either way: it
@@ -529,6 +530,8 @@ export function parse(src) {
     if (side) return void (model.hints.side = /** @type {'left'|'right'} */ (side[1]));
     const turn = /^%%\s*turn\s*:\s*(yes|no)\s*$/.exec(text);
     if (turn) return void (model.hints.turn = turn[1] === 'yes');
+    const wrap = /^%%\s*wrap\s*:\s*(yes|no)\s*$/.exec(text);
+    if (wrap) return void (model.hints.wrap = wrap[1] === 'yes');
     if (text.startsWith('%%{')) settings.push(text);
     if (text.startsWith('%%')) return;
 

@@ -10,7 +10,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
-import { layout } from '../skills/merlive/scripts/layout.mjs';
+import { layout, measure } from '../skills/merlive/scripts/layout.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { builtIn } from '../skills/merlive/scripts/design.mjs';
 import { page, picture } from '../skills/merlive/scripts/render.mjs';
@@ -286,6 +286,69 @@ describe('timeline: placed on the grid it was written as', () => {
 
   it('draws a long timeline as it was written, every rule kept', () => {
     const m = timeline(Array.from({ length: 9 }, (_, i) => `200${i} : Something that happened in the year 200${i} : And another thing`).join('\n'));
+    assert.deepEqual(broken(m), []);
+  });
+});
+
+describe('timeline: wrapped into bands when too wide for a screen', () => {
+  const year = 'January : Budget set\nFebruary : Raised\nMarch : Approved\nApril : Sent\nMay : Chased\nJune : Delivered\nJuly : Checked\nAugust : Invoiced\nSeptember : Paid';
+  const y = (/** @type {any} */ lay, /** @type {number} */ i) => lay.nodes[`period${i}`].y, x = (/** @type {any} */ lay, /** @type {number} */ i) => lay.nodes[`period${i}`].x;
+
+  it('runs on in a second band, as a line of words does, with as many periods in each as it can', () => {
+    const m = timeline(year), lay = layout(m);
+    assert.ok(lay.width <= measure.wide, `${lay.width}px`);
+    // Five and four, not eight and one.
+    assert.deepEqual([1, 2, 3, 4, 5].map((i) => y(lay, i)), Array(5).fill(y(lay, 1)));
+    assert.deepEqual([6, 7, 8, 9].map((i) => y(lay, i)), Array(4).fill(y(lay, 6)));
+    assert.ok(y(lay, 6) > lay.nodes.event1_1.y, 'the second band is under the first, events and all');
+    assert.equal(x(lay, 6), x(lay, 1), 'and starts at the same edge');
+    assert.ok(lay.nodes.event6_1.y > y(lay, 6) && lay.nodes.event6_1.x === x(lay, 6));
+    assert.deepEqual(broken(m), []);
+  });
+
+  it('says so, and how wide it would be in one row', () => {
+    const lay = layout(timeline(year));
+    assert.match(lay.warnings.join('\n'), /in 2 bands: in one row it would be 1592px wide, wider than most screens\. "%% wrap: no" keeps it in one/);
+  });
+
+  it('takes time on from the end of one band to the start of the next, round everything and through nothing', () => {
+    const m = timeline(year), lay = layout(m), on = m.edges.find((e) => e.from === 'period5' && e.to === 'period6');
+    const pts = lay.edges[/** @type {any} */ (on).id].points, last = pts[pts.length - 1];
+    assert.ok(Math.abs(last.x - x(lay, 6)) < lay.nodes.period6.w / 2 && last.y <= top(lay.nodes.period6), 'into the top of the first period of the next band');
+    assert.equal(score(m, lay, builtIn).checks.find((c) => c.id === 'P3')?.ok, true);
+  });
+
+  it('stays in one row when its author says so, or when it fits', () => {
+    assert.equal(layout(timeline(`${year}\n%% wrap: no`)).width, 1592);
+    const lay = layout(timeline(week));
+    assert.equal(new Set([1, 2, 3].map((i) => y(lay, i))).size, 1);
+    assert.deepEqual(lay.warnings, []);
+  });
+
+  it('is not wrapped top to bottom, where it is tall and not wide', () => {
+    const lay = layout(timeline(year, 'timeline TD'));
+    assert.equal(new Set([1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => x(lay, i))).size, 1);
+  });
+
+  it('takes time on between sections through the gap between their frames, not along the edge of one (P5)', () => {
+    const m = timeline('title From order to invoice\nsection Buying\nMonday : Raised by the buyer : Checked against the budget\nTuesday : Approved : Sent to the supplier\nsection Waiting\nWednesday\nsection Delivery\nFriday : Delivered to the warehouse\nNext Monday : Invoiced : Paid');
+    const lay = layout(m), on = /** @type {any} */ (m.edges.find((e) => e.from === 'period3' && e.to === 'period4')), pts = lay.edges[on.id].points;
+    const delivery = /** @type {any} */ (lay.groups.find((g) => g.title === 'Delivery')), above = Math.max(...lay.groups.filter((g) => g.y < delivery.y).map((g) => g.y + g.h));
+    const across = pts.find((p, i) => i > 0 && p.y === pts[i - 1].y);
+    assert.ok(across && across.y > above && across.y < delivery.y, `along y ${across?.y}, between ${above} and ${delivery.y}`);
+    assert.equal(score(m, lay, builtIn).checks.find((c) => c.id === 'P5')?.ok, true);
+  });
+
+  it('breaks between sections, never inside one, with each frame round its own periods', () => {
+    const quarters = ['Q1', 'Q2', 'Q3', 'Q4'].map((q, i) => `section ${q}\n${[1, 2, 3].map((d) => `Month ${i * 3 + d} : Done`).join('\n')}`).join('\n');
+    const m = timeline(quarters), lay = layout(m);
+    assert.ok(lay.width <= measure.wide, `${lay.width}px`);
+    const rows = [...new Set(lay.groups.map((g) => g.y))];
+    assert.ok(rows.length >= 2, `${rows.length} band`);
+    for (const g of lay.groups) {
+      const inside = /** @type {any} */ (m.groups.find((f) => f.id === g.id)).members.filter((/** @type {string} */ id) => id.startsWith('period')).map((/** @type {string} */ id) => lay.nodes[id]);
+      for (const n of inside) assert.ok(n.x > g.x && n.x < g.x + g.w && n.y > g.y && n.y < g.y + g.h, `${n.id} is outside ${g.id}`);
+    }
     assert.deepEqual(broken(m), []);
   });
 });

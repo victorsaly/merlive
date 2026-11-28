@@ -1,7 +1,7 @@
 // Why: a rule nobody checks is a wish. Every placement rule in docs/PLACEMENT.md is a check here, so a
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
-import { compartmentsOf, hitsBox, meet, measure, overNeeds, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf, wrap } from './layout.mjs';
+import { compartmentsOf, frameEdge, hitsBox, meet, measure, overNeeds, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf, wrap } from './layout.mjs';
 import { colourChecks, looksOf } from './design.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
@@ -114,6 +114,8 @@ export function score(model, lay, design) {
     if (m.overlaps) along.push(`${a.id} and ${b.id} run along each other`);
   }));
   // Where its author placed the blocks, a crossing is not forced by the graph but chosen with the places: none is forgiven for it.
+  // A frame's edge is a line too: a link that runs along it reads as part of the frame.
+  for (const e of edges) for (const f of lay.groups) if (meet(e.points, frameEdge(f)).overlaps) along.push(`${e.id} runs along the edge of the group "${f.title || f.id}"`);
   const allowed = Math.floor(edges.length / limits.linksPerCrossing), forced = lay.grids ? 0 : forcedCrossings(model, lay);
   const count = crossings === 1 ? '1 crossing' : `${crossings} crossings`;
   const tooMany = forced ? `${count}; ${edges.length} links allow ${allowed}, and the diagram forces ${forced} more` : `${count}, and ${edges.length} links allow ${allowed}`;

@@ -6,7 +6,7 @@
 // rows and columns. What comes out is what layout.mjs gives, so it is drawn and checked as any diagram is.
 // Pure: a model in, coordinates out.
 
-import { compartmentsOf, extraHeight, hitsBox, linesOf, measure, meet, overNeeds, roomFor, rowsRoom, segmentsOf, wordsFor, wrap } from './layout.mjs';
+import { compartmentsOf, extraHeight, frameEdge, hitsBox, linesOf, measure, meet, overNeeds, roomFor, rowsRoom, segmentsOf, wordsFor, wrap } from './layout.mjs';
 import { inset } from './shapes.mjs';
 
 /** @typedef {import('./parse.mjs').Model} Model */
@@ -49,6 +49,8 @@ export const gridMeasure = {
 
 /** The places a line may leave a side by, in port steps from its middle, and the lines of a gap it may take, in track steps: nearest first. */
 const PORTS = [0, 1, -1, 2, -2], TRACKS = [0, 1, -1];
+/** Whether each end's gap is outside the frames round it, as [a, b]: beside both blocks first, as before frames were thought of. */
+const SIDES = /** @type {const} */ ([[false, false], [false, true], [true, false], [true, true]]);
 
 const vertical = (/** @type {Side} */ side) => side === 'top' || side === 'bottom';
 
@@ -230,6 +232,15 @@ export function placeGrid(model) {
   const edge = (/** @type {Placed} */ n, /** @type {Side} */ side) => (side === 'top' ? n.y - n.h / 2 : side === 'bottom' ? n.y + n.h / 2 : side === 'left' ? n.x - n.w / 2 : n.x + n.w / 2);
   const downOr = (/** @type {number} */ s) => /** @type {Side} */ (s > 0 ? 'bottom' : 'top'), rightOr = (/** @type {number} */ s) => /** @type {Side} */ (s > 0 ? 'right' : 'left');
   const outer = { l: Math.min(...all.map((n) => n.x - n.w / 2)), r: Math.max(...all.map((n) => n.x + n.w / 2)) };
+  // Where a line runs along a gap beside a block, the gap is outside the frames round that block that do not
+  // also hold the other end: inside them, half a gap from the block is the frame's own margin, on its edge.
+  const holds = (/** @type {{x:number,y:number,w:number,h:number}} */ f, /** @type {Placed} */ n) => n.x > f.x && n.x < f.x + f.w && n.y > f.y && n.y < f.y + f.h;
+  const rim = (/** @type {Placed} */ n, /** @type {Placed} */ other, /** @type {Side} */ side) => {
+    const round = frames.filter((f) => holds(f, n) && !holds(f, other));
+    const ends = round.map((f) => (side === 'top' ? f.y : side === 'bottom' ? f.y + f.h : side === 'left' ? f.x : f.x + f.w));
+    return side === 'top' || side === 'left' ? Math.min(edge(n, side), ...ends) : Math.max(edge(n, side), ...ends);
+  };
+  const rims = frames.map(frameEdge);
 
   /**
    * Every way from a to b, each as what makes its points from where it leaves a (oa px off the middle of the
@@ -262,11 +273,14 @@ export function placeGrid(model) {
     }
     // Up or down out of a. With b in the same row there is no way "towards" it, so below is tried, then above,
     // and the line comes back into the same side of b it left a by.
-    for (const dy of sy ? [sy] : [1, -1]) {
+    // Each end's gap is tried beside its block, then outside the frames round it (see `rim`): leaving a period
+    // with its events under it, the line has to keep beside it; coming into the next section, outside its frame.
+    for (const [atA, atB] of SIDES) for (const dy of sy ? [sy] : [1, -1]) {
+      const near = (/** @type {Placed} */ n, /** @type {Placed} */ other, /** @type {Side} */ side, /** @type {boolean} */ out) => (out ? rim(n, other, side) : edge(n, side));
       const into = sy ? -dy : dy, from = downOr(dy), to = downOr(into);
       const out = (/** @type {number} */ oa) => ({ x: a.x + oa, y: edge(a, from) }), in_ = (/** @type {number} */ ob) => ({ x: b.x + ob, y: edge(b, to) });
-      const beyond = dy > 0 ? Math.max(edge(a, from), sy ? -Infinity : edge(b, to)) : Math.min(edge(a, from), sy ? Infinity : edge(b, to));
-      const byA = (/** @type {number} */ t) => beyond + (dy * gapY) / 2 + t, byB = (/** @type {number} */ t) => (sy ? edge(b, to) + (into * gapY) / 2 : byA(0)) + t;
+      const beyond = dy > 0 ? Math.max(near(a, b, from, atA), sy ? -Infinity : near(b, a, to, atB)) : Math.min(near(a, b, from, atA), sy ? Infinity : near(b, a, to, atB));
+      const byA = (/** @type {number} */ t) => beyond + (dy * gapY) / 2 + t, byB = (/** @type {number} */ t) => (sy ? near(b, a, to, atB) + (into * gapY) / 2 : byA(0)) + t;
       // Along the gap beside a, or the gap beside b.
       ways.push((oa, ob, ta) => ({ pts: [out(oa), { x: a.x + oa, y: byA(ta) }, { x: b.x + ob, y: byA(ta) }, in_(ob)], from, to }));
       if (sy) ways.push((oa, ob, _ta, tb) => ({ pts: [out(oa), { x: a.x + oa, y: byB(tb) }, { x: b.x + ob, y: byB(tb) }, in_(ob)], from, to }));
@@ -278,10 +292,11 @@ export function placeGrid(model) {
       }
     }
     // Left or right out of a, the same way turned a quarter: for a block straight above another with one between.
-    for (const dx of sx ? [sx] : [1, -1]) {
+    for (const [atA, atB] of SIDES) for (const dx of sx ? [sx] : [1, -1]) {
+      const near = (/** @type {Placed} */ n, /** @type {Placed} */ other, /** @type {Side} */ side, /** @type {boolean} */ out) => (out ? rim(n, other, side) : edge(n, side));
       const into = sx ? -dx : dx, from = rightOr(dx), to = rightOr(into);
-      const beyond = dx > 0 ? Math.max(edge(a, from), sx ? -Infinity : edge(b, to)) : Math.min(edge(a, from), sx ? Infinity : edge(b, to));
-      const byA = (/** @type {number} */ t) => beyond + (dx * gapX) / 2 + t, byB = (/** @type {number} */ t) => (sx ? edge(b, to) + (into * gapX) / 2 : byA(0)) + t;
+      const beyond = dx > 0 ? Math.max(near(a, b, from, atA), sx ? -Infinity : near(b, a, to, atB)) : Math.min(near(a, b, from, atA), sx ? Infinity : near(b, a, to, atB));
+      const byA = (/** @type {number} */ t) => beyond + (dx * gapX) / 2 + t, byB = (/** @type {number} */ t) => (sx ? near(b, a, to, atB) + (into * gapX) / 2 : byA(0)) + t;
       ways.push((oa, ob, ta) => ({ pts: [{ x: edge(a, from), y: a.y + oa }, { x: byA(ta), y: a.y + oa }, { x: byA(ta), y: b.y + ob }, { x: edge(b, to), y: b.y + ob }], from, to }));
       if (sx) ways.push((oa, ob, _ta, tb) => ({ pts: [{ x: edge(a, from), y: a.y + oa }, { x: byB(tb), y: a.y + oa }, { x: byB(tb), y: b.y + ob }, { x: edge(b, to), y: b.y + ob }], from, to }));
     }
@@ -327,6 +342,7 @@ export function placeGrid(model) {
           if (!least || blocked < least.blocked) least = { blocked, pts, from: made.from, to: made.to };
           return;
         }
+        if (rims.some((f) => meet(pts, f).overlaps)) return;
         let crossings = 0;
         for (const other of routed) {
           const met = meet(pts, other.pts);

@@ -136,11 +136,50 @@ export function timelineReader({ model, node, say, connect, frame, unframe, warn
    * and its other events in the rows under that.
    * @returns {Grid}
    */
-  const gridOf = (/** @type {Period[]} */ run) => {
+  const gridOf = (/** @type {Period[]} */ run, columns = run.length) => {
     if (down) return { columns: 2, cells: run.flatMap((p) => [block(p.node, p.line), p.events[0] ? block(p.events[0], p.line) : space(p.line), ...p.events.slice(1).flatMap((e) => [space(p.line), block(e, p.line)])]) };
+    // A row of a band with fewer periods than the grid has columns is filled out with spaces, so that the
+    // next row starts at the left edge.
+    const fill = (/** @type {Cell[]} */ row) => [...row, ...Array.from({ length: columns - row.length }, () => space(run[run.length - 1].line))];
     const deepest = Math.max(0, ...run.map((p) => p.events.length));
-    const rows = Array.from({ length: deepest }, (_, r) => run.map((p) => (p.events[r] ? block(p.events[r], p.line) : space(p.line))));
-    return { columns: run.length, cells: [...run.map((p) => block(p.node, p.line)), ...rows.flat()] };
+    const rows = Array.from({ length: deepest }, (_, r) => fill(run.map((p) => (p.events[r] ? block(p.events[r], p.line) : space(p.line)))));
+    return { columns, cells: [...fill(run.map((p) => block(p.node, p.line))), ...rows.flat()] };
+  };
+
+  /**
+   * The same periods run on in bands, as a line of words runs on, for when one row is wider than a screen
+   * (layout.mjs takes the fewest bands that fit): one grid for each number of bands there can be, fewest
+   * first. With no sections the bands are as even as they can be, nine periods as five and four and not eight
+   * and one. With sections a band is cut only between two, so a frame stays round all its periods, and each
+   * number of bands is made in the fewest columns it can be.
+   * @returns {Grid[]}
+   */
+  const bandsOf = (/** @type {{id:string,line:number,periods:Period[]}[]} */ runs, /** @type {boolean} */ framed) => {
+    const n = periods.length;
+    /** @type {Map<number, number>} bands to columns */
+    const made = new Map();
+    if (!framed) {
+      for (let b = 2; b <= n; b++) {
+        const k = Math.ceil(n / b), bands = Math.ceil(n / k);
+        if (!made.has(bands)) made.set(bands, k);
+      }
+      return [...made].map(([bands, k]) => ({
+        columns: k,
+        bands,
+        cells: Array.from({ length: bands }, (_, i) => gridOf(periods.slice(i * k, (i + 1) * k), k).cells).flat(),
+      }));
+    }
+    const sizes = runs.map((r) => r.periods.length);
+    for (let k = Math.max(...sizes); k < n; k++) {
+      // As grid.mjs fills rows: a section that does not fit what is left of a band starts the next.
+      let bands = 1, used = 0;
+      for (const size of sizes) {
+        if (used + size > k) [bands, used] = [bands + 1, 0];
+        used += size;
+      }
+      if (bands > 1 && !made.has(bands)) made.set(bands, k);
+    }
+    return [...made].sort(([a], [b]) => a - b).map(([bands, k]) => ({ columns: k, bands, cells: runs.map((run) => ({ is: /** @type {const} */ ('group'), id: run.id, span: run.periods.length, line: run.line, grid: gridOf(run.periods) })) }));
   };
 
   const done = () => {
@@ -158,6 +197,8 @@ export function timelineReader({ model, node, say, connect, frame, unframe, warn
     model.grid = held.length
       ? { columns: down ? 1 : 'auto', cells: runs.map((run) => ({ is: 'group', id: run.id, span: down ? 1 : run.periods.length, line: run.line, grid: gridOf(run.periods) })) }
       : gridOf(periods);
+    // Top to bottom a timeline is tall, not wide: it has nothing to run on into.
+    if (!down) model.wraps = bandsOf(runs, held.length > 0);
     // Nothing is wrong with it, so nothing is said against it: why is kept for whoever asks.
     model.placedBy = 'grid';
     model.placedWhy = `a timeline is the order its periods were written in, ${down ? 'one under another, each with its events beside it' : 'side by side, each with its events under it'}`;

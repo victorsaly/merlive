@@ -97,6 +97,9 @@ export const linesOf = (/** @type {import('./parse.mjs').Node} */ n, /** @type {
 export const overNeeds = (/** @type {{over?:string,shape:import('./shapes.mjs').Shape}} */ n) =>
   n.over ? n.over.length * measure.overGlyph + (n.shape === 'cell' ? form.cellPad : 2 * measure.overIn) : 0;
 
+/** The edge of a frame, as a line once round it: a link may cross it, and may not run along it (P5). */
+export const frameEdge = (/** @type {{x:number,y:number,w:number,h:number}} */ f) => [{ x: f.x, y: f.y }, { x: f.x + f.w, y: f.y }, { x: f.x + f.w, y: f.y + f.h }, { x: f.x, y: f.y + f.h }, { x: f.x, y: f.y }];
+
 /** How many characters a row may run to in a box of this width. */
 export const rowsRoom = (/** @type {number} */ width) => Math.floor((width - 2 * measure.rowIn) / measure.rowGlyph);
 
@@ -216,7 +219,7 @@ export function meet(/** @type {Pt[]} */ one, /** @type {Pt[]} */ other) {
  */
 export function layout(model) {
   // A block diagram whose meaning is in its grid is placed on that grid, where its author put each block.
-  if (model.placedBy === 'grid' && model.grid) return placeGrid(model);
+  if (model.placedBy === 'grid' && model.grid) return wrapped(model);
   // Boxes of different heights are placed top to bottom only, for now: across the flow they would need lanes
   // of different widths.
   const box = boxFor(model);
@@ -230,6 +233,26 @@ export function layout(model) {
   // Turned, it is read from the top, as a page is, whichever side it was written from.
   turned.warnings.unshift(`written ${model.reversed ? 'right to left' : 'left to right'}, drawn top to bottom: left to right it would be ${first.width}px wide, wider than most screens. "%% turn: no" keeps it as written`);
   return turned;
+}
+
+/**
+ * A grid as its author wrote it; or, where that is wider than a screen and the reader wrote it in bands as well
+ * (a timeline, whose order reads on from the end of one line to the start of the next as words do), in the
+ * fewest bands that fit. Where none fits, the narrowest.
+ * @param {Model} model
+ * @returns {Layout}
+ */
+function wrapped(model) {
+  const first = placeGrid(model);
+  if (first.width <= measure.wide || !model.wraps?.length || model.hints.wrap === false) return first;
+  let best = first, bands = 1;
+  for (const grid of model.wraps) {
+    const lay = placeGrid({ ...model, grid });
+    if (lay.width < best.width) [best, bands] = [lay, grid.bands ?? 2];
+    if (lay.width <= measure.wide) break;
+  }
+  if (best !== first) best.warnings.unshift(`drawn in ${bands} bands: in one row it would be ${first.width}px wide, wider than most screens. "%% wrap: no" keeps it in one`);
+  return best;
 }
 
 /**

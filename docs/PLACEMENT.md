@@ -82,7 +82,12 @@ each have a channel of their own, on whichever side crosses less. A straight lin
 A box and the box under it have their ports at the same places. Where a line leaving the one and a line entering
 the other would lie on each other in the room between them, the line entering steps aside by half a port.
 
+A group's frame is a line too. A link may cross it, going in or out, but never run along it: a link that ran
+along the top of a frame would read as part of the frame. Where a link runs along the gap beside a box in a
+frame, the gap is the one outside that frame, unless the frame holds the other end as well.
+
 - **Fail:** two links into the same box arrive on top of each other, so a reader cannot tell them apart.
+- **Fail:** a link runs two pixels inside the top of a frame, along it, to the box it goes into.
 
 ## P6. Words fit their box
 
@@ -152,6 +157,10 @@ open, an arrow drawn as a block), Merlive keeps the grid, and the rules above ar
   the blocks are, so a crossing is theirs to remove by moving one.
 - **P6**, **P7** and **P8** are unchanged; a block that spans columns has the room of its own width, and the short
   line over its name is held to that width too, not to one column's.
+
+A timeline is a grid of its author's that may run on in bands (see the timeline section of the skill's
+reference): the same grid cut after as many periods as fit a screen, every band starting at the left edge, and
+the rules above held by every band as they are by one.
 
 - **What to do when it fails:** give a link room with a `space`, or move a block to another cell. To have the
   diagram placed by rule instead, join every block to another with a link and take out the spans.

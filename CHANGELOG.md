@@ -16,6 +16,11 @@ More kinds that the two placements there are can draw: mindmaps, kanban boards, 
   with the first of them, so no line of a tree crosses another however many branches it has.
 - **A grid may say its own measures**: its narrowest column, the room between its cells, and that nothing runs
   between them. A block on a grid may list rows and carry a line over its name.
+- **A timeline too wide for a screen runs on in bands.** Nine periods were 1592 px across; they are now five and
+  four in two bands, with time's arrow running round from the end of one into the top of the next. With sections
+  a band is cut only between two. The command says so; `%% wrap: no` keeps one row.
+- **No line runs along the edge of a frame (P5).** A link into a section of the next band ran two pixels inside the
+  top of its frame; links on a grid now take the gap outside the frames round the box they go into.
 - **A packet is about as wide as Mermaid draws it.** A TCP header was 2408 px across; it is 1140. A field is a
   cell, which keeps 4 px of room either side of its words where a box of a flow keeps 14, and fields sit 4 px apart
   as Mermaid's do: P2 holds the blocks of a grid with nothing linked, whose author set its gap, to their cells

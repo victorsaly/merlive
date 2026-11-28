@@ -425,7 +425,12 @@ Where Merlive draws more than Mermaid 11 does: a period written before the first
 section (Mermaid leaves it out); two sections of one name are two sections, each with the periods written
 under it (Mermaid gives both every period of that name's sections).
 
-A timeline is as wide as it was written: nine periods are nine columns. It is not wrapped onto a second row.
+A timeline written left to right that would be wider than a screen (1,100 px) runs on in bands, as a line of
+words runs on: the first periods with their events under them, then the next band under those, starting at the
+same edge, with time's arrow running round from the end of one band into the top of the next. Nine periods are
+five and four, not eight and one; with sections a band is cut only between two, so a frame stays round all its
+periods. The command says how many bands, and how wide one row would have been. `%% wrap: no` keeps it in one
+row. A timeline drawn top to bottom is not wrapped.
 
 ## A packet
 
@@ -506,6 +511,7 @@ All are Mermaid comments, anywhere in the block.
 | `%% side: left` | Branches and loops go to the left of the main path (above it, left to right). Default `right` |
 | `%% kind red: Read-only data` | What a kind of box means. The legend, and a picked box, say this instead of the kind's own name. A kind its author named for a colour (`classDef red …`) with no such line is named in a `note,` line |
 | `%% turn: no` | A flow written left to right that would be wider than a screen (1,100 px) is drawn top to bottom, and the command says so. This keeps it as written |
+| `%% wrap: no` | A timeline written left to right that would be wider than a screen runs on in bands, and the command says so. This keeps it in one row |
 
 A step's path must follow links that exist; one that does not is named in a `note,` line and that part is left out.
 

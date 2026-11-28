@@ -70,8 +70,9 @@ export function judge(sample, source) {
   if (sample.says !== undefined && !model.warnings.some(told)) why.push(`it is not told: ${sample.says}`);
   if ((sample.placedBy ?? '') !== (model.placedBy ?? '')) why.push(sample.placedBy ? `placed by rule, though the corpus expects it on its author's ${sample.placedBy}` : `placed on its author's ${model.placedBy}, which the corpus does not expect`);
   if (sample.shapes && JSON.stringify(model.nodes.map((n) => n.shape)) !== JSON.stringify(sample.shapes)) why.push(`its shapes are read as ${model.nodes.map((n) => n.shape).join(', ')}`);
-  // That a flow is wide is true of the sample, not a thing Merlive failed to read.
-  why.push(...model.warnings.filter((w) => !told(w)), ...lay.warnings.filter((w) => !w.includes('will scroll on most screens') && !w.startsWith('written left to right, drawn top to bottom')));
+  // That a flow or a timeline is wide is true of the sample, not a thing Merlive failed to read: turned or run
+  // on in bands, it is all there.
+  why.push(...model.warnings.filter((w) => !told(w)), ...lay.warnings.filter((w) => !w.includes('will scroll on most screens') && !w.startsWith('written left to right, drawn top to bottom') && !/^drawn in \d+ bands: /.test(w)));
   const broken = score(model, lay, design).checks.filter((c) => !c.ok);
   const svg = model.nodes.length ? picture(model, lay, design, { title: sample.covers }) : '';
   if (broken.length) return { sample, result: 'refused', why: [...broken.map((c) => `${c.id} ${c.rule}: ${c.detail}`), ...why], svg };
