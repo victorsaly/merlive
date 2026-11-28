@@ -12,6 +12,8 @@ import { layout, measure } from '../skills/merlive/scripts/layout.mjs';
 import { builtIn, designWith } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { exits, help, run } from '../skills/merlive/scripts/merlive.mjs';
+import { page, picture } from '../skills/merlive/scripts/render.mjs';
+import { form } from '../skills/merlive/scripts/shapes.mjs';
 
 const state = (/** @type {string} */ body, head = 'stateDiagram-v2') => parse(`${head}\n${body}`);
 const boxes = (/** @type {import('../skills/merlive/scripts/parse.mjs').Model} */ m) => m.nodes.map((n) => [n.id, n.label, n.shape, n.kind]);
@@ -196,8 +198,39 @@ describe('state: choices, forks and joins', () => {
 
   it('gives a choice, a fork and a join their words when they have some', () => {
     const m = state('state "In budget?" as enough <<choice>>\nstate "Both at once" as split <<fork>>\nstate together <<join>>');
-    assert.deepEqual(boxes(m), [['enough', 'In budget?', 'diamond', 'decision'], ['split', 'Both at once', 'box', 'step'], ['together', 'together', 'box', 'step']]);
+    assert.deepEqual(boxes(m), [['enough', 'In budget?', 'diamond', 'decision'], ['split', 'Both at once', 'bar', 'fork'], ['together', 'together', 'bar', 'join']]);
     assert.deepEqual(m.warnings, []);
+  });
+});
+
+describe('state: a fork and a join drawn', () => {
+  const src = 'state split <<fork>>\nstate together <<join>>\nApproved --> split\nsplit --> Picking\nsplit --> Invoicing\nPicking --> together\nInvoicing --> together\ntogether --> Sent';
+
+  it('draws each as a bar across the flow, with no words on it, its name kept for a reader', () => {
+    const m = state(src), lay = layout(m);
+    const svg = picture(m, lay, builtIn, { title: '' });
+    assert.equal(svg.match(/class="mv-shape mv-bar"/g)?.length, 2);
+    assert.doesNotMatch(svg, />split</);
+    assert.doesNotMatch(svg, />together</);
+    const live = page(m, lay, builtIn, { title: '' });
+    assert.match(live, /aria-label="split, Fork"/);
+    assert.match(live, /aria-label="together, Join"/);
+  });
+
+  it('lies across the flow whichever way it runs: flat top to bottom, upright left to right', () => {
+    const bars = (/** @type {string} */ head) => {
+      const m = state(`${head}\n${src}`), svg = picture(m, layout(m), builtIn, { title: '' });
+      return [...svg.matchAll(/<rect class="mv-shape mv-bar"[^>]*width="([\d.]+)" height="([\d.]+)"/g)].map(([, w, h]) => Number(w) > Number(h));
+    };
+    assert.deepEqual(bars(''), [true, true]);
+    assert.deepEqual(bars('direction LR'), [false, false]);
+  });
+
+  it('is met by its lines at the bar, and passes every rule', () => {
+    const m = state(src), lay = layout(m), bar = lay.nodes.split;
+    const into = lay.edges['Approved-split'].points.at(-1);
+    assert.ok(into && Math.abs(into.y - (bar.y - form.bar / 2)) < 0.5, 'the line into the fork ends on the bar');
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), []);
   });
 });
 

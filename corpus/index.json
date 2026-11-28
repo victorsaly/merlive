@@ -902,8 +902,7 @@
       "file": "state/state-fork-join.mmd",
       "covers": "A fork and a join",
       "boxes": 6,
-      "links": 6,
-      "loses": "A fork and a join are boxes with their names in them, not bars"
+      "links": 6
     },
     {
       "file": "state/state-note-line.mmd",

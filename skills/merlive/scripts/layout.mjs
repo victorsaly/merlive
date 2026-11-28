@@ -2,7 +2,7 @@
 // on a grid by rule: the main path is one straight spine, everything else sits to one side, every box is the
 // same size, and lines turn at right angles and never share a port. Pure: a model in, coordinates out.
 
-import { form, inset, roomIn } from './shapes.mjs';
+import { asDrawn, form, inset, roomIn } from './shapes.mjs';
 import { gridMeasure, nameAt, placeGrid } from './grid.mjs';
 
 /** @typedef {import('./parse.mjs').Model} Model */
@@ -91,8 +91,9 @@ export const roomFor = (/** @type {{shape:import('./shapes.mjs').Shape,icon?:str
  * The lines of a box's words in a box of some width. Where the author broke the label, each of their lines is
  * kept and only wrapped if it must be; else the label is wrapped as it falls.
  */
+// A bar (a fork, a join) has no words on it: its name is said to a reader, and takes no room.
 export const linesOf = (/** @type {import('./parse.mjs').Node} */ n, /** @type {number} */ width) =>
-  n.breaks ? n.breaks.flatMap((b) => wrap(b, roomFor(n, width))) : wrap(n.label, roomFor(n, width));
+  n.shape === 'bar' ? [] : n.breaks ? n.breaks.flatMap((b) => wrap(b, roomFor(n, width))) : wrap(n.label, roomFor(n, width));
 
 /** How wide a box has to be for the short line over its name, which is never wrapped: a cell keeps less room either side of it, as it does of its words. */
 export const overNeeds = (/** @type {{over?:string,shape:import('./shapes.mjs').Shape}} */ n) =>
@@ -858,7 +859,7 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
   for (const r of routes) edges[r.e.id] = { id: r.e.id, points: tidy(r.points.map(place)), back: back.has(r.e.id), label: null };
   // A route ends at the edge of its box. A rhombus, a pill or a side that leans is further in than that, so each
   // line runs on until it meets the outline: it only ever gets longer, along the way it was already going.
-  const shapeOfBox = new Map(model.nodes.map((n) => [n.id, n.shape]));
+  const shapeOfBox = new Map(model.nodes.map((n) => [n.id, asDrawn(n.shape, dir)]));
   const meetOutline = (/** @type {Pt} */ p, /** @type {string} */ id) => {
     const n = nodes[id], shape = shapeOfBox.get(id) ?? 'box', near = (/** @type {number} */ a, /** @type {number} */ b) => Math.abs(a - b) < 0.5;
     if (near(p.y, n.y - n.h / 2)) p.y += inset(shape, 'top', p.x - n.x, n.w, n.h);

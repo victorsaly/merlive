@@ -4,11 +4,11 @@
 // words, and where a line meets it. Layout and drawing both ask here, so a line always ends on the outline.
 // Pure.
 
-/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'|'note'|'point'|'cell'|'arrow-right'|'arrow-left'|'arrow-up'|'arrow-down'|'arrow-x'|'arrow-y'} Shape */
+/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'|'note'|'point'|'bar'|'bar-upright'|'cell'|'arrow-right'|'arrow-left'|'arrow-up'|'arrow-down'|'arrow-x'|'arrow-y'} Shape */
 /** @typedef {'top'|'bottom'|'left'|'right'} Side */
 
 /** @type {Shape[]} */
-export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag', 'note', 'point', 'cell', 'arrow-right', 'arrow-left', 'arrow-up', 'arrow-down', 'arrow-x', 'arrow-y'];
+export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag', 'note', 'point', 'bar', 'bar-upright', 'cell', 'arrow-right', 'arrow-left', 'arrow-up', 'arrow-down', 'arrow-x', 'arrow-y'];
 
 // What is measured, named once.
 export const form = {
@@ -24,6 +24,7 @@ export const form = {
   notch: 14, // px a flag is cut in at the middle of its left side
   pillMost: 30, // px a pill's ends are rounded at most: a taller one (it says a sentence, or lists things) keeps flat sides for its words
   point: 7, // px from the middle of a point to its edge: a dot where lines meet and part, a little wider than a line's turn
+  bar: 8, // px a fork's or a join's bar is thick: a line and a half of a box's border, so it reads as a bar and not a line
   arrowHead: 16, // px from the back of a block arrow's head to its tip
   arrowBroad: 128, // px a block arrow that points up or down is broad at most: in a wider cell it stays an arrow, in the middle of it
   arrowShaft: 0.6, // the share of a block arrow's breadth its shaft takes: the head is wider, or it is no arrow
@@ -106,6 +107,18 @@ export function roomIn(/** @type {Shape} */ shape, /** @type {number} */ w) {
 }
 
 /** Where the middle of a shape's words sits, from the middle of its box: lower in a cylinder, under its rim; further right in a flag, past its notch. */
+// A bar's look: solid, in the colour of the lines it parts or gathers.
+const barLook = 'fill:var(--mv-edge);stroke:var(--mv-edge)';
+
+/**
+ * A bar lies across the flow: flat in a flow drawn top to bottom, upright in one drawn left to right. A flow may be
+ * turned from how it was written, so a bar is drawn for the way it is laid out, which only layout knows.
+ * @param {Shape} shape
+ * @param {'TD'|'LR'} direction as it is laid out
+ * @returns {Shape}
+ */
+export const asDrawn = (shape, direction) => (shape === 'bar' && direction === 'LR' ? 'bar-upright' : shape);
+
 export function wordsAt(/** @type {Shape} */ shape, /** @type {number} */ _h) {
   // A block arrow's words are in its shaft, which is off the middle by half of the one head it has.
   const arrow = arrowOf(shape), back = arrow && arrow.first !== arrow.last ? (arrow.last ? -form.arrowHead / 2 : form.arrowHead / 2) : 0;
@@ -142,6 +155,10 @@ export function inset(shape, side, off, w, h) {
     case 'diamond': return within((a / (along / 2)) * (across / 2));
     // A point is a dot in the middle of its box: a line runs on to it, or, past its edge, to the line through its middle.
     case 'point': return across / 2 - (a < form.point ? Math.sqrt(form.point ** 2 - a ** 2) : 0);
+    // A bar fills its box along the flow's breadth: a line from the side it faces runs on to it, and one at its
+    // end meets it there.
+    case 'bar': return flat ? across / 2 - form.bar / 2 : 0;
+    case 'bar-upright': return flat ? 0 : across / 2 - form.bar / 2;
     case 'pill': case 'double-circle': {
       // The ends are half circles: a side port meets one; a top port only past where the flat part ends.
       const r = Math.min(h / 2, form.pillMost), past = Math.max(0, a - ((flat ? w : h) / 2 - r));
@@ -189,6 +206,10 @@ export function outlineOf(shape, l, t, w, h, radius) {
   }
   switch (shape) {
     case 'pill': return { main: rect('mv-shape mv-pill', 0, Math.min(h / 2, form.pillMost)), more: [] };
+    // A bar is solid, in the colour of the lines it parts or gathers. The colour is on the bar, not in the styles
+    // every drawing carries, so a drawing with no bar is as it was.
+    case 'bar': return { main: `<rect class="mv-shape mv-bar" x="${n(l)}" y="${n(y - form.bar / 2)}" width="${n(w)}" height="${n(form.bar)}" rx="2" style="${barLook}"/>`, more: [] };
+    case 'bar-upright': return { main: `<rect class="mv-shape mv-bar" x="${n(x - form.bar / 2)}" y="${n(t)}" width="${n(form.bar)}" height="${n(h)}" rx="2" style="${barLook}"/>`, more: [] };
     case 'point': return { main: `<rect class="mv-shape mv-point" x="${n(x - form.point)}" y="${n(y - form.point)}" width="${n(2 * form.point)}" height="${n(2 * form.point)}" rx="${n(form.point)}"/>`, more: [] };
     case 'double-circle': return { main: rect('mv-shape mv-pill', 0, h / 2), more: [rect('mv-shape mv-detail mv-pill', form.ring, h / 2 - form.ring)] };
     case 'diamond': return { main: polygon([[x, t], [r, y], [x, u], [l, y]]), more: [] };

@@ -7,7 +7,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 ## In short
 
 - **Flowcharts:** of 70 features, 49 are drawn as written, 21 are drawn less something Merlive leaves out on purpose or does not have yet, 0 are only partly read, and 0 are refused.
-- **State diagrams:** of 27 features, 17 are drawn as written, 10 are drawn less something, 0 are only partly read, and 0 are refused.
+- **State diagrams:** of 27 features, 18 are drawn as written, 9 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, 0 are refused.
 - **Requirement diagrams:** of 46 features, 37 are drawn as written, 9 are drawn less something, 0 are only partly read, 0 are refused.
@@ -123,7 +123,7 @@ rules. Held to the same measure as the flowcharts above.
 | A composite state inside another | Drawn |  | [source](../corpus/state/state-composite-nested.mmd) | [picture](../corpus/drawn/state-composite-nested.svg) |
 | Transitions between composite states | Drawn, less something | A transition to a composite state is drawn to where it starts inside, and one from it from where it ends | [source](../corpus/state/state-composite-links.mmd) | [picture](../corpus/drawn/state-composite-links.svg) |
 | A choice | Drawn, less something | A choice is a decision the size of every box, with its name in it; Mermaid draws a small diamond with none | [source](../corpus/state/state-choice.mmd) | [picture](../corpus/drawn/state-choice.svg) |
-| A fork and a join | Drawn, less something | A fork and a join are boxes with their names in them, not bars | [source](../corpus/state/state-fork-join.mmd) | [picture](../corpus/drawn/state-fork-join.svg) |
+| A fork and a join | Drawn |  | [source](../corpus/state/state-fork-join.mmd) | [picture](../corpus/drawn/state-fork-join.svg) |
 | A note on one line, on either side | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/state/state-note-line.mmd) | [picture](../corpus/drawn/state-note-line.svg) |
 | A note written over several lines | Drawn, less something | A note is what a reader sees on picking its box in the page, and is printed with the page; it is not drawn beside the box, and a still picture does not carry it | [source](../corpus/state/state-note-block.mmd) | [picture](../corpus/drawn/state-note-block.svg) |
 | Concurrency: regions of a composite state parted by -- | Drawn |  | [source](../corpus/state/state-concurrency.mmd) | [picture](../corpus/drawn/state-concurrency.svg) |

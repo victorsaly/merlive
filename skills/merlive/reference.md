@@ -62,7 +62,7 @@ this page holds for them: the rules, the design, Merlive's own lines.
 | `state Review { … }` | A composite state: a group, with a start and an end of its own (`Review_start`, `Review_end`). A transition to it is drawn to where it starts inside, and one from it from where it ends |
 | `Review : In review`, `state "In review" as Review {` | What a composite state is called |
 | `state enough <<choice>>` | A decision, with its name or its words in it |
-| `state split <<fork>>`, `state together <<join>>` | A box, with its name or its words in it |
+| `state split <<fork>>`, `state together <<join>>` | A bar across the flow, as Mermaid draws it: flat top to bottom, upright left to right, of the kind Fork or Join. Its name or words are not written on it; a reader hears them, and the side panel shows them |
 | `note right of Draft : words`, `note left of Draft` … `end note` | The note on that box: what a reader sees on picking it |
 | `direction LR`, `direction BT`, `direction RL` | The way the diagram runs. A composite state's own direction is read past |
 | `classDef`, `class Held, Lost stopped`, `Held:::stopped` | Kinds, as in a flowchart |

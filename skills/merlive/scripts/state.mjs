@@ -157,6 +157,9 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
       }
       const n = state(id);
       if ((mark ?? markToo) === 'choice') n.shape = 'diamond';
+      // A fork parts the flow into what goes on at once, and a join waits for all of it: each is a bar across the
+      // flow, as Mermaid draws it, of a kind of its own, its name said to a reader and not written on it.
+      else if (mark ?? markToo) Object.assign(n, { shape: 'bar', kind: mark ?? markToo });
       if (words) say(n, describe(id, words));
       return true;
     }

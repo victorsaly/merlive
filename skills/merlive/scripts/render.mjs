@@ -4,7 +4,7 @@
 
 import { contrast, kindFill, looksOf, mix, rowShade } from './design.mjs';
 import { runtime } from './runtime.mjs';
-import { form, outlineOf, wordsAt } from './shapes.mjs';
+import { asDrawn, form, outlineOf, wordsAt } from './shapes.mjs';
 import { iconMeasure, icons } from './icons.mjs';
 import { columnsAt, compartmentsOf, measure, textOf, wrap } from './layout.mjs';
 
@@ -189,7 +189,7 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
   });
   const boxes = model.nodes.map((m) => {
     const b = lay.nodes[m.id], l = b.x - b.w / 2, t = b.y - b.h / 2, r = b.x + b.w / 2, u = b.y + b.h / 2;
-    const { main, more } = outlineOf(m.shape, l, t, b.w, b.h, design.radius), at = wordsAt(m.shape, b.h);
+    const { main, more } = outlineOf(asDrawn(m.shape, lay.direction), l, t, b.w, b.h, design.radius), at = wordsAt(m.shape, b.h);
     const shape = main + more.join('');
     // A box that lists rows keeps its name in a block at the top, the size a plain box is, with any short line
     // above it; under that, each compartment begins with a rule and lists its rows from the left.
