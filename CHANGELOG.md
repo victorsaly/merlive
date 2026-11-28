@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.5.6 (unreleased)
+## 0.5.7 (unreleased)
+
+- **A composite state runs the way it says**: `direction TB` inside a composite state of a diagram that runs left
+  to right (or `LR` in one that runs down) puts its states in a row across the flow, as a flowchart's group does
+  since 0.5.6. A region after `--` may say its own, and a direction said before the first `--` is the first
+  region's. A region laid as a row keeps clear of the region beside it.
+
+## 0.5.6 (2026-11-28)
 
 - **A group runs the way it says**: `direction LR` in a group of a flow drawn top to bottom (or `TB` in one drawn
   left to right) puts its boxes in a row across the flow, in the order they are linked, as Mermaid does. `RL` and

@@ -101,8 +101,14 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
 
     const way = LINES.direction.exec(text);
     if (way) {
-      // A composite state's own direction is read past, as a group's is: it runs the way the rest does.
-      if (open.length) return true;
+      // Inside a composite state, the way its own states run, or a region's after "--": layout lays one that runs
+      // across the flow as a row, as it does a flowchart's group.
+      const inside = open[open.length - 1];
+      if (inside) {
+        const id = inside.framed ? `${inside.id}/${inside.region}` : inside.id, g = model.groups.find((x) => x.id === id);
+        if (g) g.direction = /** @type {'TD'|'LR'|'BT'|'RL'} */ (way[1] === 'TB' ? 'TD' : way[1]);
+        return true;
+      }
       model.direction = way[1] === 'LR' || way[1] === 'RL' ? 'LR' : 'TD';
       if (way[1] === 'BT' || way[1] === 'RL') model.reversed = true;
       else delete model.reversed;
@@ -117,9 +123,13 @@ export function stateReader({ model, node, say, connect, frame, unframe, join, w
       parted.set(inside.id, regions);
       if (inside.framed) unframe();
       else if (inside.members.length) {
-        const first = `${inside.id}/1`, at = model.groups.findIndex((g) => g.id === inside.id);
+        const first = `${inside.id}/1`, at = model.groups.findIndex((g) => g.id === inside.id), outer = model.groups[at];
         for (const g of model.groups) if (g.parent === inside.id) g.parent = first;
-        model.groups.splice(at + 1, 0, { id: first, title: '', members: [...inside.members], parent: inside.id });
+        // A direction said before the "--" was said of these lines, so it is the first region's, not the
+        // composite state's round both.
+        const { direction } = outer;
+        delete outer.direction;
+        model.groups.splice(at + 1, 0, { id: first, title: '', members: [...inside.members], parent: inside.id, ...(direction && { direction }) });
         regions.push(first);
       }
       inside.region = Math.max(inside.region, 1) + 1;

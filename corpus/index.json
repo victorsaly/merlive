@@ -939,8 +939,7 @@
       "boxes": 4,
       "links": 3,
       "groups": 1,
-      "direction": "LR",
-      "loses": "The composite state's own direction is read past; it runs the way the rest does"
+      "direction": "LR"
     },
     {
       "file": "state/state-comments.mmd",

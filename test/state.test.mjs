@@ -282,6 +282,48 @@ describe('state: notes', () => {
   });
 });
 
+describe("state: a composite state's own direction", () => {
+  const src = 'direction LR\nDraft --> Checks\nstate Checks {\n  direction TB\n  Credit --> Stock\n}\nChecks --> Sent';
+
+  it('reads the way a composite state says it runs, and a region its own', () => {
+    assert.equal(state(src).groups.find((g) => g.id === 'Checks')?.direction, 'TD');
+    const parted = state('state Both {\n  A --> B\n  --\n  direction LR\n  C --> D\n}');
+    assert.equal(parted.groups.find((g) => g.id === 'Both/2')?.direction, 'LR');
+    assert.equal(parted.groups.find((g) => g.id === 'Both')?.direction, undefined);
+  });
+
+  it('runs a composite state written across the flow across it, as a flowchart group does', () => {
+    const m = state(src), lay = layout(m), n = lay.nodes;
+    assert.equal(lay.direction, 'LR');
+    assert.equal(n.Credit.x, n.Stock.x, 'one column');
+    assert.ok(n.Credit.y < n.Stock.y, 'top to bottom');
+    assert.deepEqual(lay.warnings, []);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), []);
+  });
+
+  it('gives the first region the direction said before its "--", not the composite state round it', () => {
+    // Before the "--" nothing says the lines are a region's; once it is read, they were the first region's.
+    const m = state('state Both {\n  direction LR\n  A --> B\n  --\n  direction LR\n  C --> D\n}');
+    assert.equal(m.groups.find((g) => g.id === 'Both/1')?.direction, 'LR');
+    assert.equal(m.groups.find((g) => g.id === 'Both')?.direction, undefined);
+    const lay = layout(m), n = lay.nodes;
+    assert.equal(n.A.y, n.B.y, 'the first region in a row');
+    assert.equal(n.C.y, n.D.y, 'the second region in a row');
+    assert.deepEqual(lay.warnings, []);
+  });
+
+  it('keeps a region laid as a row clear of the region beside it', () => {
+    // The row's first box feeds in from one side and the row runs toward the other, so its next box would have
+    // landed on the main path.
+    const m = state('state Both {\n  A --> B\n  --\n  direction LR\n  C --> D\n}'), lay = layout(m), n = lay.nodes;
+    assert.equal(n.C.y, n.D.y, 'the second region in a row');
+    assert.equal(n.A.x, n.B.x, 'the first in a column');
+    const apart = (/** @type {string} */ a, /** @type {string} */ b) => Math.abs(n[a].x - n[b].x) >= n[a].w || Math.abs(n[a].y - n[b].y) >= n[a].h;
+    assert.ok(['A', 'B'].every((a) => ['C', 'D'].every((b) => apart(a, b))), 'no box on another');
+    assert.deepEqual(lay.warnings, []);
+  });
+});
+
 describe('state: direction, kinds and what Mermaid sets', () => {
   it('follows the direction it is given, the last one said', () => {
     assert.equal(state('direction LR\nA --> B').direction, 'LR');

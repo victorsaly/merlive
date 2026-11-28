@@ -30,7 +30,7 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
 <p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 520 samples, Merlive draws 499 whole and 1 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>520</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>394</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>105</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>1</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>20</b></button></div>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>520</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>395</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>104</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>1</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>20</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -1024,10 +1024,10 @@ flowchart LR
   Submitted --&gt; Approved
 </pre></details>
 </article>
-<article class="card" data-result="less">
+<article class="card" data-result="drawn">
 <h3>A composite state with a direction of its own</h3>
-<p class="result"><b>Drawn, less something</b> <span class="why">The composite state's own direction is read past; it runs the way the rest does</span></p>
-<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-direction-composite.png" width="345" height="246" style="--w:345" alt="A composite state with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-direction-composite.svg" width="784" height="124" style="--w:784" alt="A composite state with a direction of its own, as Merlive draws it"></div></figure></div>
+<p class="result"><b>Drawn</b></p>
+<div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/state-direction-composite.png" width="345" height="246" style="--w:345" alt="A composite state with a direction of its own, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/state-direction-composite.svg" width="584" height="208" style="--w:584" alt="A composite state with a direction of its own, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>stateDiagram-v2
   direction LR
   Draft --&gt; Checks
