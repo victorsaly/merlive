@@ -319,7 +319,7 @@ look: the root in the middle, and a colour for each branch.
 | Two lines of the same words | Two boxes: every line is a box of its own. The second is `Words_2` in Merlive's own lines |
 | `[Square]`, `(Rounded)`, bare words | The design's own box, whose corners are the design's. A mindmap with both a square and a rounded box is told, once, that they are drawn alike |
 | `((Circle))` | A round-ended box |
-| `{{Hexagon}}` | A hexagon |
+| `{{Hexagon}}` | A hexagon. A shape says nothing more in a mindmap: a hexagon is no decision and a circle no start or end, as they are in a flowchart, so every box is of one kind unless a class says otherwise |
 | `))Bang((` | A box with a heavy outline: there is no burst here. Said once |
 | `)Cloud(` | A round-ended box with a dashed outline: there is no cloud here. Said once |
 | `((Ordering))`, with no id before it | The same shapes; the id is made from the words |

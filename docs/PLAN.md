@@ -97,11 +97,19 @@ Left:
 
 1. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
    colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`.
-2. **Look, sample by sample**: one screenshot of each kind beside Mermaid's was looked at; the rest pass their
-   rules. A packet of one-bit fields with four-letter names (`packet-bit`) is still 1396px: a column is as wide as
-   its widest one-bit name.
+2. **Look, sample by sample**, beside Mermaid's. Mindmaps are done (28 November): all 38 looked through. Found
+   and fixed: a hexagon, a circle and a cloud took a flowchart's kinds (Decision, Start or end), colour and all.
+   Found and left for Victor (below): the comb, and a sibling whose line leaves another side. Kanban boards,
+   timelines and packets are still to look through. A packet of one-bit fields with four-letter names
+   (`packet-bit`) is still 1396px: a column is as wide as its widest one-bit name.
 
 ## Waiting on Victor
+
+- **How a tree's lines leave a box** (from looking through the mindmaps). A box's lines to its children each leave
+  by a port of their own, so four children make a comb of four lines a few pixels apart (`mindmap-bushy`). A tree
+  is usually drawn with one trunk the branches leave from, but that is lines sharing a path, which P5 refuses. Is a
+  shared trunk wanted, for a tree's lines that have nothing at their ends? And in `mindmap-tree` one parent's line
+  to its second child leaves its bottom and the other's its right side: both clear, not alike.
 
 - **The tags.** No session so far could push a tag: the push is refused where the sessions run. None exists
   yet. In a clone:

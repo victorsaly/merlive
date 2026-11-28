@@ -161,6 +161,9 @@ export function mindmapReader({ model, node, say, connect, warn, wordsOf, indent
     // A wide flowchart is turned top to bottom to fit a screen. A tree is not, unless its author asks: turned,
     // every leaf would stand beside the last and it would be wider still.
     model.hints.turn ??= false;
+    // A shape in a mindmap is only a shape: a hexagon is no decision and a circle no start or end, as a flowchart's
+    // are, so a box of no class of its own is a plain one, and is not drawn or named in the legend as either.
+    for (const n of model.nodes) n.kind ||= 'step';
   };
 
   return { read, done };

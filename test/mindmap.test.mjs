@@ -12,7 +12,7 @@ import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { layout } from '../skills/merlive/scripts/layout.mjs';
 import { builtIn } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
-import { picture } from '../skills/merlive/scripts/render.mjs';
+import { page, picture } from '../skills/merlive/scripts/render.mjs';
 import { drawnAs } from '../skills/merlive/scripts/mindmap.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -110,6 +110,13 @@ describe('mindmap: the tree', () => {
 });
 
 describe('mindmap: shapes', () => {
+  it('gives a shape no meaning a flowchart gives it: a hexagon is no decision, a circle no start or end', () => {
+    const m = map('  root((Ordering))\n    a{{Buying}}\n    b((Paying))\n    c(Receiving)\n    d[Returns]\n    e))Late((\n    f)Idea(');
+    assert.deepEqual(m.nodes.map((n) => [n.id, n.kind]), [['root', 'root'], ['a', 'step'], ['b', 'step'], ['c', 'step'], ['d', 'step'], ['e', 'step'], ['f', 'step']]);
+    const html = page(m, layout(m), builtIn, { title: 't', source: 'x', version: '0' });
+    assert.doesNotMatch(html, /Decision|Start or end/);
+  });
+
   const shaped = (/** @type {string} */ line) => map(`  Root\n    ${line}`).nodes[1];
 
   it('reads each of Mermaid\'s shapes into the nearest one Merlive draws', () => {
