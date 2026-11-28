@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
-import { layout } from '../skills/merlive/scripts/layout.mjs';
+import { layout, measure } from '../skills/merlive/scripts/layout.mjs';
 import { apart, builtIn, contrast, designFrom, kindFill, mix, sights } from '../skills/merlive/scripts/design.mjs';
 import { forcedCrossings, score } from '../skills/merlive/scripts/score.mjs';
 
@@ -205,8 +205,20 @@ describe('score: a broken rule is named, with where', () => {
     Object.assign(name, { x: into[0].x, y: (into[0].y + into[into.length - 1].y) / 2 });
     const p8 = score(model, lay, builtIn).checks.find((c) => c.id === 'P8');
     assert.match(p8?.detail ?? '', /a line runs through the name of the group "Hub"/);
+    // On a plate the line passes behind it, so it no longer runs through; but a plate where the top of the
+    // frame has a clear place is one too many.
     name.plate = true;
+    const plated = score(model, lay, builtIn).checks.find((c) => c.id === 'P8')?.detail ?? '';
+    assert.doesNotMatch(plated, /runs through/);
+    assert.match(plated, /the name of the group "Hub" is on a plate, where it would sit clear of the lines along the top of its frame/);
+  });
+
+  it('P8 when a line passes within a letter of a name, and not when it keeps that', () => {
+    const { model, lay } = check('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [Hub]\n  B --> C[Pack]\nend');
     assert.equal(score(model, lay, builtIn).checks.find((c) => c.id === 'P8')?.ok, true);
+    const name = lay.groups[0].name, x = lay.edges['A-B'].points[0].x;
+    name.x = x - measure.nameClear / 2 - name.w / 2;
+    assert.match(score(model, lay, builtIn).checks.find((c) => c.id === 'P8')?.detail ?? '', /a line passes within 8px of the name of the group "Hub"/);
   });
 
   it('D1 when words cannot be read, in the mode where they cannot', () => {

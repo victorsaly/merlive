@@ -314,9 +314,11 @@ describe("layout: a group's name", () => {
   });
 
   it('is put on a plate when a line has to pass behind it, so it can still be read', () => {
-    const lay = layout(parse('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [The whole warehouse floor]\n  B --> C[Pack]\nend\nC --> D[Ship]'));
+    const m = parse('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [The whole warehouse floor]\n  B --> C[Pack]\nend\nC --> D[Ship]'), lay = layout(m);
     const [frame] = lay.groups;
     assert.equal(frame.name.plate, true);
+    // No place along the top, and no wrapping to three lines, is clear of the line: the plate is needed, and P8 holds.
+    assert.equal(score(m, lay, builtIn).checks.find((c) => c.id === 'P8')?.ok, true);
   });
 
   it('wraps when it is longer than its frame is wide, inside the frame, with room kept above its boxes', () => {

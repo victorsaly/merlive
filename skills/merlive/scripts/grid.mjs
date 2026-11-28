@@ -6,7 +6,7 @@
 // rows and columns. What comes out is what layout.mjs gives, so it is drawn and checked as any diagram is.
 // Pure: a model in, coordinates out.
 
-import { compartmentsOf, extraHeight, frameEdge, hitsBox, linesOf, measure, meet, overNeeds, roomFor, rowsRoom, segmentsOf, wordsFor, wrap } from './layout.mjs';
+import { compartmentsOf, extraHeight, frameEdge, hitsBox, linesOf, measure, meet, nameAlong, nameBeside, overNeeds, roomFor, rowsRoom, segmentsOf, wordsFor, wrap } from './layout.mjs';
 import { inset } from './shapes.mjs';
 
 /** @typedef {import('./parse.mjs').Model} Model */
@@ -87,10 +87,27 @@ const tidy = (/** @type {Pt[]} */ pts) => {
 };
 
 /**
+ * A grid as its author placed it. A frame's name that would have a line through it, or too close by, may sit
+ * clear of it wrapped narrower; where that takes more lines than its row keeps room for, the grid is placed again
+ * with that room.
  * @param {Model} model a block diagram whose blocks its author placed (`model.grid`)
  * @returns {Layout}
  */
 export function placeGrid(model) {
+  /** @type {Map<string,string[]>} */
+  const beside = new Map();
+  const first = placeGridOnce(model, new Map(), beside);
+  return beside.size ? placeGridOnce(model, beside) : first;
+}
+
+/**
+ * @param {Model} model
+ * @param {Map<string,string[]>} called the names to wrap as given, by their block, in place of the widest they fit
+ * @param {Map<string,string[]>} [beside] filled with the names that sit clear of a line only in more lines than
+ *   their row keeps room for, in those lines
+ * @returns {Layout}
+ */
+function placeGridOnce(model, called, beside = new Map()) {
   /** @type {string[]} */
   const warnings = [];
   const byId = new Map(model.nodes.map((n) => [n.id, n]));
@@ -182,7 +199,7 @@ export function placeGrid(model) {
       // starts on one line: a named block beside one with no name, or a timeline's sections.
       // A name that wraps takes more lines than one, and every frame of the row keeps room for the most.
       const widthOf = (/** @type {{span:number}} */ p) => p.span * colW + (p.span - 1) * gapX;
-      const names = new Map(row.filter((p) => p.cell.is === 'group').map((p) => [p, nameAt(nameOf(p.cell), widthOf(p) - 2 * measure.framePad)]));
+      const names = new Map(row.filter((p) => p.cell.is === 'group').map((p) => [p, called.get(p.cell.id) ?? nameAt(nameOf(p.cell), widthOf(p) - 2 * measure.framePad)]));
       const rowNamed = [...names.values()].some((l) => l.length), nameBand = measure.frameTitle + (Math.max(1, ...[...names.values()].map((l) => l.length)) - 1) * measure.nameLine;
       const items = row.map((p) => {
         const w = widthOf(p), x = off + p.col * (colW + gapX);
@@ -409,14 +426,18 @@ export function placeGrid(model) {
     edges[e.id] = { id: e.id, points: r.pts, back: false, label: null };
   }
 
-  // 6. A frame's name is along its top, at the left. Where a line has to pass through it, it is on a plate of
-  // the frame's own colour and the line passes behind, as in any diagram.
+  // 6. A frame's name is along its top, placed as a flow's is (nameAlong in layout.mjs): at the left where no
+  // line comes close, else at the right or between; wrapped narrower to sit beside a line; else on a plate of the
+  // frame's own colour, with the line passing behind, as in any diagram.
   const lines = Object.values(edges).map((e) => e.points);
   for (const f of frames) {
     if (!f.title) continue;
-    const called = f.lines ?? [f.title], w = Math.round(Math.max(...called.map((l) => l.length)) * measure.nameGlyph), h = measure.nameLine * called.length;
-    const name = { x: f.x + measure.nameIn + w / 2, y: f.y + measure.nameDown + ((called.length - 1) * measure.nameLine) / 2, w, h };
-    f.name = { ...name, plate: lines.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, name, measure.clear))) };
+    const now = f.lines?.length ? f.lines : [f.title];
+    f.name = nameAlong(f, now, lines);
+    const narrower = f.name.plate ? nameBeside(f, now, lines) : null;
+    // A frame's row keeps room for the most lines of any name in it: in no more than that, it is taken now.
+    if (narrower && narrower.lines.length <= now.length) [f.name, f.lines] = [narrower.name, narrower.lines];
+    else if (narrower) beside.set(f.id, narrower.lines);
   }
 
   // 7. Each link's words, where they sit on no block, no other words and, if they can, no line.

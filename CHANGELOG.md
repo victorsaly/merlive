@@ -1,6 +1,15 @@
 # Changelog
 
-## 0.5.2 (unreleased)
+## 0.5.3 (unreleased)
+
+- **A group's name keeps a letter's width from every line**, 8px, where it kept 4: a line ending against the last
+  letter ("Web shop", "The firm") was read as one of its strokes. The name moves along the top of its frame or
+  wraps narrower to keep it, as it does for a line through it. P8 refuses a line that close.
+- **A grid places a frame's name as a flow does**: along the top where no line comes close, at the left, the
+  right or between, wrapped narrower to sit beside a line, and only then on a plate. A timeline's section with an
+  arrow coming in under the start of its name has the name at the other end (`timeline-direction-td-sections`).
+
+## 0.5.2 (2026-11-28)
 
 - **A group's name sits beside the line into its frame**, not with the line behind its letters. Where a line
   comes into a frame through where its name would go, the name wraps narrower, to three lines, to sit beside it,

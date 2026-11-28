@@ -10,7 +10,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
-import { layout, measure } from '../skills/merlive/scripts/layout.mjs';
+import { hitsBox, layout, measure } from '../skills/merlive/scripts/layout.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { builtIn } from '../skills/merlive/scripts/design.mjs';
 import { page, picture } from '../skills/merlive/scripts/render.mjs';
@@ -333,6 +333,18 @@ describe('timeline: a section with a long name', () => {
   it('leaves a short name on one line, its frame as it was', () => {
     const lay = layout(timeline('section Buying\nMonday : Raised\nsection Delivery\nFriday : Delivered'));
     for (const f of /** @type {any[]} */ (lay.groups)) assert.deepEqual([f.lines, f.name.h], [[f.title], measure.nameLine]);
+  });
+});
+
+describe("timeline: a section's name and the arrow into it", () => {
+  it('keeps a letter from the arrow, at the other end of the top where the arrow comes in under it', () => {
+    const m = parse(readFileSync(join(root, 'corpus/timeline/timeline-direction-td-sections.mmd'), 'utf8'));
+    const lay = layout(m), f = /** @type {any} */ (lay.groups.find((g) => g.title === 'Delivery'));
+    const drawn = Object.values(lay.edges).map((e) => e.points);
+    assert.equal(measure.nameClear, 8);
+    assert.ok(!drawn.some((line) => line.slice(1).some((p, i) => hitsBox([line[i], p], f.name, 8))), 'a letter clear of every line');
+    assert.equal(f.name.plate, false);
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => c.detail), []);
   });
 });
 

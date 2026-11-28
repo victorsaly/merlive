@@ -151,6 +151,39 @@ describe('grid: a block that holds others', () => {
   });
 });
 
+describe("grid: a frame's name that a line comes close to", () => {
+  // A line into the middle of "Back office team" leaves no place along the top for it on one line: it sits beside
+  // the line in three, more than its row kept room for, so the grid is placed again with that room.
+  const src = 'block\n  columns 2\n  shop["Shop"] space\n  block:back["Back office team"]\n    columns 1\n    block:books["Books"]\n      columns 1\n      erp["ERP"]\n    end\n  end\n  block:side["Stock"]\n    columns 1\n    store["Store"]\n  end\n  shop --> erp';
+  const m = parse(src), lay = layout(m);
+  const frame = (/** @type {string} */ id) => /** @type {import('../skills/merlive/scripts/layout.mjs').Frame} */ (lay.groups.find((f) => f.id === id));
+  const drawn = Object.values(lay.edges).map((e) => e.points);
+
+  it('wraps narrower to sit beside the line, and the row is placed again with room for its lines', () => {
+    assert.ok(lay.grids, 'placed on its grid');
+    assert.deepEqual(frame('back').lines, ['Back', 'office', 'team']);
+    assert.equal(frame('back').name.plate, false);
+  });
+
+  it('keeps every name a letter from every line, and above everything in its frame', () => {
+    for (const f of lay.groups) {
+      assert.ok(!drawn.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, f.name, 8))), `"${f.title}" clear of the lines`);
+    }
+    const back = frame('back'), books = frame('books');
+    assert.ok(back.name.y + back.name.h / 2 < books.y, 'the frame inside starts under the name');
+    assert.ok(books.name.y + books.name.h / 2 < lay.nodes.erp.y - lay.nodes.erp.h / 2, 'the block inside starts under its own name');
+  });
+
+  it('keeps the frame beside it in line: one top and one height for the row', () => {
+    assert.equal(frame('side').y, frame('back').y);
+    assert.equal(frame('side').h, frame('back').h);
+  });
+
+  it('passes every rule, the cells P2 works out again from the grid among them', () => {
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), []);
+  });
+});
+
 describe('grid: links', () => {
   const straight = (/** @type {{x:number,y:number}[]} */ pts) => pts.length === 2;
 

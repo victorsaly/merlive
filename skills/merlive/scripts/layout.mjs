@@ -67,6 +67,7 @@ export const measure = {
   // enough from the words at the other end of a line one rank long that both fit on one side of it
   icon: 22, // px an icon takes beside a box's words: its 16px grid and the gap to the first letter
   clear: 4, // how close a line may come to a box it does not belong to
+  nameClear: 8, // how close a line may come to a group's name: about a letter, so the line is not read as one of its strokes
   wide: 1100, // past this a left-to-right flow no longer fits a laptop's reading column
 };
 
@@ -182,6 +183,46 @@ function boxFor(/** @type {Model} */ model) {
 export const segmentsOf = (/** @type {Pt[]} */ pts) => pts.slice(1).map((p, i) => /** @type {[Pt,Pt]} */ ([pts[i], p]));
 
 /** Does a straight, axis-aligned run pass through a box (grown by `grow`)? */
+/**
+ * Where a group's name goes along the top of its frame, in the lines given: in the first stretch no line comes
+ * within `nameClear` of, at the left, then at the right, then anywhere between. Where every stretch has a line
+ * in it, at the left on a plate of the frame's own colour: the line passes behind it, and it can still be read.
+ * A flow and a grid place a name so, and P8 holds it to the same.
+ * @param {{x:number,y:number,w:number}} f the frame
+ * @param {string[]} called the name, in its lines
+ * @param {Pt[][]} drawn every line drawn
+ * @returns {{x:number,y:number,w:number,h:number,plate:boolean}}
+ */
+export function nameAlong(f, called, drawn) {
+  const w = Math.round(Math.max(...called.map((l) => l.length)) * measure.nameGlyph), h = measure.nameLine * called.length, y = f.y + measure.nameDown + ((called.length - 1) * measure.nameLine) / 2;
+  const struck = (/** @type {number} */ x) => drawn.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, { x, y, w, h }, measure.nameClear)));
+  const first = f.x + measure.nameIn + w / 2, last = f.x + f.w - measure.nameIn - w / 2;
+  /** @type {number[]} */
+  const between = [];
+  for (let x = first + measure.nameStep; x < last; x += measure.nameStep) between.push(x);
+  const clear = [first, ...(last > first ? [last, ...between] : [])].find((x) => !struck(x));
+  return { x: clear ?? first, y, w, h, plate: clear === undefined };
+}
+
+/**
+ * A name that would be on a plate may fit clear of the lines wrapped narrower, in more lines: the widest such
+ * wrapping, to three lines, and where it sits; null where none fits.
+ * @param {{x:number,y:number,w:number,title:string}} f the frame
+ * @param {string[]} called the name, in the lines it has now
+ * @param {Pt[][]} drawn every line drawn
+ * @returns {{lines:string[],name:{x:number,y:number,w:number,h:number,plate:boolean}}|null}
+ */
+export function nameBeside(f, called, drawn) {
+  const longest = Math.max(...f.title.split(/\s+/).map((word) => word.length));
+  for (let most = Math.max(...called.map((l) => l.length)) - 1; most >= longest; most--) {
+    const lines = wrap(f.title, most);
+    if (lines.length > gridMeasure.nameLines) return null;
+    const name = nameAlong(f, lines, drawn);
+    if (!name.plate) return { lines, name };
+  }
+  return null;
+}
+
 export function hitsBox(/** @type {[Pt,Pt]} */ [a, b], /** @type {{x:number,y:number,w:number,h:number}} */ box, grow = measure.clear) {
   const l = box.x - box.w / 2 - grow, r = box.x + box.w / 2 + grow, t = box.y - box.h / 2 - grow, m = box.y + box.h / 2 + grow;
   return Math.max(a.x, b.x) > l && Math.min(a.x, b.x) < r && Math.max(a.y, b.y) > t && Math.min(a.y, b.y) < m;
@@ -875,32 +916,14 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
   // for, the flow is placed again with that room. Where none fits, the name stays at the left on a plate of the
   // frame's own colour: the line passes behind it, and the name can still be read.
   const drawn = Object.values(edges).map((e) => e.points);
-  const clearOf = (/** @type {Frame} */ f, /** @type {string[]} */ called) => {
-    const w = Math.round(Math.max(...called.map((l) => l.length)) * measure.nameGlyph), h = measure.nameLine * called.length, y = f.y + measure.nameDown + ((called.length - 1) * measure.nameLine) / 2;
-    const struck = (/** @type {number} */ x) => drawn.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, { x, y, w, h }, measure.clear)));
-    const first = f.x + measure.nameIn + w / 2, last = f.x + f.w - measure.nameIn - w / 2;
-    /** @type {number[]} */
-    const between = [];
-    for (let x = first + measure.nameStep; x < last; x += measure.nameStep) between.push(x);
-    const clear = [first, ...(last > first ? [last, ...between] : [])].find((x) => !struck(x));
-    return { x: clear ?? first, y, w, h, plate: clear === undefined };
-  };
   for (const f of groups) {
     if (!f.title) continue;
     const called = f.lines ?? [f.title];
-    f.name = clearOf(f, called);
-    if (!f.name.plate) continue;
-    const longest = Math.max(...f.title.split(/\s+/).map((word) => word.length));
-    for (let most = Math.max(...called.map((l) => l.length)) - 1; most >= longest; most--) {
-      const lines = wrap(f.title, most);
-      if (lines.length > gridMeasure.nameLines) break;
-      const name = clearOf(f, lines);
-      if (name.plate) continue;
-      // In no more lines than the frame keeps room for, it is taken now; in more, the flow is placed again.
-      if (lines.length <= called.length) [f.name, f.lines] = [name, lines.length > 1 ? lines : undefined];
-      else beside.set(f.id, lines);
-      break;
-    }
+    f.name = nameAlong(f, called, drawn);
+    const narrower = f.name.plate ? nameBeside(f, called, drawn) : null;
+    // In no more lines than the frame keeps room for, it is taken now; in more, the flow is placed again.
+    if (narrower && narrower.lines.length <= called.length) [f.name, f.lines] = [narrower.name, narrower.lines.length > 1 ? narrower.lines : undefined];
+    else if (narrower) beside.set(f.id, narrower.lines);
     if (!f.lines) delete f.lines;
   }
 
