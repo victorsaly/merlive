@@ -1,6 +1,16 @@
 # Changelog
 
-## 0.5.8 (unreleased)
+## 0.5.9 (unreleased)
+
+- **A sequence's coloured highlights and groups keep their colours, in the project's own**: `rect rgb(191, 223,
+  255)` and `box Aqua Buying` were both drawn in the design's grey tint, so highlights an author told apart by
+  colour looked alike. Each is now drawn thinly in the design's own colour nearest its hue, a different one for
+  each colour while there are colours to spare; a grey keeps the tint. Any colour CSS writes is read, a hue in any
+  of its units. The fill is whole, as Mermaid's is, so one inside another shows its own colour. The lines on a
+  highlight or a coloured group, laid over what is behind it, and a coloured group's title, are held to be seen
+  there (D1).
+
+## 0.5.8 (2026-11-28)
 
 - **A note over a participant at work covers its bars wholly**: with bars stacked three deep, a note over two
   participants ended on the outermost, leaving a sliver of it showing. A note over one or two now reaches past

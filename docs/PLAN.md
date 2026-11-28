@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, as 0.5.8 was begun.
+Last brought up to date: 28 November 2026, as 0.5.9 was begun.
 
 ## Released
 
@@ -187,7 +187,7 @@ taste are under "Waiting on Victor".
   first box of a row takes a lane from which every box of the row is free (layout.mjs `free`), since a region
   that fed in from one side and ran toward the other had put a box on the main path.
 
-**0.5.8** (not released yet), the pull request from the branch `fix-0.5.8`:
+**0.5.8** (28 November 2026), pull request 19 from the branch `fix-0.5.8`:
 - a note over a participant at work lies on its bars, as Mermaid's does, and covers them wholly: with bars
   stacked, it reaches past the outermost as far as past one (`more` in `layoutSequence`), and S5 refuses a note
   whose edge falls on a bar. Three bars deep, a note over two had ended 1px inside the outermost. No corpus sample
@@ -197,6 +197,22 @@ taste are under "Waiting on Victor".
 - from review: the new S5 refused Merlive's own layouts, since the step between participants was sized by a
   note's words alone. Five bars on Alice put a note left of Bob 24px into the fifth. The step now makes room for
   the bars a note faces either side of it (`stacked`, `toRight`, `toLeft`), beside, over one and over two.
+
+**0.5.9** (not released yet), the pull request from the branch `fix-0.5.9`:
+- a sequence's `rect` and `box` keep the colour their author gave them, drawn in the design's own: the reader keeps
+  it as hex (`colourOf`, any CSS colour, its names from a browser's own values), `huesFor` in design.mjs gives
+  each the design's kind nearest in CIELAB hue, a different one for each while there are kinds to spare, and none
+  to a grey; the page fills it with that kind's colour thinned into the page at `draw.hue` (0.08), whole, as
+  Mermaid's is (`--mv-h-<kind>`). Matched by hue, not by distance, since such colours are pale: by distance a pale
+  blue was as near a pale anything. Two corpus pictures changed (`seq-rect`, `seq-box-groups`), and neither says
+  it loses its colour any more.
+- from review: a kind only one look of a design colours is not taken (it threw in dark); a hue in turns, grads,
+  radians or below 0 is read; and D1 reads what lies on a highlight against everything under it, the group behind
+  it and every highlight it is inside, plain or not. Working that out showed the words are drawn on a halo of the
+  page's colour, so it is the lines that lie bare on a highlight: D1 holds them to 3 to 1 there. Laid thinly one
+  over another, the built-in's lines fell to 2.3 to 1 three deep, so a coloured fill is whole, not added up, and
+  0.1 became 0.08: one inside another, a plain inside a coloured, still passes; three deep over the darkest kinds
+  does not, and is said.
 
 ## Waiting on Victor
 
@@ -239,7 +255,6 @@ taste are under "Waiting on Victor".
 ## Next, in this order
 
 1. **Where Mermaid still reads better**, from the comparison page:
-   - in a sequence diagram: an author's highlight colours become the design's tint;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
    - of the 53 newer `@{ shape }` names, 32 are drawn as themselves; the 21 that are boxes are mostly drawings

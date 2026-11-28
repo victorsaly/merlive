@@ -6,7 +6,7 @@
 
 import { wordsOf } from './parse.mjs';
 import { wrap } from './layout.mjs';
-import { colourChecks, colourLimits, contrast, looksOf, mix } from './design.mjs';
+import { colourChecks, colourLimits, contrast, huesFor, looksOf, mix } from './design.mjs';
 import { draw } from './render.mjs';
 
 /** @typedef {'none'|'arrow'|'open'|'cross'|'half-top'|'half-bottom'|'stick-top'|'stick-bottom'} End what is drawn at an end of a message; top is the left-hand side of the way the line goes, which is above a line that goes right */
@@ -16,7 +16,7 @@ import { draw } from './render.mjs';
 /** @typedef {{type:'note',id:string,place:'left'|'right'|'over',over:string[],label:string,lines:string[],line:number}} Note */
 /** @typedef {{type:'open'|'else'|'close',block:number,section:number}} Edge the top of a block, the start of one of its later sections, its foot */
 /** @typedef {Message|Note|Edge} Item */
-/** @typedef {{id:string,kind:string,label:string,sections:string[],parent:number,line:number}} Block */
+/** @typedef {{id:string,kind:string,label:string,sections:string[],parent:number,line:number,colour?:string}} Block colour: the one its author gave a rect, as hex */
 /** @typedef {{of:string,from:number,to:number|null,depth:number}} Activation from and to: items; depth: how many of the same participant were already open */
 /**
  * @typedef {object} SequenceModel
@@ -28,7 +28,7 @@ import { draw } from './render.mjs';
  * @property {Participant[]} participants in the order they stand, left to right
  * @property {Item[]} items everything that takes a row, in the order it was written
  * @property {Block[]} blocks loop, alt, opt, par, critical, break and rect, each with the names of its later sections
- * @property {{title:string,members:string[]}[]} groups the author's boxes round participants
+ * @property {{title:string,members:string[],colour?:string}[]} groups the author's boxes round participants, with the colour they gave one, as hex
  * @property {Activation[]} activations
  * @property {boolean} mirror whether every participant is drawn again at the foot of its lifeline: yes, unless its author turned mirrorActors off
  * @property {string[]} warnings
@@ -121,9 +121,37 @@ const MARKS = { actor: 'person', boundary: 'boundary', control: 'control', entit
 /** Whether a participant's name sits under its drawing, not inside it. */
 export const namedUnder = (/** @type {{shape:Mark}} */ p) => p.shape === 'person' || p.shape === 'boundary' || p.shape === 'control' || p.shape === 'entity' || p.shape === 'database';
 
-// The colours CSS has names for. A group may open with one ("box Aqua Buying"), and it is the group's colour, not
-// the first word of its title. The colour itself is read past: the look is the design's.
-const COLOURS = new Set('aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond blue blueviolet brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite forestgreen fuchsia gainsboro ghostwhite gold goldenrod gray green greenyellow grey honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgreen lightgrey lightpink lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightyellow lime limegreen linen magenta maroon mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite navy oldlace olive olivedrab orange orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue purple rebeccapurple red rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna silver skyblue slateblue slategray slategrey snow springgreen steelblue tan teal thistle tomato transparent turquoise violet wheat white whitesmoke yellow yellowgreen'.split(' '));
+// The colours CSS has names for, each with its value. A group may open with one ("box Aqua Buying"), and it is the
+// group's colour, not the first word of its title. Transparent is a name with no colour.
+const NAMED = new Map([...'aliceblue:f0f8ff antiquewhite:faebd7 aqua:00ffff aquamarine:7fffd4 azure:f0ffff beige:f5f5dc bisque:ffe4c4 black:000000 blanchedalmond:ffebcd blue:0000ff blueviolet:8a2be2 brown:a52a2a burlywood:deb887 cadetblue:5f9ea0 chartreuse:7fff00 chocolate:d2691e coral:ff7f50 cornflowerblue:6495ed cornsilk:fff8dc crimson:dc143c cyan:00ffff darkblue:00008b darkcyan:008b8b darkgoldenrod:b8860b darkgray:a9a9a9 darkgreen:006400 darkgrey:a9a9a9 darkkhaki:bdb76b darkmagenta:8b008b darkolivegreen:556b2f darkorange:ff8c00 darkorchid:9932cc darkred:8b0000 darksalmon:e9967a darkseagreen:8fbc8f darkslateblue:483d8b darkslategray:2f4f4f darkslategrey:2f4f4f darkturquoise:00ced1 darkviolet:9400d3 deeppink:ff1493 deepskyblue:00bfff dimgray:696969 dimgrey:696969 dodgerblue:1e90ff firebrick:b22222 floralwhite:fffaf0 forestgreen:228b22 fuchsia:ff00ff gainsboro:dcdcdc ghostwhite:f8f8ff gold:ffd700 goldenrod:daa520 gray:808080 green:008000 greenyellow:adff2f grey:808080 honeydew:f0fff0 hotpink:ff69b4 indianred:cd5c5c indigo:4b0082 ivory:fffff0 khaki:f0e68c lavender:e6e6fa lavenderblush:fff0f5 lawngreen:7cfc00 lemonchiffon:fffacd lightblue:add8e6 lightcoral:f08080 lightcyan:e0ffff lightgoldenrodyellow:fafad2 lightgray:d3d3d3 lightgreen:90ee90 lightgrey:d3d3d3 lightpink:ffb6c1 lightsalmon:ffa07a lightseagreen:20b2aa lightskyblue:87cefa lightslategray:778899 lightslategrey:778899 lightsteelblue:b0c4de lightyellow:ffffe0 lime:00ff00 limegreen:32cd32 linen:faf0e6 magenta:ff00ff maroon:800000 mediumaquamarine:66cdaa mediumblue:0000cd mediumorchid:ba55d3 mediumpurple:9370db mediumseagreen:3cb371 mediumslateblue:7b68ee mediumspringgreen:00fa9a mediumturquoise:48d1cc mediumvioletred:c71585 midnightblue:191970 mintcream:f5fffa mistyrose:ffe4e1 moccasin:ffe4b5 navajowhite:ffdead navy:000080 oldlace:fdf5e6 olive:808000 olivedrab:6b8e23 orange:ffa500 orangered:ff4500 orchid:da70d6 palegoldenrod:eee8aa palegreen:98fb98 paleturquoise:afeeee palevioletred:db7093 papayawhip:ffefd5 peachpuff:ffdab9 peru:cd853f pink:ffc0cb plum:dda0dd powderblue:b0e0e6 purple:800080 rebeccapurple:663399 red:ff0000 rosybrown:bc8f8f royalblue:4169e1 saddlebrown:8b4513 salmon:fa8072 sandybrown:f4a460 seagreen:2e8b57 seashell:fff5ee sienna:a0522d silver:c0c0c0 skyblue:87ceeb slateblue:6a5acd slategray:708090 slategrey:708090 snow:fffafa springgreen:00ff7f steelblue:4682b4 tan:d2b48c teal:008080 thistle:d8bfd8 tomato:ff6347 turquoise:40e0d0 violet:ee82ee wheat:f5deb3 white:ffffff whitesmoke:f5f5f5 yellow:ffff00 yellowgreen:9acd32'.split(' ').map((x) => /** @type {[string, string]} */ ([x.slice(0, x.indexOf(':')), `#${x.slice(x.indexOf(':') + 1)}`])), ['transparent', '']]);
+
+/**
+ * The colour an author wrote, as CSS writes one (a name, #hex, rgb(), rgba(), hsl(), hsla()), as six-figure hex,
+ * or '' when it is none. How see-through it is, is left out: what is kept is which colour the author meant.
+ * @param {string} text
+ */
+export function colourOf(text) {
+  const t = text.trim().toLowerCase();
+  const hex = (/** @type {number[]} */ v) => `#${v.map((x) => Math.round(Math.min(255, Math.max(0, x))).toString(16).padStart(2, '0')).join('')}`;
+  if (NAMED.has(t)) return NAMED.get(t) ?? '';
+  let m = /^#([0-9a-f]{3,8})$/.exec(t);
+  if (m) return m[1].length <= 4 ? hex([...m[1].slice(0, 3)].map((c) => parseInt(c + c, 16))) : m[1].length >= 6 ? `#${m[1].slice(0, 6)}` : '';
+  const parts = (/** @type {string} */ s) => s.split(/[\s,/]+/).filter(Boolean);
+  if ((m = /^rgba?\(([^)]*)\)$/.exec(t))) return hex(parts(m[1]).slice(0, 3).map((x) => (x.endsWith('%') ? parseFloat(x) * 2.55 : parseFloat(x))));
+  if ((m = /^hsla?\(([^)]*)\)$/.exec(t))) {
+    // Hue, saturation and lightness to red, green and blue, as CSS Color 4 sets it out. A hue is an angle in
+    // degrees unless it says another unit, and goes on round the circle past 360 and below 0.
+    const [angle, sat, l] = parts(m[1]).slice(0, 3).map((x) => parseFloat(x) / (x.endsWith('%') ? 100 : 1));
+    const unit = /(deg|grad|rad|turn)$/.exec(parts(m[1])[0] ?? '')?.[1] ?? 'deg';
+    const h = (((angle * { deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360 }[unit]) % 360) + 360) % 360;
+    const a = sat * Math.min(l, 1 - l), f = (/** @type {number} */ n) => {
+      const k = (n + h / 30) % 12;
+      return 255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)));
+    };
+    return hex([f(0), f(8), f(4)]);
+  }
+  return '';
+}
 
 /** Whether a Mermaid block is a sequence diagram: its first line that says anything, past front matter and comments. */
 export function isSequence(/** @type {string} */ src) {
@@ -273,14 +301,16 @@ export function parseSequence(src) {
     if ((m = /^box(?:\s+(.*))?$/.exec(s))) {
       // "box Aqua Buying", "box rgb(33,66,99) Buying", "box Buying": the colour, if there is one, comes first.
       const colour = /^(?:(?:rgba?|hsla?)\([^)]*\)|#[0-9a-f]{3,8}\b|([a-z]+)\b)\s*/i.exec(m[1] ?? '');
-      const title = colour && (colour[1] === undefined || COLOURS.has(colour[1].toLowerCase())) ? (m[1] ?? '').slice(colour[0].length) : m[1] ?? '';
-      open.push({ what: 'group', index: model.groups.push({ title: wordsOf(title).join(' '), members: [] }) - 1, line });
+      const named = colour && (colour[1] === undefined || NAMED.has(colour[1].toLowerCase()));
+      const title = named ? (m[1] ?? '').slice(colour[0].length) : m[1] ?? '', painted = named ? colourOf(colour[0]) : '';
+      open.push({ what: 'group', index: model.groups.push({ title: wordsOf(title).join(' '), members: [], ...(painted && { colour: painted }) }) - 1, line });
       return;
     }
     if ((m = /^(loop|alt|opt|par|critical|break|rect)(?:\s+(.*))?$/.exec(s))) {
       const parent = open.findLast((o) => o.what === 'block')?.index ?? -1;
-      // A rect is a highlight behind some rows. What follows the word is its colour, and the look is the design's.
-      const index = model.blocks.push({ id: `b${model.blocks.length + 1}`, kind: m[1], label: m[1] === 'rect' ? '' : wordsOf(m[2] ?? '').join(' '), sections: [], parent, line }) - 1;
+      // A rect is a highlight behind some rows. What follows the word is its colour: the design's nearest is drawn.
+      const painted = m[1] === 'rect' ? colourOf(m[2] ?? '') : '';
+      const index = model.blocks.push({ id: `b${model.blocks.length + 1}`, kind: m[1], label: m[1] === 'rect' ? '' : wordsOf(m[2] ?? '').join(' '), sections: [], parent, line, ...(painted && { colour: painted }) }) - 1;
       open.push({ what: 'block', index, line });
       model.items.push({ type: 'open', block: index, section: 0 });
       return;
@@ -386,7 +416,7 @@ export function parseSequence(src) {
  * @property {Record<string, Words>} notes
  * @property {Frame[]} frames
  * @property {Bar[]} bars
- * @property {{title:string,x:number,y:number,w:number,h:number,name:Words|null}[]} groups each from its top left corner, with where its title sits if it has one
+ * @property {{title:string,x:number,y:number,w:number,h:number,name:Words|null,colour?:string}[]} groups each from its top left corner, with where its title sits if it has one, and its author's colour
  * @property {string[]} warnings
  */
 
@@ -650,7 +680,7 @@ export function layoutSequence(model) {
       warnings.push(`the group "${g.title}" is not drawn: its participants do not stand side by side`);
       continue;
     }
-    boxed.push({ title: g.title, cols, lines: g.title ? wrap(g.title, titleRoom((cols.length - 1) * step + w)) : [] });
+    boxed.push({ title: g.title, cols, lines: g.title ? wrap(g.title, titleRoom((cols.length - 1) * step + w)) : [], colour: g.colour });
   }
   const titleLines = Math.max(0, ...boxed.map((g) => g.lines.length));
   const above = boxed.length ? across.groupPad + (titleLines ? across.groupTitle + (titleLines - 1) * across.groupLine : 0) : 0;
@@ -660,7 +690,7 @@ export function layoutSequence(model) {
     const gx = g.cols[0] * step - w / 2 - across.groupPad, gw = (g.cols.length - 1) * step + w + 2 * across.groupPad, tall = g.lines.length * across.groupLine;
     // The last line of a title sits just above the participants; a shorter title leaves the room above it.
     const name = g.lines.length ? { x: gx + gw / 2, y: -(across.groupTitle - across.groupLine) - tall / 2, w: widest(g.lines, across.groupGlyph), h: tall, lines: g.lines } : null;
-    return { title: g.title, x: gx, y: -above, w: gw, h: bottom + above + across.groupPad, name };
+    return { title: g.title, x: gx, y: -above, w: gw, h: bottom + above + across.groupPad, name, ...(g.colour && { colour: g.colour }) };
   });
 
   // 7. Room all round: everything moves so that the leftmost and topmost thing is one margin in.
@@ -873,6 +903,42 @@ export function scoreSequence(model, lay, design) {
   if (lay.groups.some((g) => g.name)) for (const [mode, p] of looksOf(design)) {
     const c = contrast(p.muted, mix(p.text, p.bg, draw.frame));
     if (c < colourLimits.text) d1.broken.push(`${mode}: the title of a group is ${c.toFixed(1)} to 1, and needs ${colourLimits.text}`);
+  }
+  // A highlight or a group its author coloured is filled with the design's colour nearest it, thinned into the
+  // page, whole, over whatever is under it; a plain highlight lays the text colour thinly over what is under it, a
+  // group's fill or the page and any highlight it is inside. Words on it are drawn on a halo of the page's own
+  // colour, so it is the lines that lie bare on it, and a coloured group's title: each is read there.
+  const hues = huesFor(design, [...model.groups.flatMap((g) => (g.colour ? [g.colour] : [])), ...model.blocks.flatMap((b) => (b.colour ? [b.colour] : []))]);
+  for (const [mode, p] of looksOf(design)) {
+    const own = (/** @type {string|undefined} */ c) => {
+      const k = c ? hues[c] : undefined;
+      return k ? mix(p.kinds[k], p.bg, draw.hue) : null;
+    };
+    const lines = (/** @type {string} */ where, /** @type {string} */ fill) => {
+      for (const [what, ink] of [['lines', p.edge], ['a picked line', p.accent]]) {
+        const c = contrast(ink, fill);
+        if (c < colourLimits.line) d1.broken.push(`${mode}: ${what} on ${where} ${what === 'lines' ? 'are' : 'is'} ${c.toFixed(1)} to 1, and need${what === 'lines' ? '' : 's'} ${colourLimits.line}`);
+      }
+    };
+    model.blocks.forEach((b, i) => {
+      const f = lay.frames.find((x) => x.id === b.id);
+      if (b.kind !== 'rect' || !f) return;
+      const chain = [];
+      for (let at = i; at >= 0; at = model.blocks[at].parent) if (model.blocks[at].kind === 'rect') chain.unshift(model.blocks[at]);
+      // What is behind it: each group it lies over, and the page wherever no one group holds it all.
+      const over = lay.groups.filter((g) => g.x < f.x + f.w && f.x < g.x + g.w);
+      const grounds = [...over.map((g) => own(g.colour) ?? mix(p.text, p.bg, draw.frame)), ...(over.some((g) => g.x <= f.x && f.x + f.w <= g.x + g.w) ? [] : [p.bg])];
+      const fills = grounds.map((ground) => chain.reduce((under, r) => own(r.colour) ?? mix(p.text, under, draw.tint), ground));
+      const worst = fills.reduce((x, y) => (contrast(p.edge, y) < contrast(p.edge, x) ? y : x));
+      lines(`a highlight${b.colour ? ` coloured ${b.colour}` : ''}`, worst);
+    });
+    for (const g of lay.groups) {
+      const fill = own(g.colour);
+      if (!fill) continue;
+      const c = contrast(p.muted, fill);
+      if (g.name && c < colourLimits.text) d1.broken.push(`${mode}: the title of a group coloured ${g.colour} is ${c.toFixed(1)} to 1, and needs ${colourLimits.text}`);
+      lines(`a group coloured ${g.colour}`, fill);
+    }
   }
   const looks = looksOf(design).map(([mode]) => mode).join(' and ');
   add('D1', 'Words and lines can be read against what is behind them', d1.broken, `${design.name} passes in ${looks}`);

@@ -489,8 +489,8 @@ A block that starts `sequenceDiagram` is read, placed and checked by rules of it
 | `A->>+B`, `B-->>-A`, `activate B`, `deactivate B` | A bar on a participant at work; a second on the same one sits beside the first |
 | `Note right of A: …`, `Note left of A: …`, `Note over A: …`, `Note over A,B: …` | A note, on a row of its own |
 | `loop`, `alt` / `else`, `opt`, `par` / `and`, `critical` / `option`, `break` … `end` | A frame round its rows, named, one inside another |
-| `rect rgb(…)` … `end` | A highlight behind its rows, in the design's tint: the colour is read past |
-| `box Aqua Buying` … `end` | A group of participants, framed, its title inside the frame above them and wrapped to it: the colour is read past |
+| `rect rgb(…)` … `end` | A highlight behind its rows, in the design's own colour nearest the one written (any CSS colour), thinly; with no colour, or a grey, in the design's tint |
+| `box Aqua Buying` … `end` | A group of participants, framed, its title inside the frame above them and wrapped to it, in the design's own colour nearest the one written, as a highlight is |
 | `create participant J`, `destroy J` | A participant that starts at the message that makes it, and ends in a cross |
 | `autonumber`, `autonumber 10 5` | Each message numbered, from a start and by a step |
 | `title: …`, `accTitle`, `accDescr`, front matter, `%%` comments, `<br/>`, `#9829;` | As in a flowchart |

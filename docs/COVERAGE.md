@@ -18,7 +18,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 - **Kanban boards:** of 25 features, 17 are drawn as written, 8 are drawn less something, 0 are only partly read, 0 are refused.
 - **Timelines:** of 29 features, 29 are drawn as written, 0 are drawn less something, 0 are only partly read, 0 are refused.
 - **Packets:** of 22 features, 22 are drawn as written, 0 are drawn less something, 0 are only partly read, 0 are refused.
-- **Sequence diagrams:** of 42 features, 38 are drawn as written, 4 are drawn less something, 0 are only partly read, and 0 are refused.
+- **Sequence diagrams:** of 42 features, 40 are drawn as written, 2 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Every kind of diagram:** of 32, 12 drawn (those with their own lists above), and 20 left as Mermaid and named.
 
 ## Flowcharts, feature by feature
@@ -579,7 +579,7 @@ and every rule in [SEQUENCE.md](SEQUENCE.md) passes.
 | A name written inside the braces | Drawn |  | [source](../corpus/sequence/seq-alias-inline.mmd) | [picture](../corpus/drawn/seq-alias-inline.svg) |
 | A name inside the braces and another after "as": the one after "as" wins | Drawn |  | [source](../corpus/sequence/seq-alias-precedence.mmd) | [picture](../corpus/drawn/seq-alias-precedence.svg) |
 | A participant made part way down, and one ended | Drawn |  | [source](../corpus/sequence/seq-create-destroy.mmd) | [picture](../corpus/drawn/seq-create-destroy.svg) |
-| Participants grouped in boxes, with and without a colour and a title | Drawn, less something | A group's colour is read past: the look is the design's | [source](../corpus/sequence/seq-box-groups.mmd) | [picture](../corpus/drawn/seq-box-groups.svg) |
+| Participants grouped in boxes, with and without a colour and a title | Drawn |  | [source](../corpus/sequence/seq-box-groups.mmd) | [picture](../corpus/drawn/seq-box-groups.svg) |
 | A message with no arrowhead, solid and dotted | Drawn |  | [source](../corpus/sequence/seq-message-line.mmd) | [picture](../corpus/drawn/seq-message-line.svg) |
 | A message with an arrowhead, solid and dotted | Drawn |  | [source](../corpus/sequence/seq-message-arrow.mmd) | [picture](../corpus/drawn/seq-message-arrow.svg) |
 | A message with an arrowhead at both ends | Drawn |  | [source](../corpus/sequence/seq-message-both-ways.mmd) | [picture](../corpus/drawn/seq-message-both-ways.svg) |
@@ -603,7 +603,7 @@ and every rule in [SEQUENCE.md](SEQUENCE.md) passes.
 | What must happen, and what to do when it cannot: critical and option | Drawn |  | [source](../corpus/sequence/seq-critical.mmd) | [picture](../corpus/drawn/seq-critical.svg) |
 | A critical block with no options | Drawn |  | [source](../corpus/sequence/seq-critical-plain.mmd) | [picture](../corpus/drawn/seq-critical-plain.svg) |
 | Where the sequence stops: break | Drawn |  | [source](../corpus/sequence/seq-break.mmd) | [picture](../corpus/drawn/seq-break.svg) |
-| Rows highlighted with a coloured background, one inside another | Drawn, less something | The highlight's colour is read past: it is drawn in the design's own tint | [source](../corpus/sequence/seq-rect.mmd) | [picture](../corpus/drawn/seq-rect.svg) |
+| Rows highlighted with a coloured background, one inside another | Drawn |  | [source](../corpus/sequence/seq-rect.mmd) | [picture](../corpus/drawn/seq-rect.svg) |
 | Comments on lines of their own | Drawn |  | [source](../corpus/sequence/seq-comments.mmd) | [picture](../corpus/drawn/seq-comments.svg) |
 | Characters written as entity codes | Drawn |  | [source](../corpus/sequence/seq-entity-codes.mmd) | [picture](../corpus/drawn/seq-entity-codes.svg) |
 | Messages numbered | Drawn |  | [source](../corpus/sequence/seq-autonumber.mmd) | [picture](../corpus/drawn/seq-autonumber.svg) |

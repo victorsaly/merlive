@@ -138,6 +138,48 @@ export function designWith(design, model) {
   return { ...design, light: more(design.light), ...(design.dark ? { dark: more(design.dark) } : {}) };
 }
 
+// A colour weaker than this, apart from how light it is, is a grey: there is no hue its author meant to keep.
+// A pale highlight Mermaid's own pages use (rgb(191,223,255)) is 19; a light grey is under 1.
+const greyBelow = 8;
+/** A colour's hue as CIELAB has it, in degrees: hues the eye takes as near are near here. */
+const hueAngle = (/** @type {string} */ hex) => {
+  const [, a, b] = lab(hex, sights.ordinary);
+  return ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360;
+};
+
+/**
+ * Which of the design's own kinds' colours to draw each colour in that an author gave a highlight or a group of a
+ * sequence: the nearest in hue, since such colours are pale and only their hue says anything. A colour after the
+ * first takes the nearest not yet taken, so colours an author told apart stay apart while there are colours to
+ * spare. A grey keeps the design's own tint. Chosen in the design's first look, among the kinds every look has a
+ * colour for, and drawn in each look's colour of that kind.
+ * @param {Design} design
+ * @param {string[]} colours as hex, in the order they were written
+ * @returns {Record<string, string|undefined>} each colour to a kind of the design, or to nothing
+ */
+export function huesFor(design, colours) {
+  const looks = looksOf(design).map(([, q]) => q), p = looks[0], taken = new Set();
+  const kinds = Object.keys(p.kinds).filter((k) => looks.every((q) => q.kinds[k]));
+  /** @type {Record<string, string|undefined>} */
+  const out = {};
+  for (const c of colours) {
+    if (c in out) continue;
+    const from = kinds.filter((k) => !taken.has(k));
+    if (!HEX.test(c) || strength(c) < greyBelow || !kinds.length) {
+      out[c] = undefined;
+      continue;
+    }
+    const gap = (/** @type {string} */ k) => {
+      const d = Math.abs(hueAngle(p.kinds[k]) - hueAngle(c));
+      return Math.min(d, 360 - d);
+    };
+    const k = (from.length ? from : kinds).reduce((a, b) => (gap(b) < gap(a) ? b : a));
+    taken.add(k);
+    out[c] = k;
+  }
+  return out;
+}
+
 // What any palette is held to. Each is set out in docs/PLACEMENT.md.
 export const colourLimits = {
   text: 4.5, // WCAG AA for words
