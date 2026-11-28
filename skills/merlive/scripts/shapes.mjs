@@ -107,9 +107,6 @@ export function roomIn(/** @type {Shape} */ shape, /** @type {number} */ w) {
 }
 
 /** Where the middle of a shape's words sits, from the middle of its box: lower in a cylinder, under its rim; further right in a flag, past its notch. */
-// A bar's look: solid, in the colour of the lines it parts or gathers.
-const barLook = 'fill:var(--mv-edge);stroke:var(--mv-edge)';
-
 /**
  * A bar lies across the flow: flat in a flow drawn top to bottom, upright in one drawn left to right. A flow may be
  * turned from how it was written, so a bar is drawn for the way it is laid out, which only layout knows.
@@ -206,10 +203,9 @@ export function outlineOf(shape, l, t, w, h, radius) {
   }
   switch (shape) {
     case 'pill': return { main: rect('mv-shape mv-pill', 0, Math.min(h / 2, form.pillMost)), more: [] };
-    // A bar is solid, in the colour of the lines it parts or gathers. The colour is on the bar, not in the styles
-    // every drawing carries, so a drawing with no bar is as it was.
-    case 'bar': return { main: `<rect class="mv-shape mv-bar" x="${n(l)}" y="${n(y - form.bar / 2)}" width="${n(w)}" height="${n(form.bar)}" rx="2" style="${barLook}"/>`, more: [] };
-    case 'bar-upright': return { main: `<rect class="mv-shape mv-bar" x="${n(x - form.bar / 2)}" y="${n(t)}" width="${n(form.bar)}" height="${n(h)}" rx="2" style="${barLook}"/>`, more: [] };
+    // A bar is solid, in the colour of the lines it parts or gathers: a rule render.mjs adds where there is a bar.
+    case 'bar': return { main: `<rect class="mv-shape mv-bar" x="${n(l)}" y="${n(y - form.bar / 2)}" width="${n(w)}" height="${n(form.bar)}" rx="2"/>`, more: [] };
+    case 'bar-upright': return { main: `<rect class="mv-shape mv-bar" x="${n(x - form.bar / 2)}" y="${n(t)}" width="${n(form.bar)}" height="${n(h)}" rx="2"/>`, more: [] };
     case 'point': return { main: `<rect class="mv-shape mv-point" x="${n(x - form.point)}" y="${n(y - form.point)}" width="${n(2 * form.point)}" height="${n(2 * form.point)}" rx="${n(form.point)}"/>`, more: [] };
     case 'double-circle': return { main: rect('mv-shape mv-pill', 0, h / 2), more: [rect('mv-shape mv-detail mv-pill', form.ring, h / 2 - form.ring)] };
     case 'diamond': return { main: polygon([[x, t], [r, y], [x, u], [l, y]]), more: [] };

@@ -124,8 +124,8 @@ describe('shapes: a cell', () => {
 
 describe('shapes: a bar, for a fork or a join', () => {
   it('lies across its box, flat or upright, with nothing else drawn', () => {
-    assert.match(outlineOf('bar', 0, 0, w, h, 8).main, new RegExp(`class="mv-shape mv-bar" x="0" y="${h / 2 - form.bar / 2}" width="${w}" height="${form.bar}"`));
-    assert.match(outlineOf('bar-upright', 0, 0, w, h, 8).main, new RegExp(`class="mv-shape mv-bar" x="${w / 2 - form.bar / 2}" y="0" width="${form.bar}" height="${h}"`));
+    assert.match(outlineOf('bar', 0, 0, w, h, 8).main, new RegExp(`class="mv-shape mv-bar" x="0" y="${h / 2 - form.bar / 2}" width="${w}" height="${form.bar}" rx="2"/>`));
+    assert.match(outlineOf('bar-upright', 0, 0, w, h, 8).main, new RegExp(`class="mv-shape mv-bar" x="${w / 2 - form.bar / 2}" y="0" width="${form.bar}" height="${h}" rx="2"/>`));
   });
 
   it('is met at the bar: a line from the side it faces runs on to it, one at its end stops there', () => {

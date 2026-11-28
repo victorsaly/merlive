@@ -226,6 +226,40 @@ describe('state: a fork and a join drawn', () => {
     assert.deepEqual(bars('direction LR'), [false, false]);
   });
 
+  it('is met on its broad face by every line, however many branches, which way the flow runs', () => {
+    for (const head of ['', 'direction LR\n']) {
+      const m = state(`${head}state f <<fork>>\nstate j <<join>>\nA --> f\nf --> B\nf --> C\nf --> D\nB --> j\nC --> j\nD --> j\nj --> E`), lay = layout(m);
+      for (const id of ['f', 'j']) {
+        const bar = lay.nodes[id], upright = lay.direction === 'LR';
+        for (const e of Object.values(lay.edges)) {
+          const end = e.id.startsWith(`${id}-`) ? e.points[0] : e.id.endsWith(`-${id}`) ? e.points.at(-1) : null;
+          if (!end) continue;
+          const [across, along] = upright ? [end.x - bar.x, end.y - bar.y] : [end.y - bar.y, end.x - bar.x];
+          assert.ok(Math.abs(across) <= form.bar / 2 + 0.5 && Math.abs(along) < (upright ? bar.h : bar.w) / 2, `${head || 'TD '}${e.id} meets the bar`);
+        }
+      }
+      assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`), [], head);
+    }
+  });
+
+  it('draws no icon on a bar, as it writes no words on it, and keeps both for a reader', () => {
+    const m = state('state "fa:fa-truck Both at once" as split <<fork>>\nA --> split\nsplit --> B'), lay = layout(m);
+    const svg = picture(m, lay, builtIn, { title: '' });
+    assert.doesNotMatch(svg, /Infinity|NaN/);
+    assert.doesNotMatch(svg, /class="mv-icon"/);
+    assert.match(page(m, lay, builtIn, { title: '' }), /aria-label="Both at once, Fork"/);
+  });
+
+  it('takes its colour from a rule a picked or focused bar overrides, there only when a bar is', () => {
+    const m = state(src), svg = picture(m, layout(m), builtIn, { title: '' });
+    assert.doesNotMatch(svg, /class="mv-shape mv-bar"[^>]*style=/);
+    assert.ok(svg.indexOf('.mv-node .mv-bar{fill:var(--mv-edge);stroke:var(--mv-edge)}') > svg.indexOf('[data-kind="join"] .mv-shape{'), 'after the kinds, so it is the bar\'s colour');
+    const live = page(m, layout(m), builtIn, { title: '' });
+    assert.ok(live.indexOf('.mv-sel .mv-shape,.mv-node:focus-visible .mv-shape{stroke:var(--mv-accent)') > live.indexOf('.mv-node .mv-bar{'), 'and before what picking and focus draw');
+    const plain = state('A --> B');
+    assert.doesNotMatch(picture(plain, layout(plain), builtIn, { title: '' }), /mv-bar/);
+  });
+
   it('is met by its lines at the bar, and passes every rule', () => {
     const m = state(src), lay = layout(m), bar = lay.nodes.split;
     const into = lay.edges['Approved-split'].points.at(-1);

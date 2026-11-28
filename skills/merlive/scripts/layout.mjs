@@ -596,6 +596,7 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
       return out > 0 ? Math.max(...between.map((n) => n.x + n.w / 2)) + measure.channel : Math.min(...between.map((n) => n.x - n.w / 2)) - measure.channel;
     };
 
+    const bars = new Set(model.nodes.filter((n) => n.shape === 'bar').map((n) => n.id));
     /** @type {Route[]} */
     const routes = model.edges.map((e) => {
       const s = nodes[e.from], t = nodes[e.to];
@@ -617,8 +618,12 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
       // Leaving the spine a line goes across first; coming back to it, along first; between two boxes off it, it
       // turns in the room between ranks. Back up the flow it keeps to the sides, and to the outside if it must.
       const order = !down ? [vh, hv, near, far, outer] : s.spine && !t.spine ? [hv, near, far, vh] : t.spine && !s.spine ? [vh, far, near, hv] : [near, far, hv, vh];
+      // A bar (a fork, a join) is met on its broad face, across the flow, as Mermaid draws it: at its end only one
+      // line could meet it, and a second beside that would stop short of it.
+      const end = (/** @type {Side} */ side) => side === 'left' || side === 'right';
+      const faced = order.filter((c) => !(bars.has(e.from) && end(c.sSide)) && !(bars.has(e.to) && end(c.tSide)));
       let best = Infinity;
-      for (const choice of order) {
+      for (const choice of faced.length ? faced : order) {
         const tried = /** @type {Route} */ ({ ...r, ...choice });
         tried.ty = roomAfter(tried.gap);
         const n = hits(shapeOf(tried, mid(s, tried.sSide), mid(t, tried.tSide)), s, t);

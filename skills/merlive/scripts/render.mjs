@@ -71,6 +71,9 @@ function middleOf(/** @type {Pt[]} */ pts) {
 
 export const kindName = (/** @type {string} */ k) => (k === 'terminal' ? 'Start or end' : k.charAt(0).toUpperCase() + k.slice(1));
 /** A kind's name for a reader: what its author said it means, else its own name. */
+// A fork's or a join's bar is solid, in the colour of its lines: a rule only a drawing with a bar carries, after the
+// kinds' colours and before what picking and focus draw, which colour its outline as they do any box's.
+const barredIn = (/** @type {import('./parse.mjs').Model} */ model) => model.nodes.some((m) => m.shape === 'bar');
 const meaningOf = (/** @type {import('./parse.mjs').Model} */ model, /** @type {string} */ k) => model.meanings?.[k] ?? kindName(k);
 
 /** The colours as CSS variables, with each kind's edge and fill worked out here, not by the browser. */
@@ -85,12 +88,12 @@ export function variables(/** @type {import('./design.mjs').Palette} */ p, /** @
 }
 
 /** The drawing's own rules, with no colours in them: those come from the variables of whatever it sits in. */
-export function rulesFor(/** @type {import('./design.mjs').Design} */ design, /** @type {string[]} */ kinds, /** @type {string[]} */ lines = []) {
+export function rulesFor(/** @type {import('./design.mjs').Design} */ design, /** @type {string[]} */ kinds, /** @type {string[]} */ lines = [], barred = false) {
   return `.mv-svg{font-family:${design.font}}
 .mv-shape{fill:var(--mv-node);stroke:var(--mv-stroke);stroke-width:1.5}
 ${design.depth === 'soft' ? '.mv-node{filter:drop-shadow(0 2px 5px var(--mv-shadow))}\n' : ''}${kinds.map((k) => `[data-kind="${k}"] .mv-shape{fill:var(--mv-kf-${k});stroke:var(--mv-k-${k})}`).join('\n')}
 .mv-node .mv-detail{fill:none}
-[data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
+${barred ? '.mv-node .mv-bar{fill:var(--mv-edge);stroke:var(--mv-edge)}\n' : ''}[data-outline~="dashed"] .mv-shape{stroke-dasharray:5 4}
 [data-outline~="heavy"] .mv-shape{stroke-width:2.6}
 .mv-node .mv-rows{font-family:${design.mono};font-size:11.5px;font-weight:400;text-anchor:start;white-space:pre}
 .mv-node .mv-cell{font-size:12px;font-weight:400;text-anchor:start}
@@ -119,11 +122,11 @@ ${lines.map((k) => `[data-kind="${k}"] .mv-line,[data-kind="${k}"] .mv-cross{str
 }
 
 /** The colours of the looks a design is drawn in: one, or light with dark for readers whose system asks for it. */
-function styleOf(/** @type {import('./design.mjs').Design} */ design, /** @type {string[]} */ kinds, /** @type {string} */ root, /** @type {string[]} */ lines = []) {
+function styleOf(/** @type {import('./design.mjs').Design} */ design, /** @type {string[]} */ kinds, /** @type {string} */ root, /** @type {string[]} */ lines = [], barred = false) {
   const [[first, one], two] = looksOf(design);
   const scheme = (/** @type {string} */ mode) => (mode === 'dark' ? ';color-scheme:dark' : '');
   const dark = two ? `@media (prefers-color-scheme:dark){${root}{${variables(two[1], kinds)}${scheme(two[0])}}}` : '';
-  return `${root}{${variables(one, kinds)}${scheme(first)}}${dark}\n${rulesFor(design, kinds, lines)}`;
+  return `${root}{${variables(one, kinds)}${scheme(first)}}${dark}\n${rulesFor(design, kinds, lines, barred)}`;
 }
 
 /**
@@ -234,7 +237,8 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     }).join('');
     // An icon sits left of the words, on the middle of their block; the words move over by half its room, so
     // icon and words together stay in the middle of the box.
-    const drawing = m.icon ? icons[m.icon] : '', aside = drawing ? measure.icon / 2 : 0;
+    // An icon sits with the words: a box with none written on it (a bar) has none drawn.
+    const drawing = m.icon && b.lines.length ? icons[m.icon] : '', aside = drawing ? measure.icon / 2 : 0;
     const widest = Math.max(...b.lines.map((line) => line.length)) * measure.glyph;
     const icon = drawing ? `<path class="mv-icon" transform="translate(${n(b.x + at.dx + aside - widest / 2 - measure.icon)},${n(nameY + at.dy - iconMeasure.grid / 2)})" d="${drawing}"/>` : '';
     const first = nameY + at.dy - ((b.lines.length - 1) * 16) / 2 + draw.baseline;
@@ -320,7 +324,7 @@ export function picture(model, lay, design, about) {
   const title = titleOf(model.heading, lay.width);
   return `<svg xmlns="http://www.w3.org/2000/svg" class="mv-svg" viewBox="0 0 ${lay.width} ${lay.height + title.band}" width="${lay.width}" height="${lay.height + title.band}" role="img" aria-label="${esc(about.title)}">
 <title>${esc(about.title)}</title>${model.describes ? `\n<desc>${esc(model.describes)}</desc>` : ''}
-<style>${styleOf(design, kindsIn(model), '.mv-svg', lineKindsIn(model))}</style>
+<style>${styleOf(design, kindsIn(model), '.mv-svg', lineKindsIn(model), barredIn(model))}</style>
 <rect width="100%" height="100%" fill="var(--mv-bg)"/>
 ${title.band ? `${title.svg}\n<g transform="translate(0,${title.band})">\n${inside(model, lay, design, false)}\n</g>` : inside(model, lay, design, false)}
 </svg>
@@ -388,7 +392,7 @@ ${steps}
 <meta name="generator" content="Merlive ${esc(about.version)}">
 <title>${esc(about.title)}</title>
 <style>
-${styleOf(design, kinds, ':root', lineKindsIn(model))}
+${styleOf(design, kinds, ':root', lineKindsIn(model), barredIn(model))}
 *{box-sizing:border-box}
 body{margin:0;background:var(--mv-bg);color:var(--mv-text);font:15px/1.5 ${design.font}}
 main{max-width:${draw.page}px;margin:0 auto;padding:20px ${draw.pagePad}px 40px;display:grid;gap:16px}
