@@ -3,7 +3,7 @@
 // its colours and the look of its boxes and lines from the same rules a flowchart is drawn with (render.mjs),
 // so the two kinds of diagram in one document are one family. Pure.
 
-import { huesFor, looksOf } from './design.mjs';
+import { huesFor, looksOf, mix } from './design.mjs';
 import { draw, rulesFor, titleOf, variables } from './render.mjs';
 import { across, namedUnder, tabOf } from './sequence.mjs';
 import { sequenceRuntime } from './sequence-runtime.mjs';
@@ -110,7 +110,7 @@ ${coloured.map((k) => `[data-kind="${k}"][data-mark] .mv-shape,[data-kind="${k}"
 .mv-note text{font-size:12px;fill:var(--mv-text);text-anchor:middle}
 .mv-frame-box{fill:none;stroke:var(--mv-stroke);stroke-width:1.2}
 [data-kind="rect"] .mv-frame-box{fill:var(--mv-text);fill-opacity:${draw.tint};stroke:none}
-${hued.map((k) => `.mv-frame[data-hue="${k}"] .mv-frame-box,.mv-group[data-hue="${k}"] rect{fill:var(--mv-k-${k});fill-opacity:${draw.hue}}\n`).join('')}.mv-frame-tab{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1.2}
+${hued.map((k) => `.mv-frame[data-hue="${k}"] .mv-frame-box,.mv-group[data-hue="${k}"] rect{fill:var(--mv-h-${k});fill-opacity:1}\n`).join('')}.mv-frame-tab{fill:var(--mv-group);stroke:var(--mv-stroke);stroke-width:1.2}
 .mv-frame-kind{font-size:10.5px;font-weight:700;fill:var(--mv-muted);letter-spacing:.04em;text-transform:uppercase}
 .mv-frame-label{font-size:12px;font-weight:600;fill:var(--mv-muted);paint-order:stroke;stroke:var(--mv-bg);stroke-width:4px;stroke-linejoin:round}
 .mv-frame-divide{stroke:var(--mv-stroke);stroke-width:1.2;stroke-dasharray:5 4}`;
@@ -118,11 +118,13 @@ ${hued.map((k) => `.mv-frame[data-hue="${k}"] .mv-frame-box,.mv-group[data-hue="
 
 function styleOf(/** @type {Design} */ design, /** @type {string[]} */ kinds, /** @type {string} */ root, /** @type {string[]} */ hued = []) {
   const [[first, one], two] = looksOf(design);
-  // A kind a highlight is coloured in needs its colour as a variable too, and is no kind of participant.
-  const all = [...new Set([...kinds, ...hued])];
+  // A highlight or a group its author coloured is filled with its kind's colour thinned into the page, made here
+  // for each look as the other colours are. Its fill is whole, as Mermaid's is: one inside another shows its own
+  // colour, not the two added up. It is no kind of participant.
+  const tinted = (/** @type {import('./design.mjs').Palette} */ p) => hued.map((k) => `;--mv-h-${k}:${mix(p.kinds[k], p.bg, draw.hue)}`).join('');
   const scheme = (/** @type {string} */ mode) => (mode === 'dark' ? ';color-scheme:dark' : '');
-  const dark = two ? `@media (prefers-color-scheme:dark){${root}{${variables(two[1], all)}${scheme(two[0])}}}` : '';
-  return `${root}{${variables(one, all)}${scheme(first)}}${dark}\n${sequenceRules(design, kinds, hued)}`;
+  const dark = two ? `@media (prefers-color-scheme:dark){${root}{${variables(two[1], kinds)}${tinted(two[1])}${scheme(two[0])}}}` : '';
+  return `${root}{${variables(one, kinds)}${tinted(one)}${scheme(first)}}${dark}\n${sequenceRules(design, kinds, hued)}`;
 }
 
 /** The drawing alone: the SVG's insides, the same for a page and a picture. */

@@ -202,10 +202,17 @@ taste are under "Waiting on Victor".
 - a sequence's `rect` and `box` keep the colour their author gave them, drawn in the design's own: the reader keeps
   it as hex (`colourOf`, any CSS colour, its names from a browser's own values), `huesFor` in design.mjs gives
   each the design's kind nearest in CIELAB hue, a different one for each while there are kinds to spare, and none
-  to a grey; the page lays that kind's colour over the page at `draw.hue` (0.1). Matched by hue, not by distance,
-  since such colours are pale: by distance a pale blue was as near a pale anything. D1 holds the words and the
-  quiet words on a coloured highlight, laid over any it is inside, and a coloured group's title. Two corpus
-  pictures changed (`seq-rect`, `seq-box-groups`), and neither says it loses its colour any more.
+  to a grey; the page fills it with that kind's colour thinned into the page at `draw.hue` (0.08), whole, as
+  Mermaid's is (`--mv-h-<kind>`). Matched by hue, not by distance, since such colours are pale: by distance a pale
+  blue was as near a pale anything. Two corpus pictures changed (`seq-rect`, `seq-box-groups`), and neither says
+  it loses its colour any more.
+- from review: a kind only one look of a design colours is not taken (it threw in dark); a hue in turns, grads,
+  radians or below 0 is read; and D1 reads what lies on a highlight against everything under it, the group behind
+  it and every highlight it is inside, plain or not. Working that out showed the words are drawn on a halo of the
+  page's colour, so it is the lines that lie bare on a highlight: D1 holds them to 3 to 1 there. Laid thinly one
+  over another, the built-in's lines fell to 2.3 to 1 three deep, so a coloured fill is whole, not added up, and
+  0.1 became 0.08: one inside another, a plain inside a coloured, still passes; three deep over the darkest kinds
+  does not, and is said.
 
 ## Waiting on Victor
 

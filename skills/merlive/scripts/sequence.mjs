@@ -139,8 +139,11 @@ export function colourOf(text) {
   const parts = (/** @type {string} */ s) => s.split(/[\s,/]+/).filter(Boolean);
   if ((m = /^rgba?\(([^)]*)\)$/.exec(t))) return hex(parts(m[1]).slice(0, 3).map((x) => (x.endsWith('%') ? parseFloat(x) * 2.55 : parseFloat(x))));
   if ((m = /^hsla?\(([^)]*)\)$/.exec(t))) {
-    // Hue, saturation and lightness to red, green and blue, as CSS Color 4 sets it out.
-    const [h, sat, l] = parts(m[1]).slice(0, 3).map((x) => parseFloat(x) / (x.endsWith('%') ? 100 : 1));
+    // Hue, saturation and lightness to red, green and blue, as CSS Color 4 sets it out. A hue is an angle in
+    // degrees unless it says another unit, and goes on round the circle past 360 and below 0.
+    const [angle, sat, l] = parts(m[1]).slice(0, 3).map((x) => parseFloat(x) / (x.endsWith('%') ? 100 : 1));
+    const unit = /(deg|grad|rad|turn)$/.exec(parts(m[1])[0] ?? '')?.[1] ?? 'deg';
+    const h = (((angle * { deg: 1, grad: 0.9, rad: 180 / Math.PI, turn: 360 }[unit]) % 360) + 360) % 360;
     const a = sat * Math.min(l, 1 - l), f = (/** @type {number} */ n) => {
       const k = (n + h / 30) % 12;
       return 255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)));
@@ -901,32 +904,40 @@ export function scoreSequence(model, lay, design) {
     const c = contrast(p.muted, mix(p.text, p.bg, draw.frame));
     if (c < colourLimits.text) d1.broken.push(`${mode}: the title of a group is ${c.toFixed(1)} to 1, and needs ${colourLimits.text}`);
   }
-  // A highlight or a group its author coloured is drawn in the design's colour nearest it, laid thinly over the
-  // page and over any highlight it is inside: the words on it, plain and quiet, and a group's title, read there.
+  // A highlight or a group its author coloured is filled with the design's colour nearest it, thinned into the
+  // page, whole, over whatever is under it; a plain highlight lays the text colour thinly over what is under it, a
+  // group's fill or the page and any highlight it is inside. Words on it are drawn on a halo of the page's own
+  // colour, so it is the lines that lie bare on it, and a coloured group's title: each is read there.
   const hues = huesFor(design, [...model.groups.flatMap((g) => (g.colour ? [g.colour] : [])), ...model.blocks.flatMap((b) => (b.colour ? [b.colour] : []))]);
   for (const [mode, p] of looksOf(design)) {
-    const layer = (/** @type {Block} */ b, /** @type {string} */ under) => {
-      const k = b.colour ? hues[b.colour] : undefined;
-      return k ? mix(p.kinds[k], under, draw.hue) : mix(p.text, under, draw.tint);
+    const own = (/** @type {string|undefined} */ c) => {
+      const k = c ? hues[c] : undefined;
+      return k ? mix(p.kinds[k], p.bg, draw.hue) : null;
     };
-    const fillOf = (/** @type {number} */ i) => {
-      const chain = [];
-      for (let at = i; at >= 0; at = model.blocks[at].parent) if (model.blocks[at].kind === 'rect') chain.unshift(model.blocks[at]);
-      return chain.reduce((under, b) => layer(b, under), p.bg);
+    const lines = (/** @type {string} */ where, /** @type {string} */ fill) => {
+      for (const [what, ink] of [['lines', p.edge], ['a picked line', p.accent]]) {
+        const c = contrast(ink, fill);
+        if (c < colourLimits.line) d1.broken.push(`${mode}: ${what} on ${where} ${what === 'lines' ? 'are' : 'is'} ${c.toFixed(1)} to 1, and need${what === 'lines' ? '' : 's'} ${colourLimits.line}`);
+      }
     };
     model.blocks.forEach((b, i) => {
-      if (b.kind !== 'rect' || !b.colour || !hues[b.colour] || !lay.frames.some((f) => f.id === b.id)) return;
-      const fill = fillOf(i);
-      for (const [what, ink] of /** @type {[string, string][]} */ ([['words', p.text], ['quiet words', p.muted]])) {
-        const c = contrast(ink, fill);
-        if (c < colourLimits.text) d1.broken.push(`${mode}: ${what} on a highlight coloured ${b.colour} are ${c.toFixed(1)} to 1, and need ${colourLimits.text}`);
-      }
+      const f = lay.frames.find((x) => x.id === b.id);
+      if (b.kind !== 'rect' || !f) return;
+      const chain = [];
+      for (let at = i; at >= 0; at = model.blocks[at].parent) if (model.blocks[at].kind === 'rect') chain.unshift(model.blocks[at]);
+      // What is behind it: each group it lies over, and the page wherever no one group holds it all.
+      const over = lay.groups.filter((g) => g.x < f.x + f.w && f.x < g.x + g.w);
+      const grounds = [...over.map((g) => own(g.colour) ?? mix(p.text, p.bg, draw.frame)), ...(over.some((g) => g.x <= f.x && f.x + f.w <= g.x + g.w) ? [] : [p.bg])];
+      const fills = grounds.map((ground) => chain.reduce((under, r) => own(r.colour) ?? mix(p.text, under, draw.tint), ground));
+      const worst = fills.reduce((x, y) => (contrast(p.edge, y) < contrast(p.edge, x) ? y : x));
+      lines(`a highlight${b.colour ? ` coloured ${b.colour}` : ''}`, worst);
     });
     for (const g of lay.groups) {
-      const k = g.colour ? hues[g.colour] : undefined;
-      if (!g.name || !k) continue;
-      const c = contrast(p.muted, mix(p.kinds[k], p.bg, draw.hue));
-      if (c < colourLimits.text) d1.broken.push(`${mode}: the title of a group coloured ${g.colour} is ${c.toFixed(1)} to 1, and needs ${colourLimits.text}`);
+      const fill = own(g.colour);
+      if (!fill) continue;
+      const c = contrast(p.muted, fill);
+      if (g.name && c < colourLimits.text) d1.broken.push(`${mode}: the title of a group coloured ${g.colour} is ${c.toFixed(1)} to 1, and needs ${colourLimits.text}`);
+      lines(`a group coloured ${g.colour}`, fill);
     }
   }
   const looks = looksOf(design).map(([mode]) => mode).join(' and ');

@@ -68,10 +68,12 @@ strikes one through.
 - **Fail:** a frame's corner tab reads "OOP" because a lifeline runs through the L.
 
 A `rect` is a frame with no name: a highlight behind its rows, in the design's own tint. One inside another shows
-darker. A `rect` its author gave a colour (`rect rgb(191, 223, 255)`) is drawn in the design's own colour nearest
-that hue, thinly, and so is a `box` round participants (`box Aqua Buying`): highlights an author told apart by
-colour stay apart, in the project's colours. Each colour after the first takes the nearest not yet taken, while
-the design has colours to spare. A grey, or a colour with none, keeps the design's tint.
+darker. A `rect` its author gave a colour (`rect rgb(191, 223, 255)`) is filled with the design's own colour
+nearest that hue, thinned into the page, and so is a `box` round participants (`box Aqua Buying`): highlights an
+author told apart by colour stay apart, in the project's colours. The fill is whole, as Mermaid's is, so one inside
+another, or over a group, shows its own colour. Each colour after the first takes the nearest not yet taken, among
+the kinds every look of the design has a colour for, while there are kinds to spare. A grey, or a colour with
+none, keeps the design's tint.
 
 ## S5. A note sits clear of messages and of other notes, and covers a bar wholly or not at all
 
@@ -119,10 +121,15 @@ the design's `external` kind and a database of its `data` kind; every other part
 and the name carry the difference as well as colour: the small drawings are line work in the colour of a line,
 or of their kind when the design gives it one, and both are held to be seen on the page.
 
-Two things are checked that a flowchart has not: the title of a group is quiet text on the group's own fill, which
-is a little off the page's, and it must be readable there, in light and in dark; and on a highlight or a group
-its author coloured, the words, the quiet words and the title must be readable on the colour it is drawn in, laid
-over any highlight it is inside.
+Two things are checked that a flowchart has not. The title of a group is quiet text on the group's own fill, which
+is a little off the page's, or on the colour its author gave it, and it must be readable there, in light and in
+dark. And the lines on a highlight or a coloured group, plain and picked, must be seen on what is under them: a
+coloured one's own fill, or a plain one's tint over the group behind it, the page, and any plain highlight it is
+inside. A message's words and a frame's name are drawn on a halo of the page's own colour, so they are read as on
+the page wherever they sit.
+
+- **What to do when it fails:** put fewer plain highlights one inside another; with a design's own colours, a
+  darker line (`edge`) or quiet text (`muted`).
 
 ## What a sequence looks like
 

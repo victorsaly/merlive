@@ -151,14 +151,15 @@ const hueAngle = (/** @type {string} */ hex) => {
  * Which of the design's own kinds' colours to draw each colour in that an author gave a highlight or a group of a
  * sequence: the nearest in hue, since such colours are pale and only their hue says anything. A colour after the
  * first takes the nearest not yet taken, so colours an author told apart stay apart while there are colours to
- * spare. A grey keeps the design's own tint. Chosen in the design's first look, and drawn in each look's colour
- * of that kind.
+ * spare. A grey keeps the design's own tint. Chosen in the design's first look, among the kinds every look has a
+ * colour for, and drawn in each look's colour of that kind.
  * @param {Design} design
  * @param {string[]} colours as hex, in the order they were written
  * @returns {Record<string, string|undefined>} each colour to a kind of the design, or to nothing
  */
 export function huesFor(design, colours) {
-  const p = looksOf(design)[0][1], kinds = Object.keys(p.kinds), taken = new Set();
+  const looks = looksOf(design).map(([, q]) => q), p = looks[0], taken = new Set();
+  const kinds = Object.keys(p.kinds).filter((k) => looks.every((q) => q.kinds[k]));
   /** @type {Record<string, string|undefined>} */
   const out = {};
   for (const c of colours) {

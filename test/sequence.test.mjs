@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
-import { across, isSequence, layoutSequence, parseSequence, scoreSequence } from '../skills/merlive/scripts/sequence.mjs';
+import { across, colourOf, isSequence, layoutSequence, parseSequence, scoreSequence } from '../skills/merlive/scripts/sequence.mjs';
 import { sequencePage, sequencePicture } from '../skills/merlive/scripts/sequence-render.mjs';
 import { builtIn, designFrom, huesFor } from '../skills/merlive/scripts/design.mjs';
 
@@ -723,7 +723,7 @@ describe("sequence: an author's colours for a highlight and a group", () => {
     assert.notEqual(blues['#00ffff'], blues['#214263']);
   });
 
-  it('draws a coloured highlight and group in that colour of the design, thinly, in light and dark, and leaves the legend alone', () => {
+  it('fills a coloured highlight and group with that colour of the design, thinly and whole, in light and dark, and leaves the legend alone', () => {
     const m = seq(coloured), l = layoutSequence(m);
     const svg = sequencePicture(m, l, builtIn, { title: 't' });
     const hues = huesFor(builtIn, ['#00ffff', '#214263', '#bfdfff', '#c896ff']);
@@ -733,19 +733,62 @@ describe("sequence: an author's colours for a highlight and a group", () => {
     assert.match(svg, new RegExp(`<g class="mv-frame" data-kind="rect" data-hue="${hues['#c896ff']}"`));
     assert.equal((svg.match(/<g class="mv-group">/g) ?? []).length, 1, 'a group with no colour is the design\'s');
     assert.equal((svg.match(/<g class="mv-frame" data-kind="rect"(?! data-hue)/g) ?? []).length, 1, 'a highlight with no colour is the design\'s tint');
-    // Each colour is a variable of the design's, in both looks.
-    for (const k of new Set(Object.values(hues))) assert.equal((svg.match(new RegExp(`--mv-k-${k}:`, 'g')) ?? []).length, 2, k);
+    // Each colour is a variable made from the design's, in both looks, and fills whole: one inside another shows
+    // its own colour, as Mermaid's does.
+    for (const k of new Set(Object.values(hues))) {
+      assert.equal((svg.match(new RegExp(`--mv-h-${k}:`, 'g')) ?? []).length, 2, k);
+      assert.match(svg, new RegExp(`\\.mv-frame\\[data-hue="${k}"\\] \\.mv-frame-box,\\.mv-group\\[data-hue="${k}"\\] rect\\{fill:var\\(--mv-h-${k}\\);fill-opacity:1\\}`));
+    }
     const page = sequencePage(m, l, builtIn, { title: 't', source: 's', version: '0' });
     assert.doesNotMatch(page.slice(page.indexOf('mv-legend')), /--mv-k-(data|external|terminal|decision|rework|risk)\)/, 'no kind in the legend for a colour that means nothing');
     assert.deepEqual(failed(scoreSequence(m, l, builtIn)), []);
   });
 
-  it('holds the words on a coloured highlight, and the title on a coloured group, to the rule', () => {
+  it('holds the lines on a coloured highlight or group, and the title on a coloured group, to the rule', () => {
     const m = seq(coloured), l = layoutSequence(m);
-    // Words as light as the rule allows on the page cannot also be read on a coloured highlight over it.
-    const faint = designFrom({ name: 'Faint', light: { ...builtIn.light, text: '#5f7472', muted: '#5f7472' }, dark: builtIn.dark });
+    // Lines and quiet words just light enough on the page are too light on a colour laid over it. Words on a
+    // highlight are drawn on a halo of the page's colour, so it is the lines that are read on it.
+    const faint = designFrom({ name: 'Faint', light: { ...builtIn.light, edge: '#8a8a8a', muted: '#6a6a6a' }, dark: builtIn.dark });
     const d1 = scoreSequence(m, l, faint).checks.find((c) => c.id === 'D1')?.detail ?? '';
-    assert.match(d1, /light: words on a highlight coloured .* are .* to 1, and need 4\.5/);
-    assert.match(d1, /light: the title of a group coloured .* is .* to 1, and needs 4\.5/);
+    assert.match(d1, /light: lines on a highlight coloured #bfdfff are 2\.\d to 1, and need 3/);
+    assert.match(d1, /light: lines on a group coloured #214263 are 2\.\d to 1, and need 3/);
+    assert.match(d1, /light: the title of a group coloured .* is 4\.\d to 1, and needs 4\.5/);
+    assert.doesNotMatch(d1, /words on a highlight/);
+  });
+
+  it('reads a hue CSS turns or writes below zero, in any of its units', () => {
+    assert.equal(colourOf('hsl(-120, 100%, 50%)'), '#0000ff');
+    assert.equal(colourOf('hsl(0.5turn, 100%, 50%)'), '#00ffff');
+    assert.equal(colourOf('hsl(200grad 100% 50%)'), '#00ffff');
+    assert.equal(colourOf('hsl(240deg, 100%, 50%)'), '#0000ff');
+    assert.equal(colourOf('hsla(600, 100%, 50%, 0.3)'), '#0000ff');
+  });
+
+  it('takes only a colour every look of the design has', () => {
+    // A kind coloured in light only has no colour to draw a highlight in, in dark.
+    const lightOnly = designFrom({ name: 'Half', light: { kinds: { customBlue: '#0000ff' } }, dark: {} });
+    assert.equal(huesFor(lightOnly, ['#0000ff'])['#0000ff'] === 'customBlue', false);
+    const m = seq('A->>B: hi\nrect blue\nB->>A: back\nend');
+    assert.doesNotThrow(() => scoreSequence(m, layoutSequence(m), lightOnly));
+  });
+
+  // Lines just dark enough on the page, on a pale blue, and on the design's tint over the page, and not on its
+  // tint over the pale blue: what is behind a plain highlight decides.
+  const between = designFrom({ name: 'Between', light: { edge: '#838383' } });
+  const d1Of = (/** @type {string} */ body) => {
+    const m = seq(body);
+    return scoreSequence(m, layoutSequence(m), between).checks.find((c) => c.id === 'D1')?.detail ?? '';
+  };
+
+  it('reads the lines on a highlight against the group behind it too', () => {
+    assert.match(d1Of('box rgb(191,223,255) Here\nparticipant A\nparticipant B\nend\nrect\nA->>B: hi\nend'), /light: lines on a highlight are 2\.\d to 1, and need 3/);
+    assert.doesNotMatch(d1Of('participant A\nparticipant B\nrect\nA->>B: hi\nend'), /lines on a highlight/, 'over the page alone it is seen');
+  });
+
+  it('reads the lines on a plain highlight inside a coloured one on both, and a coloured one inside anything on its own colour', () => {
+    assert.match(d1Of('participant A\nparticipant B\nrect rgb(191,223,255)\nrect\nA->>B: hi\nend\nend'), /light: lines on a highlight are 2\.\d to 1, and need 3/);
+    assert.doesNotMatch(d1Of('participant A\nparticipant B\nrect rgb(191,223,255)\nA->>B: hi\nend'), /lines on a highlight/);
+    // A coloured one is filled whole, so what it is inside adds nothing to it.
+    assert.doesNotMatch(d1Of('box rgb(191,223,255) Here\nparticipant A\nparticipant B\nend\nrect\nrect rgb(191,223,255)\nA->>B: hi\nend\nend'), /lines on a highlight coloured/);
   });
 });
