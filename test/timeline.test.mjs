@@ -324,6 +324,12 @@ describe('timeline: a section with a long name', () => {
     assert.deepEqual([...(text?.[2] ?? '').matchAll(/<tspan x="([\d.]+)"/g)].map((t) => String(Math.round(Number(t[1])))), [left, left, left]);
   });
 
+  it('keeps the name one sentence for whoever reads its text: a screen reader, or a copy', () => {
+    const m = timeline(long), svg = picture(m, layout(m), builtIn, { title: 't' });
+    const text = /<text class="mv-name"[^>]*>(<tspan[^]*?)<\/text>/.exec(svg)?.[1] ?? '';
+    assert.equal(text.replace(/<[^>]+>/g, ''), 'Everything the buyer does before the supplier hears of it');
+  });
+
   it('leaves a short name on one line, its frame as it was', () => {
     const lay = layout(timeline('section Buying\nMonday : Raised\nsection Delivery\nFriday : Delivered'));
     for (const f of /** @type {any[]} */ (lay.groups)) assert.deepEqual([f.lines, f.name.h], [[f.title], measure.nameLine]);

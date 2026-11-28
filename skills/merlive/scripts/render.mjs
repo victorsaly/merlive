@@ -276,8 +276,10 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
     const lines = f.lines?.length ? f.lines : [f.title];
     if (lines.length === 1) return `<text class="mv-name" x="${n(f.name.x)}" y="${n(f.name.y + 4)}">${esc(f.title)}</text>`;
     // Its lines start where a name of one line starts, at the left of the frame: centred, they would be ragged.
+    // Each but the last ends in a space, which takes no room at the end of a line, so that its text is still one
+    // sentence to a screen reader or a copy, and not words run together where the lines meet.
     const first = f.name.y + 4 - ((lines.length - 1) * measure.nameLine) / 2, left = f.name.x - f.name.w / 2;
-    return `<text class="mv-name" style="text-anchor:start" x="${n(left)}" y="${n(first)}">${lines.map((l, i) => `<tspan x="${n(left)}" dy="${i ? measure.nameLine : 0}">${esc(l)}</tspan>`).join('')}</text>`;
+    return `<text class="mv-name" style="text-anchor:start" x="${n(left)}" y="${n(first)}">${lines.map((l, i) => `<tspan x="${n(left)}" dy="${i ? measure.nameLine : 0}">${esc(l)}${i < lines.length - 1 ? ' ' : ''}</tspan>`).join('')}</text>`;
   });
   // The ground: the grid the boxes are placed on, shown as dots faint enough to sit behind everything.
   // A live page spreads them over its whole stage instead, so they do not stop at the drawing's edge.
