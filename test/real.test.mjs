@@ -368,7 +368,9 @@ describe('more real diagrams: drawn', () => {
     const svg = picture(m, layout(m), builtIn, { title: m.title });
     assert.equal(svg.match(/class="mv-group"/g)?.length, 3);
     assert.ok(svg.indexOf('class="mv-group"') < svg.indexOf('class="mv-node"'));
-    assert.ok(svg.includes('>Build the agent</text>'));
+    // A name may wrap to sit beside the line into its frame: read as a sentence, its lines are its title.
+    const names = [...svg.matchAll(/<text class="mv-name"[^>]*>(.*?)<\/text>/g)].map((t) => t[1].replace(/<[^>]+>/g, ''));
+    assert.ok(names.includes('Build the agent'), names.join(' | '));
     const long = parse('flowchart TD\nA -->|a label that goes on for rather a while| B');
     assert.equal(picture(long, layout(long), builtIn, { title: '' }).match(/<tspan class="mv-label-line"/g)?.length, 2);
   });

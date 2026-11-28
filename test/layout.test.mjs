@@ -303,6 +303,16 @@ describe("layout: a group's name", () => {
     assert.ok(!struck(lay, frame.name));
   });
 
+  it('wraps narrower to sit beside a line that comes into its frame, rather than have the line pass behind it', () => {
+    const src = 'flowchart TD\nX[Draft] --> A\nsubgraph C [Checks before sending]\n  A[Credit] --> B[Stock]\nend';
+    const m = parse(src), lay = layout(m), [f] = lay.groups;
+    assert.equal(f.name.plate, false);
+    assert.ok(!struck(lay, f.name), 'no line through the name');
+    assert.ok(f.name.x - f.name.w / 2 >= f.x && f.name.x + f.name.w / 2 <= f.x + f.w, 'inside its frame');
+    assert.ok(f.name.y + f.name.h / 2 < lay.nodes.A.y - lay.nodes.A.h / 2, 'above its boxes');
+    assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => c.detail), []);
+  });
+
   it('is put on a plate when a line has to pass behind it, so it can still be read', () => {
     const lay = layout(parse('flowchart TB\nA[Order] --> B[Pick]\nsubgraph wh [The whole warehouse floor]\n  B --> C[Pack]\nend\nC --> D[Ship]'));
     const [frame] = lay.groups;

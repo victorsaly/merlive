@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.5.1 (unreleased)
+## 0.5.2 (unreleased)
+
+- **A group's name sits beside the line into its frame**, not with the line behind its letters. Where a line
+  comes into a frame through where its name would go, the name wraps narrower, to three lines, to sit beside it,
+  and the frame keeps the room for those lines ("Checks before sending", "Build the agent", "Back office"). A
+  name that fits beside no line (a single long word, a line each side) is still on a plate, as before.
+
+## 0.5.1 (2026-11-28)
 
 What 0.4.0 and 0.5.0 left in flowcharts.
 

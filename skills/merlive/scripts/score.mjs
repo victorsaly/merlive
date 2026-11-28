@@ -187,6 +187,23 @@ export function score(model, lay, design) {
     if (lines > gridMeasure.nameLines) struck.push(`the name of the group "${f.title}" takes ${lines} lines; a name wraps to ${gridMeasure.nameLines} at most`);
     if (n.x - n.w / 2 < f.x || n.x + n.w / 2 > f.x + f.w) struck.push(`the name of the group "${f.title}" runs past its frame`);
     for (const b of nodes) if (overlap(n, b)) struck.push(`the name of the group "${f.title}" lies under "${label(b.id)}"`);
+    // On a plate only where no wrapping of it, to three lines, sits beside the lines along the top of its frame.
+    // On a grid a name is not yet wrapped narrower for a line: docs/PLAN.md.
+    if (!n.plate || lay.grids) continue;
+    const longest = Math.max(...f.title.split(/\s+/).map((word) => word.length));
+    for (let most = Math.max(...(f.lines ?? [f.title]).map((l) => l.length)) - 1; most >= longest; most--) {
+      const called = wrap(f.title, most);
+      if (called.length > gridMeasure.nameLines) break;
+      const w = Math.round(Math.max(...called.map((l) => l.length)) * measure.nameGlyph), h = measure.nameLine * called.length;
+      const y = f.y + measure.nameDown + ((called.length - 1) * measure.nameLine) / 2;
+      const clear = (/** @type {number} */ x) => !edges.some((e) => segmentsOf(e.points).some((seg) => hitsBox(seg, { x, y, w, h }, measure.clear)));
+      let fits = false;
+      for (let x = f.x + measure.nameIn + w / 2; x <= f.x + f.w - measure.nameIn - w / 2 && !fits; x += measure.nameStep) fits = clear(x);
+      if (fits) {
+        struck.push(`the name of the group "${f.title}" is on a plate, where in ${called.length} lines it would sit beside the line`);
+        break;
+      }
+    }
   }
   add('P8', "A group's name can be read", struck, lay.groups.length ? `${lay.groups.length} clear of lines, or on a plate` : 'no groups');
 
