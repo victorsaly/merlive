@@ -134,16 +134,18 @@ frame it is neither inside nor round, would say something untrue: it is left out
 
 ## P8. A group's name can be read
 
-A group's name goes along the top of its frame, in the first stretch no line runs through: at the left, then at
-the right, then anywhere between. A link's words keep off it. Where every stretch has a line in it (a narrow
+A group's name goes along the top of its frame, in the first stretch no line comes within 8 px of (about a
+letter, so a line is not read as one of its strokes): at the left, then at the right, then anywhere between. A link's words keep off it. Where every stretch has a line in it (a narrow
 frame, a long name, a line coming in at the middle), the name wraps narrower, to three lines, to sit beside the
 line, and the frame keeps room above its boxes for those lines. Where no wrapping of it fits beside the lines (a
 single long word, a line each side of it), the name stays at the left on a plate of the frame's own colour, and
 the line passes behind it.
 
-- **Fail:** a line is drawn through the letters of a group's name.
+- **Fail:** a line is drawn through the letters of a group's name, or passes within 8 px of them.
 - **Fail:** a name on a plate, with a line behind its letters, where it would have fitted beside the line in
   three lines.
+
+A grid places its frames' names the same way.
 
 ## On a grid its author placed
 

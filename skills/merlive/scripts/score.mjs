@@ -1,7 +1,7 @@
 // Why: a rule nobody checks is a wish. Every placement rule in docs/PLACEMENT.md is a check here, so a
 // diagram that breaks one is not written, and the message says which rule and where. Pure.
 
-import { compartmentsOf, frameEdge, hitsBox, meet, measure, overNeeds, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf, wrap } from './layout.mjs';
+import { compartmentsOf, frameEdge, hitsBox, meet, measure, nameAlong, nameBeside, overNeeds, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf, wrap } from './layout.mjs';
 import { colourChecks, looksOf } from './design.mjs';
 import { gridMeasure } from './grid.mjs';
 
@@ -179,6 +179,7 @@ export function score(model, lay, design) {
   add('P7', "A link's words sit clear of boxes and of each other", covered, `${labels.length} labels clear`);
 
   // P8: a name on a plate has its line pass behind it, which is drawn so; any other must be clear of every line.
+  const drawn = edges.map((e) => e.points);
   const struck = lay.groups.filter((f) => !f.name.plate && edges.some((e) => segmentsOf(e.points).some((seg) => hitsBox(seg, f.name, 0)))).map((f) => `a line runs through the name of the group "${f.title}"`);
   // A name is read along the top of its own frame: in as many lines as a name wraps to, inside the frame, and
   // with no box on it. A box that lies on the name hides it as surely as a line through it would.
@@ -187,22 +188,18 @@ export function score(model, lay, design) {
     if (lines > gridMeasure.nameLines) struck.push(`the name of the group "${f.title}" takes ${lines} lines; a name wraps to ${gridMeasure.nameLines} at most`);
     if (n.x - n.w / 2 < f.x || n.x + n.w / 2 > f.x + f.w) struck.push(`the name of the group "${f.title}" runs past its frame`);
     for (const b of nodes) if (overlap(n, b)) struck.push(`the name of the group "${f.title}" lies under "${label(b.id)}"`);
-    // On a plate only where no wrapping of it, to three lines, sits beside the lines along the top of its frame.
-    // On a grid a name is not yet wrapped narrower for a line: docs/PLAN.md.
-    if (!n.plate || lay.grids) continue;
-    const longest = Math.max(...f.title.split(/\s+/).map((word) => word.length));
-    for (let most = Math.max(...(f.lines ?? [f.title]).map((l) => l.length)) - 1; most >= longest; most--) {
-      const called = wrap(f.title, most);
-      if (called.length > gridMeasure.nameLines) break;
-      const w = Math.round(Math.max(...called.map((l) => l.length)) * measure.nameGlyph), h = measure.nameLine * called.length;
-      const y = f.y + measure.nameDown + ((called.length - 1) * measure.nameLine) / 2;
-      const clear = (/** @type {number} */ x) => !edges.some((e) => segmentsOf(e.points).some((seg) => hitsBox(seg, { x, y, w, h }, measure.clear)));
-      let fits = false;
-      for (let x = f.x + measure.nameIn + w / 2; x <= f.x + f.w - measure.nameIn - w / 2 && !fits; x += measure.nameStep) fits = clear(x);
-      if (fits) {
-        struck.push(`the name of the group "${f.title}" is on a plate, where in ${called.length} lines it would sit beside the line`);
-        break;
-      }
+    // A line that passes close by a name is read as a stroke of its letters, as in "web shop|": a name keeps
+    // a letter's width from every line, unless it is on a plate with the line behind it.
+    if (!n.plate && !struck.some((s) => s.includes(`"${f.title}"`)) && drawn.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, n, measure.nameClear)))) {
+      struck.push(`a line passes within ${measure.nameClear}px of the name of the group "${f.title}"`);
+    }
+    // On a plate only where no place along the top of its frame, and no wrapping of it to three lines, is clear.
+    if (!n.plate) continue;
+    const called = f.lines ?? [f.title];
+    if (!nameAlong(f, called, drawn).plate) struck.push(`the name of the group "${f.title}" is on a plate, where it would sit clear of the lines along the top of its frame`);
+    else {
+      const narrower = nameBeside(f, called, drawn);
+      if (narrower) struck.push(`the name of the group "${f.title}" is on a plate, where in ${narrower.lines.length} lines it would sit beside the line`);
     }
   }
   add('P8', "A group's name can be read", struck, lay.groups.length ? `${lay.groups.length} clear of lines, or on a plate` : 'no groups');

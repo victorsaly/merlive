@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, as 0.5.2 was begun.
+Last brought up to date: 28 November 2026, as 0.5.3 was begun.
 
 ## Released
 
@@ -104,7 +104,7 @@ boards, 29 timelines, 22 packets). Fixed from it: a mindmap's hexagon, circle an
 Left as the reference decides: a known priority in small letters (`priority: high`) and any other as written; a
 ticket that is not a link even where `ticketBaseUrl` says where it would go; a timeline theme's colours, which
 are the design's. Already known: in `timeline-direction-td-sections` the arrow into a section runs just past the
-end of its name (on a grid a name is not yet wrapped narrower to sit beside a line, as a flow's is since 0.5.2: "Next", item 1). A packet's bits are said over its name ("0–15")
+end of its name (0.5.3 keeps a name a letter from every line). A packet's bits are said over its name ("0–15")
 where Mermaid puts the first and last at its corners, and its title is above, as every kind's is. Questions of
 taste are under "Waiting on Victor".
 
@@ -124,7 +124,7 @@ taste are under "Waiting on Victor".
   (`aside` in `settle()`), so left to right a name's lines do not run into the next lane, and a word longer than
   its frame makes the frame wider (`Fit.w`); a design file may colour a kind with a hyphen in its name.
 
-**0.5.2** (not released yet), the pull request from the branch `fix-0.5.2`:
+**0.5.2** (28 November 2026), pull request 13 from the branch `fix-0.5.2`:
 - a group's name that a line would pass behind wraps narrower, to three lines, to sit beside the line instead
   (`clearOf` and the search after it in `placedOnce()`; `placed()` places the flow a third time when the narrower
   name needs more lines than were kept for it). Six corpus pictures changed (`state-composite-named`,
@@ -133,6 +133,17 @@ taste are under "Waiting on Victor".
   line into its frame, the frame a line or two taller. A name that fits beside no line in three lines (a single
   long word, a line on each side) is still on a plate.
 - the lanes off the main path in the service diagram were looked into and left: see "Waiting on Victor".
+
+**0.5.3** (not released yet), the pull request from the branch `fix-0.5.3`:
+- a group's name keeps 8px from every line (`measure.nameClear`), where it kept the 4 a box keeps
+  (`measure.clear`): "Web shop" and "The firm" (`c4-boundary-container`, `c4-boundary`) ended against the arrow
+  into their frames. Looked into as "a grid's name is not wrapped narrower", the timeline in
+  `timeline-direction-td-sections` had no line through its name at all: the arrow ran 4px past its end.
+- a name is placed by `nameAlong` and `nameBeside` in layout.mjs, which a flow, a grid (step 6 of grid.mjs, and
+  `placeGrid` placing again where a narrower name needs more lines than its row keeps) and P8 all use. P8 refuses
+  a line within 8px of a name, and a plate where the top of the frame has a clear place, on a grid as in a flow.
+  Three corpus pictures changed. In the timeline, "Delivery" is now at the right of its frame and "Buying"
+  above it at the left: see "Waiting on Victor".
 
 ## Waiting on Victor
 
@@ -145,6 +156,10 @@ taste are under "Waiting on Victor".
   shared trunk wanted, for a tree's lines that have nothing at their ends? And in `mindmap-tree` one parent's line
   to its second child leaves its bottom and the other's its right side: both clear, not alike.
 
+- **Section names that do not line up.** In `timeline-direction-td-sections` the arrow from Tuesday into
+  Friday comes in under the start of "Delivery", so the name went to the right end of its frame, as a flow's
+  name does when the left is taken; "Buying" above is at the left. Should frames stacked in one column keep their
+  names at one end (on a plate where a line comes in under one), or is the name clear of the line worth it?
 - **Lanes off the main path, short lines or no crossing.** In the business analyst demo's service diagram OpenAI
   (linked to the question, Groq and the answer) is in the far lane and "Live AI stops" (linked to Groq only) in
   the near one, so two lines run long. Swapped, the "yes" line into OpenAI crosses Groq's line to "Live AI
@@ -178,8 +193,6 @@ taste are under "Waiting on Victor".
    - a state diagram's fork and join are boxes, not bars;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
-   - on a grid, a frame's name is not wrapped narrower to sit beside a line, as a flow's is (0.5.2): in
-     `timeline-direction-td-sections` the arrow into a section runs just past the end of its name;
    - a group's own direction is read past;
    - of the newer `@{ shape }` list, twelve shapes are drawn and the rest are boxes.
 2. **The other kinds**, picked by what Victor's own repositories use, not by Mermaid's list. Twenty are left
