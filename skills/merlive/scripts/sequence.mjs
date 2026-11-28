@@ -432,7 +432,16 @@ export function layoutSequence(model) {
   const up = (/** @type {Participant} */ p) => (namedUnder(p) ? across.mark / 2 : h / 2);
   const reach = (/** @type {Participant} */ p) => (namedUnder(p) ? across.markHalf : w / 2);
 
-  // 2. One step from each lifeline to the next: wide enough for the widest words that sit in a gap.
+  // How many bars a participant carries at an item, for where a line meets it: at the edge of its outermost bar.
+  const barsAt = (/** @type {string} */ id, /** @type {number} */ index) => model.activations.filter((a) => a.of === id && a.from <= index && (a.to === null || index <= a.to)).length;
+  // Bars stack to the right: past the first, how much further a participant's reach to the right.
+  const stacked = (/** @type {string|undefined} */ id, /** @type {number} */ index) => (id ? Math.max(0, barsAt(id, index) - 1) * across.barStep : 0);
+  // How far a participant's bars reach from its lifeline, to its right and to its left, at an item.
+  const toRight = (/** @type {string|undefined} */ id, /** @type {number} */ index) => (id && barsAt(id, index) ? stacked(id, index) + across.bar / 2 : 0);
+  const toLeft = (/** @type {string|undefined} */ id, /** @type {number} */ index) => (id && barsAt(id, index) ? across.bar / 2 : 0);
+
+  // 2. One step from each lifeline to the next: wide enough for the widest words that sit in a gap, and for a note
+  //    with the bars it faces either side of it.
   const wordsOfMessage = (/** @type {Message} */ m) => m.lines.flatMap((l) => wrap(l, across.wordWrap));
   const noteLines = (/** @type {Note} */ n, max = across.noteWrap) => n.lines.flatMap((l) => wrap(l, max));
   let step = w + across.gap;
@@ -442,18 +451,31 @@ export function layoutSequence(model) {
       // Beside a message to itself the words share the gap with its loop; beside a participant made here, with its box.
       const beside = item.from === item.to ? across.selfOut + across.clear : people[at(item.to)].created === index ? w / 2 : 0;
       if (item.from !== item.to || at(item.from) < people.length - 1) step = Math.max(step, px + beside + 2 * across.clear + across.bar);
-    } else if (item.type === 'note' && item.over.length === 1) {
+    } else if (item.type === 'note') {
+      const over = [...item.over].sort((p, q) => at(p) - at(q)), first = over[0], last = over[over.length - 1];
+      const before = people[at(first) - 1]?.id, after = people[at(last) + 1]?.id;
+      if (over.length > 1) {
+        // Over two, a note reaches past each lifeline, and past the stack on the right one: clear of the bars beyond.
+        if (before) step = Math.max(step, across.noteOver + across.clear + toRight(before, index));
+        if (after) step = Math.max(step, across.noteOver + stacked(last, index) + across.clear + toLeft(after, index));
+        return;
+      }
       const px = widest(noteLines(item), across.noteGlyph) + 2 * across.notePad;
-      const inner = item.place === 'right' ? at(item.over[0]) < people.length - 1 : item.place === 'left' ? at(item.over[0]) > 0 : false;
-      if (inner) step = Math.max(step, px + across.noteOff + across.clear + across.bar);
-      if (item.place === 'over') step = Math.max(step, px / 2 + across.clear);
+      // Beside a participant, a note starts past its bars and ends clear of the bars of the next one, which reach
+      // toward it from the left by their stack and from the right by half a bar.
+      if (item.place === 'right' && after) step = Math.max(step, px + across.noteOff + across.clear + across.bar + stacked(first, index));
+      if (item.place === 'left' && before) step = Math.max(step, px + across.noteOff + across.clear + across.bar + stacked(before, index));
+      if (item.place === 'over') {
+        // Over one, it is centred on the lifeline, as wide as its words or its stack of bars makes it.
+        const half = Math.max(48, px, 2 * (across.noteOver + stacked(first, index))) / 2;
+        if (before) step = Math.max(step, half + across.clear + toRight(before, index));
+        if (after) step = Math.max(step, half + across.clear + toLeft(after, index));
+      }
     }
   });
   step = Math.min(across.mostStep, Math.ceil(step / 8) * 8);
   const x = (/** @type {string} */ id) => at(id) * step;
 
-  // How many bars a participant carries at an item, for where a line meets it: at the edge of its outermost bar.
-  const barsAt = (/** @type {string} */ id, /** @type {number} */ index) => model.activations.filter((a) => a.of === id && a.from <= index && (a.to === null || index <= a.to)).length;
   const rightOf = (/** @type {string} */ id, /** @type {number} */ index) => x(id) + (barsAt(id, index) ? (barsAt(id, index) - 1) * across.barStep + across.bar / 2 : 0);
   const leftOf = (/** @type {string} */ id, /** @type {number} */ index) => x(id) - (barsAt(id, index) ? across.bar / 2 : 0);
 
@@ -493,13 +515,16 @@ export function layoutSequence(model) {
     }
     if (item.type === 'note') {
       const [a, b = a] = item.over.map(x).sort((p, q) => p - q);
-      const span = b - a + 2 * across.noteOver;
+      // Over a participant at work, a note covers its bars wholly: bars stack to the right, so it reaches past the
+      // outermost as far as past one, and no edge of it falls on a bar.
+      const last = item.over.find((id) => x(id) === b) ?? item.over[0], more = stacked(last, index);
+      const span = b - a + 2 * across.noteOver + more;
       // A note over two participants is as wide as the room between them, and its words wrap to that.
       const lines = b > a ? noteLines(item, Math.max(across.noteWrap, Math.floor((span - 2 * across.notePad) / across.noteGlyph))) : noteLines(item);
-      const wide = b > a ? span : Math.max(48, widest(lines, across.noteGlyph) + 2 * across.notePad);
+      const wide = b > a ? span : Math.max(48, widest(lines, across.noteGlyph) + 2 * across.notePad, item.place === 'over' ? 2 * (across.noteOver + more) : 0);
       const tall = lines.length * across.noteLine + 2 * across.notePad;
       const id = item.over[0];
-      const mid = b > a ? (a + b) / 2 : item.place === 'right' ? rightOf(id, index) + across.noteOff + wide / 2 : item.place === 'left' ? leftOf(id, index) - across.noteOff - wide / 2 : a;
+      const mid = b > a ? (a + b + more) / 2 : item.place === 'right' ? rightOf(id, index) + across.noteOff + wide / 2 : item.place === 'left' ? leftOf(id, index) - across.noteOff - wide / 2 : a;
       notes[item.id] = { x: mid, y: cursor + tall / 2, w: wide, h: tall, lines };
       rows.push({ id: item.id, kind: 'note', y: cursor, h: tall });
       cursor += tall;
@@ -801,9 +826,14 @@ export function scoreSequence(model, lay, design) {
       if (meet(box, { l: Math.min(...xs), r: Math.max(...xs), t: Math.min(...ys) - 1, b: Math.max(...ys) + 1 }) || (s.words && meet(box, boxOf(s.words)))) crowded.push(`the note "${n.label}" sits on the message "${m.label}"`);
     }
     for (const o of noted.slice(i + 1)) if (meet(box, boxOf(lay.notes[o.id]))) crowded.push(`the notes "${n.label}" and "${o.label}" overlap`);
+    // A note covers a bar wholly or keeps clear of it: an edge on one leaves a sliver of bar showing past it.
+    for (const bar of lay.bars) {
+      const l = bar.x - bar.w / 2, r = bar.x + bar.w / 2;
+      if (bar.y < box.b && box.t < bar.y + bar.h && [box.l, box.r].some((edge) => edge > l - 0.5 && edge < r + 0.5)) crowded.push(`the note "${n.label}" ends on a bar of ${label(bar.of)}`);
+    }
     if (box.l < 0 || box.r > lay.width) crowded.push(`the note "${n.label}" runs off the drawing`);
   });
-  add('S5', 'A note sits clear of messages and of other notes', crowded, `${noted.length} clear`);
+  add('S5', 'A note sits clear of messages and of other notes, and covers a bar wholly or not at all', crowded, `${noted.length} clear`);
 
   // S6
   /** @type {string[]} */

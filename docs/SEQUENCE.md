@@ -70,10 +70,19 @@ strikes one through.
 A `rect` is a frame with no name: a highlight behind its rows, in the design's own tint. One inside another shows
 darker.
 
-## S5. A note sits clear of messages and of other notes
+## S5. A note sits clear of messages and of other notes, and covers a bar wholly or not at all
 
 A note has a row of its own. Beside a participant it sits 10 px from the lifeline, in the gap; over one it is
 centred on the lifeline; over two it reaches from one to the other. It wraps at 28 characters.
+
+Over a participant at work, a note lies on its bars, as Mermaid's does, and covers them wholly: bars stack to the
+right, so it reaches past the outermost as far as it would past one. Beside one, it starts past the outermost.
+The step between participants is wide enough for a note and for the bars it faces either side of it: a
+neighbour's stack reaches toward a note on its right.
+
+- **Fail:** the edge of a note falls on a bar, and a sliver of the bar shows past it.
+- **What to do when it fails:** a note placed by Merlive does not; one moved by hand is moved clear of the bar, or
+  over it.
 
 ## S6. Bars on one participant stack side by side, and never lie on each other
 

@@ -252,6 +252,16 @@ describe('sequence: placement', () => {
     assert.ok(l.notes.n1.y > l.messages.m1.y && l.notes.n2.y > l.notes.n1.y + l.notes.n1.h / 2);
   });
 
+  it('covers the bars a note over a participant lies on wholly, never ending on one', () => {
+    // Three bars on Bob reach 15px past his lifeline, past where a note over two stops when he has one.
+    const l = layoutSequence(seq('participant A\nparticipant B\nparticipant C\nA->>+B: one\nA->>+B: two\nA->>+B: three\nA->>+B: four\nA->>+B: five\nNote over A,B: Over two\nNote over B: Hi\nNote over B,C: Over Bob and Carol'));
+    const outer = Math.max(...l.bars.map((b) => b.x + b.w / 2)), inner = Math.min(...l.bars.map((b) => b.x - b.w / 2));
+    const past = across.noteOver - across.bar / 2;
+    for (const id of ['n1', 'n2']) assert.ok(l.notes[id].x + l.notes[id].w / 2 >= outer + past, `${id} reaches past the outermost bar`);
+    for (const id of ['n2', 'n3']) assert.ok(l.notes[id].x - l.notes[id].w / 2 <= inner - past, `${id} begins before the innermost bar`);
+    assert.equal(l.notes.n2.x, l.participants.B.x, 'a note over one is still centred on its lifeline');
+  });
+
   it('frames a block round exactly what is in it, a frame inside a frame clear of it', () => {
     const l = layoutSequence(seq('B->>E: Ask\npar To supplier\nE->>S: Order\nand To buyer\nE->>B: Receipt\nloop Daily\nE->>S: Chase\nend\nend\nB->>E: Thanks'));
     const [par, loop] = l.frames;
@@ -399,6 +409,29 @@ describe('sequence: the rules', () => {
     const { model, lay } = check('B->>E: Ask\nNote over B,E: Both agree');
     lay.notes.n1.y = lay.messages.m1.y;
     assert.ok(failed(scoreSequence(model, lay, builtIn)).includes('S5'));
+  });
+
+  it('S5 when a note ends on a bar, half covering it', () => {
+    const { model, lay, result } = check('A->>+B: one\nA->>+B: two\nA->>+B: three\nNote over A,B: Over two\nB-->>-A: a\nB-->>-A: b\nB-->>-A: c');
+    assert.deepEqual(failed(result), []);
+    const note = lay.notes.n1, bar = lay.bars[2];
+    note.w = 2 * (bar.x - note.x);
+    assert.match(scoreSequence(model, lay, builtIn).checks.find((c) => c.id === 'S5')?.detail ?? '', /the note "Over two" ends on a bar of B/);
+  });
+
+  it('passes S5 for notes beside and over a participant whose neighbour carries a stack of bars', () => {
+    // The gap is wide enough for a note and for the bars it faces: a neighbour's stack reaches toward it.
+    const five = (/** @type {string} */ m) => Array(5).fill(m).join('\n');
+    for (const body of [
+      `participant A\nparticipant B\n${five('B->>+A: x')}\nNote left of B: Needs stock approval today`,
+      `participant A\nparticipant B\nparticipant C\n${five('A->>+B: x')}\nNote right of B: Needs stock approval today`,
+      `participant A\nparticipant B\n${five('B->>+A: x')}\n${five('B->>+A: x')}\nNote over B: Needs stock approval today`,
+      `participant A\nparticipant B\nparticipant C\n${five('B->>+C: x')}\n${five('C->>+B: x')}\nNote over B: Needs stock approval today`,
+      `participant A\nparticipant B\nparticipant C\n${Array(12).fill('A->>+B: x').join('\n')}\nC->>+C: y\nNote over A,B: Both`,
+    ]) assert.deepEqual(failed(check(body).result), [], body);
+    // Beside a participant at work, the note starts past its stack and still ends clear of the next lifeline.
+    const { lay } = check(`participant A\nparticipant B\nparticipant C\n${five('A->>+B: x')}\nNote right of B: Needs stock approval today`);
+    assert.ok(lay.notes.n1.x + lay.notes.n1.w / 2 <= lay.participants.C.x - across.clear, 'clear of C');
   });
 
   it('S6 when two bars of one participant lie on each other', () => {

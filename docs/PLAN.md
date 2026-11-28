@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, as 0.5.7 was begun.
+Last brought up to date: 28 November 2026, as 0.5.8 was begun.
 
 ## Released
 
@@ -179,13 +179,24 @@ taste are under "Waiting on Victor".
   "Build the agent" and "Demo app, on your laptop" are rows. Two corpus pictures changed
   (`subgraph-direction`, `er-subgraph-direction`).
 
-**0.5.7** (not released yet), the pull request from the branch `fix-0.5.7`:
+**0.5.7** (28 November 2026), pull request 18 from the branch `fix-0.5.7`:
 - a composite state's own direction, or a region's after `--`, is read onto its group (state.mjs), and layout runs
   one across the flow as a row, as it does a flowchart's group since 0.5.6. One corpus picture changed
   (`state-direction-composite`), now as Mermaid draws it: Credit above Stock in a flow that runs left to right.
 - from review: a direction said before the first `--` moves to the first region when the `--` makes it; and the
   first box of a row takes a lane from which every box of the row is free (layout.mjs `free`), since a region
   that fed in from one side and ran toward the other had put a box on the main path.
+
+**0.5.8** (not released yet), the pull request from the branch `fix-0.5.8`:
+- a note over a participant at work lies on its bars, as Mermaid's does, and covers them wholly: with bars
+  stacked, it reaches past the outermost as far as past one (`more` in `layoutSequence`), and S5 refuses a note
+  whose edge falls on a bar. Three bars deep, a note over two had ended 1px inside the outermost. No corpus sample
+  has a note over a participant at work, so no corpus picture changed. Checked first whether a note over two
+  participants sits on a bar wrongly at all: beside a bar every note already starts past the outermost, and over
+  one it covers it, as Mermaid's does; only the stacked case was wrong.
+- from review: the new S5 refused Merlive's own layouts, since the step between participants was sized by a
+  note's words alone. Five bars on Alice put a note left of Bob 24px into the fifth. The step now makes room for
+  the bars a note faces either side of it (`stacked`, `toRight`, `toLeft`), beside, over one and over two.
 
 ## Waiting on Victor
 
@@ -228,8 +239,7 @@ taste are under "Waiting on Victor".
 ## Next, in this order
 
 1. **Where Mermaid still reads better**, from the comparison page:
-   - in a sequence diagram: a note over two participants may sit on an activation bar (not checked whether that
-     is new); an author's highlight colours become the design's tint;
+   - in a sequence diagram: an author's highlight colours become the design's tint;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
    - of the 53 newer `@{ shape }` names, 32 are drawn as themselves; the 21 that are boxes are mostly drawings
