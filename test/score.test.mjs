@@ -113,6 +113,16 @@ describe('score: a broken rule is named, with where', () => {
     assert.match(p8.detail, /the name of the group "Checks" runs past its frame/);
   });
 
+  it('P8 when a name is on a plate where, wrapped narrower, it would have sat beside the line', () => {
+    const { model, lay } = check('flowchart TD\nX[Draft] --> A\nsubgraph C [Checks before sending]\n  A[Credit] --> B[Stock]\nend');
+    const [f] = lay.groups;
+    delete f.lines;
+    f.name = { ...f.name, x: f.x + f.w / 2, w: f.w - 20, h: 12, y: f.y + 12, plate: true };
+    const p8 = /** @type {any} */ (score(model, lay, builtIn).checks.find((c) => c.id === 'P8'));
+    assert.equal(p8.ok, false);
+    assert.match(p8.detail, /the name of the group "Checks before sending" is on a plate, where in 3 lines it would sit beside the line/);
+  });
+
   it('P2 when two boxes are too close', () => {
     const { model, lay } = check(orders);
     lay.nodes.E.y = lay.nodes.G.y;

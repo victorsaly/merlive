@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, as 0.5.1 was begun.
+Last brought up to date: 28 November 2026, as 0.5.2 was begun.
 
 ## Released
 
@@ -104,11 +104,11 @@ boards, 29 timelines, 22 packets). Fixed from it: a mindmap's hexagon, circle an
 Left as the reference decides: a known priority in small letters (`priority: high`) and any other as written; a
 ticket that is not a link even where `ticketBaseUrl` says where it would go; a timeline theme's colours, which
 are the design's. Already known: in `timeline-direction-td-sections` the arrow into a section runs just past the
-end of its name (the narrow group's name, item 1 of "Next" below). A packet's bits are said over its name ("0–15")
+end of its name (on a grid a name is not yet wrapped narrower to sit beside a line, as a flow's is since 0.5.2: "Next", item 1). A packet's bits are said over its name ("0–15")
 where Mermaid puts the first and last at its corners, and its title is above, as every kind's is. Questions of
 taste are under "Waiting on Victor".
 
-**0.5.1** (not released yet), what 0.4.0 and 0.5.0 left in flowcharts, the pull request from the branch
+**0.5.1** (28 November 2026), what 0.4.0 and 0.5.0 left in flowcharts, pull request 12 from the branch
 `fix-0.5.1`:
 - a class with a hyphen in its name (`classDef read-only`, `class B read-only`, `A:::read-only`), the hyphen
   counted only between letters so `A:::x-->B` is still a link (parse.mjs, state.mjs, class.mjs);
@@ -120,7 +120,19 @@ taste are under "Waiting on Victor".
 - a flow's group name wraps to three lines inside its frame, the flow placed again with room at the top of the
   frame (`placed()` and `placedOnce()` in layout.mjs, `nameAt` from grid.mjs); P8 holds every frame. Four corpus
   pictures changed, each for the better (`state-composite-named`, `c4-boundary-type`, `c4-deployment-described`,
-  `c4-deployment-nodes`). A line that has to cross a name still passes behind it, on a plate: "Next", item 1.
+  `c4-deployment-nodes`). From review of pull request 12: room is kept beside a frame as well as above it
+  (`aside` in `settle()`), so left to right a name's lines do not run into the next lane, and a word longer than
+  its frame makes the frame wider (`Fit.w`); a design file may colour a kind with a hyphen in its name.
+
+**0.5.2** (not released yet), the pull request from the branch `fix-0.5.2`:
+- a group's name that a line would pass behind wraps narrower, to three lines, to sit beside the line instead
+  (`clearOf` and the search after it in `placedOnce()`; `placed()` places the flow a third time when the narrower
+  name needs more lines than were kept for it). Six corpus pictures changed (`state-composite-named`,
+  `c4-deployment`, `c4-deployment-described`, `c4-deployment-nodes`, `c4-boundary-enterprise`,
+  `block-nested-label`) and the business analyst demo's 13 steps ("Build the agent"): each name is clear of the
+  line into its frame, the frame a line or two taller. A name that fits beside no line in three lines (a single
+  long word, a line on each side) is still on a plate.
+- the lanes off the main path in the service diagram were looked into and left: see "Waiting on Victor".
 
 ## Waiting on Victor
 
@@ -133,9 +145,12 @@ taste are under "Waiting on Victor".
   shared trunk wanted, for a tree's lines that have nothing at their ends? And in `mindmap-tree` one parent's line
   to its second child leaves its bottom and the other's its right side: both clear, not alike.
 
-- **The tag for 0.5.0.** `v0.1.0` to `v0.4.0` are on GitHub, each on its release. `v0.5.0` goes on the commit
-  that merges pull request 11 (pull request 10 was merged before the release commit reached it), in a clone: `git tag -a v0.5.0 <that commit> -m "Merlive 0.5.0"`, then
-  `git push origin v0.5.0`. Sessions have not been able to push a tag where they run.
+- **Lanes off the main path, short lines or no crossing.** In the business analyst demo's service diagram OpenAI
+  (linked to the question, Groq and the answer) is in the far lane and "Live AI stops" (linked to Groq only) in
+  the near one, so two lines run long. Swapped, the "yes" line into OpenAI crosses Groq's line to "Live AI
+  stops", which P4 refuses (checked: one crossing where none is forced). The one way with short lines and no
+  crossing puts "Live AI stops" on the other side of the main path, where what feeds it goes, not what leaves it
+  (P1). Is a box leaving to the other side worth shorter lines, or is the picture right as it is?
 - **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11), which took "not released
   yet" off Merlive's page, was merged on 25 November. Whether the site was then built and deployed is not known
   here. If not, in the skills repository: `npm install`,
@@ -163,10 +178,8 @@ taste are under "Waiting on Victor".
    - a state diagram's fork and join are boxes, not bars;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
-   - the name of a narrow group usually has its line pass behind it, and the arrowhead sits close under it;
-   - off the main path, two boxes of one rank take their lanes in the order they are met, not by how much each
-     is linked to: in the business analyst demo's service diagram OpenAI (linked to the question, Groq and the
-     answer) is in the far lane and "Live AI stops" (linked to Groq only) in the near one, so two lines run long;
+   - on a grid, a frame's name is not wrapped narrower to sit beside a line, as a flow's is (0.5.2): in
+     `timeline-direction-td-sections` the arrow into a section runs just past the end of its name;
    - a group's own direction is read past;
    - of the newer `@{ shape }` list, twelve shapes are drawn and the rest are boxes.
 2. **The other kinds**, picked by what Victor's own repositories use, not by Mermaid's list. Twenty are left

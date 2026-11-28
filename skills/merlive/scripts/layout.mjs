@@ -3,7 +3,7 @@
 // same size, and lines turn at right angles and never share a port. Pure: a model in, coordinates out.
 
 import { form, inset, roomIn } from './shapes.mjs';
-import { nameAt, placeGrid } from './grid.mjs';
+import { gridMeasure, nameAt, placeGrid } from './grid.mjs';
 
 /** @typedef {import('./parse.mjs').Model} Model */
 /** @typedef {{x:number,y:number}} Pt */
@@ -267,14 +267,26 @@ function wrapped(model) {
  * @returns {Layout}
  */
 function placed(model, dir, reversed = false) {
-  const first = placedOnce(model, dir, reversed);
+  /** @type {Map<string,string[]>} */
+  const beside = new Map();
+  const first = placedOnce(model, dir, reversed, new Map(), beside);
+  const fitOf = (/** @type {Frame} */ f, /** @type {string[]} */ lines) => {
+    const w = Math.round(Math.max(...lines.map((l) => l.length)) * measure.nameGlyph) + 2 * measure.nameIn;
+    return { lines, w, more: Math.max(0, w - f.w) };
+  };
   /** @type {Map<string,Fit>} */
   const fits = new Map(first.groups.filter((f) => f.title).flatMap((f) => {
-    const lines = nameAt(f.title, f.w - 2 * measure.nameIn);
-    const w = Math.round(Math.max(...lines.map((l) => l.length)) * measure.nameGlyph) + 2 * measure.nameIn;
-    return lines.length > 1 || w > f.w ? [/** @type {[string, Fit]} */ ([f.id, { lines, w, more: Math.max(0, w - f.w) }])] : [];
+    const fit = fitOf(f, beside.get(f.id) ?? nameAt(f.title, f.w - 2 * measure.nameIn));
+    return fit.lines.length > 1 || fit.more ? [/** @type {[string, Fit]} */ ([f.id, fit])] : [];
   }));
-  return fits.size ? placedOnce(model, dir, reversed, fits) : first;
+  if (!fits.size) return first;
+  // Placed again with room for the names, a name may still have a line through it that a narrower one would
+  // sit beside, in more lines than there is room for: once more, with that room.
+  beside.clear();
+  const second = placedOnce(model, dir, reversed, fits, beside);
+  if (!beside.size) return second;
+  for (const f of second.groups) if (beside.has(f.id)) fits.set(f.id, fitOf(f, beside.get(f.id) ?? []));
+  return placedOnce(model, dir, reversed, fits);
 }
 
 /**
@@ -283,9 +295,11 @@ function placed(model, dir, reversed = false) {
  * @param {'TD'|'LR'} dir
  * @param {boolean} reversed
  * @param {Map<string,Fit>} [fits] the names that do not fit their frames on one line, by their group
+ * @param {Map<string,string[]>} [beside] filled with the names that would sit beside a line only in more lines than
+ *   their frames keep room for, in those lines
  * @returns {Layout}
  */
-function placedOnce(model, dir, reversed, fits = new Map()) {
+function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) {
   /** @type {string[]} */
   const warnings = [];
   // The room a name takes past its first line, at the top of its frame, and past its frame's right side.
@@ -856,12 +870,12 @@ function placedOnce(model, dir, reversed, fits = new Map()) {
   groups.push(...model.groups.flatMap((g) => made.filter((f) => f.id === g.id)));
 
   // A group's name goes along the top of its frame, in the first stretch no line runs through: at the left,
-  // then at the right, then anywhere between. Where every stretch has a line in it, the name stays at the left
-  // on a plate of the frame's own colour: the line passes behind it, and the name can still be read.
+  // then at the right, then anywhere between. Where every stretch has a line in it, a narrower name, in more lines,
+  // may fit beside the line: it is tried, to three lines, and where it needs more lines than the frame keeps room
+  // for, the flow is placed again with that room. Where none fits, the name stays at the left on a plate of the
+  // frame's own colour: the line passes behind it, and the name can still be read.
   const drawn = Object.values(edges).map((e) => e.points);
-  for (const f of groups) {
-    if (!f.title) continue;
-    const called = f.lines ?? [f.title];
+  const clearOf = (/** @type {Frame} */ f, /** @type {string[]} */ called) => {
     const w = Math.round(Math.max(...called.map((l) => l.length)) * measure.nameGlyph), h = measure.nameLine * called.length, y = f.y + measure.nameDown + ((called.length - 1) * measure.nameLine) / 2;
     const struck = (/** @type {number} */ x) => drawn.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, { x, y, w, h }, measure.clear)));
     const first = f.x + measure.nameIn + w / 2, last = f.x + f.w - measure.nameIn - w / 2;
@@ -869,7 +883,25 @@ function placedOnce(model, dir, reversed, fits = new Map()) {
     const between = [];
     for (let x = first + measure.nameStep; x < last; x += measure.nameStep) between.push(x);
     const clear = [first, ...(last > first ? [last, ...between] : [])].find((x) => !struck(x));
-    f.name = { x: clear ?? first, y, w, h, plate: clear === undefined };
+    return { x: clear ?? first, y, w, h, plate: clear === undefined };
+  };
+  for (const f of groups) {
+    if (!f.title) continue;
+    const called = f.lines ?? [f.title];
+    f.name = clearOf(f, called);
+    if (!f.name.plate) continue;
+    const longest = Math.max(...f.title.split(/\s+/).map((word) => word.length));
+    for (let most = Math.max(...called.map((l) => l.length)) - 1; most >= longest; most--) {
+      const lines = wrap(f.title, most);
+      if (lines.length > gridMeasure.nameLines) break;
+      const name = clearOf(f, lines);
+      if (name.plate) continue;
+      // In no more lines than the frame keeps room for, it is taken now; in more, the flow is placed again.
+      if (lines.length <= called.length) [f.name, f.lines] = [name, lines.length > 1 ? lines : undefined];
+      else beside.set(f.id, lines);
+      break;
+    }
+    if (!f.lines) delete f.lines;
   }
 
   // The few words at an end of a link ("1", "0..*") sit beside the line, just out from its box and past what
