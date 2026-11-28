@@ -164,6 +164,9 @@ taste are under "Waiting on Victor".
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
    - the name of a narrow group usually has its line pass behind it, and the arrowhead sits close under it;
+   - off the main path, two boxes of one rank take their lanes in the order they are met, not by how much each
+     is linked to: in the business analyst demo's service diagram OpenAI (linked to the question, Groq and the
+     answer) is in the far lane and "Live AI stops" (linked to Groq only) in the near one, so two lines run long;
    - a group's own direction is read past;
    - of the newer `@{ shape }` list, twelve shapes are drawn and the rest are boxes.
 2. **The other kinds**, picked by what Victor's own repositories use, not by Mermaid's list. Twenty are left
