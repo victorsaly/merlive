@@ -6,7 +6,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 ## In short
 
-- **Flowcharts:** of 70 features, 48 are drawn as written, 21 are drawn less something Merlive leaves out on purpose or does not have yet, 1 are only partly read, and 0 are refused.
+- **Flowcharts:** of 70 features, 49 are drawn as written, 20 are drawn less something Merlive leaves out on purpose or does not have yet, 1 are only partly read, and 0 are refused.
 - **State diagrams:** of 27 features, 18 are drawn as written, 9 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, 0 are refused.
@@ -89,7 +89,7 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | A group named by its title | Drawn |  | [source](../corpus/flowchart/subgraph-title.mmd) | [picture](../corpus/drawn/subgraph-title.svg) |
 | A group with an id and a title | Drawn |  | [source](../corpus/flowchart/subgraph-id.mmd) | [picture](../corpus/drawn/subgraph-id.svg) |
 | Links to a group and between groups | Drawn |  | [source](../corpus/flowchart/subgraph-links.mmd) | [picture](../corpus/drawn/subgraph-links.svg) |
-| A group with a direction of its own | Drawn, less something | The group's own direction is read past; it runs the way the rest does | [source](../corpus/flowchart/subgraph-direction.mmd) | [picture](../corpus/drawn/subgraph-direction.svg) |
+| A group with a direction of its own | Drawn |  | [source](../corpus/flowchart/subgraph-direction.mmd) | [picture](../corpus/drawn/subgraph-direction.svg) |
 | A group inside a group | Drawn |  | [source](../corpus/flowchart/subgraph-nested.mmd) | [picture](../corpus/drawn/subgraph-nested.svg) |
 | A group shown collapsed | Drawn, less something | Drawn open: a picture cannot be opened and closed | [source](../corpus/flowchart/subgraph-collapsed.mmd) | [picture](../corpus/drawn/subgraph-collapsed.svg) |
 | A box styled on its own | Drawn, less something | Its outline is broken, heavy and red as written, in the design's own red; its fill is the design's | [source](../corpus/flowchart/style-node.mmd) | [picture](../corpus/drawn/style-node.svg) |

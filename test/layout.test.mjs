@@ -372,6 +372,53 @@ describe("layout: a group's name", () => {
   });
 });
 
+describe("layout: a group's own direction", () => {
+  const warehouse = 'flowchart TB\n  A[Order] --> B\n  subgraph wh [Warehouse]\n    direction LR\n    B[Pick] --> C[Pack] --> D[Label]\n  end\n  D --> E[Ship]';
+  const passes = (/** @type {import('../skills/merlive/scripts/parse.mjs').Model} */ m, /** @type {ReturnType<typeof layout>} */ lay) => score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => `${c.id} ${c.detail}`);
+
+  it('reads the direction a group says it runs', () => {
+    assert.equal(parse(warehouse).groups[0].direction, 'LR');
+    assert.deepEqual(parse(warehouse).warnings, []);
+  });
+
+  it('runs a group written across the flow across it: its boxes in one row, in their order, the main path through where it starts', () => {
+    const m = parse(warehouse), lay = layout(m), n = lay.nodes;
+    assert.equal(new Set([n.B.y, n.C.y, n.D.y]).size, 1, 'one row');
+    assert.ok(n.B.x < n.C.x && n.C.x < n.D.x, 'left to right, as written');
+    assert.ok(n.B.y > n.A.y && n.E.y > n.B.y, 'between what comes before and after');
+    assert.deepEqual(lay.spine, ['A', 'B', 'E']);
+    assert.deepEqual(passes(m, lay), []);
+    assert.deepEqual(lay.warnings, []);
+  });
+
+  it('runs right to left when it says so, and keeps its order when the branches are drawn to the left', () => {
+    const rl = layout(parse(warehouse.replace('direction LR', 'direction RL'))).nodes;
+    assert.ok(rl.B.x > rl.C.x && rl.C.x > rl.D.x, 'right to left');
+    const left = layout(parse(`${warehouse}\n%% side: left`)).nodes;
+    assert.ok(left.B.x < left.C.x && left.C.x < left.D.x, 'still left to right');
+  });
+
+  it('runs down a group written top to bottom in a flow that runs left to right', () => {
+    const m = parse('flowchart LR\n  A[Order] --> B\n  subgraph wh [Warehouse]\n    direction TB\n    B[Pick] --> C[Pack] --> D[Label]\n  end\n  D --> E[Ship]'), lay = layout(m), n = lay.nodes;
+    assert.equal(lay.direction, 'LR');
+    assert.equal(new Set([n.B.x, n.C.x, n.D.x]).size, 1, 'one column');
+    assert.ok(n.B.y < n.C.y && n.C.y < n.D.y, 'top to bottom');
+    assert.deepEqual(passes(m, lay), []);
+  });
+
+  it('runs a group the way the flow does when its boxes branch, and says so', () => {
+    const m = parse('flowchart TB\n  A --> B\n  subgraph g [Checks]\n    direction LR\n    B --> C\n    B --> D\n  end'), lay = layout(m);
+    assert.notEqual(lay.nodes.B.y, lay.nodes.C.y);
+    assert.match(lay.warnings.join(' '), /the group "Checks" says "direction LR", which is followed only for boxes linked one after another in a line; it runs as the flow does/);
+    assert.deepEqual(passes(m, lay), []);
+  });
+
+  it('leaves a group that runs the way the flow does as it was', () => {
+    const plain = layout(parse(warehouse.replace('    direction LR\n', ''))), down = layout(parse(warehouse.replace('direction LR', 'direction TB')));
+    assert.deepEqual(Object.values(down.nodes).map((n) => [n.x, n.y]), Object.values(plain.nodes).map((n) => [n.x, n.y]));
+  });
+});
+
 describe('layout: a group inside a group', () => {
   const site = 'flowchart TB\n  O[Order] --> A\n  subgraph site [Site]\n    subgraph wh [Warehouse]\n      A[Pick] --> B[Pack]\n    end\n    B --> C[Load]\n  end\n  C --> D[Ship]';
   const holds = (/** @type {{x:number,y:number,w:number,h:number}} */ outer, /** @type {{x:number,y:number,w:number,h:number}} */ inner, by = 0) =>

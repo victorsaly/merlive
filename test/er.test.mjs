@@ -224,7 +224,7 @@ describe('er: what a flowchart has too', () => {
     const m = er('subgraph Buying\n  SUPPLIER ||--o{ ORDER : receives\n  subgraph "Order lines"\n    direction LR\n    ORDER_LINE\n  end\nend\nsubgraph pay [Paying up]\n  INVOICE\nend');
     assert.deepEqual(m.groups, [
       { id: 'Buying', title: 'Buying', members: ['SUPPLIER', 'ORDER', 'ORDER_LINE'] },
-      { id: 'Order lines', title: 'Order lines', members: ['ORDER_LINE'], parent: 'Buying' },
+      { id: 'Order lines', title: 'Order lines', members: ['ORDER_LINE'], parent: 'Buying', direction: 'LR' },
       { id: 'pay', title: 'Paying up', members: ['INVOICE'] },
     ]);
     assert.deepEqual(m.warnings, []);

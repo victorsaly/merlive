@@ -377,6 +377,30 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
   for (const id of ids) if (!seen.has(id)) visit(id);
   const forward = model.edges.filter((e) => !back.has(e.id));
 
+  // A group that says its boxes run across the flow (`direction LR` in a flow drawn top to bottom) is a row: its
+  // boxes share one rank, in the order they are linked, one lane each. That is only drawn for boxes linked one
+  // after another in a line: a branch inside the row would run straight through the box beside it.
+  /** @type {Map<string,{row:string[],at:number,side:1|-1}>} */
+  const rowOf = new Map();
+  for (const g of model.groups) {
+    if (!g.direction || (g.direction === 'LR' || g.direction === 'RL') === (dir === 'LR') || g.members.length < 2 || g.members.some((id) => rowOf.has(id))) continue;
+    const inner = forward.filter((e) => e.from !== e.to && g.members.includes(e.from) && g.members.includes(e.to));
+    const next = new Map(inner.map((e) => [e.from, e.to])), entered = new Set(inner.map((e) => e.to));
+    const first = g.members.filter((id) => !entered.has(id));
+    /** @type {string[]} */
+    const row = [];
+    for (let at = first.length === 1 ? first[0] : undefined; at !== undefined && !row.includes(at); at = next.get(at)) row.push(at);
+    if (inner.length !== g.members.length - 1 || next.size !== inner.length || row.length !== g.members.length) {
+      warnings.push(`the group "${g.title}" says "direction ${g.direction}", which is followed only for boxes linked one after another in a line; it runs as the flow does`);
+      continue;
+    }
+    // Right to left, or bottom to top, it runs the other way; drawn with the branches to the left, the picture is
+    // turned over across the flow, and the row with it, so it is laid the other way to read as written.
+    const side = /** @type {1|-1} */ ((g.direction === 'RL' || g.direction === 'BT') !== (model.hints.side === 'left') ? -1 : 1);
+    row.forEach((id, at) => rowOf.set(id, { row, at, side }));
+  }
+  const inRow = (/** @type {{from:string,to:string}} */ e) => rowOf.has(e.from) && rowOf.get(e.from)?.row === rowOf.get(e.to)?.row;
+
   // 2. Rank: how far along the flow a box sits, which is the longest way to reach it.
   const waiting = new Map(ids.map((id) => [id, 0]));
   for (const e of forward) waiting.set(e.to, (waiting.get(e.to) ?? 0) + 1);
@@ -387,9 +411,24 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
   for (let id = queue.shift(); id !== undefined; id = queue.shift()) {
     sorted.push(id);
     for (const e of forward.filter((f) => f.from === id)) {
-      rank.set(e.to, Math.max(rank.get(e.to) ?? 0, (rank.get(id) ?? 0) + 1));
+      rank.set(e.to, Math.max(rank.get(e.to) ?? 0, (rank.get(id) ?? 0) + (inRow(e) ? 0 : 1)));
       waiting.set(e.to, (waiting.get(e.to) ?? 1) - 1);
       if (waiting.get(e.to) === 0) queue.push(e.to);
+    }
+  }
+  // A row is one rank: as far on as the furthest of its boxes, which a link into it from outside may have pushed
+  // on, and what follows it moves on with it.
+  for (let moved = rowOf.size > 0; moved;) {
+    moved = false;
+    for (const { row } of new Set(rowOf.values())) {
+      const r = Math.max(...row.map((id) => rank.get(id) ?? 0));
+      for (const id of row) if (rank.get(id) !== r) [moved] = [true, rank.set(id, r)];
+    }
+    for (const id of sorted) {
+      for (const e of forward.filter((f) => f.from === id)) {
+        const r = Math.max(rank.get(e.to) ?? 0, (rank.get(id) ?? 0) + (inRow(e) ? 0 : 1));
+        if (r !== rank.get(e.to)) [moved] = [true, rank.set(e.to, r)];
+      }
     }
   }
 
@@ -408,7 +447,9 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
     // taken while there is the plain way, however long the exception's way is. Where every link out has words
     // (a question's yes and no), none is the usual one, and the longest way is the main path.
     const plain = new Set(forward.filter((e) => !e.label).map((e) => e.from));
-    const ways = (/** @type {string} */ id) => forward.filter((e) => e.from === id && !(e.label && plain.has(id))).map((e) => e.to);
+    // From a row, the main path goes on from wherever the row is left, not along it: it keeps one box of a row.
+    const leaving = (/** @type {string} */ id) => rowOf.get(id)?.row ?? [id];
+    const ways = (/** @type {string} */ id) => forward.filter((e) => leaving(id).includes(e.from) && !inRow(e) && !(e.label && plain.has(e.from))).map((e) => e.to);
     const longest = new Map();
     for (const id of [...sorted].reverse()) longest.set(id, 1 + Math.max(0, ...ways(id).map((to) => longest.get(to) ?? 0)));
     // Of two as long, the one that reaches more of the flow: the other is more likely the side road.
@@ -444,7 +485,7 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
   // to keeps together, in lanes of its own, and the box is in line with the first of them. Its lines then never
   // cross, however many branches it has, and the main path is still the straight one.
   const ledTo = new Map(ids.map((id) => [id, forward.filter((e) => e.to === id).length]));
-  const tree = ids.length > 1 && forward.length === model.edges.length && forward.length === ids.length - 1 && ids.every((id) => (ledTo.get(id) ?? 0) <= 1) && forward.every((e) => e.from !== e.to);
+  const tree = !rowOf.size && ids.length > 1 && forward.length === model.edges.length && forward.length === ids.length - 1 && ids.every((id) => (ledTo.get(id) ?? 0) <= 1) && forward.every((e) => e.from !== e.to);
   if (tree) {
     let next = 0;
     const leadsTo = (/** @type {string} */ id) => forward.filter((e) => e.from === id).map((e) => e.to)
@@ -459,7 +500,21 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
     walk(ids.find((id) => !ledTo.get(id)) ?? ids[0]);
   }
   const rest = tree ? [] : ids.filter((id) => !onSpine.has(id)).sort((a, b) => (rank.get(a) ?? 0) - (rank.get(b) ?? 0) || (order.get(a) ?? 0) - (order.get(b) ?? 0));
+  // A row is laid out from the first of its boxes to be placed: the one on the main path, or else the first met.
+  const layRow = (/** @type {string} */ id, /** @type {number} */ l) => {
+    const r = rowOf.get(id);
+    if (!r) return;
+    for (const [i, other] of r.row.entries()) {
+      if (other === id) continue;
+      const at = l + r.side * (i - r.at);
+      lane.set(other, at);
+      if (at) sideOf.set(other, /** @type {1|-1} */ (Math.sign(at)));
+      taken.add(`${rank.get(other)}:${at}`);
+    }
+  };
+  for (const id of spine) if (rowOf.has(id)) layRow(id, 0);
   for (const id of rest) {
+    if (lane.has(id)) continue;
     const before = forward.filter((e) => e.to === id).map((e) => e.from);
     // It goes where the box that led to it went; with only the spine behind it, it leaves; with nothing, it feeds.
     const led = before.find((p) => sideOf.has(p));
@@ -469,6 +524,7 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
     while (taken.has(`${rank.get(id)}:${side * l}`)) l++;
     lane.set(id, side * l);
     taken.add(`${rank.get(id)}:${side * l}`);
+    layRow(id, side * l);
   }
   // A frame takes room along the flow: its pad at each end, and at its top its name. One frame fits in the room
   // between two ranks. Frames inside one another that begin or end at the same rank need more, so that rank
@@ -487,11 +543,21 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
   const atStart = measure.framePad + (dir === 'LR' ? 0 : measure.frameTitle);
   const ranks = Math.max(0, ...rank.values()) + 1;
   /** @type {number[]} */
+  /** The room the frames take at each side of the gap before rank r: those that end above it and begin below it. */
+  const between = (/** @type {number} */ r) => {
+    const [atEnds, atStarts] = reversed ? [atStart, measure.framePad] : [measure.framePad, atStart];
+    return [atEnds * most(ends, r - 1), atStarts * most(starts, r)];
+  };
   const wider = Array.from({ length: ranks + 1 }, (_, r) => {
     const frames = most(ends, r - 1) + most(starts, r);
     // From the far end, a frame's top (and its name) is where the frame ends along the flow, not where it starts.
     const [atEnds, atStarts] = reversed ? [atStart, measure.framePad] : [measure.framePad, atStart];
     const forFrames = frames > 1 ? Math.max(0, atEnds * most(ends, r - 1) + atStarts * most(starts, r) + measure.frameAir - rankGap) : 0;
+    // Between a frame that ends and one that begins, a line from one lane to another runs across in the band
+    // between their edges, not along either: the band is made wide enough for it to keep off both.
+    const [upper, lower] = between(r);
+    const crossing = upper && lower && model.edges.some((e) => lane.get(e.from) !== lane.get(e.to) && Math.min(rank.get(e.from) ?? 0, rank.get(e.to) ?? 0) < r && r <= Math.max(rank.get(e.from) ?? 0, rank.get(e.to) ?? 0));
+    const forTrack = crossing ? Math.max(0, upper + lower + 2 * measure.trackEdge - rankGap) : 0;
     // Words on a link that runs into a group from outside would land on the group's name, which is along the top
     // of its frame, in this same room. The room is made taller by the words, so they have a row above the name.
     // Left to right, a link from one rank straight on to the next runs across this room, and its words sit
@@ -503,7 +569,7 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
       const forName = reaching.length ? atEnds * most(ends, r - 1) + atStarts * most(starts, r) + Math.max(...reaching.map((g) => past(g.id))) + measure.frameAir - rankGap : 0;
       const across = model.edges.filter((e) => e.label && Math.min(rank.get(e.from) ?? 0, rank.get(e.to) ?? 0) === r - 1 && Math.max(rank.get(e.from) ?? 0, rank.get(e.to) ?? 0) === r && lane.get(e.from) === lane.get(e.to));
       const forWords = across.length ? Math.max(...across.map((e) => Math.max(...wrap(e.label, measure.labelWrap).map((l) => l.length)) * measure.labelGlyph + 10)) + measure.wordsAcross - rankGap : 0;
-      return Math.max(forFrames, forName, forWords, 0);
+      return Math.max(forFrames, forTrack, forName, forWords, 0);
     }
     const topsHere = model.groups.filter((g) => g.title && g.members.length && (reversed ? ends.get(g.id) === r - 1 : starts.get(g.id) === r));
     const through = model.edges.filter((e) => {
@@ -523,7 +589,7 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
       return e.label && Math.min(a, b) === r - 1 && Math.max(a, b) === r && lane.get(e.from) !== lane.get(e.to) && wrap(e.label, measure.labelWrap).length > 1;
     });
     const forTurns = turning.length ? 2 * (4 + measure.labelLine * Math.max(...turning.map((e) => wrap(e.label, measure.labelWrap).length)) + measure.labelOff + 4) - rankGap : 0;
-    return Math.max(forFrames, forLines, forNames, forTurns);
+    return Math.max(forFrames, forTrack, forLines, forNames, forTurns);
   });
   // A box that lists rows is taller than one that does not. A rank is as tall as its tallest box, every box of
   // it sits on the rank's middle line, and the room to the next rank is the same whatever the heights.
@@ -582,7 +648,12 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
     const others = (/** @type {Placed} */ s, /** @type {Placed} */ t) => all.filter((n) => n !== s && n !== t);
     const hits = (/** @type {Pt[]} */ pts, /** @type {Placed} */ s, /** @type {Placed} */ t) => segmentsOf(pts).reduce((sum, seg) => sum + others(s, t).filter((n) => hitsBox(seg, n)).length, 0);
     /** The middle of the room after rank g, where a line may run across. */
-    const roomAfter = (/** @type {number} */ g) => along(g) + (tall[g] ?? bh) + (rankGap + (wider[g + 1] ?? 0)) / 2;
+    // With a frame ending above the room and another beginning below it, its middle is the middle of the band
+    // between their edges.
+    const roomAfter = (/** @type {number} */ g) => {
+      const [upper, lower] = between(g + 1), gap = rankGap + (wider[g + 1] ?? 0);
+      return along(g) + (tall[g] ?? bh) + (upper && lower ? (upper + gap - lower) / 2 : gap / 2);
+    };
     const shapeOf = (/** @type {Route} */ r, /** @type {Pt} */ a, /** @type {Pt} */ b) =>
       r.shape === 'straight' ? [a, b]
         : r.shape === 'HV' ? [a, { x: b.x, y: a.y }, b]
@@ -820,7 +891,8 @@ function placedOnce(model, dir, reversed, fits = new Map(), beside = new Map()) 
   const worthTrying = quick > 0;
   for (let pass = 0, moved = true; pass < weights.tries && moved && worthTrying; pass++) {
     moved = false;
-    for (const id of rest) {
+    // A row keeps the order its author linked it in: its boxes are not moved one by one.
+    for (const id of rest.filter((x) => !rowOf.has(x))) {
       const r = rank.get(id);
       const furthest = Math.max(1, ...[...lane.values()].map(Math.abs)) + 1;
       for (let l = -furthest; l <= furthest; l++) {
