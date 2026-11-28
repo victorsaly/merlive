@@ -19,6 +19,9 @@ More kinds that the two placements there are can draw: mindmaps, kanban boards, 
 - **A timeline too wide for a screen runs on in bands.** Nine periods were 1592 px across; they are now five and
   four in two bands, with time's arrow running round from the end of one into the top of the next. With sections
   a band is cut only between two. The command says so; `%% wrap: no` keeps one row.
+- **A long name of a frame on a grid wraps.** A timeline's section named in a sentence made every column of the
+  timeline as wide as the sentence (469 px); its name now goes onto up to three lines at the left of its frame, and
+  the columns are 180 px.
 - **No line runs along the edge of a frame (P5).** A link into a section of the next band ran two pixels inside the
   top of its frame; links on a grid now take the gap outside the frames round the box they go into.
 - **A packet is about as wide as Mermaid draws it.** A TCP header was 2408 px across; it is 1140. A field is a

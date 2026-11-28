@@ -290,6 +290,46 @@ describe('timeline: placed on the grid it was written as', () => {
   });
 });
 
+describe('timeline: a section with a long name', () => {
+  const long = 'section Everything the buyer does before the supplier hears of it\nMonday : Raised\nsection Delivery\nFriday : Delivered';
+
+  it('wraps the name to its frame, and does not widen every column for it', () => {
+    const m = timeline(long), lay = layout(m), f = /** @type {any} */ (lay.groups.find((g) => g.id === 'section1'));
+    // It was 469px: the name on one line. Three lines of it need a little more than a period does.
+    assert.ok(lay.box.w <= measure.widths[2], `a column is ${lay.box.w}px`);
+    assert.ok(f.lines.length > 1 && f.lines.length <= 3, `${f.lines.length} lines`);
+    assert.equal(f.lines.join(' '), 'Everything the buyer does before the supplier hears of it');
+    for (const line of f.lines) assert.ok(line.length * measure.nameGlyph + 2 * measure.nameIn <= f.w, `"${line}" is wider than its frame`);
+    assert.deepEqual(broken(m), []);
+  });
+
+  it('keeps what each frame of a row holds starting on one line, under the longest name, and clear of it', () => {
+    const m = timeline(long), lay = layout(m), f = /** @type {any} */ (lay.groups.find((g) => g.id === 'section1'));
+    assert.equal(lay.nodes.period1.y, lay.nodes.period2.y);
+    assert.ok(top(lay.nodes.period1) >= f.name.y + f.name.h / 2, 'the first period starts under the name');
+    assert.equal(f.name.h, f.lines.length * measure.nameLine);
+  });
+
+  it('draws each line of the name under the one before', () => {
+    const m = timeline(long), svg = picture(m, layout(m), builtIn, { title: 't' });
+    assert.match(svg, /<text class="mv-name"[^>]*><tspan[^>]*>Everything the buyer[^<]*<\/tspan><tspan[^>]*dy="12"[^>]*>/);
+  });
+
+  it('starts every line of the name at the left of its frame, where a name of one line starts', () => {
+    const m = timeline(long), lay = layout(m), f = /** @type {any} */ (lay.groups.find((g) => g.id === 'section1'));
+    const svg = picture(m, lay, builtIn, { title: 't' }), left = String(Math.round(f.x + measure.nameIn));
+    const text = /<text class="mv-name"([^>]*)>(<tspan[^]*?)<\/text>/.exec(svg);
+    // An inline style: the class's own text-anchor would win over an attribute.
+    assert.match(text?.[1] ?? '', /style="text-anchor:start"/);
+    assert.deepEqual([...(text?.[2] ?? '').matchAll(/<tspan x="([\d.]+)"/g)].map((t) => String(Math.round(Number(t[1])))), [left, left, left]);
+  });
+
+  it('leaves a short name on one line, its frame as it was', () => {
+    const lay = layout(timeline('section Buying\nMonday : Raised\nsection Delivery\nFriday : Delivered'));
+    for (const f of /** @type {any[]} */ (lay.groups)) assert.deepEqual([f.lines, f.name.h], [[f.title], measure.nameLine]);
+  });
+});
+
 describe('timeline: wrapped into bands when too wide for a screen', () => {
   const year = 'January : Budget set\nFebruary : Raised\nMarch : Approved\nApril : Sent\nMay : Chased\nJune : Delivered\nJuly : Checked\nAugust : Invoiced\nSeptember : Paid';
   const y = (/** @type {any} */ lay, /** @type {number} */ i) => lay.nodes[`period${i}`].y, x = (/** @type {any} */ lay, /** @type {number} */ i) => lay.nodes[`period${i}`].x;

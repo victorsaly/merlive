@@ -401,7 +401,7 @@ runs from a period down its events, as Mermaid's own does.
 | `Week 1 #colon; buying` | Mermaid's code for a colon that ends nothing: read as `:` |
 | `Raised <br>by the buyer` | The lines its author broke the words into. Longer words are wrapped in their box |
 | `title The order's week`, `title:` in front matter | What the picture is called: drawn above a still picture and as the heading of a page. The timeline's own wins |
-| `section Buying` | A group round every period after it, up to the next section, and their events. Left to right the sections are side by side; top to bottom, one under another |
+| `section Buying` | A group round every period after it, up to the next section, and their events. Left to right the sections are side by side; top to bottom, one under another. A name too long for its periods goes onto as many as three lines, and only then makes them wider |
 | `timeline LR`, `timeline TD` | Which way it runs. Left to right when nothing is said |
 | `%% note period2: words`, `%% note event2_1: words` | A note for the second period, or for its first event: periods are numbered `period1`, `period2`… in the order written, and a period's events `event2_1`, `event2_2`… |
 | `%% kind step: Milestone`, `%% kind period: Day` | What an event, or a period, is called in the legend and when picked. Unsaid, they are "Event" and "Period" |

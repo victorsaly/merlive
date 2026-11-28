@@ -45,6 +45,7 @@ export const gridMeasure = {
   crossing: 1000, // what a crossing costs when a route is chosen: more than any number of turns
   turn: 10, // what a turn costs
   step: 3, // what each step off the middle of a side or of a gap costs
+  nameLines: 3, // the most lines a frame's name wraps to before its columns are widened for it: a timeline's section may be named in a sentence
 };
 
 /** The places a line may leave a side by, in port steps from its middle, and the lines of a gap it may take, in track steps: nearest first. */
@@ -114,6 +115,17 @@ export function placeGrid(model) {
     const over = overNeeds(n);
     return over <= w && lines.length <= Math.max(2, Math.min(measure.mostLines, n.breaks?.length ?? 0)) && lines.every((l) => l.length <= roomFor(n, w)) && listed(n).every((row) => row.length <= rowsRoom(w));
   };
+  /**
+   * A frame's name in lines, in a frame whose contents are `room` px wide: wrapped as a box's words are, to as many
+   * lines as `gridMeasure.nameLines` at most, and only as much wider than the room as its longest word, or three
+   * lines, need. One sentence of a name would otherwise make every column of the grid as wide as itself.
+   */
+  const nameAt = (/** @type {string} */ name, /** @type {number} */ room) => {
+    if (!name) return [];
+    let chars = Math.max(1, Math.floor(room / measure.nameGlyph)), lines = wrap(name, chars);
+    while (lines.length > gridMeasure.nameLines || lines.some((l) => l.length > chars)) lines = wrap(name, ++chars);
+    return lines;
+  };
   /** The name a block that holds others goes by: its group's, or, when it holds nothing and so is no group, the one its cell keeps. */
   const nameOf = (/** @type {Cell} */ cell) => groupOf.get(/** @type {{id:string}} */ (cell).id)?.title ?? /** @type {{title?:string}} */ (cell).title ?? '';
   /** @returns {{cols:number,rows:{cell:Cell,col:number,span:number}[][],colW:number,w:number}} */
@@ -129,7 +141,7 @@ export function placeGrid(model) {
     let colW = widths.find((w) => blocks.every((b) => fitsAt(b.n, wide(w, b.span)))) ?? Math.max(least, flows[flows.length - 1]);
     for (const p of all) {
       if (p.cell.is !== 'group') continue;
-      const name = Math.round(nameOf(p.cell).length * measure.nameGlyph), inner = Math.max(need(p.cell.grid).w, name) + 2 * measure.framePad;
+      const held = need(p.cell.grid).w, name = Math.round(Math.max(0, ...nameAt(nameOf(p.cell), held).map((l) => l.length)) * measure.nameGlyph), inner = Math.max(held, name) + 2 * measure.framePad;
       colW = Math.max(colW, Math.ceil((inner - (p.span - 1) * gapX) / p.span));
     }
     return { cols, rows, colW, w: cols * colW + (cols - 1) * gapX };
@@ -138,7 +150,7 @@ export function placeGrid(model) {
   // 3. A grid as it comes out in a given width, from its own top left corner: its column width, each row's
   // height, and each cell. A grid inside a frame is given the frame's width, and its columns share it.
   /**
-   * @typedef {{cell:Cell,col:number,span:number,x:number,w:number,h:number,lines:string[],inner:Shaped|null,titled:boolean}} Item
+   * @typedef {{cell:Cell,col:number,span:number,x:number,w:number,h:number,lines:string[],inner:Shaped|null,titled:boolean,band:number,named:string[]}} Item band: the room at the top of a frame for its name; named: its name in lines
    * @typedef {{colW:number,off:number,w:number,h:number,rows:{y:number,h:number,items:Item[]}[]}} Shaped
    */
   // A block that lists something under its name has its name in a band at its top, the same for every such
@@ -154,15 +166,19 @@ export function placeGrid(model) {
     const rows = n.rows.map((row) => {
       // Where one frame of a row has a name, every frame of that row keeps room for one, so that what they hold
       // starts on one line: a named block beside one with no name, or a timeline's sections.
-      const rowNamed = row.some((p) => p.cell.is === 'group' && Boolean(nameOf(p.cell)));
+      // A name that wraps takes more lines than one, and every frame of the row keeps room for the most.
+      const widthOf = (/** @type {{span:number}} */ p) => p.span * colW + (p.span - 1) * gapX;
+      const names = new Map(row.filter((p) => p.cell.is === 'group').map((p) => [p, nameAt(nameOf(p.cell), widthOf(p) - 2 * measure.framePad)]));
+      const rowNamed = [...names.values()].some((l) => l.length), nameBand = measure.frameTitle + (Math.max(1, ...[...names.values()].map((l) => l.length)) - 1) * measure.nameLine;
       const items = row.map((p) => {
-        const w = p.span * colW + (p.span - 1) * gapX, x = off + p.col * (colW + gapX);
+        const w = widthOf(p), x = off + p.col * (colW + gapX);
         /** @type {Item} */
-        const item = { ...p, x, w, h: base, lines: [], inner: null, titled: false };
+        const item = { ...p, x, w, h: base, lines: [], inner: null, titled: false, band: 0, named: names.get(p) ?? [] };
         if (p.cell.is === 'group') {
           item.titled = rowNamed;
+          item.band = rowNamed ? nameBand : 0;
           item.inner = shape(p.cell.grid, w - 2 * measure.framePad);
-          item.h = Math.max(base, item.inner.h) + 2 * measure.framePad + (item.titled ? measure.frameTitle : 0);
+          item.h = Math.max(base, item.inner.h) + 2 * measure.framePad + item.band;
         } else if (p.cell.is !== 'space') {
           const node = /** @type {Node} */ (byId.get(p.cell.id));
           item.lines = linesOf(node, w);
@@ -203,9 +219,9 @@ export function placeGrid(model) {
         if (cell.is === 'group') {
           // A block that holds nothing is an empty cell: there is no group to draw a frame for. One that
           // keeps a name of its own (a column of a board with no cards yet) is still drawn, round nothing.
-          if (groupOf.has(cell.id) || nameOf(cell)) frames.push({ id: cell.id, title: nameOf(cell), x: l, y: t, w: item.w, h: row.h, name: { x: l, y: t, w: 0, h: 0, plate: false } });
+          if (groupOf.has(cell.id) || nameOf(cell)) frames.push({ id: cell.id, title: nameOf(cell), lines: item.named, x: l, y: t, w: item.w, h: row.h, name: { x: l, y: t, w: 0, h: 0, plate: false } });
           else placed.cells.pop();
-          commit(/** @type {Shaped} */ (item.inner), l + measure.framePad, t + measure.framePad + (item.titled ? measure.frameTitle : 0));
+          commit(/** @type {Shaped} */ (item.inner), l + measure.framePad, t + measure.framePad + item.band);
         } else nodes[cell.id] = { id: cell.id, x: l + item.w / 2, y: t + row.h / 2, w: item.w, h: row.h, rank: r, lane: item.col, spine: false, lines: item.lines };
       }
     });
@@ -384,7 +400,8 @@ export function placeGrid(model) {
   const lines = Object.values(edges).map((e) => e.points);
   for (const f of frames) {
     if (!f.title) continue;
-    const w = Math.round(f.title.length * measure.nameGlyph), h = measure.nameLine, name = { x: f.x + measure.nameIn + w / 2, y: f.y + measure.nameDown, w, h };
+    const called = f.lines ?? [f.title], w = Math.round(Math.max(...called.map((l) => l.length)) * measure.nameGlyph), h = measure.nameLine * called.length;
+    const name = { x: f.x + measure.nameIn + w / 2, y: f.y + measure.nameDown + ((called.length - 1) * measure.nameLine) / 2, w, h };
     f.name = { ...name, plate: lines.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, name, measure.clear))) };
   }
 
