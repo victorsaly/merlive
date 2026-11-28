@@ -121,7 +121,7 @@ taste are under "Waiting on Victor".
   to its second child leaves its bottom and the other's its right side: both clear, not alike.
 
 - **The tag for 0.5.0.** `v0.1.0` to `v0.4.0` are on GitHub, each on its release. `v0.5.0` goes on the commit
-  that merges pull request 10, in a clone: `git tag -a v0.5.0 <that commit> -m "Merlive 0.5.0"`, then
+  that merges pull request 11 (pull request 10 was merged before the release commit reached it), in a clone: `git tag -a v0.5.0 <that commit> -m "Merlive 0.5.0"`, then
   `git push origin v0.5.0`. Sessions have not been able to push a tag where they run.
 - **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11), which took "not released
   yet" off Merlive's page, was merged on 25 November. Whether the site was then built and deployed is not known
