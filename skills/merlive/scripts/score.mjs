@@ -3,6 +3,7 @@
 
 import { compartmentsOf, frameEdge, hitsBox, meet, measure, overNeeds, roomFor, rowsRoom, segmentsOf, tableNeeds, textOf, wrap } from './layout.mjs';
 import { colourChecks, looksOf } from './design.mjs';
+import { gridMeasure } from './grid.mjs';
 
 /** @typedef {{id:string,rule:string,ok:boolean,detail:string}} Check */
 
@@ -169,6 +170,15 @@ export function score(model, lay, design) {
 
   // P8: a name on a plate has its line pass behind it, which is drawn so; any other must be clear of every line.
   const struck = lay.groups.filter((f) => !f.name.plate && edges.some((e) => segmentsOf(e.points).some((seg) => hitsBox(seg, f.name, 0)))).map((f) => `a line runs through the name of the group "${f.title}"`);
+  // On a grid a name is read along the top of its own frame: in as many lines as a name wraps to, inside the
+  // frame, and with no box on it. A box that lies on the name hides it as surely as a line through it would.
+  // A flow's group name does not wrap yet, and a long one can run past a narrow frame: docs/PLAN.md.
+  for (const f of (lay.grids ? lay.groups : []).filter((g) => g.title)) {
+    const lines = f.lines?.length ?? 1, n = f.name;
+    if (lines > gridMeasure.nameLines) struck.push(`the name of the group "${f.title}" takes ${lines} lines; a name wraps to ${gridMeasure.nameLines} at most`);
+    if (n.x - n.w / 2 < f.x || n.x + n.w / 2 > f.x + f.w) struck.push(`the name of the group "${f.title}" runs past its frame`);
+    for (const b of nodes) if (overlap(n, b)) struck.push(`the name of the group "${f.title}" lies under "${label(b.id)}"`);
+  }
   add('P8', "A group's name can be read", struck, lay.groups.length ? `${lay.groups.length} clear of lines, or on a plate` : 'no groups');
 
   // D1, D2: the sums are in design.mjs, where the setup page uses them too.

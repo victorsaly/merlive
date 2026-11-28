@@ -171,7 +171,8 @@ export function kanbanReader({ model, node, say, frame, unframe, warn, wordsOf, 
       else warn(line, `the priority "${pressing}" of ${of} is not one Mermaid draws (Very High, High, Low, Very Low); it is kept as written`);
     }
     const rows = KEPT.filter((k) => kept.has(k)).map((k) => `${k}: ${kept.get(k)}`);
-    if (rows.length) n.rows = [rows];
+    // A ticket, a person and how pressing it is are said in words, not code: they keep the page's face.
+    if (rows.length) Object.assign(n, { rows: [rows], facts: true });
     /** @type {ColumnCell} */ (column).grid.cells.push({ is: 'block', id, span: 1, line });
   };
 

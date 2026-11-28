@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, with 0.4.0 released and 0.5.0 in hand.
+Last brought up to date: 28 November 2026, as 0.5.0 was released.
 
 ## Released
 
@@ -78,9 +78,8 @@ does not read `%% kind` yet; the main path is still the longest one, which in a 
 then OpenAI when its limit is reached) puts the fallback on the straight line. `%% main:` fixes it by hand;
 picking the path that takes no decision's exception would fix it by rule.
 
-## In hand: 0.5.0, more kinds the two placements can draw
-
-On the branch `kinds-2`. Done: readers for mindmaps, kanban boards, timelines and packets (`mindmap.mjs`,
+**0.5.0** (28 November 2026), more kinds the two placements can draw, the pull request from the branch `kinds-2`:
+readers for mindmaps, kanban boards, timelines and packets (`mindmap.mjs`,
 `kanban.mjs`, `timeline.mjs`, `packet.mjs`), each with its tests, its list in `corpus/index.json` and its section
 in `skills/merlive/reference.md`; a tree placed as a tree (step 5 of `placed()` in layout.mjs); a grid that says
 its own least column, its gap, and that its cells are close (`grid.mjs`); a plain box named for what it is in
@@ -90,28 +89,48 @@ and a page with no lines that says nothing of a flow (`linked` in the page's dat
 grid with nothing linked to its cells, and P6 holding the line over a name to its block's own width.
 A timeline too wide for a screen runs on in bands (`wraps` on the model, the fewest that fit chosen in
 `layout()`; `%% wrap: no` keeps one row), and no line runs along a frame's edge (P5; the grid router takes the gap
-outside the frames round a box, `rim` in grid.mjs).
+outside the frames round a box, `rim` in grid.mjs). A frame's name on a grid wraps to three lines before it
+widens a column (`nameAt` in grid.mjs, `Frame.lines`). In a flow placed by rule a group's name still does not wrap.
 
-Left:
+What 0.5.0 left:
 
-1. **A long section name widens every section** of a timeline: a frame's name is never wrapped, and every column
-   of a grid is as wide as every other, so one name of sixty letters makes every column 469px. A frame name that
-   wraps onto a second line, as a box's words do, would fix it.
-2. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
-   colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`.
-3. **Look, sample by sample**: one screenshot of each kind beside Mermaid's was looked at; the rest pass their
-   rules. A packet of one-bit fields with four-letter names (`packet-bit`) is still 1396px: a column is as wide as
-   its widest one-bit name.
+1. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
+   colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`. Waits on Victor.
+2. **A packet of one-bit fields with four-letter names** (`packet-bit`) is still 1396px: a column is as wide as its
+   widest one-bit name.
+3. **A flow's group name does not wrap**, so a long one runs past a narrow frame, its line and arrowhead under the
+   letters: `state-composite-named` ("Checks before sending"), `c4-boundary-type`, `c4-deployment-described`.
+   P8 holds a name on a grid to its frame (review of pull request 11); held to it, those three would be refused,
+   so a flow's frames are not held yet. Wrapping a flow group's name as a grid's is (`nameAt` in grid.mjs) and
+   then holding every frame would close it, and the narrow group's name in "Next" with it.
+
+Every sample of the four kinds was looked through beside Mermaid's own on 28 November (114: 38 mindmaps, 25
+boards, 29 timelines, 22 packets). Fixed from it: a mindmap's hexagon, circle and cloud took a flowchart's kinds
+(Decision, Start or end), colour and all; a card's ticket, who has it and its priority were in the face for code.
+Left as the reference decides: a known priority in small letters (`priority: high`) and any other as written; a
+ticket that is not a link even where `ticketBaseUrl` says where it would go; a timeline theme's colours, which
+are the design's. Already known: in `timeline-direction-td-sections` the arrow into a section runs just past the
+end of its name (the narrow group's name, item 1 of "Next" below). A packet's bits are said over its name ("0–15")
+where Mermaid puts the first and last at its corners, and its title is above, as every kind's is. Questions of
+taste are under "Waiting on Victor".
 
 ## Waiting on Victor
 
-- **The tags.** No session so far could push a tag: the push is refused where the sessions run. None exists
-  yet. In a clone:
-  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0"`, `git tag -a v0.2.0 faa35cd -m "Merlive 0.2.0"`,
-  `git tag -a v0.3.0 cf1fee7 -m "Merlive 0.3.0"`, `v0.4.0` on the commit that merges its release, then
-  `git push origin v0.1.0 v0.2.0 v0.3.0 v0.4.0`.
-- **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11) takes "not released
-  yet" off Merlive's page; merge it after the tag. Then, in the skills repository: `npm install`,
+- **Bands, and how much past a screen.** `timeline-whole` was 1108px in one row, 8px past the 1,100 a flow is
+  turned at, and is now two bands with a long arrow between them. Should a timeline have some slack before it
+  wraps, or is one limit for every kind right?
+- **How a tree's lines leave a box** (from looking through the mindmaps). A box's lines to its children each leave
+  by a port of their own, so four children make a comb of four lines a few pixels apart (`mindmap-bushy`). A tree
+  is usually drawn with one trunk the branches leave from, but that is lines sharing a path, which P5 refuses. Is a
+  shared trunk wanted, for a tree's lines that have nothing at their ends? And in `mindmap-tree` one parent's line
+  to its second child leaves its bottom and the other's its right side: both clear, not alike.
+
+- **The tag for 0.5.0.** `v0.1.0` to `v0.4.0` are on GitHub, each on its release. `v0.5.0` goes on the commit
+  that merges pull request 11 (pull request 10 was merged before the release commit reached it), in a clone: `git tag -a v0.5.0 <that commit> -m "Merlive 0.5.0"`, then
+  `git push origin v0.5.0`. Sessions have not been able to push a tag where they run.
+- **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11), which took "not released
+  yet" off Merlive's page, was merged on 25 November. Whether the site was then built and deployed is not known
+  here. If not, in the skills repository: `npm install`,
   `npm run build` (the Merlive page has never been built: it could not be, where it was written),
   `npm run cards` (the share card `public/og/merlive.png` is missing and the hub's card shows two skills), and
   `npm run deploy` (the site deploys by hand, so skills.victorsaly.com does not show Merlive until then).

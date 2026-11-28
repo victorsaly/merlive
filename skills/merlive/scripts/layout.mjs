@@ -11,7 +11,7 @@ import { placeGrid } from './grid.mjs';
 /** @typedef {{id:string,x:number,y:number,w:number,h:number,rank:number,lane:number,spine:boolean,lines:string[]}} Placed */
 /** @typedef {{x:number,y:number,w:number,h:number,text:string,lines:string[],align?:'start'|'end'}} Words a link's words: the middle of where they sit, their size, and the lines they are wrapped to; align: beside a line that runs along the flow, the side of them that is next to it, where they are held */
 /** @typedef {{id:string,points:Pt[],back:boolean,label:null|Words,near?:Words,far?:Words}} Routed near, far: the few words at the end it comes from and the end it leads to */
-/** @typedef {{id:string,title:string,x:number,y:number,w:number,h:number,name:{x:number,y:number,w:number,h:number,plate:boolean}}} Frame a group's frame, from its top left corner; name: where its name sits, from its middle, and whether a line has to pass behind it */
+/** @typedef {{id:string,title:string,lines?:string[],x:number,y:number,w:number,h:number,name:{x:number,y:number,w:number,h:number,plate:boolean}}} Frame a group's frame, from its top left corner; lines: its name, where it wraps (on a grid); name: where its name sits, from its middle, and whether a line has to pass behind it */
 /** @typedef {{width:number,height:number,direction:'TD'|'LR',reversed:boolean,box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[],grids?:import('./grid.mjs').PlacedGrid[]}} Layout grids: set when the boxes are on a grid their author placed, each grid as it came out */
 
 // What is measured, named once. Boxes are sized without a browser, from the average glyph of a 13px UI face.

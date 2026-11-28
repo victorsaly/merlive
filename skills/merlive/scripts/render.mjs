@@ -228,7 +228,9 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
       const spans = lines.map((line, i) => `<tspan class="mv-row" x="${n(l + measure.rowIn)}" y="${n(down + measure.rowPad + measure.rowLine * i + 12)}">${esc(line)}</tspan>`).join('');
       down += 2 * measure.rowPad + measure.rowLine * lines.length;
       // Spaces are kept as written, so an author's columns (a key, a type, a name) stay in line.
-      return `${rule}<text class="mv-rows" xml:space="preserve">${spans}</text>`;
+      // Rows said in words (a card's ticket, who has it) take the page's face, on the element, so that a drawing
+      // with none has no rule for them.
+      return `${rule}<text class="mv-rows"${m.facts ? ' style="font-family:inherit"' : ''} xml:space="preserve">${spans}</text>`;
     }).join('');
     // An icon sits left of the words, on the middle of their block; the words move over by half its room, so
     // icon and words together stay in the middle of the box.
@@ -271,7 +273,16 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
   const frames = lay.groups.map((f) => `<g class="mv-group"><rect x="${n(f.x)}" y="${n(f.y)}" width="${n(f.w)}" height="${n(f.h)}" rx="${Math.min(design.radius, 10)}"/></g>`);
   // A group's name is drawn over the lines, with the frame's own colour round its letters: where a line has to
   // pass, it passes behind the name.
-  const names = lay.groups.filter((f) => f.title).map((f) => `<text class="mv-name" x="${n(f.name.x)}" y="${n(f.name.y + 4)}">${esc(f.title)}</text>`);
+  // A name that wraps (a timeline's section named in a sentence) is a line under a line, from the top of its place.
+  const names = lay.groups.filter((f) => f.title).map((f) => {
+    const lines = f.lines?.length ? f.lines : [f.title];
+    if (lines.length === 1) return `<text class="mv-name" x="${n(f.name.x)}" y="${n(f.name.y + 4)}">${esc(f.title)}</text>`;
+    // Its lines start where a name of one line starts, at the left of the frame: centred, they would be ragged.
+    // Each but the last ends in a space, which takes no room at the end of a line, so that its text is still one
+    // sentence to a screen reader or a copy, and not words run together where the lines meet.
+    const first = f.name.y + 4 - ((lines.length - 1) * measure.nameLine) / 2, left = f.name.x - f.name.w / 2;
+    return `<text class="mv-name" style="text-anchor:start" x="${n(left)}" y="${n(first)}">${lines.map((l, i) => `<tspan x="${n(left)}" dy="${i ? measure.nameLine : 0}">${esc(l)}${i < lines.length - 1 ? ' ' : ''}</tspan>`).join('')}</text>`;
+  });
   // The ground: the grid the boxes are placed on, shown as dots faint enough to sit behind everything.
   // A live page spreads them over its whole stage instead, so they do not stop at the drawing's edge.
   const ground = design.ground === 'dots' && !live

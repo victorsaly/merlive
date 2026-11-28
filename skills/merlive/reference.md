@@ -319,7 +319,7 @@ look: the root in the middle, and a colour for each branch.
 | Two lines of the same words | Two boxes: every line is a box of its own. The second is `Words_2` in Merlive's own lines |
 | `[Square]`, `(Rounded)`, bare words | The design's own box, whose corners are the design's. A mindmap with both a square and a rounded box is told, once, that they are drawn alike |
 | `((Circle))` | A round-ended box |
-| `{{Hexagon}}` | A hexagon |
+| `{{Hexagon}}` | A hexagon. A shape says nothing more in a mindmap: a hexagon is no decision and a circle no start or end, as they are in a flowchart, so every box is of one kind unless a class says otherwise |
 | `))Bang((` | A box with a heavy outline: there is no burst here. Said once |
 | `)Cloud(` | A round-ended box with a dashed outline: there is no cloud here. Said once |
 | `((Ordering))`, with no id before it | The same shapes; the id is made from the words |
@@ -401,7 +401,7 @@ runs from a period down its events, as Mermaid's own does.
 | `Week 1 #colon; buying` | Mermaid's code for a colon that ends nothing: read as `:` |
 | `Raised <br>by the buyer` | The lines its author broke the words into. Longer words are wrapped in their box |
 | `title The order's week`, `title:` in front matter | What the picture is called: drawn above a still picture and as the heading of a page. The timeline's own wins |
-| `section Buying` | A group round every period after it, up to the next section, and their events. Left to right the sections are side by side; top to bottom, one under another |
+| `section Buying` | A group round every period after it, up to the next section, and their events. Left to right the sections are side by side; top to bottom, one under another. A name too long for its periods goes onto as many as three lines, and only then makes them wider |
 | `timeline LR`, `timeline TD` | Which way it runs. Left to right when nothing is said |
 | `%% note period2: words`, `%% note event2_1: words` | A note for the second period, or for its first event: periods are numbered `period1`, `period2`… in the order written, and a period's events `event2_1`, `event2_2`… |
 | `%% kind step: Milestone`, `%% kind period: Day` | What an event, or a period, is called in the legend and when picked. Unsaid, they are "Event" and "Period" |
@@ -558,7 +558,7 @@ never write one by hand. Everything in it is optional, and what is left out come
 | `output.legend` | Whether a page carries the legend of kinds of box |
 | `output.source` | Whether a page carries the Mermaid it was drawn from |
 | `font`, `weight`, `radius` | The face (a list of faces), its weight (100 to 900) and a box's corner in px (0 to 40) |
-| `mono` | The face for code (a list of faces): the Mermaid a page shows, and the rows a class lists. An entity's table keeps the page's face, which its columns are measured for |
+| `mono` | The face for code (a list of faces): the Mermaid a page shows, and the rows a class lists. An entity's table keeps the page's face, which its columns are measured for, and so does what a kanban card lists (its ticket, who has it, its priority), which is said in words and is not code |
 | `from` | Where setup read the colours. Not used in drawing; it says where to look again |
 
 | Colour | What it is |

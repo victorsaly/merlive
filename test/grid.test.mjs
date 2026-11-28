@@ -9,7 +9,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from '../skills/merlive/scripts/parse.mjs';
 import { hitsBox, layout, measure, segmentsOf } from '../skills/merlive/scripts/layout.mjs';
-import { gridMeasure, placeGrid } from '../skills/merlive/scripts/grid.mjs';
+import { gridMeasure, nameAt, placeGrid } from '../skills/merlive/scripts/grid.mjs';
 import { builtIn } from '../skills/merlive/scripts/design.mjs';
 import { score } from '../skills/merlive/scripts/score.mjs';
 import { picture } from '../skills/merlive/scripts/render.mjs';
@@ -427,5 +427,38 @@ describe('grid: what a board asked of it', () => {
     assert.equal(joined.placedBy, 'grid');
     /** @type {any} */ (joined.grid).close = true;
     assert.equal(left(layout(joined).nodes.b) - right(layout(joined).nodes.a), gridMeasure.gap);
+  });
+});
+
+describe("grid: a frame's name in lines", () => {
+  const counted = (/** @type {string} */ name, /** @type {() => unknown} */ run) => {
+    const split = String.prototype.split;
+    let times = 0;
+    String.prototype.split = function (/** @type {any[]} */ ...args) {
+      if (String(this) === name) times++;
+      return split.apply(this, /** @type {any} */ (args));
+    };
+    try {
+      return { result: run(), times };
+    } finally {
+      String.prototype.split = split;
+    }
+  };
+
+  it('wraps to as many lines as a name may take, widening only for a word too long or a name that will not go in three', () => {
+    assert.deepEqual(nameAt('Everything the buyer does before the supplier hears of it', 128), ['Everything the buyer', 'does before the', 'supplier hears of it']);
+    assert.deepEqual(nameAt('Delivery', 128), ['Delivery']);
+    assert.deepEqual(nameAt('', 128), []);
+    const word = 'Procurement-and-accounts-payable';
+    assert.deepEqual(nameAt(`${word} team`, 64), [word, 'team']);
+  });
+
+  it('finds the width a long name needs in a few tries, not one for every letter it widens by', () => {
+    const name = 'x'.repeat(400), { result, times } = counted(name, () => nameAt(name, 128));
+    assert.deepEqual(result, [name]);
+    assert.ok(times <= 12, `the name was wrapped ${times} times`);
+    const words = Array.from({ length: 300 }, (_, i) => `word${i}`).join(' '), many = counted(words, () => nameAt(words, 128));
+    assert.equal(many.result.length, gridMeasure.nameLines);
+    assert.ok(many.times <= 14, `the name was wrapped ${many.times} times`);
   });
 });
