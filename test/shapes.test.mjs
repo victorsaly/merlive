@@ -143,6 +143,38 @@ describe('shapes: a bar, for a fork or a join', () => {
   });
 });
 
+describe('shapes: the newer shapes', () => {
+  it('is met where its outline is: a document at its wave, a card past its cut corner, a sloped box under its slope', () => {
+    // The wave is furthest in a quarter of the way along, and right at the bottom three quarters along.
+    assert.equal(inset('document', 'bottom', -w / 4, w, h), form.wave);
+    assert.equal(inset('document', 'bottom', w / 4, w, h), 0);
+    assert.equal(inset('document', 'top', 0, w, h), 0);
+    assert.equal(inset('card', 'top', -w / 2, w, h), form.notch);
+    assert.equal(inset('card', 'top', 0, w, h), 0);
+    assert.equal(inset('card', 'left', -h / 2, w, h), form.notch);
+    assert.equal(inset('sloped', 'top', -w / 2, w, h), form.slant);
+    assert.equal(inset('sloped', 'top', w / 2, w, h), 0);
+    assert.equal(inset('delay', 'right', 0, w, h), 0);
+    assert.ok(inset('delay', 'right', h / 2 - 2, w, h) > 10, 'round at its corners');
+  });
+
+  it('is met at a triangle\'s sides: at its point on top, at its foot below', () => {
+    assert.equal(inset('triangle', 'top', 0, w, h), 0);
+    assert.equal(inset('triangle', 'bottom', 0, w, h), 0);
+    assert.equal(inset('triangle', 'left', 0, w, h), w / 4);
+    assert.equal(inset('flipped-triangle', 'bottom', 0, w, h), 0);
+    assert.equal(inset('flipped-triangle', 'left', 0, w, h), w / 4);
+  });
+
+  it('is met by a line at the front sheet of a stack, below or left of the sheets behind it', () => {
+    assert.equal(inset('stacked', 'top', w / 2 - 1, w, h), 0, 'the back sheet reaches the top right');
+    assert.equal(inset('stacked', 'top', -w / 2 + 1, w, h), 2 * form.stack, 'the front sheet is lower at the left');
+    assert.equal(inset('stacked', 'bottom', 0, w, h), 0);
+    assert.ok(inset('documents', 'bottom', -w / 4, w, h) > 0 && inset('documents', 'bottom', -w / 4, w, h) <= form.wave, 'the front sheet\'s wave');
+    assert.equal(inset('documents', 'bottom', w / 2 - 1, w, h), 2 * form.stack, 'the back sheet at the bottom right');
+  });
+});
+
 describe('shapes: a point', () => {
   it('is a dot in the middle of its box, with no room for words', () => {
     const { main, more } = outlineOf('point', 0, 0, w, h, 8);

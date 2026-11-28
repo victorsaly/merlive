@@ -6,7 +6,7 @@ The syntax pages of mermaid-js/mermaid at 6374e52 (2026-11-23): one row for ever
 
 ## In short
 
-- **Flowcharts:** of 70 features, 49 are drawn as written, 21 are drawn less something Merlive leaves out on purpose or does not have yet, 0 are only partly read, and 0 are refused.
+- **Flowcharts:** of 70 features, 48 are drawn as written, 21 are drawn less something Merlive leaves out on purpose or does not have yet, 1 are only partly read, and 0 are refused.
 - **State diagrams:** of 27 features, 18 are drawn as written, 9 are drawn less something, 0 are only partly read, and 0 are refused.
 - **Class diagrams:** of 36 features, 28 are drawn as written, 8 are drawn less something, 0 are only partly read, 0 are refused.
 - **Entity diagrams:** of 48 features, 38 are drawn as written, 10 are drawn less something, 0 are only partly read, 0 are refused.
@@ -63,7 +63,7 @@ missing, named beside it. **Partly read** and **refused** are what there is to f
 | Shape: Trapezoid | Drawn |  | [source](../corpus/flowchart/shape-trapezoid.mmd) | [picture](../corpus/drawn/shape-trapezoid.svg) |
 | Shape: Trapezoid, upside down | Drawn |  | [source](../corpus/flowchart/shape-trapezoid-alt.mmd) | [picture](../corpus/drawn/shape-trapezoid-alt.svg) |
 | Shape: Double circle | Drawn |  | [source](../corpus/flowchart/shape-double-circle.mmd) | [picture](../corpus/drawn/shape-double-circle.svg) |
-| Shapes written as @{ shape: … }, with a label | Drawn |  | [source](../corpus/flowchart/shape-at-syntax.mmd) | [picture](../corpus/drawn/shape-at-syntax.svg) |
+| Shapes written as @{ shape: … }, with a label | Partly read | its shapes are read as box, diamond, cylinder, document, pill | [source](../corpus/flowchart/shape-at-syntax.mmd) | [picture](../corpus/drawn/shape-at-syntax.svg) |
 | Every one of the 53 newer shapes | Drawn, less something | Those Merlive has a drawing for are drawn as themselves; the rest are boxes | [source](../corpus/flowchart/shape-at-every.mmd) | [picture](../corpus/drawn/shape-at-every.svg) |
 | A box that is an icon | Drawn, less something | The icon is Merlive's own drawing of a user, beside the label and not above it | [source](../corpus/flowchart/shape-icon.mmd) | [picture](../corpus/drawn/shape-icon.svg) |
 | A box that is an image | Drawn, less something | The image is left out (a page of Merlive fetches nothing); its label is kept | [source](../corpus/flowchart/shape-image.mmd) | [picture](../corpus/drawn/shape-image.svg) |

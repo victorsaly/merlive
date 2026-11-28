@@ -4,11 +4,11 @@
 // words, and where a line meets it. Layout and drawing both ask here, so a line always ends on the outline.
 // Pure.
 
-/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'|'note'|'point'|'bar'|'bar-upright'|'cell'|'arrow-right'|'arrow-left'|'arrow-up'|'arrow-down'|'arrow-x'|'arrow-y'} Shape */
+/** @typedef {'box'|'pill'|'diamond'|'hexagon'|'cylinder'|'subroutine'|'lean-right'|'lean-left'|'trapezoid'|'trapezoid-alt'|'double-circle'|'flag'|'document'|'documents'|'card'|'lined'|'stacked'|'divided'|'window'|'sloped'|'delay'|'triangle'|'flipped-triangle'|'note'|'point'|'bar'|'bar-upright'|'cell'|'arrow-right'|'arrow-left'|'arrow-up'|'arrow-down'|'arrow-x'|'arrow-y'} Shape */
 /** @typedef {'top'|'bottom'|'left'|'right'} Side */
 
 /** @type {Shape[]} */
-export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag', 'note', 'point', 'bar', 'bar-upright', 'cell', 'arrow-right', 'arrow-left', 'arrow-up', 'arrow-down', 'arrow-x', 'arrow-y'];
+export const shapes = ['box', 'pill', 'diamond', 'hexagon', 'cylinder', 'subroutine', 'lean-right', 'lean-left', 'trapezoid', 'trapezoid-alt', 'double-circle', 'flag', 'document', 'documents', 'card', 'lined', 'stacked', 'divided', 'window', 'sloped', 'delay', 'triangle', 'flipped-triangle', 'note', 'point', 'bar', 'bar-upright', 'cell', 'arrow-right', 'arrow-left', 'arrow-up', 'arrow-down', 'arrow-x', 'arrow-y'];
 
 // What is measured, named once.
 export const form = {
@@ -29,6 +29,10 @@ export const form = {
   arrowBroad: 128, // px a block arrow that points up or down is broad at most: in a wider cell it stays an arrow, in the middle of it
   arrowShaft: 0.6, // the share of a block arrow's breadth its shaft takes: the head is wider, or it is no arrow
   fold: 12, // px of a note's top right corner that is folded over: enough to see, not enough to take a word's room
+  wave: 8, // px a document's bottom waves in at most: enough to read as a sheet of paper, not to reach its words
+  stack: 5, // px each sheet behind a stack of documents or boxes shows, up and to the right
+  triangleRoom: 0.45, // the share of a triangle's width its words can use: they sit low in it, where it is wide
+  triangleLow: 8, // px a triangle's words sit below its middle (above, turned over), toward where it is wide
 };
 
 /** How far the corners of a hexagon of this height are cut. */
@@ -102,6 +106,11 @@ export function roomIn(/** @type {Shape} */ shape, /** @type {number} */ w) {
     // An arrow that points up or down keeps its words in its shaft, which is narrower than its box.
     case 'arrow-up': case 'arrow-down': case 'arrow-y': return Math.min(w, form.arrowBroad) * form.arrowShaft - 12;
     case 'cell': return w - form.cellPad;
+    // A rule down the left (a lined box, a window) takes its room; a stack's words are on its front sheet.
+    case 'lined': case 'window': return w - form.pad - form.rail;
+    case 'documents': case 'stacked': return w - form.pad - 2 * form.stack;
+    case 'delay': return w - form.pad - form.slant;
+    case 'triangle': case 'flipped-triangle': return w * form.triangleRoom;
     default: return w - form.pad;
   }
 }
@@ -120,8 +129,35 @@ export function wordsAt(/** @type {Shape} */ shape, /** @type {number} */ _h) {
   // A block arrow's words are in its shaft, which is off the middle by half of the one head it has.
   const arrow = arrowOf(shape), back = arrow && arrow.first !== arrow.last ? (arrow.last ? -form.arrowHead / 2 : form.arrowHead / 2) : 0;
   if (arrow) return arrow.upright ? { dx: 0, dy: back } : { dx: back, dy: 0 };
-  return { dx: shape === 'flag' ? form.notch / 2 : 0, dy: shape === 'cylinder' ? form.cap / 2 : 0 };
+  switch (shape) {
+    // A stack's words are on its front sheet, which is down and to the left of the middle.
+    case 'documents': case 'stacked': return { dx: -form.stack, dy: form.stack };
+    // Clear of the rules that mark a lined box, a divided one and a window, and above a document's wave.
+    case 'lined': return { dx: form.rail / 2, dy: 0 };
+    case 'divided': return { dx: 0, dy: form.rail / 2 };
+    case 'window': return { dx: form.rail / 2, dy: form.rail / 2 };
+    case 'document': return { dx: 0, dy: -form.wave / 2 };
+    // A triangle is wide at its foot: its words sit low in it, and high in one turned over.
+    case 'triangle': return { dx: 0, dy: form.triangleLow };
+    case 'flipped-triangle': return { dx: 0, dy: -form.triangleLow };
+    default: return { dx: shape === 'flag' ? form.notch / 2 : 0, dy: shape === 'cylinder' ? form.cap / 2 : 0 };
+  }
 }
+
+/** How far up from the bottom of its sheet a document's wave is, `off` px from the middle of a sheet `w` wide. */
+const wave = (/** @type {number} */ off, /** @type {number} */ w) => (form.wave * (1 - Math.sin((2 * Math.PI * off) / w))) / 2;
+
+/** The wave along a sheet's bottom, from its right end `from` to its left end `to`, as path steps. */
+const waveTo = (/** @type {number} */ from, /** @type {number} */ to, /** @type {number} */ u, /** @type {number} */ w) => {
+  const steps = 24, mid = (from + to) / 2;
+  return Array.from({ length: steps }, (_, i) => {
+    const x = from - ((from - to) * (i + 1)) / steps;
+    return `L${n(x)},${n(u - wave(x - mid, w))}`;
+  }).join('');
+};
+
+/** How far a stack's sheets behind are in, for a line `from` px from the near corner of a side: none past the second sheet. */
+const behind = (/** @type {number} */ from) => (from < form.stack ? 2 * form.stack : from < 2 * form.stack ? form.stack : 0);
 
 /**
  * How far in from the edge of its box a shape's outline is, where a line meets it: `off` px along the side
@@ -170,6 +206,31 @@ export function inset(shape, side, off, w, h) {
     case 'trapezoid': return flat ? 0 : within(Math.max(0, lean(true)));
     case 'trapezoid-alt': return flat ? 0 : within(Math.max(0, lean(false)));
     case 'flag': return side === 'left' ? within(form.notch * (1 - a / (h / 2))) : 0;
+    case 'document': return side === 'bottom' ? within(wave(Math.sign(off) * a, w)) : 0;
+    // A stack: its back sheet reaches the top and the right, its front sheet the left and the bottom.
+    case 'stacked': case 'documents': {
+      const fromNear = Math.sign(off) * a + along / 2, fromFar = along - fromNear;
+      if (side === 'top' || side === 'left') return within(behind(fromNear));
+      if (fromFar < 2 * form.stack) return within(behind(fromFar));
+      return within(shape === 'documents' && side === 'bottom' ? wave(fromNear - (w - 2 * form.stack) / 2, w - 2 * form.stack) : 0);
+    }
+    case 'card': return side === 'top' || side === 'left' ? within(form.notch - (Math.sign(off) * a + along / 2)) : 0;
+    case 'sloped': return side === 'top' ? within(form.slant * (0.5 - (Math.sign(off) * a) / w)) : 0;
+    // A delay's right end is half a circle as tall as the box.
+    case 'delay': {
+      const r = h / 2;
+      if (side === 'right') return within(r - Math.sqrt(Math.max(0, r ** 2 - a ** 2)));
+      const past = Math.sign(off) * a - (w / 2 - r);
+      return flat && past > 0 ? within(r - Math.sqrt(Math.max(0, r ** 2 - past ** 2))) : 0;
+    }
+    // A triangle's point is at the middle of its top, its foot along the bottom; turned over, the other way.
+    case 'triangle': case 'flipped-triangle': {
+      const pointSide = shape === 'triangle' ? 'top' : 'bottom';
+      if (side === pointSide) return within((h * a) / (w / 2));
+      if (flat) return 0;
+      const down = shape === 'triangle' ? Math.sign(off) * a + h / 2 : h / 2 - Math.sign(off) * a;
+      return within((w / 2) * (1 - down / h));
+    }
     // Only the folded corner is in from the box: the last few px of the top, and the first few of the right side.
     case 'note': return side === 'top' ? within(Math.max(0, off - (w / 2 - form.fold))) : side === 'right' ? within(Math.max(0, -off - (h / 2 - form.fold))) : 0;
     case 'cylinder': return flat ? within(form.cap * (1 - Math.sqrt(Math.max(0, 1 - (a / (w / 2)) ** 2)))) : 0;
@@ -218,6 +279,28 @@ export function outlineOf(shape, l, t, w, h, radius) {
     case 'trapezoid': return { main: polygon([[l + s, t], [r - s, t], [r, u], [l, u]]), more: [] };
     case 'trapezoid-alt': return { main: polygon([[l, t], [r, t], [r - s, u], [l + s, u]]), more: [] };
     case 'flag': return { main: polygon([[l, t], [r, t], [r, u], [l, u], [l + form.notch, y]]), more: [] };
+    case 'card': return { main: polygon([[l + form.notch, t], [r, t], [r, u], [l, u], [l, t + form.notch]]), more: [] };
+    case 'sloped': return { main: polygon([[l, t + s], [r, t], [r, u], [l, u]]), more: [] };
+    case 'triangle': return { main: polygon([[x, t], [r, u], [l, u]]), more: [] };
+    case 'flipped-triangle': return { main: polygon([[l, t], [r, t], [x, u]]), more: [] };
+    case 'delay': {
+      const rr = h / 2;
+      return { main: `<path class="mv-shape" d="M${n(l)},${n(t)}H${n(r - rr)}A${n(rr)},${n(rr)} 0 0 1 ${n(r - rr)},${n(u)}H${n(l)}Z"/>`, more: [] };
+    }
+    case 'lined': return { main: rect('mv-shape', 0, 0), more: [`<path class="mv-shape mv-detail" d="M${n(l + form.rail)},${n(t)}V${n(u)}"/>`] };
+    case 'divided': return { main: rect('mv-shape', 0, 0), more: [`<path class="mv-shape mv-detail" d="M${n(l)},${n(t + form.rail)}H${n(r)}"/>`] };
+    case 'window': return { main: rect('mv-shape', 0, 0), more: [`<path class="mv-shape mv-detail" d="M${n(l + form.rail)},${n(t)}V${n(u)}M${n(l)},${n(t + form.rail)}H${n(r)}"/>`] };
+    // A document's bottom is a wave, drawn as short straight steps so where a line meets it is the same sum.
+    case 'document': return { main: `<path class="mv-shape" d="M${n(l)},${n(t)}H${n(r)}V${n(u - wave(w / 2, w))}${waveTo(r, l, u, w)}Z"/>`, more: [] };
+    // A stack is the outline of its three sheets together, and the edges of the two in front drawn on it.
+    case 'stacked': case 'documents': {
+      const k = form.stack, fw = w - 2 * k, fr = l + fw;
+      const front = shape === 'documents' ? `V${n(u - wave(fw / 2, fw))}${waveTo(fr, l, u, fw)}` : `V${n(u)}H${n(l)}`;
+      return {
+        main: `<path class="mv-shape" d="M${n(l)},${n(t + 2 * k)}H${n(l + k)}V${n(t + k)}H${n(l + 2 * k)}V${n(t)}H${n(r)}V${n(u - 2 * k)}H${n(r - k)}V${n(u - k)}H${n(fr)}${front}Z"/>`,
+        more: [`<path class="mv-shape mv-detail" d="M${n(l)},${n(t + 2 * k)}H${n(fr)}V${n(u - (shape === 'documents' ? wave(fw / 2, fw) : 0))}M${n(l + k)},${n(t + k)}H${n(r - k)}V${n(u - k)}"/>`],
+      };
+    }
     case 'note': {
       const f = Math.min(form.fold, h / 2);
       return { main: polygon([[l, t], [r - f, t], [r, t + f], [r, u], [l, u]]), more: [`<path class="mv-shape mv-detail" d="M${n(r - f)},${n(t)}V${n(t + f)}H${n(r)}"/>`] };

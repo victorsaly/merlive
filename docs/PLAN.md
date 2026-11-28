@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, as 0.5.4 was begun.
+Last brought up to date: 28 November 2026, as 0.5.5 was begun.
 
 ## Released
 
@@ -145,12 +145,25 @@ taste are under "Waiting on Victor".
   Three corpus pictures changed. In the timeline, "Delivery" is now at the right of its frame and "Buying"
   above it at the left: see "Waiting on Victor".
 
-**0.5.4** (not released yet), the pull request from the branch `fix-0.5.4`:
+**0.5.4** (28 November 2026), pull request 15 from the branch `fix-0.5.4`:
 - a state diagram's fork and join are bars across the flow, as Mermaid draws them (`bar` and `bar-upright` in
   shapes.mjs, `asDrawn` choosing between them by the way the flow is laid out, which a turned flow changes), of
   the kinds Fork and Join, with no words on them: their names are in the side panel and said to a reader
   (`linesOf` gives a bar none). The bar keeps every box's footprint (P2), so left to right the arrows either side
   of it are longer than Mermaid's. One corpus picture changed (`state-fork-join`).
+
+**0.5.5** (not released yet), the pull request from the branch `fix-0.5.5`:
+- eleven more of the newer shapes drawn as themselves (shapes.mjs): a document and a stack of them (a waved foot,
+  `form.wave`, sheets `form.stack` apart), a card, a lined box, a stack of boxes, a divided box, a window pane, a
+  sloped box, a delay, a triangle and one turned over; Mermaid's `fork` and `join` are the bar a state diagram's
+  are. 32 of the 53 names in `shape-at-every` are drawn as themselves, where 18 were.
+- on a sequence diagram's page a participant's foot is hidden from a screen reader (`aria-hidden`): it is the head
+  again, and the head is what the keyboard reaches.
+- three sequence items in "Next" were looked into and closed, as Merlive's choice, not a lack: a destroyed
+  participant ends in a cross on its lifeline, UML's mark, where Mermaid draws its box again; a figure (a person,
+  a database) is as tall as a name's box with its name under it (`across.mark`), so the row of participants keeps
+  one height, where Mermaid's boxes are taller and its figures bigger; and the legend names the kinds of colour
+  there are, three for six types, each drawing saying its own type.
 
 ## Waiting on Victor
 
@@ -193,14 +206,14 @@ taste are under "Waiting on Victor".
 ## Next, in this order
 
 1. **Where Mermaid still reads better**, from the comparison page:
-   - in a sequence diagram: a participant that is destroyed is not drawn again where it ends; the figure and the
-     marks are smaller than Mermaid's; the page's legend names only three kinds of participant; a foot is picked
-     by pointer and not by keyboard; a note over two participants may sit on an activation bar (not checked
-     whether that is new); an author's highlight colours become the design's tint;
+   - in a sequence diagram: a note over two participants may sit on an activation bar (not checked whether that
+     is new); an author's highlight colours become the design's tint;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
    - a group's own direction is read past;
-   - of the newer `@{ shape }` list, twelve shapes are drawn and the rest are boxes.
+   - of the 53 newer `@{ shape }` names, 32 are drawn as themselves; the 21 that are boxes are mostly drawings
+     (a cloud, a bolt, a person, braces, a folder) rather than outlines, and the hourglass, whose words would sit
+     in its pinch.
 2. **The other kinds**, picked by what Victor's own repositories use, not by Mermaid's list. Twenty are left
    as Mermaid (the `kinds` list of `corpus/index.json`): gantt and journey, the charts (pie, xychart, quadrant,
    sankey, radar, treemap), gitgraph, zenuml and the rest. Each needs a way of drawing of its own.
@@ -234,6 +247,9 @@ Each of these was a choice somebody could reopen. The reason is here so that nob
   one ("daily limit gone") was on the straight line in the business analyst demo; `%% main:` could fix it by hand,
   and 0.4.0's plan asked for it by rule. Where every link out of a box has words (a question's yes and no), there
   is no usual case to tell from them, and the longest way still is the main path.
+- **A fork and a join are bare bars, with no words on them**, in a flowchart (`@{ shape: fork }`) as in a state
+  diagram, as Mermaid draws them. Their label is kept for the side panel and a screen reader. Victor chose this
+  over writing an author's label beside the bar, after the corpus sample that names every shape lost its "fork".
 - **After 0.1.0, one pull request is one release**, and nothing goes straight to `main`.
 
 ## How to pick it up

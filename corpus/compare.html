@@ -29,8 +29,8 @@ body[data-show="drawn"] article:not([data-result="drawn"]),body[data-show="drawn
 <body data-show="all">
 <main>
 <h1>Mermaid and Merlive, side by side</h1>
-<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 520 samples, Merlive draws 500 whole and 0 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
-<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>520</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>394</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>106</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>0</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>20</b></button></div>
+<p class="lede">Every sample in the corpus, drawn twice: by Mermaid's own command (mermaid-cli 11.16.0) and by Merlive. Of 520 samples, Merlive draws 499 whole and 1 in part; Mermaid itself could not draw 5. <code>npm run coverage</code> draws Merlive's side again, <code>npm run compare</code> Mermaid's.</p>
+<div class="filters"><button type="button" data-show="all" aria-pressed="true">All <b>520</b></button><button type="button" data-show="drawn" aria-pressed="false">Drawn <b>393</b></button><button type="button" data-show="less" aria-pressed="false">Drawn, less something <b>106</b></button><button type="button" data-show="partly" aria-pressed="false">Partly read <b>1</b></button><button type="button" data-show="refused" aria-pressed="false">Refused <b>0</b></button><button type="button" data-show="left" aria-pressed="false">Left as Mermaid <b>20</b></button></div>
 <section><h2>Flowcharts, feature by feature</h2>
 <article class="card" data-result="drawn">
 <h3>A flowchart, declared with &quot;flowchart&quot;</h3>
@@ -322,9 +322,9 @@ flowchart LR
   A[Before] --&gt; B(((Stop))) --&gt; C[After]
 </pre></details>
 </article>
-<article class="card" data-result="drawn">
+<article class="card" data-result="partly">
 <h3>Shapes written as @{ shape: … }, with a label</h3>
-<p class="result"><b>Drawn</b></p>
+<p class="result"><b>Partly read</b> <span class="why">its shapes are read as box, diamond, cylinder, document, pill</span></p>
 <div class="pair"><figure><figcaption>Mermaid</figcaption><div class="pane mermaid"><img loading="lazy" src="mermaid/shape-at-syntax.png" width="273" height="445" style="--w:273" alt="Shapes written as @{ shape: … }, with a label, as Mermaid draws it"></div></figure><figure><figcaption>Merlive</figcaption><div class="pane"><img loading="lazy" src="drawn/shape-at-syntax.svg" width="376" height="440" style="--w:376" alt="Shapes written as @{ shape: … }, with a label, as Merlive draws it"></div></figure></div>
 <details><summary>Source</summary><pre>flowchart TD
   A@{ shape: rect, label: &quot;Take the order&quot; } --&gt; B@{ shape: diam, label: &quot;In stock?&quot; }

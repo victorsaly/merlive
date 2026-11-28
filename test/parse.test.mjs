@@ -252,6 +252,15 @@ describe('parse: @{ … }', () => {
     assert.deepEqual(m.warnings, []);
   });
 
+  it('draws more of the newer shapes as themselves, each by any of its names', () => {
+    const names = [['doc', 'document'], ['documents', 'documents'], ['st-doc', 'documents'], ['notch-rect', 'card'], ['card', 'card'], ['lin-rect', 'lined'], ['shaded-process', 'lined'],
+      ['st-rect', 'stacked'], ['processes', 'stacked'], ['div-rect', 'divided'], ['win-pane', 'window'], ['internal-storage', 'window'], ['sl-rect', 'sloped'], ['manual-input', 'sloped'],
+      ['delay', 'delay'], ['tri', 'triangle'], ['extract', 'triangle'], ['flip-tri', 'flipped-triangle'], ['manual-file', 'flipped-triangle'], ['fork', 'bar'], ['join', 'bar']];
+    const m = flow(names.map(([name], i) => `N${i}@{ shape: ${name}, label: "Words" }`).join('\n'));
+    assert.deepEqual(m.nodes.map((n) => n.shape), names.map(([, shape]) => shape));
+    assert.deepEqual(m.warnings, []);
+  });
+
   it('knows a shape by any of its names, and draws one it has no drawing for as a box', () => {
     const m = flow('A@{ shape: decision }\nB@{ shape: database }\nC@{ shape: terminal }\nD@{ shape: lightning-bolt }\nE@{ shape: hex }\nF@{ shape: dbl-circ }\nG@{ shape: subproc }\nH@{ shape: in-out }\nI@{ shape: manual }\nJ@{ shape: odd }\nK@{ shape: datastore }');
     assert.deepEqual(m.nodes.map((n) => [n.shape, n.kind]), [
