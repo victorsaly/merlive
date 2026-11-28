@@ -23,6 +23,22 @@ const links = (/** @type {Model} */ m) => m.edges.map((e) => e.id);
 const ordering = '  root((Ordering))\n    Buying\n      Quotes\n      Orders\n    Paying\n      Invoices';
 
 describe('mindmap: what it is taken for', () => {
+  it('reads how far in each line is without splitting the whole source again for every box', () => {
+    const src = `mindmap\n  root((Plan))\n${Array.from({ length: 500 }, (_, i) => `    Idea ${i}`).join('\n')}`;
+    const split = String.prototype.split;
+    let whole = 0;
+    String.prototype.split = function (/** @type {any[]} */ ...args) {
+      if (this.length === src.length) whole++;
+      return split.apply(this, /** @type {any} */ (args));
+    };
+    try {
+      assert.equal(parse(src).nodes.length, 501);
+    } finally {
+      String.prototype.split = split;
+    }
+    assert.ok(whole <= 2, `the source was split ${whole} times`);
+  });
+
   it('calls a plain box an idea on the page, and says nothing of a map of its root alone', () => {
     assert.equal(map('  root((Plan))\n    Goals').meanings?.step, 'Idea');
     assert.equal(map('  root((Plan))').meanings?.step, undefined);

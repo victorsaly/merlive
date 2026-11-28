@@ -311,6 +311,9 @@ export function parse(src) {
   let reader = null;
   // What a plain box is called in this kind of diagram (see READERS); a flowchart's is a step.
   let plain = '';
+  // The source's lines, split once: a reader that asks how far in a line was written (a mindmap, a board) asks for
+  // every box, and splitting the whole source each time made a big diagram slow by the square of its length.
+  const written = src.split(/\r?\n/);
   // What Mermaid was told of itself, in front matter and in "%%{init: …}%%": read past here, and lent to a
   // reader whose diagram a setting changes (how many bits a packet has in a row).
   /** @type {string[]} */
@@ -542,7 +545,7 @@ export function parse(src) {
       const found = READERS.find(([starts]) => starts.test(text));
       const read = found?.[1];
       plain = found?.[2] ?? '';
-      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, settings, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]), indent: (at) => /^\s*/.exec(src.split(/\r?\n/)[at - 1] ?? '')?.[0].length ?? 0, header: { text, line } }));
+      if (read) return void (reader = read({ model, node, say, connect, frame, unframe: () => open.pop(), join, warn, wordsOf, settings, outline: (ids, css) => void ofBoxes.push([ids, lookOf(css)]), indent: (at) => /^\s*/.exec(written[at - 1] ?? '')?.[0].length ?? 0, header: { text, line } }));
       if (!h) {
         model.type = 'unsupported';
         return;
@@ -591,7 +594,7 @@ export function parse(src) {
   let front = 'before';
   /** @type {{text:string,line:number}|null} */
   let held = null;
-  src.split(/\r?\n/).forEach((raw, i) => {
+  written.forEach((raw, i) => {
     const text = raw.trim();
     if (!text) return;
     if (front === 'before') {
