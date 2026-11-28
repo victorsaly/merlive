@@ -3,7 +3,7 @@
 // same size, and lines turn at right angles and never share a port. Pure: a model in, coordinates out.
 
 import { form, inset, roomIn } from './shapes.mjs';
-import { placeGrid } from './grid.mjs';
+import { nameAt, placeGrid } from './grid.mjs';
 
 /** @typedef {import('./parse.mjs').Model} Model */
 /** @typedef {{x:number,y:number}} Pt */
@@ -256,15 +256,33 @@ function wrapped(model) {
 }
 
 /**
- * The placing itself, in the direction asked for.
+ * The placing, in the direction asked for. A frame is as wide as its boxes make it, which is known only once they
+ * are placed; a name longer than that wraps (to three lines, as a grid's does) and is placed again, with the room
+ * at the top of its frame for the lines it takes.
  * @param {Model} model
  * @param {'TD'|'LR'} dir
  * @param {boolean} [reversed] from the far end: bottom to top, or right to left
  * @returns {Layout}
  */
 function placed(model, dir, reversed = false) {
+  const first = placedOnce(model, dir, reversed);
+  const wraps = new Map(first.groups.filter((f) => f.title).map((f) => /** @type {[string, string[]]} */ ([f.id, nameAt(f.title, f.w - 2 * measure.nameIn)])).filter(([, lines]) => lines.length > 1));
+  return wraps.size ? placedOnce(model, dir, reversed, wraps) : first;
+}
+
+/**
+ * The placing itself.
+ * @param {Model} model
+ * @param {'TD'|'LR'} dir
+ * @param {boolean} reversed
+ * @param {Map<string,string[]>} [wraps] the names that wrap, in the lines they wrap to, by their group
+ * @returns {Layout}
+ */
+function placedOnce(model, dir, reversed, wraps = new Map()) {
   /** @type {string[]} */
   const warnings = [];
+  // The room a name takes past its first line, at the top of its frame.
+  const below = (/** @type {string} */ id) => ((wraps.get(id)?.length ?? 1) - 1) * measure.nameLine;
   const box = boxFor(model);
   // Everything is placed as if the flow ran downwards. A left-to-right diagram is the same drawing turned on
   // its side at the end, so along the flow a box is as "tall" as it is really wide.
@@ -425,7 +443,12 @@ function placed(model, dir, reversed = false) {
       const a = rank.get(e.from) ?? 0, b = rank.get(e.to) ?? 0;
       return e.label && Math.min(a, b) < r && r <= Math.max(a, b) && topsHere.some((g) => g.members.includes(e.from) !== g.members.includes(e.to));
     });
-    const forNames = through.length ? atEnds * most(ends, r - 1) + atStarts * most(starts, r) + measure.wordsIn + 4 + measure.labelLine * Math.max(...through.map((e) => wrap(e.label, measure.labelWrap).length)) - rankGap : 0;
+    // A name that wraps takes its lines past the first from the same room, above the boxes its frame begins with;
+    // frames one inside the next that begin here each take theirs, one above the other.
+    const within = (/** @type {string} */ id) => below(id) + (topsHere.some((g) => g.id === parentOf.get(id)) ? within(/** @type {string} */ (parentOf.get(id))) : 0);
+    const lines = Math.max(0, ...topsHere.map((g) => within(g.id)));
+    const forLines = lines ? atEnds * most(ends, r - 1) + atStarts * most(starts, r) + lines + measure.frameAir - rankGap : 0;
+    const forNames = through.length ? atEnds * most(ends, r - 1) + atStarts * most(starts, r) + lines + measure.wordsIn + 4 + measure.labelLine * Math.max(...through.map((e) => wrap(e.label, measure.labelWrap).length)) - rankGap : 0;
     // A link between boxes that are not in line turns in this room, half way down it. Words of two lines or more
     // go above or below the turn, and need all of their height on one side of it.
     const turning = model.edges.filter((e) => {
@@ -433,7 +456,7 @@ function placed(model, dir, reversed = false) {
       return e.label && Math.min(a, b) === r - 1 && Math.max(a, b) === r && lane.get(e.from) !== lane.get(e.to) && wrap(e.label, measure.labelWrap).length > 1;
     });
     const forTurns = turning.length ? 2 * (4 + measure.labelLine * Math.max(...turning.map((e) => wrap(e.label, measure.labelWrap).length)) + measure.labelOff + 4) - rankGap : 0;
-    return Math.max(forFrames, forNames, forTurns);
+    return Math.max(forFrames, forLines, forNames, forTurns);
   });
   // A box that lists rows is taller than one that does not. A rank is as tall as its tallest box, every box of
   // it sits on the rank's middle line, and the room to the next rank is the same whatever the heights.
@@ -785,10 +808,11 @@ function placed(model, dir, reversed = false) {
     const inner = made.filter((f) => parentOf.get(f.id) === g.id);
     const l = Math.min(...own.map((n) => n.x - n.w / 2), ...inner.map((f) => f.x)) - measure.framePad;
     // A frame with no name (a region of a composite state) keeps no room for one.
-    const t = Math.min(...own.map((n) => n.y - n.h / 2), ...inner.map((f) => f.y)) - measure.framePad - (g.title ? measure.frameTitle : 0);
+    const t = Math.min(...own.map((n) => n.y - n.h / 2), ...inner.map((f) => f.y)) - measure.framePad - (g.title ? measure.frameTitle + below(g.id) : 0);
     const r = Math.max(...own.map((n) => n.x + n.w / 2), ...inner.map((f) => f.x + f.w)) + measure.framePad;
     const u = Math.max(...own.map((n) => n.y + n.h / 2), ...inner.map((f) => f.y + f.h)) + measure.framePad;
-    const frame = { name: { x: l, y: t, w: 0, h: 0, plate: false }, id: g.id, title: g.title, x: l, y: t, w: r - l, h: u - t };
+    /** @type {Frame} */
+    const frame = { name: { x: l, y: t, w: 0, h: 0, plate: false }, id: g.id, title: g.title, ...(wraps.has(g.id) ? { lines: wraps.get(g.id) } : {}), x: l, y: t, w: r - l, h: u - t };
     const stranger = all.find((n) => !g.members.includes(n.id) && meets(frame, n));
     // A frame inside this one, or round it, is where it should be; any other it meets is one it has run into.
     const other = made.find((f) => !within(f.id, g.id) && !within(g.id, f.id) && meets(frame, { x: f.x + f.w / 2, y: f.y + f.h / 2, w: f.w, h: f.h }));
@@ -805,7 +829,8 @@ function placed(model, dir, reversed = false) {
   const drawn = Object.values(edges).map((e) => e.points);
   for (const f of groups) {
     if (!f.title) continue;
-    const w = Math.round(f.title.length * measure.nameGlyph), h = measure.nameLine, y = f.y + measure.nameDown;
+    const called = f.lines ?? [f.title];
+    const w = Math.round(Math.max(...called.map((l) => l.length)) * measure.nameGlyph), h = measure.nameLine * called.length, y = f.y + measure.nameDown + ((called.length - 1) * measure.nameLine) / 2;
     const struck = (/** @type {number} */ x) => drawn.some((line) => segmentsOf(line).some((seg) => hitsBox(seg, { x, y, w, h }, measure.clear)));
     const first = f.x + measure.nameIn + w / 2, last = f.x + f.w - measure.nameIn - w / 2;
     /** @type {number[]} */

@@ -105,6 +105,14 @@ describe('score: a broken rule is named, with where', () => {
     assert.equal(named.result.checks[0].ok, true);
   });
 
+  it('P8 when the name of a group in a flow runs past its frame', () => {
+    const { model, lay } = check('flowchart TD\nX[Draft] --> A\nsubgraph C [Checks]\n  A[Credit] --> B[Stock]\nend');
+    lay.groups[0].name.w = lay.groups[0].w + 40;
+    const p8 = /** @type {any} */ (score(model, lay, builtIn).checks.find((c) => c.id === 'P8'));
+    assert.equal(p8.ok, false);
+    assert.match(p8.detail, /the name of the group "Checks" runs past its frame/);
+  });
+
   it('P2 when two boxes are too close', () => {
     const { model, lay } = check(orders);
     lay.nodes.E.y = lay.nodes.G.y;

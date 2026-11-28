@@ -309,6 +309,26 @@ describe("layout: a group's name", () => {
     assert.equal(frame.name.plate, true);
   });
 
+  it('wraps when it is longer than its frame is wide, inside the frame, with room kept above its boxes', () => {
+    for (const src of ['flowchart TD\nX[Draft] --> A\nsubgraph C [Checks before sending]\n  A[Credit] --> B[Stock]\nend', 'flowchart LR\nX[Draft] --> A\nsubgraph C [Checks before the order is sent]\n  A[Credit]\nend']) {
+      const lay = layout(parse(src));
+      const [f] = lay.groups, top = lay.nodes.A.y - lay.nodes.A.h / 2;
+      assert.ok((f.lines?.length ?? 1) > 1, `wrapped: ${src}`);
+      assert.ok(f.name.x - f.name.w / 2 >= f.x && f.name.x + f.name.w / 2 <= f.x + f.w, 'inside its frame');
+      // As far above them as a name of one line is: its frame keeps the room for its other lines.
+      assert.equal(top - (f.name.y + f.name.h / 2), measure.framePad + measure.frameTitle - measure.nameDown - measure.nameLine / 2, 'above its boxes');
+      assert.deepEqual(lay.warnings, []);
+      assert.deepEqual(score(parse(src), lay, builtIn).checks.filter((c) => !c.ok).map((c) => c.detail), []);
+    }
+  });
+
+  it('keeps one line where it fits, and the frame as it was', () => {
+    const lay = layout(parse('flowchart TD\nX[Draft] --> A\nsubgraph C [Checks]\n  A[Credit] --> B[Stock]\nend'));
+    const [f] = lay.groups;
+    assert.equal(f.lines, undefined);
+    assert.equal(lay.nodes.A.y - lay.nodes.A.h / 2 - f.y, measure.framePad + measure.frameTitle);
+  });
+
   it("keeps a link's words off it", () => {
     const lay = layout(parse('flowchart TB\nA[Order] -->|when it is paid for in full| B[Pick]\nsubgraph wh [Warehouse]\n  B --> C[Pack]\nend'));
     const words = lay.edges['A-B'].label, name = lay.groups[0].name;
