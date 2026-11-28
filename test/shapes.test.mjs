@@ -4,7 +4,7 @@
 
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { cut, form, inset, outlineOf, roomIn, shapes, wordsAt } from '../skills/merlive/scripts/shapes.mjs';
+import { asDrawn, cut, form, inset, outlineOf, roomIn, shapes, wordsAt } from '../skills/merlive/scripts/shapes.mjs';
 
 const w = 160, h = 60;
 
@@ -119,6 +119,27 @@ describe('shapes: a cell', () => {
     assert.ok(form.cellPad < form.pad);
     assert.equal(roomIn('cell', 40), 40 - form.cellPad);
     assert.equal(inset('cell', 'left', 0, 40, 60), inset('box', 'left', 0, 40, 60));
+  });
+});
+
+describe('shapes: a bar, for a fork or a join', () => {
+  it('lies across its box, flat or upright, with nothing else drawn', () => {
+    assert.match(outlineOf('bar', 0, 0, w, h, 8).main, new RegExp(`class="mv-shape mv-bar" x="0" y="${h / 2 - form.bar / 2}" width="${w}" height="${form.bar}" rx="2"/>`));
+    assert.match(outlineOf('bar-upright', 0, 0, w, h, 8).main, new RegExp(`class="mv-shape mv-bar" x="${w / 2 - form.bar / 2}" y="0" width="${form.bar}" height="${h}" rx="2"/>`));
+  });
+
+  it('is met at the bar: a line from the side it faces runs on to it, one at its end stops there', () => {
+    assert.equal(inset('bar', 'top', 0, w, h), h / 2 - form.bar / 2);
+    assert.equal(inset('bar', 'bottom', 30, w, h), h / 2 - form.bar / 2);
+    assert.equal(inset('bar', 'left', 0, w, h), 0);
+    assert.equal(inset('bar-upright', 'left', 0, w, h), w / 2 - form.bar / 2);
+    assert.equal(inset('bar-upright', 'top', 0, w, h), 0);
+  });
+
+  it('is drawn across the flow as it is laid out, which a turned flow changes', () => {
+    assert.equal(asDrawn('bar', 'TD'), 'bar');
+    assert.equal(asDrawn('bar', 'LR'), 'bar-upright');
+    assert.equal(asDrawn('diamond', 'LR'), 'diamond');
   });
 });
 

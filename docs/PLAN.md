@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, as 0.5.3 was begun.
+Last brought up to date: 28 November 2026, as 0.5.4 was begun.
 
 ## Released
 
@@ -134,7 +134,7 @@ taste are under "Waiting on Victor".
   long word, a line on each side) is still on a plate.
 - the lanes off the main path in the service diagram were looked into and left: see "Waiting on Victor".
 
-**0.5.3** (not released yet), the pull request from the branch `fix-0.5.3`:
+**0.5.3** (28 November 2026), pull request 14 from the branch `fix-0.5.3`:
 - a group's name keeps 8px from every line (`measure.nameClear`), where it kept the 4 a box keeps
   (`measure.clear`): "Web shop" and "The firm" (`c4-boundary-container`, `c4-boundary`) ended against the arrow
   into their frames. Looked into as "a grid's name is not wrapped narrower", the timeline in
@@ -144,6 +144,13 @@ taste are under "Waiting on Victor".
   a line within 8px of a name, and a plate where the top of the frame has a clear place, on a grid as in a flow.
   Three corpus pictures changed. In the timeline, "Delivery" is now at the right of its frame and "Buying"
   above it at the left: see "Waiting on Victor".
+
+**0.5.4** (not released yet), the pull request from the branch `fix-0.5.4`:
+- a state diagram's fork and join are bars across the flow, as Mermaid draws them (`bar` and `bar-upright` in
+  shapes.mjs, `asDrawn` choosing between them by the way the flow is laid out, which a turned flow changes), of
+  the kinds Fork and Join, with no words on them: their names are in the side panel and said to a reader
+  (`linesOf` gives a bar none). The bar keeps every box's footprint (P2), so left to right the arrows either side
+  of it are longer than Mermaid's. One corpus picture changed (`state-fork-join`).
 
 ## Waiting on Victor
 
@@ -190,7 +197,6 @@ taste are under "Waiting on Victor".
      marks are smaller than Mermaid's; the page's legend names only three kinds of participant; a foot is picked
      by pointer and not by keyboard; a note over two participants may sit on an activation bar (not checked
      whether that is new); an author's highlight colours become the design's tint;
-   - a state diagram's fork and join are boxes, not bars;
    - `A & B --> C & D`: the crossing sits beside a bend; three to three is refused (it forces nine crossings and
      placement finds eleven);
    - a group's own direction is read past;

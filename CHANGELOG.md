@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.5.3 (unreleased)
+## 0.5.4 (unreleased)
+
+- **A state diagram's fork and join are bars**, as Mermaid draws them: a solid bar across the flow, flat top to
+  bottom and upright left to right, with the lines running on to it. Its name is not written on it; the page's
+  side panel and a screen reader still say it, as a Fork or a Join.
+
+## 0.5.3 (2026-11-28)
 
 - **A group's name keeps a letter's width from every line**, 8px, where it kept 4: a line ending against the last
   letter ("Web shop", "The firm") was read as one of its strokes. The name moves along the top of its frame or
