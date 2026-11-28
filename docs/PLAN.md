@@ -247,6 +247,9 @@ Each of these was a choice somebody could reopen. The reason is here so that nob
   one ("daily limit gone") was on the straight line in the business analyst demo; `%% main:` could fix it by hand,
   and 0.4.0's plan asked for it by rule. Where every link out of a box has words (a question's yes and no), there
   is no usual case to tell from them, and the longest way still is the main path.
+- **A fork and a join are bare bars, with no words on them**, in a flowchart (`@{ shape: fork }`) as in a state
+  diagram, as Mermaid draws them. Their label is kept for the side panel and a screen reader. Victor chose this
+  over writing an author's label beside the bar, after the corpus sample that names every shape lost its "fork".
 - **After 0.1.0, one pull request is one release**, and nothing goes straight to `main`.
 
 ## How to pick it up
