@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.0 (unreleased)
+## 0.5.0 (2026-11-28)
 
 More kinds that the two placements there are can draw: mindmaps, kanban boards, timelines and packets.
 

@@ -5,7 +5,7 @@ done, what is half done and how to finish it, what waits on Victor, and what was
 [ROADMAP.md](ROADMAP.md) is where Merlive is going; this is where it is. Change this page in the same pull
 request as the work it describes: a plan nobody keeps is worse than none.
 
-Last brought up to date: 28 November 2026, with 0.4.0 released and 0.5.0 in hand.
+Last brought up to date: 28 November 2026, as 0.5.0 was released.
 
 ## Released
 
@@ -78,9 +78,8 @@ does not read `%% kind` yet; the main path is still the longest one, which in a 
 then OpenAI when its limit is reached) puts the fallback on the straight line. `%% main:` fixes it by hand;
 picking the path that takes no decision's exception would fix it by rule.
 
-## In hand: 0.5.0, more kinds the two placements can draw
-
-On the branch `kinds-2`. Done: readers for mindmaps, kanban boards, timelines and packets (`mindmap.mjs`,
+**0.5.0** (28 November 2026), more kinds the two placements can draw, the pull request from the branch `kinds-2`:
+readers for mindmaps, kanban boards, timelines and packets (`mindmap.mjs`,
 `kanban.mjs`, `timeline.mjs`, `packet.mjs`), each with its tests, its list in `corpus/index.json` and its section
 in `skills/merlive/reference.md`; a tree placed as a tree (step 5 of `placed()` in layout.mjs); a grid that says
 its own least column, its gap, and that its cells are close (`grid.mjs`); a plain box named for what it is in
@@ -93,7 +92,7 @@ A timeline too wide for a screen runs on in bands (`wraps` on the model, the few
 outside the frames round a box, `rim` in grid.mjs). A frame's name on a grid wraps to three lines before it
 widens a column (`nameAt` in grid.mjs, `Frame.lines`). In a flow placed by rule a group's name still does not wrap.
 
-Left:
+What 0.5.0 left:
 
 1. **A mindmap** has Mermaid's meaning and not its look: a tree to the right, not a root in the middle with a
    colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`. Waits on Victor.
@@ -121,13 +120,12 @@ taste are under "Waiting on Victor".
   shared trunk wanted, for a tree's lines that have nothing at their ends? And in `mindmap-tree` one parent's line
   to its second child leaves its bottom and the other's its right side: both clear, not alike.
 
-- **The tags.** No session so far could push a tag: the push is refused where the sessions run. None exists
-  yet. In a clone:
-  `git tag -a v0.1.0 c2de18e -m "Merlive 0.1.0"`, `git tag -a v0.2.0 faa35cd -m "Merlive 0.2.0"`,
-  `git tag -a v0.3.0 cf1fee7 -m "Merlive 0.3.0"`, `v0.4.0` on the commit that merges its release, then
-  `git push origin v0.1.0 v0.2.0 v0.3.0 v0.4.0`.
-- **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11) takes "not released
-  yet" off Merlive's page; merge it after the tag. Then, in the skills repository: `npm install`,
+- **The tag for 0.5.0.** `v0.1.0` to `v0.4.0` are on GitHub, each on its release. `v0.5.0` goes on the commit
+  that merges pull request 10, in a clone: `git tag -a v0.5.0 <that commit> -m "Merlive 0.5.0"`, then
+  `git push origin v0.5.0`. Sessions have not been able to push a tag where they run.
+- **The site.** [skills pull request 11](https://github.com/victorsaly/skills/pull/11), which took "not released
+  yet" off Merlive's page, was merged on 25 November. Whether the site was then built and deployed is not known
+  here. If not, in the skills repository: `npm install`,
   `npm run build` (the Merlive page has never been built: it could not be, where it was written),
   `npm run cards` (the share card `public/og/merlive.png` is missing and the hub's card shows two skills), and
   `npm run deploy` (the site deploys by hand, so skills.victorsaly.com does not show Merlive until then).
