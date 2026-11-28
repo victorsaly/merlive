@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.5.7 (unreleased)
+## 0.5.8 (unreleased)
+
+- **A note over a participant at work covers its bars wholly**: with bars stacked three deep, a note over two
+  participants ended on the outermost, leaving a sliver of it showing. A note over one or two now reaches past
+  the outermost bar as far as it does past one, and the rule says it (S5).
+
+## 0.5.7 (2026-11-28)
 
 - **A composite state runs the way it says**: `direction TB` inside a composite state of a diagram that runs left
   to right (or `LR` in one that runs down) puts its states in a row across the flow, as a flowchart's group does
