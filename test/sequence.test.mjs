@@ -419,6 +419,21 @@ describe('sequence: the rules', () => {
     assert.match(scoreSequence(model, lay, builtIn).checks.find((c) => c.id === 'S5')?.detail ?? '', /the note "Over two" ends on a bar of B/);
   });
 
+  it('passes S5 for notes beside and over a participant whose neighbour carries a stack of bars', () => {
+    // The gap is wide enough for a note and for the bars it faces: a neighbour's stack reaches toward it.
+    const five = (/** @type {string} */ m) => Array(5).fill(m).join('\n');
+    for (const body of [
+      `participant A\nparticipant B\n${five('B->>+A: x')}\nNote left of B: Needs stock approval today`,
+      `participant A\nparticipant B\nparticipant C\n${five('A->>+B: x')}\nNote right of B: Needs stock approval today`,
+      `participant A\nparticipant B\n${five('B->>+A: x')}\n${five('B->>+A: x')}\nNote over B: Needs stock approval today`,
+      `participant A\nparticipant B\nparticipant C\n${five('B->>+C: x')}\n${five('C->>+B: x')}\nNote over B: Needs stock approval today`,
+      `participant A\nparticipant B\nparticipant C\n${Array(12).fill('A->>+B: x').join('\n')}\nC->>+C: y\nNote over A,B: Both`,
+    ]) assert.deepEqual(failed(check(body).result), [], body);
+    // Beside a participant at work, the note starts past its stack and still ends clear of the next lifeline.
+    const { lay } = check(`participant A\nparticipant B\nparticipant C\n${five('A->>+B: x')}\nNote right of B: Needs stock approval today`);
+    assert.ok(lay.notes.n1.x + lay.notes.n1.w / 2 <= lay.participants.C.x - across.clear, 'clear of C');
+  });
+
   it('S6 when two bars of one participant lie on each other', () => {
     const { model, lay } = check('B->>+E: Raise\nB->>+E: Hurry\nE-->>-B: Wait\nE-->>-B: Done');
     lay.bars[1].x = lay.bars[0].x;

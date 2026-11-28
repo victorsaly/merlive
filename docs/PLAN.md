@@ -194,6 +194,9 @@ taste are under "Waiting on Victor".
   has a note over a participant at work, so no corpus picture changed. Checked first whether a note over two
   participants sits on a bar wrongly at all: beside a bar every note already starts past the outermost, and over
   one it covers it, as Mermaid's does; only the stacked case was wrong.
+- from review: the new S5 refused Merlive's own layouts, since the step between participants was sized by a
+  note's words alone. Five bars on Alice put a note left of Bob 24px into the fifth. The step now makes room for
+  the bars a note faces either side of it (`stacked`, `toRight`, `toLeft`), beside, over one and over two.
 
 ## Waiting on Victor
 
