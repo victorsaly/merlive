@@ -99,8 +99,11 @@ Left:
    colour to each branch. A class in a mindmap has no colour, since a mindmap has no `classDef`.
 2. **Look, sample by sample**, beside Mermaid's. Mindmaps are done (28 November): all 38 looked through. Found
    and fixed: a hexagon, a circle and a cloud took a flowchart's kinds (Decision, Start or end), colour and all.
-   Found and left for Victor (below): the comb, and a sibling whose line leaves another side. Kanban boards,
-   timelines and packets are still to look through. A packet of one-bit fields with four-letter names
+   Found and left for Victor (below): the comb, and a sibling whose line leaves another side. Kanban boards are
+   done too, all 25: a card's ticket, who has it and its priority were in the face for code, and are in the page's
+   face now. Left as decided in the reference: a known priority is listed in small letters (`priority: high`) and
+   any other as written, and a ticket is not a link even where `ticketBaseUrl` says where it would go. Timelines
+   and packets are still to look through. A packet of one-bit fields with four-letter names
    (`packet-bit`) is still 1396px: a column is as wide as its widest one-bit name.
 
 ## Waiting on Victor

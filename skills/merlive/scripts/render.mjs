@@ -228,7 +228,9 @@ export function inside(/** @type {import('./parse.mjs').Model} */ model, /** @ty
       const spans = lines.map((line, i) => `<tspan class="mv-row" x="${n(l + measure.rowIn)}" y="${n(down + measure.rowPad + measure.rowLine * i + 12)}">${esc(line)}</tspan>`).join('');
       down += 2 * measure.rowPad + measure.rowLine * lines.length;
       // Spaces are kept as written, so an author's columns (a key, a type, a name) stay in line.
-      return `${rule}<text class="mv-rows" xml:space="preserve">${spans}</text>`;
+      // Rows said in words (a card's ticket, who has it) take the page's face, on the element, so that a drawing
+      // with none has no rule for them.
+      return `${rule}<text class="mv-rows"${m.facts ? ' style="font-family:inherit"' : ''} xml:space="preserve">${spans}</text>`;
     }).join('');
     // An icon sits left of the words, on the middle of their block; the words move over by half its room, so
     // icon and words together stay in the middle of the box.

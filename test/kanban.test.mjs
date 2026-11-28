@@ -312,6 +312,14 @@ describe('kanban: the corpus', () => {
 });
 
 describe("kanban: the page's words", () => {
+  it("lists a card's ticket, who has it and its priority in the page's face, not the face for code", () => {
+    const m = board('  todo[To do]\n    raise[Raise the order]@{ ticket: PO-1041, assigned: \'Amara\' }'), svg = picture(m, layout(m), builtIn, { title: 't' });
+    assert.match(svg, /<text class="mv-rows" style="font-family:inherit"[^>]*><tspan[^>]*>ticket: PO-1041</);
+    // A class's members are code, and keep its face.
+    const c = parse('classDiagram\n  class Order {\n    +int number\n  }');
+    assert.match(picture(c, layout(c), builtIn, { title: 't' }), /<text class="mv-rows" xml:space/);
+  });
+
   const about = { title: 'A board', source: 'x', version: '0' };
   it('calls a card a card, in the legend and when it is picked, unless its author named it', () => {
     assert.deepEqual(board(three).meanings, { step: 'Card' });
