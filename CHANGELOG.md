@@ -15,7 +15,10 @@ What 0.4.0 and 0.5.0 left in flowcharts.
 - **A group's name wraps in a flow too**, as it does on a grid: to three lines at the left of its frame, the
   frame taller by the lines it takes, instead of running past a narrow frame ("Checks before sending", a C4
   boundary's "Buying [department]", a deployment node's "Buyer's phone [iOS or Android]"). P8 holds every frame's
-  name inside it, in a flow as on a grid.
+  name inside it, in a flow as on a grid. Left to right, the lane beside the frame moves over for the name's
+  lines; a word longer than its frame (`Internationalisation`) makes the frame wider, and what is beside it moves
+  over (review of pull request 12).
+- **A design file may give a colour to a kind with a hyphen in its name** (`"kinds": { "read-only": "#445566" }`).
 
 ## 0.5.0 (2026-11-28)
 

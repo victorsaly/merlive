@@ -11,7 +11,7 @@ import { nameAt, placeGrid } from './grid.mjs';
 /** @typedef {{id:string,x:number,y:number,w:number,h:number,rank:number,lane:number,spine:boolean,lines:string[]}} Placed */
 /** @typedef {{x:number,y:number,w:number,h:number,text:string,lines:string[],align?:'start'|'end'}} Words a link's words: the middle of where they sit, their size, and the lines they are wrapped to; align: beside a line that runs along the flow, the side of them that is next to it, where they are held */
 /** @typedef {{id:string,points:Pt[],back:boolean,label:null|Words,near?:Words,far?:Words}} Routed near, far: the few words at the end it comes from and the end it leads to */
-/** @typedef {{id:string,title:string,lines?:string[],x:number,y:number,w:number,h:number,name:{x:number,y:number,w:number,h:number,plate:boolean}}} Frame a group's frame, from its top left corner; lines: its name, where it wraps (on a grid); name: where its name sits, from its middle, and whether a line has to pass behind it */
+/** @typedef {{id:string,title:string,lines?:string[],x:number,y:number,w:number,h:number,name:{x:number,y:number,w:number,h:number,plate:boolean}}} Frame a group's frame, from its top left corner; lines: its name, where it wraps; name: where its name sits, from its middle, and whether a line has to pass behind it */
 /** @typedef {{width:number,height:number,direction:'TD'|'LR',reversed:boolean,box:{w:number,h:number},nodes:Record<string,Placed>,edges:Record<string,Routed>,groups:Frame[],spine:string[],warnings:string[],grids?:import('./grid.mjs').PlacedGrid[]}} Layout grids: set when the boxes are on a grid their author placed, each grid as it came out */
 
 // What is measured, named once. Boxes are sized without a browser, from the average glyph of a 13px UI face.
@@ -255,10 +255,12 @@ function wrapped(model) {
   return best;
 }
 
+/** @typedef {{lines:string[],w:number,more:number}} Fit a group's name as it fits its frame: the lines it wraps to, how wide the frame must be for them, and how much wider than the frame its boxes made that is */
+
 /**
  * The placing, in the direction asked for. A frame is as wide as its boxes make it, which is known only once they
- * are placed; a name longer than that wraps (to three lines, as a grid's does) and is placed again, with the room
- * at the top of its frame for the lines it takes.
+ * are placed; a name longer than that wraps (to three lines, as a grid's does), and where a word of it is longer
+ * still, the frame is made wider. The flow is then placed again, with room for that above the frame and beside it.
  * @param {Model} model
  * @param {'TD'|'LR'} dir
  * @param {boolean} [reversed] from the far end: bottom to top, or right to left
@@ -266,8 +268,13 @@ function wrapped(model) {
  */
 function placed(model, dir, reversed = false) {
   const first = placedOnce(model, dir, reversed);
-  const wraps = new Map(first.groups.filter((f) => f.title).map((f) => /** @type {[string, string[]]} */ ([f.id, nameAt(f.title, f.w - 2 * measure.nameIn)])).filter(([, lines]) => lines.length > 1));
-  return wraps.size ? placedOnce(model, dir, reversed, wraps) : first;
+  /** @type {Map<string,Fit>} */
+  const fits = new Map(first.groups.filter((f) => f.title).flatMap((f) => {
+    const lines = nameAt(f.title, f.w - 2 * measure.nameIn);
+    const w = Math.round(Math.max(...lines.map((l) => l.length)) * measure.nameGlyph) + 2 * measure.nameIn;
+    return lines.length > 1 || w > f.w ? [/** @type {[string, Fit]} */ ([f.id, { lines, w, more: Math.max(0, w - f.w) }])] : [];
+  }));
+  return fits.size ? placedOnce(model, dir, reversed, fits) : first;
 }
 
 /**
@@ -275,14 +282,15 @@ function placed(model, dir, reversed = false) {
  * @param {Model} model
  * @param {'TD'|'LR'} dir
  * @param {boolean} reversed
- * @param {Map<string,string[]>} [wraps] the names that wrap, in the lines they wrap to, by their group
+ * @param {Map<string,Fit>} [fits] the names that do not fit their frames on one line, by their group
  * @returns {Layout}
  */
-function placedOnce(model, dir, reversed, wraps = new Map()) {
+function placedOnce(model, dir, reversed, fits = new Map()) {
   /** @type {string[]} */
   const warnings = [];
-  // The room a name takes past its first line, at the top of its frame.
-  const below = (/** @type {string} */ id) => ((wraps.get(id)?.length ?? 1) - 1) * measure.nameLine;
+  // The room a name takes past its first line, at the top of its frame, and past its frame's right side.
+  const below = (/** @type {string} */ id) => ((fits.get(id)?.lines.length ?? 1) - 1) * measure.nameLine;
+  const past = (/** @type {string} */ id) => fits.get(id)?.more ?? 0;
   const box = boxFor(model);
   // Everything is placed as if the flow ran downwards. A left-to-right diagram is the same drawing turned on
   // its side at the end, so along the flow a box is as "tall" as it is really wide.
@@ -434,9 +442,12 @@ function placedOnce(model, dir, reversed, wraps = new Map()) {
     // above or below it: the room is made as wide as the words, so they keep the lines they wrap to anyway
     // instead of being wrapped again into a column.
     if (dir === 'LR') {
+      // A frame made wider for its name reaches on along the flow, past its last rank (its first, from the far end).
+      const reaching = model.groups.filter((g) => past(g.id) && g.members.length && (reversed ? starts.get(g.id) === r : ends.get(g.id) === r - 1));
+      const forName = reaching.length ? atEnds * most(ends, r - 1) + atStarts * most(starts, r) + Math.max(...reaching.map((g) => past(g.id))) + measure.frameAir - rankGap : 0;
       const across = model.edges.filter((e) => e.label && Math.min(rank.get(e.from) ?? 0, rank.get(e.to) ?? 0) === r - 1 && Math.max(rank.get(e.from) ?? 0, rank.get(e.to) ?? 0) === r && lane.get(e.from) === lane.get(e.to));
       const forWords = across.length ? Math.max(...across.map((e) => Math.max(...wrap(e.label, measure.labelWrap).map((l) => l.length)) * measure.labelGlyph + 10)) + measure.wordsAcross - rankGap : 0;
-      return Math.max(forFrames, forWords, 0);
+      return Math.max(forFrames, forName, forWords, 0);
     }
     const topsHere = model.groups.filter((g) => g.title && g.members.length && (reversed ? ends.get(g.id) === r - 1 : starts.get(g.id) === r));
     const through = model.edges.filter((e) => {
@@ -473,6 +484,26 @@ function placedOnce(model, dir, reversed, wraps = new Map()) {
    */
   const settle = (/** @type {boolean} */ thorough) => {
     const firstLane = Math.min(0, ...lane.values());
+    // Across the flow, a frame takes room beside its lanes for its name: top to bottom, the room a frame made
+    // wider takes past its right side; left to right, the room a name's other lines take above it. Which lane
+    // that is beside turns with the picture: drawn with the branches to the left, the right is the first lane.
+    /** @type {number[]} */
+    const aside = [];
+    const lanesOf = (/** @type {{members:string[]}} */ g) => g.members.filter((id) => lane.has(id)).map((id) => (lane.get(id) ?? 0) - firstLane);
+    for (const g of model.groups) {
+      const need = dir === 'LR' ? below(g.id) : past(g.id), ls = lanesOf(g);
+      if (!need || !ls.length) continue;
+      const after = (dir === 'LR') === (model.hints.side === 'left');
+      const at = after ? Math.max(...ls) + 1 : Math.min(...ls);
+      // Frames one inside another on the same side each take their own room there.
+      let room = need;
+      for (let up = parentOf.get(g.id); up !== undefined; up = parentOf.get(up)) {
+        const outer = model.groups.find((o) => o.id === up), ol = outer ? lanesOf(outer) : [];
+        if (ol.length && (after ? Math.max(...ol) + 1 : Math.min(...ol)) === at) room += dir === 'LR' ? below(up) : past(up);
+      }
+      if (at > 0) aside[at] = Math.max(aside[at] ?? 0, room);
+    }
+    const besideBefore = (/** @type {number} */ l) => aside.slice(0, l + 1).reduce((a, b) => a + (b ?? 0), 0);
 
     /** @type {Record<string, Placed>} */
     const nodes = {};
@@ -480,7 +511,7 @@ function placedOnce(model, dir, reversed, wraps = new Map()) {
       const l = (lane.get(n.id) ?? 0) - firstLane, r = rank.get(n.id) ?? 0;
       nodes[n.id] = {
         id: n.id, w: bw, h: high(n.id), rank: r, lane: l, spine: onSpine.has(n.id), lines: linesOf(n, box.w),
-        x: measure.pad + l * (bw + laneGap) + bw / 2,
+        x: measure.pad + l * (bw + laneGap) + besideBefore(l) + bw / 2,
         y: along(r) + tall[r] / 2,
       };
     }
@@ -809,10 +840,11 @@ function placedOnce(model, dir, reversed, wraps = new Map()) {
     const l = Math.min(...own.map((n) => n.x - n.w / 2), ...inner.map((f) => f.x)) - measure.framePad;
     // A frame with no name (a region of a composite state) keeps no room for one.
     const t = Math.min(...own.map((n) => n.y - n.h / 2), ...inner.map((f) => f.y)) - measure.framePad - (g.title ? measure.frameTitle + below(g.id) : 0);
-    const r = Math.max(...own.map((n) => n.x + n.w / 2), ...inner.map((f) => f.x + f.w)) + measure.framePad;
+    // As wide as its boxes make it, or as its name needs where a word of that is longer.
+    const r = Math.max(Math.max(...own.map((n) => n.x + n.w / 2), ...inner.map((f) => f.x + f.w)) + measure.framePad, l + (fits.get(g.id)?.w ?? 0));
     const u = Math.max(...own.map((n) => n.y + n.h / 2), ...inner.map((f) => f.y + f.h)) + measure.framePad;
     /** @type {Frame} */
-    const frame = { name: { x: l, y: t, w: 0, h: 0, plate: false }, id: g.id, title: g.title, ...(wraps.has(g.id) ? { lines: wraps.get(g.id) } : {}), x: l, y: t, w: r - l, h: u - t };
+    const frame = { name: { x: l, y: t, w: 0, h: 0, plate: false }, id: g.id, title: g.title, ...((fits.get(g.id)?.lines.length ?? 0) > 1 ? { lines: fits.get(g.id)?.lines } : {}), x: l, y: t, w: r - l, h: u - t };
     const stranger = all.find((n) => !g.members.includes(n.id) && meets(frame, n));
     // A frame inside this one, or round it, is where it should be; any other it meets is one it has run into.
     const other = made.find((f) => !within(f.id, g.id) && !within(g.id, f.id) && meets(frame, { x: f.x + f.w / 2, y: f.y + f.h / 2, w: f.w, h: f.h }));

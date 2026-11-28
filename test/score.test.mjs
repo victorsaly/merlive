@@ -295,6 +295,12 @@ describe('design: a project\'s own file', () => {
     assert.equal(designFrom({ dark: { bg: '#000000' } }).light.bg, builtIn.light.bg);
   });
 
+  it('takes a colour for a kind with a hyphen in its name, as a class may have, and still refuses what is not a name', () => {
+    assert.equal(designFrom({ light: { kinds: { 'read-only': '#445566' } } }).light.kinds['read-only'], '#445566');
+    assert.throws(() => designFrom({ light: { kinds: { 'x}body{': '#445566' } } }), /light\.kinds has "x}body\{"; a kind is named in letters, digits, _ and a hyphen between them only/);
+    assert.throws(() => designFrom({ light: { kinds: { '-x': '#445566' } } }), /a kind is named in letters/);
+  });
+
   it('refuses a colour that is not one, a motion that is not one, and a file that is not an object, each with what to do', () => {
     assert.throws(() => designFrom({ light: { bg: 'blue' } }), /light\.bg must be a colour like #1f5fd1, not "blue"/);
     assert.throws(() => designFrom({ light: { kinds: { risk: '#fff' } } }), /light\.kinds\.risk must be a colour/);

@@ -322,6 +322,30 @@ describe("layout: a group's name", () => {
     }
   });
 
+  it('keeps room beside the frame for a name that wraps, left to right, where its lines go into the lane next to it', () => {
+    for (const side of ['', '\n%% side: left']) {
+      const src = `flowchart LR\nA[Ask] --> B[Pack]\nA --> C[Check]\nsubgraph g [Checks before the order is sent]\n  C\nend${side}`;
+      const m = parse(src), lay = layout(m);
+      assert.equal(lay.groups.length, 1, `the frame is kept${side}`);
+      assert.deepEqual(lay.warnings, []);
+      assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => c.detail), [], side);
+    }
+  });
+
+  it('makes the frame wide enough for a word of its name that is longer than the frame, and keeps clear of the box beside it', () => {
+    for (const src of [
+      'flowchart TD\nA[Ask] --> B[Pack]\nA --> C[Check]\nsubgraph g [Internationalisation]\n  B\nend',
+      'flowchart TD\nA[Ask] --> B[Pack]\nA --> C[Check]\nsubgraph g [Internationalisation]\n  B\nend\n%% side: left',
+      'flowchart LR\nA[Ask] --> B[Pack] --> C[Check]\nsubgraph g [Internationalisation]\n  B\nend',
+      'flowchart RL\nA[Ask] --> B[Pack] --> C[Check]\nsubgraph g [Internationalisation]\n  B\nend',
+    ]) {
+      const m = parse(src), lay = layout(m), [f] = lay.groups;
+      assert.ok(f, `the frame is kept: ${src}`);
+      assert.ok(f.name.x - f.name.w / 2 >= f.x && f.name.x + f.name.w / 2 <= f.x + f.w, `inside its frame: ${src}`);
+      assert.deepEqual(score(m, lay, builtIn).checks.filter((c) => !c.ok).map((c) => c.detail), [], src);
+    }
+  });
+
   it('keeps one line where it fits, and the frame as it was', () => {
     const lay = layout(parse('flowchart TD\nX[Draft] --> A\nsubgraph C [Checks]\n  A[Credit] --> B[Stock]\nend'));
     const [f] = lay.groups;
